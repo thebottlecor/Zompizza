@@ -183,7 +183,7 @@ public class PrometeoCarController : MonoBehaviour
 
                 ////collision.rigidbody.AddExplosionForce(impactPower, collision.transform.position, 20f, 20f);
 
-                collision.gameObject.GetComponent<Zombie>().Hit(cp.point);
+                collision.gameObject.GetComponent<Zombie>().Hit(cp.point, 1f);
 
             }
 
