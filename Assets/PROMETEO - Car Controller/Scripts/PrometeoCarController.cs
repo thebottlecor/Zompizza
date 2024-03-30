@@ -173,7 +173,7 @@ public class PrometeoCarController : MonoBehaviour
             // Target과 Player사이의 각도
             float theta = Mathf.Acos(dotProduct) * Mathf.Rad2Deg;
             // 시야각 안에있는지 여부
-            Debug.Log(dotProduct + " >> " + theta);
+            //Debug.Log(dotProduct + " >> " + theta);
             if (theta <= 225f / 2f)
             {
                 //Debug.Log("속도 방향과 충돌 방향 일치 -> 힘 전달 " + carRigidbody.velocity.magnitude);
@@ -183,7 +183,7 @@ public class PrometeoCarController : MonoBehaviour
 
                 ////collision.rigidbody.AddExplosionForce(impactPower, collision.transform.position, 20f, 20f);
 
-                collision.gameObject.GetComponent<Zombie>().Hit(cp.point, 1f);
+                collision.gameObject.GetComponent<Zombie>().Hit(cp.point, 1f, targetDirection);
 
             }
 

@@ -161,7 +161,8 @@ public class PlayerController : MonoBehaviour
 
     [Header("Custom")]
     public float impactPower = 3000f;
-    public List<Zombie> contactingZombies = new List<Zombie>();
+    //public List<Zombie> contactingZombies = new List<Zombie>();
+    public List<Zombie2> contactingZombies = new List<Zombie2>();
 
     void OnCollisionEnter(Collision collision)
     {
@@ -169,21 +170,23 @@ public class PlayerController : MonoBehaviour
         {
             float speedPercent = Mathf.Abs(carSpeed) / maxSpeed;
             ContactPoint cp = collision.GetContact(0);
-            Zombie zombie = collision.gameObject.GetComponent<Zombie>();
+            Zombie2 zombie = collision.gameObject.GetComponent<Zombie2>();
+            //Zombie zombie = collision.gameObject.GetComponent<Zombie>();
 
             if (speedPercent > 0.1f)
             {
-                Vector2 targetDirection = (collision.transform.position - transform.position).normalized;
+                Vector3 targetDirection = (collision.transform.position - transform.position).normalized;
                 //float dotProduct = Vector2.Dot(transform.forward.normalized, targetDirection);
-                float dotProduct = Vector2.Dot(carRigidbody.velocity.normalized, targetDirection);
+                float dotProduct = Vector3.Dot(carRigidbody.velocity.normalized, targetDirection);
                 // 내적의 값이 > 0 이면 플레이어 앞에있고, < 0이면 뒤에있다.
+                // Target과 Player사이의 각도
+                float theta = Mathf.Acos(dotProduct) * Mathf.Rad2Deg;
+                //Debug.Log(dotProduct + " >> " + theta);
+
                 if (dotProduct > 0)
                 {
-                    // Target과 Player사이의 각도
-                    float theta = Mathf.Acos(dotProduct) * Mathf.Rad2Deg;
                     // 시야각 안에있는지 여부
-                    Debug.Log(dotProduct + " >> " + theta);
-                    if (theta <= 225f / 2f)
+                    if (theta <= 120f / 2f)
                     {
                         //Debug.Log("속도 방향과 충돌 방향 일치 -> 힘 전달 " + carRigidbody.velocity.magnitude);
 
@@ -192,14 +195,14 @@ public class PlayerController : MonoBehaviour
 
                         ////collision.rigidbody.AddExplosionForce(impactPower, collision.transform.position, 20f, 20f);
 
-                        zombie.Hit(cp.point, speedPercent);
+                        zombie.Hit(cp.point, speedPercent, targetDirection);
 
                         return;
                     }
                 }
             }
 
-            if (zombie.CloseContact(cp.point))
+            if (contactingZombies.Count < 10 && zombie.CloseContact(cp.point)) // 최대 10명 부착
             {
                 contactingZombies.Add(zombie);
             }

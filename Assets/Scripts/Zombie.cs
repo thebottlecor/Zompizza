@@ -14,9 +14,6 @@ public class Zombie : MonoBehaviour
     [SerializeField] protected Collider coll;
     [SerializeField] protected Animator animator;
 
-    public Transform target;
-
-
     public bool contactingPlayer;
     public bool tooClose;
 
@@ -29,7 +26,6 @@ public class Zombie : MonoBehaviour
         hitFeedback = GetComponent<MMFeedbacks>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         contactingPlayer = false;
@@ -40,12 +36,12 @@ public class Zombie : MonoBehaviour
         {
             walk = true; // 항상 true
 
-            if (target != null)
+            if (ZombiePooler.Instance.target != null)
             {
                 if (navMeshAgent.enabled)
                 {
                     walk = true;
-                    navMeshAgent.SetDestination(target.position);
+                    navMeshAgent.SetDestination(ZombiePooler.Instance.target.position);
 
                     if (!navMeshAgent.pathPending)
                     {
@@ -90,12 +86,7 @@ public class Zombie : MonoBehaviour
     //    }
     //}
 
-    public float power;
-    public float radius;
-    public float height;
-    public Transform pos;
-
-    public void Hit(Vector3 hitPos, float speed)
+    public void Hit(Vector3 hitPos, float speed, Vector3 knockbackDir)
     {
         //hitFeedback?.PlayFeedbacks();
         navMeshAgent.enabled = false;
@@ -105,11 +96,10 @@ public class Zombie : MonoBehaviour
         expPos.y = -3f; // 평면 밑에서 폭발 (평면 밑으로 들어가지 않도록)
 
         rigid.velocity = Vector3.zero;
-        rigid.AddExplosionForce(power * speed, expPos, radius, height);
+        rigid.AddForce(knockbackDir * ZombiePooler.Instance.knockbackPower * speed, ForceMode.Impulse);
+        rigid.AddExplosionForce(ZombiePooler.Instance.power * speed, expPos, ZombiePooler.Instance.radius, ZombiePooler.Instance.height);
 
-        Debug.Log("Hit");
-
-        dead = true;
+        DeadHandle();
     }
 
     public bool CloseContact(Vector3 hitPos)
@@ -121,14 +111,14 @@ public class Zombie : MonoBehaviour
         rigid.isKinematic = true;
         coll.enabled = false;
 
-        this.transform.SetParent(target);
+        this.transform.SetParent(ZombiePooler.Instance.target);
 
-        Vector3 origin = target.position;
+        Vector3 origin = ZombiePooler.Instance.target.position;
         origin.y += 2f;
-        if (Physics.Raycast(origin, hitPos - origin, out RaycastHit result, 2f, LayerMask.GetMask("CarContact")))
+        if (Physics.Raycast(origin, hitPos - origin, out RaycastHit result, 2f, LayerMask.GetMask("Car Contact Coll")))
         {
             transform.position = result.point;
-            transform.LookAt(target);
+            transform.LookAt(ZombiePooler.Instance.target);
         }
 
         return true;
@@ -136,9 +126,9 @@ public class Zombie : MonoBehaviour
 
     public void DriftOffContact(float localXvel, float speed) // localXvel < 0 오른쪽 , > 0 왼쪽 (로컬 기준)
     {
-        Transform tempTarger = target;
+        Transform tempTarger = ZombiePooler.Instance.target;
 
-        transform.parent = null;
+        this.transform.SetParent(ZombiePooler.Instance.zombieSpawnParent);
 
         navMeshAgent.enabled = false;
         rigid.constraints = RigidbodyConstraints.None;
@@ -149,17 +139,21 @@ public class Zombie : MonoBehaviour
 
         Vector3 right = new Vector3(tempTarger.forward.z, tempTarger.forward.y, -1f * tempTarger.forward.x);
         if (localXvel < 0)
-            expPos += 0.25f * radius * right;
+            expPos += 0.25f * ZombiePooler.Instance.radius * right;
         else if (localXvel > 0)
-            expPos += -0.25f * radius * right;
+            expPos += -0.25f * ZombiePooler.Instance.radius * right;
 
         expPos.y = -3f; // 평면 밑에서 폭발 (평면 밑으로 들어가지 않도록)
 
         rigid.velocity = Vector3.zero;
-        rigid.AddExplosionForce(power * Mathf.Max(Mathf.Min(0.33f, speed * 0.33f), 0.1f), expPos, radius, height);
+        rigid.AddExplosionForce(ZombiePooler.Instance.power * Mathf.Max(Mathf.Min(0.33f, speed * 0.33f), 0.1f), expPos, ZombiePooler.Instance.radius, ZombiePooler.Instance.height);
 
-        Debug.Log("Off");
+        DeadHandle();
+    }
 
+
+    public void DeadHandle()
+    {
         dead = true;
     }
 }
