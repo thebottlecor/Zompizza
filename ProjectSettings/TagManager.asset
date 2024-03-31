@@ -5,6 +5,10 @@ TagManager:
   serializedVersion: 2
   tags:
   - Zombie
+  - Combined Mesh
+  - Tile Mesh
+  - Rule Tile
+  - Grid
   layers:
   - Default
   - TransparentFX

@@ -21,6 +21,7 @@ public class ZombiePooler : Singleton<ZombiePooler>
     [Header("스폰 설정")]
     public Vector3 spawnOffset;
     public float spawnDist;
+    public int spawnCount = 1;
     private float timer;
 
     private void Start()
@@ -42,23 +43,27 @@ public class ZombiePooler : Singleton<ZombiePooler>
         if (timer >= 1f)
         {
             timer = 0f;
-
-            float random = Random.Range(-1f, 1f) * 30f;
-            var v3 = Quaternion.AngleAxis(random, Vector3.up) * target.forward;
-            Spawn(target.transform.position + v3 * spawnDist);
+            Spawn(spawnCount);
         }
     }
 
-    public void Spawn(Vector3 pos)
+    public void Spawn(int count)
     {
         for (int i = 0; i < maxZombie; i++)
         {
             if (!zombiesPool[i].gameObject.activeSelf)
             {
                 zombiesPool[i].StateReset();
-                zombiesPool[i].transform.position = pos;
+
+                float random = Random.Range(-1f, 1f) * 30f;
+                var v3 = Quaternion.AngleAxis(random, Vector3.up) * target.forward;
+                zombiesPool[i].transform.position = target.transform.position + v3 * spawnDist;
+
                 zombiesPool[i].gameObject.SetActive(true);
-                break;
+
+                count--;
+                if (count <= 0)
+                    break;
             }
         }
     }
