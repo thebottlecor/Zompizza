@@ -51,16 +51,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   coll: {fileID: 7608486549936029157}
   animator: {fileID: 9090047537539905066}
-  target: {fileID: 0}
   contactingPlayer: 0
-  tooClose: 0
+  contact: 0
   dead: 0
   seeker: {fileID: 8468248722716590919}
-  knockbackPower: 300
-  power: 5000
-  radius: 13
-  height: 125
-  contact: 0
 --- !u!54 &4240378934813003587
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -254,6 +248,10 @@ PrefabInstance:
     - target: {fileID: 434538, guid: 042872c1bba04d84eb9f9e686d669877, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9515254, guid: 042872c1bba04d84eb9f9e686d669877, type: 3}
+      propertyPath: m_CullingMode
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 13771954, guid: 042872c1bba04d84eb9f9e686d669877, type: 3}
       propertyPath: m_CastShadows
