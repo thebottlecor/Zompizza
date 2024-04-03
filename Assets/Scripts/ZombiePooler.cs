@@ -57,7 +57,9 @@ public class ZombiePooler : Singleton<ZombiePooler>
 
                 float random = Random.Range(-1f, 1f) * 30f;
                 var v3 = Quaternion.AngleAxis(random, Vector3.up) * target.forward;
-                zombiesPool[i].transform.position = target.transform.position + v3 * spawnDist;
+                Vector3 newPos = target.transform.position + v3 * spawnDist;
+                newPos.y = 0f;
+                zombiesPool[i].transform.position = newPos;
 
                 zombiesPool[i].gameObject.SetActive(true);
 
