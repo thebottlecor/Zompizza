@@ -23,6 +23,7 @@ public class ZombiePooler : Singleton<ZombiePooler>
     public float spawnDist;
     public int spawnCount = 1;
     private float timer;
+    public AstarPath astarPath;
 
     private void Start()
     {
@@ -59,7 +60,10 @@ public class ZombiePooler : Singleton<ZombiePooler>
                 var v3 = Quaternion.AngleAxis(random, Vector3.up) * target.forward;
                 Vector3 newPos = target.transform.position + v3 * spawnDist;
                 newPos.y = 0f;
-                zombiesPool[i].transform.position = newPos;
+
+                var node = AstarPath.active.GetNearest(newPos, Pathfinding.NNConstraint.Walkable).position;
+
+                zombiesPool[i].transform.position = node;
 
                 zombiesPool[i].gameObject.SetActive(true);
 

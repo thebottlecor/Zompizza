@@ -173,7 +173,7 @@ public class PlayerController : MonoBehaviour
             Zombie2 zombie = collision.gameObject.GetComponent<Zombie2>();
             //Zombie zombie = collision.gameObject.GetComponent<Zombie>();
 
-            if (speedPercent > 0.1f)
+            if (speedPercent >= 0.15f)
             {
                 Vector3 targetDirection = (collision.transform.position - transform.position).normalized;
                 //float dotProduct = Vector2.Dot(transform.forward.normalized, targetDirection);
@@ -190,11 +190,6 @@ public class PlayerController : MonoBehaviour
                     {
                         //Debug.Log("속도 방향과 충돌 방향 일치 -> 힘 전달 " + carRigidbody.velocity.magnitude);
 
-                        ////collision.rigidbody.AddForce(carRigidbody.velocity.magnitude * impactPower * targetDirection, ForceMode.Impulse);
-                        //collision.rigidbody.AddForce(carRigidbody.velocity.magnitude * impactPower * carRigidbody.velocity.normalized, ForceMode.Impulse);
-
-                        ////collision.rigidbody.AddExplosionForce(impactPower, collision.transform.position, 20f, 20f);
-
                         zombie.Hit(cp.point, speedPercent, targetDirection);
 
                         return;
@@ -206,9 +201,6 @@ public class PlayerController : MonoBehaviour
             {
                 contactingZombies.Add(zombie);
             }
-
-            //Vector3 dir = collision.transform.position - cp.point; // 접촉지점에서부터 탄위치 의 방향
-            //collision.rigidbody.AddForce((dir).normalized * 300f);
         }
     }
 

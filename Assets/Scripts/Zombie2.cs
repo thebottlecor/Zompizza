@@ -125,7 +125,11 @@ public class Zombie2 : MonoBehaviour
 
         rigid.velocity = Vector3.zero;
         if (!dead)
-            rigid.AddForce(knockbackDir * ZombiePooler.Instance.knockbackPower * speed, ForceMode.Impulse);
+        {
+            //knockbackDir.y += 0.1f;
+            rigid.AddForce(speed * ZombiePooler.Instance.knockbackPower * knockbackDir, ForceMode.Impulse);
+        }
+        coll.gameObject.layer = LayerMask.NameToLayer("Flying Zombie");
         rigid.AddExplosionForce(ZombiePooler.Instance.power * speed, expPos, ZombiePooler.Instance.radius, ZombiePooler.Instance.height);
 
         DeadHandle();
@@ -204,6 +208,8 @@ public class Zombie2 : MonoBehaviour
 
         contact = false;
         dead = false;
+
+        coll.gameObject.layer = LayerMask.NameToLayer("Zombie");
     }
 
     public void DeadHandle()

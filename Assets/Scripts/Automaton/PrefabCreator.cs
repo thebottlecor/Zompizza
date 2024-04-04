@@ -5,12 +5,23 @@ using UnityEngine;
 public class PrefabCreator : MonoBehaviour
 {
 
-    private BoxCollider coll;
+    private Collider coll;
+    public bool addColl;
 
     private void Start()
     {
+        if (addColl)
+            coll = this.gameObject.AddComponent<BoxCollider>();
+        else
+            coll = this.gameObject.GetComponent<Collider>();
+
+        if (coll == null)
+        {
+            Debug.LogWarning(gameObject.name + " 콜라이더 없음");
+            return;
+        }
+
         this.gameObject.layer = LayerMask.NameToLayer("PathfindingBlock");
-        coll = this.gameObject.AddComponent<BoxCollider>();
 
         StartCoroutine(Sequence());
     }
@@ -26,9 +37,20 @@ public class PrefabCreator : MonoBehaviour
         yield return null;
 
         this.gameObject.transform.SetParent(parent.transform);
-        var parentColl = parent.AddComponent<BoxCollider>();
-        parentColl.center = coll.center;
-        parentColl.size = coll.size;
+
+        if (coll is BoxCollider)
+        {
+            var parentColl = parent.AddComponent<BoxCollider>();
+            parentColl.center = (coll as BoxCollider).center;
+            parentColl.size = (coll as BoxCollider).size;
+        }
+        else if (coll is CapsuleCollider)
+        {
+            var parentColl = parent.AddComponent<CapsuleCollider>();
+            parentColl.center = (coll as CapsuleCollider).center;
+            parentColl.radius = (coll as CapsuleCollider).radius;
+            parentColl.height = (coll as CapsuleCollider).height;
+        }
 
         Destroy(this);
 
