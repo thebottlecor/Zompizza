@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 463316123715860977}
   - component: {fileID: 7892308400749924938}
   - component: {fileID: 3036521443844166766}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Etc_Campfire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -103,5 +103,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2.0276477, y: 0.967608, z: 2.0099359}
-  m_Center: {x: 0, y: 0.26358968, z: 0.0000005364418}
+  m_Size: {x: 3, y: 1, z: 3}
+  m_Center: {x: 0, y: -0.45, z: 0}
