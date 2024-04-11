@@ -44,8 +44,6 @@ public class ShopGate : MonoBehaviour
             targetPos_Right = openPos_Right;
         }
 
-        Debug.Log((movingChild.transform.position - targetPos_Left).magnitude);
-
         movingChild.position = Vector3.SmoothDamp(movingChild.position, targetPos_Left, ref vel, smoothTime, Time.deltaTime * gateSpeed);
         movingChild_Right.position = Vector3.SmoothDamp(movingChild_Right.position, targetPos_Right, ref vel2, smoothTime, Time.deltaTime * gateSpeed);
     }

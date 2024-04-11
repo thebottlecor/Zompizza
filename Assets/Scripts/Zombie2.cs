@@ -21,6 +21,7 @@ public class Zombie2 : MonoBehaviour
     public bool dead;
 
     public SkinnedMeshRenderer meshRenderer;
+    public GameObject shadow;
 
     protected IAstarAI ai;
     protected AIDestinationSetter destinationSetter;
@@ -149,6 +150,7 @@ public class Zombie2 : MonoBehaviour
         coll.enabled = false;
 
         contact = true;
+        shadow.SetActive(false);
 
         this.transform.SetParent(ZombiePooler.Instance.target);
 
@@ -210,6 +212,7 @@ public class Zombie2 : MonoBehaviour
 
         contact = false;
         dead = false;
+        shadow.SetActive(true);
 
         coll.gameObject.layer = LayerMask.NameToLayer("Zombie");
     }
@@ -217,5 +220,6 @@ public class Zombie2 : MonoBehaviour
     public void DeadHandle()
     {
         dead = true;
+        shadow.SetActive(false);
     }
 }
