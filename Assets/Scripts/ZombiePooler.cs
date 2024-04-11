@@ -25,6 +25,16 @@ public class ZombiePooler : Singleton<ZombiePooler>
     private float timer;
     public AstarPath astarPath;
 
+    [Header("Á»ºñ ¸ðµ¨")]
+    public ZombieModel[] models_Info;
+    [System.Serializable]
+    public struct ZombieModel
+    {
+        public Material material;
+        public Mesh mesh;
+    }
+
+
     private void Start()
     {
         zombiesPool = new List<Zombie2>(maxZombie);
@@ -54,6 +64,9 @@ public class ZombiePooler : Singleton<ZombiePooler>
         {
             if (!zombiesPool[i].gameObject.activeSelf)
             {
+                int rand = UnityEngine.Random.Range(0, models_Info.Length);
+                zombiesPool[i].meshRenderer.material = models_Info[rand].material;
+                zombiesPool[i].meshRenderer.sharedMesh = models_Info[rand].mesh;
                 zombiesPool[i].StateReset();
 
                 float random = Random.Range(-1f, 1f) * 30f;

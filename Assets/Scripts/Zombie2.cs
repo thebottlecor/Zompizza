@@ -20,6 +20,8 @@ public class Zombie2 : MonoBehaviour
 
     public bool dead;
 
+    public SkinnedMeshRenderer meshRenderer;
+
     protected IAstarAI ai;
     protected AIDestinationSetter destinationSetter;
     public Seeker seeker;
