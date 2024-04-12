@@ -64,11 +64,6 @@ public class ZombiePooler : Singleton<ZombiePooler>
         {
             if (!zombiesPool[i].gameObject.activeSelf)
             {
-                int rand = UnityEngine.Random.Range(0, models_Info.Length);
-                zombiesPool[i].meshRenderer.material = models_Info[rand].material;
-                zombiesPool[i].meshRenderer.sharedMesh = models_Info[rand].mesh;
-                zombiesPool[i].StateReset();
-
                 float random = Random.Range(-1f, 1f) * 30f;
                 var v3 = Quaternion.AngleAxis(random, Vector3.up) * target.forward;
                 Vector3 newPos = target.transform.position + v3 * spawnDist;
@@ -76,7 +71,23 @@ public class ZombiePooler : Singleton<ZombiePooler>
 
                 var node = AstarPath.active.GetNearest(newPos, Pathfinding.NNConstraint.Walkable).position;
 
+                float dist = (target.position - node).magnitude;
+
+                if (dist < spawnDist * 0.75f)
+                {
+                    count--;
+                    if (count <= 0)
+                        break;
+
+                    continue;
+                }
+
                 zombiesPool[i].transform.position = node;
+
+                int rand = UnityEngine.Random.Range(0, models_Info.Length);
+                zombiesPool[i].meshRenderer.material = models_Info[rand].material;
+                zombiesPool[i].meshRenderer.sharedMesh = models_Info[rand].mesh;
+                zombiesPool[i].StateReset();
 
                 zombiesPool[i].gameObject.SetActive(true);
 

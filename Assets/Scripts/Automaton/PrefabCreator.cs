@@ -36,7 +36,10 @@ public class PrefabCreator : MonoBehaviour
 
         yield return null;
 
+        Vector3 scale = this.transform.localScale;
+        this.transform.localScale = Vector3.one;
         this.gameObject.transform.SetParent(parent.transform);
+        parent.transform.localScale = scale;
 
         if (coll is BoxCollider)
         {

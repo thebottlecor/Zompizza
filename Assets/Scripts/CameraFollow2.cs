@@ -38,8 +38,7 @@ public class CameraFollow2 : MonoBehaviour {
 	void LateUpdate()
 	{
 		Vector3 direction = (carTransform.position - transform.position).normalized;
-		RaycastHit[] hits = Physics.RaycastAll(transform.position, direction, Mathf.Infinity,
-							1 << LayerMask.NameToLayer("EnvironmentObject"));
+		RaycastHit[] hits = Physics.RaycastAll(transform.position, direction, Mathf.Infinity, 1 << LayerMask.NameToLayer("EnvironmentObject"));
 
 		for (int i = 0; i < hits.Length; i++)
 		{
