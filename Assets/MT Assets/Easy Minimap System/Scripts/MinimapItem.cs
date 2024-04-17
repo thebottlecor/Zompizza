@@ -572,12 +572,12 @@ namespace MTAssets.EasyMinimapSystem
                 sizeOnMinimap.y = 0;
 
             //Move the item to follow this gameobject
-            tempSpriteObj.transform.position = Vector3.Lerp(tempSpriteObj.transform.position, new Vector3(this.gameObject.transform.position.x, BASE_HEIGHT_IN_3D_WORLD, this.gameObject.transform.position.z), movementsSmoothing * Time.deltaTime);
+            tempSpriteObj.transform.position = Vector3.Lerp(tempSpriteObj.transform.position, new Vector3(this.gameObject.transform.position.x, BASE_HEIGHT_IN_3D_WORLD, this.gameObject.transform.position.z), movementsSmoothing * Time.unscaledDeltaTime);
             //Rotate the item
             if (followRotationOf == FollowRotationOf.ThisGameObject)
-                tempSpriteObj.transform.rotation = Quaternion.Lerp(tempSpriteObj.transform.rotation, Quaternion.Euler(90, this.gameObject.transform.rotation.eulerAngles.y, 0), movementsSmoothing * Time.deltaTime);
+                tempSpriteObj.transform.rotation = Quaternion.Lerp(tempSpriteObj.transform.rotation, Quaternion.Euler(90, this.gameObject.transform.rotation.eulerAngles.y, 0), movementsSmoothing * Time.unscaledDeltaTime);
             if (followRotationOf == FollowRotationOf.CustomGameObject && customGameObjectToFollowRotation != null)
-                tempSpriteObj.transform.rotation = Quaternion.Lerp(tempSpriteObj.transform.rotation, Quaternion.Euler(90, customGameObjectToFollowRotation.rotation.eulerAngles.y, 0), movementsSmoothing * Time.deltaTime);
+                tempSpriteObj.transform.rotation = Quaternion.Lerp(tempSpriteObj.transform.rotation, Quaternion.Euler(90, customGameObjectToFollowRotation.rotation.eulerAngles.y, 0), movementsSmoothing * Time.unscaledDeltaTime);
         }
 
         //Public methods

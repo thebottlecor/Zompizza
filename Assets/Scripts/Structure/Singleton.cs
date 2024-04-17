@@ -39,4 +39,11 @@ public abstract class Singleton<T> : EventListener where T : MonoBehaviour
     {
 
     }
+
+    public virtual void CallAfterAwake()
+    {
+    }
+    public virtual void CallAfterStart(ConfigData config)
+    {
+    }
 }

@@ -490,12 +490,12 @@ namespace MTAssets.EasyMinimapSystem
                 fieldOfView = 1.0f;
 
             //Move the camera to follow this gameobject
-            tempCameraObj.transform.position = Vector3.Lerp(tempCameraObj.transform.position, new Vector3(this.gameObject.transform.position.x, BASE_HEIGHT_IN_3D_WORLD, this.gameObject.transform.position.z), movementsSmoothing * Time.deltaTime);
+            tempCameraObj.transform.position = Vector3.Lerp(tempCameraObj.transform.position, new Vector3(this.gameObject.transform.position.x, BASE_HEIGHT_IN_3D_WORLD, this.gameObject.transform.position.z), movementsSmoothing * Time.unscaledDeltaTime);
             //Rotate the camera
             if (followRotationOf == FollowRotationOf.ThisGameObject)
-                tempCameraObj.transform.rotation = Quaternion.Lerp(tempCameraObj.transform.rotation, Quaternion.Euler(90, this.gameObject.transform.rotation.eulerAngles.y, 0), movementsSmoothing * Time.deltaTime);
+                tempCameraObj.transform.rotation = Quaternion.Lerp(tempCameraObj.transform.rotation, Quaternion.Euler(90, this.gameObject.transform.rotation.eulerAngles.y, 0), movementsSmoothing * Time.unscaledDeltaTime);
             if (followRotationOf == FollowRotationOf.CustomGameObject && customGameObjectToFollowRotation != null)
-                tempCameraObj.transform.rotation = Quaternion.Lerp(tempCameraObj.transform.rotation, Quaternion.Euler(90, customGameObjectToFollowRotation.rotation.eulerAngles.y, 0), movementsSmoothing * Time.deltaTime);
+                tempCameraObj.transform.rotation = Quaternion.Lerp(tempCameraObj.transform.rotation, Quaternion.Euler(90, customGameObjectToFollowRotation.rotation.eulerAngles.y, 0), movementsSmoothing * Time.unscaledDeltaTime);
         }
 
         //Public methods

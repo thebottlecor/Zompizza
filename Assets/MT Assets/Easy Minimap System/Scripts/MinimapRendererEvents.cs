@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -107,7 +108,9 @@ namespace MTAssets.EasyMinimapSystem
 
             //Call the event
             if (minimapRenderer.onInputDrag != null)
+            {
                 minimapRenderer.onInputDrag.Invoke(startingWorldPositionOfOnPointerDownForCurrentOnDrag, worldPositionOfMouse);
+            }
         }
 
         public virtual void OnPointerDown(PointerEventData ped)
