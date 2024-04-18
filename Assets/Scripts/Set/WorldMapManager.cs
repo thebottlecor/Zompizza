@@ -36,10 +36,13 @@ public class WorldMapManager : Singleton<WorldMapManager>
         //worldMapCamera.gameObject.SetActive(true);
         //playerFieldOfView.enabled = false;
 
+        MinimapDataGlobal.SetMinimapItemsSizeGlobalMultiplier(1.5f);
+    }
+
+    public void FocusPlayerPos()
+    {
         // 처음 열 때 플레이어 위치로 고정
         worldMapCamera.transform.position = minimapItemsTarget.position;
-
-        //MinimapDataGlobal.SetMinimapItemsSizeGlobalMultiplier(1.5f);
     }
 
     public void CloseFullscreenMap()
@@ -48,7 +51,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         //worldMapCamera.gameObject.SetActive(false);
         //playerFieldOfView.enabled = true;
 
-        //MinimapDataGlobal.SetMinimapItemsSizeGlobalMultiplier(1f);
+        MinimapDataGlobal.SetMinimapItemsSizeGlobalMultiplier(1f);
     }
 
     public void OpenMinimap()

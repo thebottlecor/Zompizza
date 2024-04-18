@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class PlayerController : MonoBehaviour
 {
@@ -206,7 +207,9 @@ public class PlayerController : MonoBehaviour
 
     public void StopPlayer()
     {
-        this.transform.eulerAngles = Vector3.zero;
+        //this.transform.eulerAngles = Vector3.zero;
+
+        this.transform.DORotate(Vector3.zero, 1f).SetUpdate(true);
         carRigidbody.velocity = Vector3.zero;
         carRigidbody.angularVelocity = Vector3.zero;
 

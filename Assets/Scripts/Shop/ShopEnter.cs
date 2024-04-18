@@ -8,6 +8,7 @@ public class ShopEnter : MonoBehaviour
 {
 
     public static EventHandler PlayerArriveEvent;
+    public static EventHandler PlayerExitEvent;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -18,6 +19,17 @@ public class ShopEnter : MonoBehaviour
             if (PlayerArriveEvent != null)
             {
                 PlayerArriveEvent(this, null);
+            }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            if (PlayerExitEvent != null)
+            {
+                PlayerExitEvent(this, null);
             }
         }
     }

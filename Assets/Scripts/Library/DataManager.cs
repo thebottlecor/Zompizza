@@ -9,6 +9,7 @@ public class DataManager : Singleton<DataManager>
     public UILibrary uiLibrary;
     public MaterialLibrary materialLibrary;
     public CursorLibrary cursorLibrary;
+    public EffectLibrary effectLibrary;
 
     protected override void Awake()
     {

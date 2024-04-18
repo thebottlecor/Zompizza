@@ -21,26 +21,66 @@ public class ShopUI : EventListener
     public CanvasGroup canvasGroup;
     public RectTransform rectTransform;
 
+    public GameObject shopUIOpenButton;
+
     public bool loading;
+    public bool opened;
+
+    public bool IsActive => loading || opened;
+
+    public bool playerStay;
 
     protected override void AddListeners()
     {
         ShopEnter.PlayerArriveEvent += OnPlayerArriveShop;
+        ShopEnter.PlayerExitEvent += OnPlayerExitShop;
     }
 
     protected override void RemoveListeners()
     {
         ShopEnter.PlayerArriveEvent -= OnPlayerArriveShop;
+        ShopEnter.PlayerExitEvent -= OnPlayerExitShop;
     }
 
     private void OnPlayerArriveShop(object sender, EventArgs e)
     {
         OpenUI();
+        playerStay = true;
     }
+
+    private void OnPlayerExitShop(object sender, EventArgs e)
+    {
+        playerStay = false;
+    }
+
+    private void Update()
+    {
+        bool buttonOn = false;
+        if (!IsActive && !UIManager.Instance.utilUI.IsActive && playerStay)
+        {
+            buttonOn = true;
+        }
+        if ((buttonOn && !shopUIOpenButton.activeSelf) || !buttonOn && shopUIOpenButton.activeSelf)
+        {
+            shopUIOpenButton.SetActive(buttonOn);
+        }
+    }
+
 
     public void OpenUI()
     {
         if (loading) return;
+
+        if (UIManager.Instance.utilUI.IsActive)
+        {
+            UIManager.Instance.utilUI.HideUI_Replace();
+        }
+
+        if (opened)
+        {
+            HideUI();
+            return;
+        }
 
         GM.Instance.stop_control = true;
         Time.timeScale = 0f;
@@ -56,13 +96,31 @@ public class ShopUI : EventListener
         canvasGroup.DOFade(1f, fadeTime).SetUpdate(true).OnComplete(() =>
         {
             loading = false;
+            opened = true;
         });
+    }
+
+    public void HideUI_Replace()
+    {
+        for (int i = 0; i < panelButtonPairs.Count; i++)
+        {
+            panelButtonPairs[i].button.Hide();
+        }
+
+        DOTween.Kill(rectTransform);
+        DOTween.Kill(canvasGroup);
+        loading = false;
+        opened = false;
+
+        rectTransform.anchoredPosition = new Vector2(0f, -2000f);
+        canvasGroup.alpha = 0f;
     }
 
     public void HideUI()
     {
         if (loading) return;
 
+        opened = false;
         GM.Instance.stop_control = false;
         Time.timeScale = 1f;
         loading = true;
@@ -76,8 +134,9 @@ public class ShopUI : EventListener
 
         canvasGroup.alpha = 1f;
         rectTransform.transform.localPosition = new Vector3(0f, 0f, 0f);
-        rectTransform.DOAnchorPos(new Vector2(0f, -2000f), fadeTime, false).SetEase(Ease.InOutQuint).SetUpdate(true);
-        canvasGroup.DOFade(0f, fadeTime).SetUpdate(true).OnComplete(() =>
+        float hideFast = fadeTime * 0.5f;
+        rectTransform.DOAnchorPos(new Vector2(0f, -2000f), hideFast, false).SetEase(Ease.InOutQuint).SetUpdate(true);
+        canvasGroup.DOFade(0f, hideFast).SetUpdate(true).OnComplete(() =>
         {
             loading = false;
         });

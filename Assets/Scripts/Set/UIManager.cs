@@ -8,4 +8,8 @@ using UnityEngine.UI;
 public class UIManager : Singleton<UIManager>
 {
 
+    public ShopUI shopUI;
+    public UtilUI utilUI;
+
+
 }

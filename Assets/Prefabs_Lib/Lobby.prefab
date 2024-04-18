@@ -251,6 +251,7 @@ MonoBehaviour:
   uiLibrary: {fileID: 11400000, guid: 11c54c42de837984c94b234960f2d33a, type: 2}
   materialLibrary: {fileID: 11400000, guid: a05134f48e1ac634690c50f70e7d7821, type: 2}
   cursorLibrary: {fileID: 11400000, guid: 1223258829c43354e9b244178b3ad8c1, type: 2}
+  effectLibrary: {fileID: 11400000, guid: d02c3656d26cdbb4d9d92fe6d541fe63, type: 2}
 --- !u!1 &3148667165461892423
 GameObject:
   m_ObjectHideFlags: 0

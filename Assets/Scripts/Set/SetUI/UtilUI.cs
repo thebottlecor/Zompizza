@@ -15,6 +15,9 @@ public class UtilUI : EventListener
     public RectTransform rectTransform;
 
     public bool loading;
+    public bool opened;
+
+    public bool IsActive => loading || opened;
 
     protected override void AddListeners()
     {
@@ -26,37 +29,72 @@ public class UtilUI : EventListener
 
     }
 
+    public void OpenWorldMap()
+    {
+        activeSubPanel = 0;
+        OpenUI();
+    }
+
     public void OpenUI()
     {
         if (loading) return;
+
+        if (UIManager.Instance.shopUI.IsActive)
+        {
+            UIManager.Instance.shopUI.HideUI_Replace();
+        }
+
+        if (opened)
+        {
+            HideUI();
+            return;
+        }
 
         GM.Instance.stop_control = true;
         Time.timeScale = 0f;
         loading = true;
 
+        WorldMapManager.Instance.OpenFullscreenMap();
         WorldMapManager.Instance.CloseMinimap();
-
-        SelectSubPanel(activeSubPanel);
 
         canvasGroup.alpha = 0f;
         rectTransform.transform.localPosition = new Vector3(0f, 1000f, 0f);
         rectTransform.DOAnchorPos(new Vector2(0f, 0f), fadeTime, false).SetEase(Ease.OutElastic).SetUpdate(true);
         canvasGroup.DOFade(1f, fadeTime).SetUpdate(true).OnComplete(() =>
         {
+            SelectSubPanel(activeSubPanel);
             loading = false;
+            opened = true;
         });
+    }
+
+    public void HideUI_Replace()
+    {
+        for (int i = 0; i < panelButtonPairs.Count; i++)
+        {
+            panelButtonPairs[i].button.Hide();
+        }
+
+        DOTween.Kill(rectTransform);
+        DOTween.Kill(canvasGroup);
+        loading = false;
+        opened = false;
+        WorldMapManager.Instance.CloseFullscreenMap();
+
+        rectTransform.anchoredPosition = new Vector2(0f, -2000f);
+        canvasGroup.alpha = 0f;
     }
 
     public void HideUI()
     {
         if (loading) return;
 
+        opened = false;
         GM.Instance.stop_control = false;
         Time.timeScale = 1f;
         loading = true;
 
         WorldMapManager.Instance.OpenMinimap();
-        WorldMapManager.Instance.CloseFullscreenMap();
 
         for (int i = 0; i < panelButtonPairs.Count; i++)
         {
@@ -68,6 +106,7 @@ public class UtilUI : EventListener
         rectTransform.DOAnchorPos(new Vector2(0f, -2000f), fadeTime, false).SetEase(Ease.InOutQuint).SetUpdate(true);
         canvasGroup.DOFade(0f, fadeTime).SetUpdate(true).OnComplete(() =>
         {
+            WorldMapManager.Instance.CloseFullscreenMap();
             loading = false;
         });
     }
@@ -76,11 +115,12 @@ public class UtilUI : EventListener
     {
         if (idx == 0) // ¿ùµå¸Ê
         {
-            WorldMapManager.Instance.OpenFullscreenMap();
+            //WorldMapManager.Instance.OpenFullscreenMap();
+            WorldMapManager.Instance.FocusPlayerPos();
         }
         else
         {
-            WorldMapManager.Instance.CloseFullscreenMap();
+            //WorldMapManager.Instance.CloseFullscreenMap();
         }
 
         for (int i = 0; i < panelButtonPairs.Count; i++)

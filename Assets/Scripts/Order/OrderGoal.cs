@@ -9,7 +9,6 @@ public class OrderGoal : MonoBehaviour
 
     public int index;
     public GameObject goalEffectObj;
-    public GameObject successEffectObj;
 
     public static EventHandler<int> PlayerArriveEvent;
 
@@ -29,7 +28,6 @@ public class OrderGoal : MonoBehaviour
     {
         gameObject.SetActive(false);
         goalEffectObj.SetActive(false);
-        successEffectObj.SetActive(false);
     }
     public void Show()
     {
@@ -45,11 +43,12 @@ public class OrderGoal : MonoBehaviour
     public void SuccessEffect()
     {
         EffectUpdate(false);
-        successEffectObj.SetActive(true);
-        successEffectObj.transform.DOShakePosition(5f, 0.01f).OnComplete(() =>
-        {
-            Hide();
-        });
+        var source = DataManager.Instance.effectLibrary.dollarBoomEffect;
+        Vector3 pos = this.transform.position;
+        pos.y = 4f;
+        var obj = Instantiate(source, pos, Quaternion.identity);
+        Destroy(obj, 5f);
+        Hide();
     }
 
 }
