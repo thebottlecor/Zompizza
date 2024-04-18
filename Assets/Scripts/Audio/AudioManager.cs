@@ -149,6 +149,9 @@ public class AudioManager : Singleton<AudioManager>
 
 public enum Sfx
 {
+    crash,
+    zombieCrash,
+
     construction,
     demolish,
     toggle,

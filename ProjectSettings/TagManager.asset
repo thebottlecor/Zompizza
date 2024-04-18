@@ -10,6 +10,7 @@ TagManager:
   - Rule Tile
   - Grid
   - Missile
+  - Plane
   layers:
   - Default
   - TransparentFX

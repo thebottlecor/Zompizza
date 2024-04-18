@@ -18,147 +18,146 @@ using DG.Tweening;
 
 public class PlayerController : MonoBehaviour
 {
-
     //CAR SETUP
 
-      [Space(20)]
-      //[Header("CAR SETUP")]
-      [Space(10)]
-      [Range(20, 190)]
-      public int maxSpeed = 90; //The maximum speed that the car can reach in km/h.
-      [Range(10, 120)]
-      public int maxReverseSpeed = 45; //The maximum speed that the car can reach while going on reverse in km/h.
-      [Range(1, 10)]
-      public int accelerationMultiplier = 2; // How fast the car can accelerate. 1 is a slow acceleration and 10 is the fastest.
-      [Space(10)]
-      [Range(10, 45)]
-      public int maxSteeringAngle = 27; // The maximum angle that the tires can reach while rotating the steering wheel.
-      [Range(0.1f, 1f)]
-      public float steeringSpeed = 0.5f; // How fast the steering wheel turns.
-      [Space(10)]
-      [Range(100, 600)]
-      public int brakeForce = 350; // The strength of the wheel brakes.
-      [Range(1, 10)]
-      public int decelerationMultiplier = 2; // How fast the car decelerates when the user is not using the throttle.
-      [Range(1, 10)]
-      public int handbrakeDriftMultiplier = 5; // How much grip the car loses when the user hit the handbrake.
-      [Space(10)]
-      public Vector3 bodyMassCenter; // This is a vector that contains the center of mass of the car. I recommend to set this value
-                                    // in the points x = 0 and z = 0 of your car. You can select the value that you want in the y axis,
-                                    // however, you must notice that the higher this value is, the more unstable the car becomes.
-                                    // Usually the y value goes from 0 to 1.5.
+    [Space(20)]
+    //[Header("CAR SETUP")]
+    [Space(10)]
+    [Range(20, 190)]
+    public int maxSpeed = 90; //The maximum speed that the car can reach in km/h.
+    [Range(10, 120)]
+    public int maxReverseSpeed = 45; //The maximum speed that the car can reach while going on reverse in km/h.
+    [Range(1, 10)]
+    public int accelerationMultiplier = 2; // How fast the car can accelerate. 1 is a slow acceleration and 10 is the fastest.
+    [Space(10)]
+    [Range(10, 45)]
+    public int maxSteeringAngle = 27; // The maximum angle that the tires can reach while rotating the steering wheel.
+    [Range(0.1f, 1f)]
+    public float steeringSpeed = 0.5f; // How fast the steering wheel turns.
+    [Space(10)]
+    [Range(100, 600)]
+    public int brakeForce = 350; // The strength of the wheel brakes.
+    [Range(1, 10)]
+    public int decelerationMultiplier = 2; // How fast the car decelerates when the user is not using the throttle.
+    [Range(1, 10)]
+    public int handbrakeDriftMultiplier = 5; // How much grip the car loses when the user hit the handbrake.
+    [Space(10)]
+    public Vector3 bodyMassCenter; // This is a vector that contains the center of mass of the car. I recommend to set this value
+                                   // in the points x = 0 and z = 0 of your car. You can select the value that you want in the y axis,
+                                   // however, you must notice that the higher this value is, the more unstable the car becomes.
+                                   // Usually the y value goes from 0 to 1.5.
 
     //WHEELS
 
-      //[Header("WHEELS")]
+    //[Header("WHEELS")]
 
-      /*
-      The following variables are used to store the wheels' data of the car. We need both the mesh-only game objects and wheel
-      collider components of the wheels. The wheel collider components and 3D meshes of the wheels cannot come from the same
-      game object; they must be separate game objects.
-      */
-      public GameObject frontLeftMesh;
-      public WheelCollider frontLeftCollider;
-      [Space(10)]
-      public GameObject frontRightMesh;
-      public WheelCollider frontRightCollider;
-      [Space(10)]
-      public GameObject rearLeftMesh;
-      public WheelCollider rearLeftCollider;
-      [Space(10)]
-      public GameObject rearRightMesh;
-      public WheelCollider rearRightCollider;
+    /*
+    The following variables are used to store the wheels' data of the car. We need both the mesh-only game objects and wheel
+    collider components of the wheels. The wheel collider components and 3D meshes of the wheels cannot come from the same
+    game object; they must be separate game objects.
+    */
+    public GameObject frontLeftMesh;
+    public WheelCollider frontLeftCollider;
+    [Space(10)]
+    public GameObject frontRightMesh;
+    public WheelCollider frontRightCollider;
+    [Space(10)]
+    public GameObject rearLeftMesh;
+    public WheelCollider rearLeftCollider;
+    [Space(10)]
+    public GameObject rearRightMesh;
+    public WheelCollider rearRightCollider;
 
     //PARTICLE SYSTEMS
 
-      [Space(20)]
-      //[Header("EFFECTS")]
-      [Space(10)]
-      //The following variable lets you to set up particle systems in your car
-      public bool useEffects = false;
+    [Space(20)]
+    //[Header("EFFECTS")]
+    [Space(10)]
+    //The following variable lets you to set up particle systems in your car
+    public bool useEffects = false;
 
-      // The following particle systems are used as tire smoke when the car drifts.
-      public ParticleSystem RLWParticleSystem;
-      public ParticleSystem RRWParticleSystem;
+    // The following particle systems are used as tire smoke when the car drifts.
+    public ParticleSystem RLWParticleSystem;
+    public ParticleSystem RRWParticleSystem;
 
-      [Space(10)]
-      // The following trail renderers are used as tire skids when the car loses traction.
-      public TrailRenderer RLWTireSkid;
-      public TrailRenderer RRWTireSkid;
+    [Space(10)]
+    // The following trail renderers are used as tire skids when the car loses traction.
+    public TrailRenderer RLWTireSkid;
+    public TrailRenderer RRWTireSkid;
 
     //SPEED TEXT (UI)
 
-      [Space(20)]
-      //[Header("UI")]
-      [Space(10)]
-      //The following variable lets you to set up a UI text to display the speed of your car.
-      public bool useUI = false;
-      public TextMeshProUGUI carSpeedText; // Used to store the UI object that is going to show the speed of the car.
+    [Space(20)]
+    //[Header("UI")]
+    [Space(10)]
+    //The following variable lets you to set up a UI text to display the speed of your car.
+    public bool useUI = false;
+    public TextMeshProUGUI carSpeedText; // Used to store the UI object that is going to show the speed of the car.
 
     //SOUNDS
 
-      [Space(20)]
-      //[Header("Sounds")]
-      [Space(10)]
-      //The following variable lets you to set up sounds for your car such as the car engine or tire screech sounds.
-      public bool useSounds = false;
-      public AudioSource carEngineSound; // This variable stores the sound of the car engine.
-      public AudioSource tireScreechSound; // This variable stores the sound of the tire screech (when the car is drifting).
-      float initialCarEngineSoundPitch; // Used to store the initial pitch of the car engine sound.
+    [Space(20)]
+    //[Header("Sounds")]
+    [Space(10)]
+    //The following variable lets you to set up sounds for your car such as the car engine or tire screech sounds.
+    public bool useSounds = false;
+    public AudioSource carEngineSound; // This variable stores the sound of the car engine.
+    public AudioSource tireScreechSound; // This variable stores the sound of the tire screech (when the car is drifting).
+    float initialCarEngineSoundPitch; // Used to store the initial pitch of the car engine sound.
 
     //CONTROLS
 
-      [Space(20)]
-      //[Header("CONTROLS")]
-      [Space(10)]
-      //The following variables lets you to set up touch controls for mobile devices.
-      public bool useTouchControls = false;
-      public GameObject throttleButton;
-      PrometeoTouchInput throttlePTI;
-      public GameObject reverseButton;
-      PrometeoTouchInput reversePTI;
-      public GameObject turnRightButton;
-      PrometeoTouchInput turnRightPTI;
-      public GameObject turnLeftButton;
-      PrometeoTouchInput turnLeftPTI;
-      public GameObject handbrakeButton;
-      PrometeoTouchInput handbrakePTI;
+    [Space(20)]
+    //[Header("CONTROLS")]
+    [Space(10)]
+    //The following variables lets you to set up touch controls for mobile devices.
+    public bool useTouchControls = false;
+    public GameObject throttleButton;
+    PrometeoTouchInput throttlePTI;
+    public GameObject reverseButton;
+    PrometeoTouchInput reversePTI;
+    public GameObject turnRightButton;
+    PrometeoTouchInput turnRightPTI;
+    public GameObject turnLeftButton;
+    PrometeoTouchInput turnLeftPTI;
+    public GameObject handbrakeButton;
+    PrometeoTouchInput handbrakePTI;
 
     //CAR DATA
 
-      [HideInInspector]
-      public float carSpeed; // Used to store the speed of the car.
-      [HideInInspector]
-      public bool isDrifting; // Used to know whether the car is drifting or not.
-      [HideInInspector]
-      public bool isTractionLocked; // Used to know whether the traction of the car is locked or not.
+    [HideInInspector]
+    public float carSpeed; // Used to store the speed of the car.
+    [HideInInspector]
+    public bool isDrifting; // Used to know whether the car is drifting or not.
+    [HideInInspector]
+    public bool isTractionLocked; // Used to know whether the traction of the car is locked or not.
 
     //PRIVATE VARIABLES
 
-      /*
-      IMPORTANT: The following variables should not be modified manually since their values are automatically given via script.
-      */
-      Rigidbody carRigidbody; // Stores the car's rigidbody.
-      float steeringAxis; // Used to know whether the steering wheel has reached the maximum value. It goes from -1 to 1.
-      float throttleAxis; // Used to know whether the throttle has reached the maximum value. It goes from -1 to 1.
-      float driftingAxis;
-      float localVelocityZ;
-      float localVelocityX;
-      bool deceleratingCar;
-      bool touchControlsSetup = false;
-      /*
-      The following variables are used to store information about sideways friction of the wheels (such as
-      extremumSlip,extremumValue, asymptoteSlip, asymptoteValue and stiffness). We change this values to
-      make the car to start drifting.
-      */
-      WheelFrictionCurve FLwheelFriction;
-      float FLWextremumSlip;
-      WheelFrictionCurve FRwheelFriction;
-      float FRWextremumSlip;
-      WheelFrictionCurve RLwheelFriction;
-      float RLWextremumSlip;
-      WheelFrictionCurve RRwheelFriction;
-      float RRWextremumSlip;
+    /*
+    IMPORTANT: The following variables should not be modified manually since their values are automatically given via script.
+    */
+    Rigidbody carRigidbody; // Stores the car's rigidbody.
+    float steeringAxis; // Used to know whether the steering wheel has reached the maximum value. It goes from -1 to 1.
+    float throttleAxis; // Used to know whether the throttle has reached the maximum value. It goes from -1 to 1.
+    float driftingAxis;
+    float localVelocityZ;
+    float localVelocityX;
+    bool deceleratingCar;
+    bool touchControlsSetup = false;
+    /*
+    The following variables are used to store information about sideways friction of the wheels (such as
+    extremumSlip,extremumValue, asymptoteSlip, asymptoteValue and stiffness). We change this values to
+    make the car to start drifting.
+    */
+    WheelFrictionCurve FLwheelFriction;
+    float FLWextremumSlip;
+    WheelFrictionCurve FRwheelFriction;
+    float FRWextremumSlip;
+    WheelFrictionCurve RLwheelFriction;
+    float RLWextremumSlip;
+    WheelFrictionCurve RRwheelFriction;
+    float RRWextremumSlip;
 
     [Header("Custom")]
     public float impactPower = 3000f;
@@ -191,6 +190,7 @@ public class PlayerController : MonoBehaviour
                     {
                         //Debug.Log("속도 방향과 충돌 방향 일치 -> 힘 전달 " + carRigidbody.velocity.magnitude);
 
+                        AudioManager.Instance.PlaySFX(Sfx.zombieCrash);
                         zombie.Hit(cp.point, speedPercent, targetDirection);
 
                         return;
@@ -201,6 +201,15 @@ public class PlayerController : MonoBehaviour
             if (contactingZombies.Count < 10 && zombie.CloseContact(cp.point)) // 최대 10명 부착
             {
                 contactingZombies.Add(zombie);
+            }
+        }
+        //else if (!collision.gameObject.CompareTag("Plane") && collision.gameObject.layer == 6)
+        else if (collision.gameObject.layer == 6)
+        {
+            float speedPercent = Mathf.Abs(carSpeed) / maxSpeed;
+            if (speedPercent >= 0.15f)
+            {
+                AudioManager.Instance.PlaySFX(Sfx.crash);
             }
         }
     }
@@ -268,26 +277,35 @@ public class PlayerController : MonoBehaviour
         // We invoke 2 methods inside this script. CarSpeedUI() changes the text of the UI object that stores
         // the speed of the car and CarSounds() controls the engine and drifting sounds. Both methods are invoked
         // in 0 seconds, and repeatedly called every 0.1 seconds.
-        if(useUI){
-          InvokeRepeating("CarSpeedUI", 0f, 0.1f);
-        }else if(!useUI){
-          if(carSpeedText != null){
-            carSpeedText.text = "0";
-          }
+        if (useUI)
+        {
+            InvokeRepeating(nameof(CarSpeedUI), 0f, 0.1f);
+        }
+        else if (!useUI)
+        {
+            if (carSpeedText != null)
+            {
+                carSpeedText.text = "0";
+            }
         }
 
-        if(useSounds){
-          InvokeRepeating("CarSounds", 0f, 0.1f);
-        }else if(!useSounds){
-          if(carEngineSound != null){
-            carEngineSound.Stop();
-          }
-          if(tireScreechSound != null){
-            tireScreechSound.Stop();
-          }
+        if (useSounds)
+        {
+            InvokeRepeating(nameof(CarSounds), 0f, 0.1f);
+        }
+        else if (!useSounds)
+        {
+            if (carEngineSound != null)
+            {
+                carEngineSound.Stop();
+            }
+            if (tireScreechSound != null)
+            {
+                tireScreechSound.Stop();
+            }
         }
 
-        if(!useEffects){
+        if (!useEffects){
           if(RLWParticleSystem != null){
             RLWParticleSystem.Stop();
           }
@@ -388,7 +406,7 @@ public class PlayerController : MonoBehaviour
             }
             if ((!reversePTI.buttonPressed && !throttlePTI.buttonPressed) && !handbrakePTI.buttonPressed && !deceleratingCar)
             {
-                InvokeRepeating("DecelerateCar", 0f, 0.1f);
+                InvokeRepeating(nameof(DecelerateCar), 0f, 0.1f);
                 deceleratingCar = true;
             }
             if (!turnLeftPTI.buttonPressed && !turnRightPTI.buttonPressed && steeringAxis != 0f)
@@ -435,7 +453,7 @@ public class PlayerController : MonoBehaviour
             }
             if ((!Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.W)) && !Input.GetKey(KeyCode.Space) && !deceleratingCar)
             {
-                InvokeRepeating("DecelerateCar", 0f, 0.1f);
+                InvokeRepeating(nameof(DecelerateCar), 0f, 0.1f);
                 deceleratingCar = true;
             }
             if (!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D) && steeringAxis != 0f)

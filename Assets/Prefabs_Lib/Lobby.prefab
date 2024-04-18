@@ -307,7 +307,15 @@ MonoBehaviour:
   globalBGMVolumeOffset: 0
   masterMixer: {fileID: 24100000, guid: 003f3addf47f17f4cadaded4762c0df6, type: 2}
   audios:
-    array: []
+    array:
+    - Key: 0
+      Value:
+        clip: {fileID: 8300000, guid: ea115a23246e5364489598470bb5b235, type: 3}
+        volumeOffset: 0
+    - Key: 1
+      Value:
+        clip: {fileID: 8300000, guid: e970185e3554ef64b9122fe2e79937a9, type: 3}
+        volumeOffset: 0
 --- !u!1 &3490372867426255444
 GameObject:
   m_ObjectHideFlags: 0
