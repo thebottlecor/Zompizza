@@ -11,6 +11,9 @@ using UnityEngine.UI;
 #region 세이브 데이터
 public enum KeyMap
 {
+    escape,
+    worldMap,
+
     cameraMove_Up,
     cameraMove_Down,
     cameraMove_Left,
@@ -21,7 +24,6 @@ public enum KeyMap
     time_Speed_1,
     time_Speed_2,
     time_Speed_3,
-    escape,
     toggle_UI_Display,
     demolish_Building,
     jobPriority_Up,
@@ -44,6 +46,9 @@ public class KeySaveData
 {
     public SerializableDictionary<KeyMap, KeyCode> keyCodes = new()
     {
+        new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.escape, Value = KeyCode.Escape },
+        new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.worldMap, Value = KeyCode.M },
+
         new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.cameraMove_Up, Value = KeyCode.W },
         new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.cameraMove_Down, Value = KeyCode.S },
         new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.cameraMove_Left, Value = KeyCode.A },
@@ -56,7 +61,6 @@ public class KeySaveData
         new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.time_Speed_2, Value = KeyCode.Alpha2 },
         new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.time_Speed_3, Value = KeyCode.Alpha3 },
 
-        new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.escape, Value = KeyCode.Escape },
         new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.toggle_UI_Display, Value = KeyCode.I },
 
         new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.demolish_Building, Value = KeyCode.X },
@@ -130,6 +134,9 @@ public class SettingManager : Singleton<SettingManager>
     // Keysetting에서 prefab 생성 순서
     private readonly List<KeyMap> keyOrder = new List<KeyMap>
     {
+        KeyMap.escape,
+        KeyMap.worldMap,
+
         KeyMap.cameraMove_Up,
         KeyMap.cameraMove_Down,
         KeyMap.cameraMove_Left,
@@ -142,7 +149,6 @@ public class SettingManager : Singleton<SettingManager>
         KeyMap.time_Speed_2,
         KeyMap.time_Speed_3,
 
-        KeyMap.escape,
         KeyMap.toggle_UI_Display,
         KeyMap.demolish_Building,
 

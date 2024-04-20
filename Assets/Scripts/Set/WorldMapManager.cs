@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class WorldMapManager : Singleton<WorldMapManager>
 {
     //Public variables
-    public GameObject worldMapObj;
+    public MinimapRenderer worldmap;
 
     public MinimapCamera worldMapCamera;
 
@@ -36,6 +36,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         //worldMapCamera.gameObject.SetActive(true);
         //playerFieldOfView.enabled = false;
 
+        //worldmap.renderContent = true;
         MinimapDataGlobal.SetMinimapItemsSizeGlobalMultiplier(1.5f);
     }
 
@@ -51,6 +52,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         //worldMapCamera.gameObject.SetActive(false);
         //playerFieldOfView.enabled = true;
 
+        //worldmap.renderContent = false;
         MinimapDataGlobal.SetMinimapItemsSizeGlobalMultiplier(1f);
     }
 

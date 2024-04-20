@@ -60,8 +60,8 @@ public class UtilUI : EventListener
         Time.timeScale = 0f;
         loading = true;
 
-        WorldMapManager.Instance.OpenFullscreenMap();
         WorldMapManager.Instance.CloseMinimap();
+        WorldMapManager.Instance.OpenFullscreenMap();
 
         SelectSubPanel(activeSubPanel);
 
@@ -101,6 +101,7 @@ public class UtilUI : EventListener
         Time.timeScale = 1f;
         loading = true;
 
+        WorldMapManager.Instance.CloseFullscreenMap();
         WorldMapManager.Instance.OpenMinimap();
 
         for (int i = 0; i < panelButtonPairs.Count; i++)
@@ -113,7 +114,6 @@ public class UtilUI : EventListener
         rectTransform.DOAnchorPos(new Vector2(0f, -2000f), fadeTime, false).SetEase(Ease.InOutQuint).SetUpdate(true);
         canvasGroup.DOFade(0f, fadeTime).SetUpdate(true).OnComplete(() =>
         {
-            WorldMapManager.Instance.CloseFullscreenMap();
             loading = false;
         });
     }
