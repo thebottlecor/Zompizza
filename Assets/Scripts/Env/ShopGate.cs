@@ -11,7 +11,8 @@ public class ShopGate : MonoBehaviour
 
     public Transform movingChild;
     public Transform movingChild_Right;
-    public bool opened;
+
+    public bool alwaysClosed;
 
     [Header("개발자 설정값")]
     public Vector3 closedPos;
@@ -29,6 +30,13 @@ public class ShopGate : MonoBehaviour
 
     void Update()
     {
+        if (alwaysClosed)
+        {
+            movingChild.position = closedPos;
+            movingChild_Right.position = closedPos_Right;
+            return;
+        }
+
         float dist = (transform.position - target.position).magnitude;
 
         if (dist > 100f) return;

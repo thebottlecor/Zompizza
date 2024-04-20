@@ -379,7 +379,7 @@ public class SettingManager : Singleton<SettingManager>
 
     public void OpenSettings()
     {
-        //Lobby.Instance.CloseAllPanel();
+        Lobby.Instance.CloseAllPanel();
         settingCanvas.gameObject.SetActive(true);
         ShowSubSettingPanel(0);
     }

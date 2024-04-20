@@ -17,6 +17,8 @@ public class Zombie2 : MonoBehaviour
 
     public bool contactingPlayer;
     public bool contact;
+    private float attackTimer;
+    private float contactTimer;
 
     public bool dead;
 
@@ -95,7 +97,8 @@ public class Zombie2 : MonoBehaviour
                         //    }
                         //}
 
-                        if (ai.remainingDistance <= (ai as FollowerEntity).stopDistance)
+                        if (ai.remainingDistance <= (ai as FollowerEntity).stopDistance 
+                            && dist <= 3.5f) // 적당한 거리 (거리에 민감)
                         {
                             contactingPlayer = true;
                         }
@@ -112,7 +115,27 @@ public class Zombie2 : MonoBehaviour
         animator.SetBool("Walk", walk);
         animator.SetBool("Attack", attack);
 
+        if (attack)
+        {
+            Attack();
+        }
+        else if (contact)
+        {
+            contactTimer += Time.deltaTime;
+            Attack();
+        }
+
         // 플레이어에게 Attacked 속성을 붙여서, Attacked * damage 만큼 1초당 받게 하기
+    }
+
+    private void Attack()
+    {
+        attackTimer += Time.deltaTime;
+        if (attackTimer > 1f)
+        {
+            attackTimer = 0f;
+            AudioManager.Instance.PlaySFX(Sfx.hittngPlayer);
+        }
     }
 
     public void Hit(Vector3 hitPos, float speed, Vector3 knockbackDir)
@@ -167,6 +190,11 @@ public class Zombie2 : MonoBehaviour
 
     public void DriftOffContact(float localXvel, float speed) // localXvel < 0 오른쪽 , > 0 왼쪽 (로컬 기준)
     {
+        if (contactTimer <= 0.25f) // 붙자마자 드리프트로 떼어졌을 때 -> 거의 충돌한 것과 마찬가지
+        {
+            AudioManager.Instance.PlaySFX(Sfx.zombieCrash);
+        }
+
         Transform tempTarger = ZombiePooler.Instance.target;
 
         this.transform.SetParent(ZombiePooler.Instance.zombieSpawnParent);
@@ -213,6 +241,9 @@ public class Zombie2 : MonoBehaviour
         contact = false;
         dead = false;
         shadow.SetActive(true);
+
+        attackTimer = 0f;
+        contactTimer = 0f;
 
         coll.gameObject.layer = LayerMask.NameToLayer("Zombie");
     }

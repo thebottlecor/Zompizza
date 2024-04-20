@@ -1336,7 +1336,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ZOM_GUI_61
+      name: cancel
       rect:
         serializedVersion: 2
         x: 580
@@ -1416,11 +1416,11 @@ TextureImporter:
       ZOM_GUI_59: -1146135056
       ZOM_GUI_6: -710229829
       ZOM_GUI_60: -1068914690
-      ZOM_GUI_61: -532384255
       ZOM_GUI_9: 1591077140
       button_01: 793004247
       button_02: 1118936077
       button_03: 748944128
+      cancel: -532384255
       circle: -796150030
       edge_01: 284716777
       panel_01: 1496360435

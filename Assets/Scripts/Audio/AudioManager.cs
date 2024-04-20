@@ -9,6 +9,7 @@ public struct SFXInfo
 {
     public AudioClip clip;
     public float volumeOffset;
+    public int maxPlay;
 }
 
 public class AudioManager : Singleton<AudioManager>
@@ -40,6 +41,22 @@ public class AudioManager : Singleton<AudioManager>
     //    audioSourceBGM.volume = 1f + globalBGMVolumeOffset;
     //    StartBGMPeace(0);
     //}
+
+    public Dictionary<Sfx, int> concurrentLimit;
+    public Dictionary<Sfx, int> frameLimit;
+
+    private void Start()
+    {
+        concurrentLimit = new Dictionary<Sfx, int>();
+        frameLimit = new Dictionary<Sfx, int>();
+        var list = Enum.GetValues(typeof(Sfx));
+        foreach (var temp in list)
+        {
+            Sfx sfx = (Sfx)temp;
+            concurrentLimit.Add(sfx, 0);
+            frameLimit.Add(sfx, 0);
+        }
+    }
 
     public void SetBGMVolume(float value)
     {
@@ -122,16 +139,40 @@ public class AudioManager : Singleton<AudioManager>
         return audioSourceSFX.isPlaying;
     }
 
-    public void PlaySFX(Sfx index, bool loop = false, float volume = 1f)
+    public void PlaySFX(Sfx idx, bool loop = false, float volume = 1f)
     {
         if (!loop)
-            audioSourceSFX.PlayOneShot(audios[index].clip, volume + audios[index].volumeOffset);
+        {
+            if (frameLimit[idx] == 0 && concurrentLimit[idx] < audios[idx].maxPlay + 1)
+            {
+                audioSourceSFX.PlayOneShot(audios[idx].clip, volume + audios[idx].volumeOffset);
+                StartCoroutine(FrameSoundCheck(idx));
+                StartCoroutine(CheckSoundFinish(idx));
+            }
+        }
         else
         {
-            audioSourceSFX_Loop.clip = audios[index].clip;
-            audioSourceSFX_Loop.volume = volume + audios[index].volumeOffset;
+            audioSourceSFX_Loop.clip = audios[idx].clip;
+            audioSourceSFX_Loop.volume = volume + audios[idx].volumeOffset;
             audioSourceSFX_Loop.Play();
         }
+    }
+
+    private IEnumerator FrameSoundCheck(Sfx idx)
+    {
+        frameLimit[idx]++;
+        float shortDuration = audios[idx].clip.length * 0.1f;
+        shortDuration = Mathf.Max(shortDuration, 0.02f);
+        yield return CoroutineHelper.WaitForSeconds(shortDuration);
+        frameLimit[idx]--;
+    }
+
+    private IEnumerator CheckSoundFinish(Sfx idx)
+    {
+        concurrentLimit[idx]++;
+        float duration = audios[idx].clip.length;
+        yield return CoroutineHelper.WaitForSeconds(duration);
+        concurrentLimit[idx]--;
     }
 
     public void StopSFX(bool loop = true)
@@ -151,6 +192,7 @@ public enum Sfx
 {
     crash,
     zombieCrash,
+    hittngPlayer,
 
     construction,
     demolish,

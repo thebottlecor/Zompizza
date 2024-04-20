@@ -34,6 +34,9 @@ public class LanguagePanel : MonoBehaviour
             case SystemLanguage.Korean:
                 firstLanguage = Language.kr;
                 break;
+            case SystemLanguage.Russian:
+                firstLanguage = Language.ru;
+                break;
         }
 
         LanguageObject languageObject = Instantiate(languageObject_Source, objectParent).GetComponent<LanguageObject>();

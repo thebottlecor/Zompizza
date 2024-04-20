@@ -35,6 +35,12 @@ public class UtilUI : EventListener
         OpenUI();
     }
 
+    public void OpenSettings()
+    {
+        activeSubPanel = 1;
+        OpenUI();
+    }
+
     public void OpenUI()
     {
         if (loading) return;
@@ -57,12 +63,13 @@ public class UtilUI : EventListener
         WorldMapManager.Instance.OpenFullscreenMap();
         WorldMapManager.Instance.CloseMinimap();
 
+        SelectSubPanel(activeSubPanel);
+
         canvasGroup.alpha = 0f;
         rectTransform.transform.localPosition = new Vector3(0f, 1000f, 0f);
         rectTransform.DOAnchorPos(new Vector2(0f, 0f), fadeTime, false).SetEase(Ease.OutElastic).SetUpdate(true);
         canvasGroup.DOFade(1f, fadeTime).SetUpdate(true).OnComplete(() =>
         {
-            SelectSubPanel(activeSubPanel);
             loading = false;
             opened = true;
         });

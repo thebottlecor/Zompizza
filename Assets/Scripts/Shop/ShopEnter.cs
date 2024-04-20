@@ -7,6 +7,8 @@ using DG.Tweening;
 public class ShopEnter : MonoBehaviour
 {
 
+    public GameObject indicator;
+
     public static EventHandler PlayerArriveEvent;
     public static EventHandler PlayerExitEvent;
 
@@ -15,6 +17,7 @@ public class ShopEnter : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             other.transform.parent.GetComponent<PlayerController>().StopPlayer();
+            indicator.SetActive(false);
 
             if (PlayerArriveEvent != null)
             {

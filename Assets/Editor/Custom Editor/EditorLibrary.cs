@@ -9,8 +9,8 @@ using UnityEditor;
 public class EditorLibrary : ScriptableObject
 {
 
-    private readonly string key = "16pXeNndcsfn7cLcezK_ZD_yeoKqB-rrjp6SZKh6SshY";
-    private readonly string[] sheetName = new string[] { "recipe", "research", "common", "keymap", "keycode", "trader", "name1" };
+    private readonly string key = "1NOGWHtmQdhGVYGXuN7Lo-oK3gIzWajo7b7D7g7a241w";
+    private readonly string[] sheetName = new string[] { "recipe", "research", "common", "keymap", "keycode", "trader" };
 
     private string Get_URL(int idx)
     {

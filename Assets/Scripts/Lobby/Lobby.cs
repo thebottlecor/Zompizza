@@ -40,7 +40,7 @@ public class Lobby : Singleton<Lobby>
     {
         base.Awake();
         DontDestroyOnLoad(this.gameObject);
-        //lobbyCloseButtons = FindObjectsOfType<LobbyCloseButton>(true);
+        lobbyCloseButtons = FindObjectsOfType<LobbyCloseButton>(true);
 
         //CallAfterAwake();
     }
@@ -55,14 +55,14 @@ public class Lobby : Singleton<Lobby>
 
     private void Start()
     {
-        //SaveDataLoading = true;
-        //var config = SaveManager.Instance.LoadConfig();
-        //CallAfterStart(config);
-        //var player = SaveManager.Instance.LoadPlayer();
-        //if (player != null)
-        //{
-        //    newGameCount = player.newGameCount;
-        //}
+        SaveDataLoading = true;
+        var config = SaveManager.Instance.LoadConfig();
+        CallAfterStart(config);
+        var player = SaveManager.Instance.LoadPlayer();
+        if (player != null)
+        {
+            newGameCount = player.newGameCount;
+        }
     }
 
     public override void CallAfterStart(ConfigData config)
@@ -72,7 +72,7 @@ public class Lobby : Singleton<Lobby>
 
         languagePanel.Init();
 
-        SaveManager.Instance.CallAfterStart(config);
+        //SaveManager.Instance.CallAfterStart(config);
 
         SaveDataLoading = false;
         // 초기화 완료 후 설정 저장
@@ -92,6 +92,7 @@ public class Lobby : Singleton<Lobby>
     {
         if (e.Equals("lobby"))
         {
+            // 로비 귀환시 UI 복구
             lobbyUIObjects.SetActive(true);
         }
     }
@@ -142,6 +143,8 @@ public class Lobby : Singleton<Lobby>
 
     public void TEMP_GameSTART()
     {
+        CloseAllPanel();
+        lobbyUIObjects.SetActive(false);
         GameStartInfo gameStartInfo = new GameStartInfo
         {
             saveName = string.Empty,
@@ -166,46 +169,47 @@ public class Lobby : Singleton<Lobby>
     [SerializeField] private TextMeshProUGUI newGamePanelTMP;
     [SerializeField] private TextMeshProUGUI gameStartTMP;
     [SerializeField] private TextMeshProUGUI islandNameTMP;
-    [SerializeField] private TextMeshProUGUI mapseedTMP;
-    [SerializeField] private TextMeshProUGUI resourceDensityTMP;
-    [SerializeField] private TextMeshProUGUI disasterIntensityTMP;
-    [SerializeField] private TextMeshProUGUI initialPopulationTMP;
-    [SerializeField] private TextMeshProUGUI initialResourceTMP;
+    //[SerializeField] private TextMeshProUGUI mapseedTMP;
+    //[SerializeField] private TextMeshProUGUI resourceDensityTMP;
+    //[SerializeField] private TextMeshProUGUI disasterIntensityTMP;
+    //[SerializeField] private TextMeshProUGUI initialPopulationTMP;
+    //[SerializeField] private TextMeshProUGUI initialResourceTMP;
 
     public void UpdateTexts()
     {
         var tm = TextManager.Instance;
         newGameTMP.text = tm.GetCommons("NewGame");
-        loadGameTMP.text = tm.GetCommons("Load");
-        settingsTMP.text = tm.GetCommons("Settings");
+        //loadGameTMP.text = tm.GetCommons("Load");
+        //settingsTMP.text = tm.GetCommons("Settings");
         exitTMP.text = tm.GetCommons("Exit");
         versionTMP.text = string.Format("v{0:0.00}", (SaveManager.Instance.version / 100f));
         creditButtonTMP.text = tm.GetCommons("Credits");
         creditPanelTMP.text = tm.GetCommons("Credits");
 
-        resourceDensityDropdown.options[0].text = tm.GetCommons("Little");
-        resourceDensityDropdown.options[1].text = tm.GetCommons("Default");
-        resourceDensityDropdown.options[2].text = tm.GetCommons("More");
-        startResourcesDropdown.options[0].text = tm.GetCommons("Little");
-        startResourcesDropdown.options[1].text = tm.GetCommons("Default");
-        startResourcesDropdown.options[2].text = tm.GetCommons("More");
-        startPopulationDropdown.options[0].text = Constant.startingMember0.ToString();
-        startPopulationDropdown.options[1].text = Constant.startingMember.ToString();
-        startPopulationDropdown.options[2].text = Constant.startingMember2.ToString();
-        disasterIntensityDropdown.options[0].text = tm.GetCommons("Off");
-        disasterIntensityDropdown.options[1].text = tm.GetCommons("Default");
-        disasterIntensityDropdown.options[2].text = tm.GetCommons("Frequent");
+        //resourceDensityDropdown.options[0].text = tm.GetCommons("Little");
+        //resourceDensityDropdown.options[1].text = tm.GetCommons("Default");
+        //resourceDensityDropdown.options[2].text = tm.GetCommons("More");
+        //startResourcesDropdown.options[0].text = tm.GetCommons("Little");
+        //startResourcesDropdown.options[1].text = tm.GetCommons("Default");
+        //startResourcesDropdown.options[2].text = tm.GetCommons("More");
+        //startPopulationDropdown.options[0].text = Constant.startingMember0.ToString();
+        //startPopulationDropdown.options[1].text = Constant.startingMember.ToString();
+        //startPopulationDropdown.options[2].text = Constant.startingMember2.ToString();
+        //disasterIntensityDropdown.options[0].text = tm.GetCommons("Off");
+        //disasterIntensityDropdown.options[1].text = tm.GetCommons("Default");
+        //disasterIntensityDropdown.options[2].text = tm.GetCommons("Frequent");
 
-        newGamePanelTMP.text = tm.GetCommons("NewGame");
-        gameStartTMP.text = tm.GetCommons("Start");
-        islandNameTMP.text = tm.GetCommons("IslandName");
-        mapseedTMP.text = tm.GetCommons("MapSeed");
-        resourceDensityTMP.text = tm.GetCommons("ResourceDensity");
-        disasterIntensityTMP.text = tm.GetCommons("Disasters");
-        initialPopulationTMP.text = tm.GetCommons("InitialPopulation");
-        initialResourceTMP.text = tm.GetCommons("InitialResources");
+        //newGamePanelTMP.text = tm.GetCommons("NewGame");
+        //gameStartTMP.text = tm.GetCommons("Start");
+        //islandNameTMP.text = tm.GetCommons("IslandName");
 
-        tutorialTMP.text = tm.GetCommons("Tutorial");
+        //mapseedTMP.text = tm.GetCommons("MapSeed");
+        //resourceDensityTMP.text = tm.GetCommons("ResourceDensity");
+        //disasterIntensityTMP.text = tm.GetCommons("Disasters");
+        //initialPopulationTMP.text = tm.GetCommons("InitialPopulation");
+        //initialResourceTMP.text = tm.GetCommons("InitialResources");
+
+        //tutorialTMP.text = tm.GetCommons("Tutorial");
     }
 
     #region NewGame

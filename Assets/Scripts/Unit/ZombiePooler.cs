@@ -58,6 +58,17 @@ public class ZombiePooler : Singleton<ZombiePooler>
         }
     }
 
+    public int GetActiveZomibes()
+    {
+        int count = 0;
+        for (int i = 0; i < maxZombie; i++)
+        {
+            if (zombiesPool[i].gameObject.activeSelf && !zombiesPool[i].dead)
+                count++;
+        }
+        return count;
+    }
+
     public void Spawn(int count)
     {
         for (int i = 0; i < maxZombie; i++)

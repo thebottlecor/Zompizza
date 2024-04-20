@@ -11,6 +11,7 @@ public enum Language
     en,
     jp,
     kr,
+    ru,
     LAST,
 }
 
@@ -45,15 +46,6 @@ public class TextManager : Singleton<TextManager>
 
     Dictionary<int, Dictionary<string, object>> traders;
     public string GetTraders(int idx) => traders[idx][language.ToString()].ToString();
-
-    Dictionary<int, Dictionary<string, object>> name1;
-    public string GetNames1(int idx, int age)
-    {
-        if (idx >= 0)
-            return name1[idx][language.ToString()].ToString();
-        else
-            return $"{GetCommons("Golem")} {age + 1}";
-    }
 
     public CultureInfo defaultCultureInfo = new CultureInfo("en-US");
 
@@ -105,6 +97,9 @@ public class TextManager : Singleton<TextManager>
             case SystemLanguage.Korean:
                 firstLanguage = Language.kr;
                 break;
+            case SystemLanguage.Russian:
+                firstLanguage = Language.ru;
+                break;
         }
         SetLanguage(firstLanguage);
     }
@@ -119,9 +114,8 @@ public class TextManager : Singleton<TextManager>
         keymaps = CSVReader.ReadCSV<KeyMap>("TextManager - keymap.csv");
         keycodes = CSVReader.ReadCSV<KeyCode>("TextManager - keycode.csv");
         traders = CSVReader.ReadCSV<int>("TextManager - trader.csv");
-        name1 = CSVReader.ReadCSV<int>("TextManager - name1.csv");
 
-        //Lobby.Instance.UpdateTexts();
+        Lobby.Instance.UpdateTexts();
         //SettingManager.Instance.UpdateTexts();
         //SaveManager.Instance.UpdateTexts();
     }

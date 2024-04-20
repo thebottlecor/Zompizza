@@ -90,8 +90,6 @@ public class PlayerController : MonoBehaviour
     [Space(20)]
     //[Header("UI")]
     [Space(10)]
-    //The following variable lets you to set up a UI text to display the speed of your car.
-    public bool useUI = false;
     public TextMeshProUGUI carSpeedText; // Used to store the UI object that is going to show the speed of the car.
 
     //SOUNDS
@@ -99,8 +97,6 @@ public class PlayerController : MonoBehaviour
     [Space(20)]
     //[Header("Sounds")]
     [Space(10)]
-    //The following variable lets you to set up sounds for your car such as the car engine or tire screech sounds.
-    public bool useSounds = false;
     public AudioSource carEngineSound; // This variable stores the sound of the car engine.
     public AudioSource tireScreechSound; // This variable stores the sound of the tire screech (when the car is drifting).
     float initialCarEngineSoundPitch; // Used to store the initial pitch of the car engine sound.
@@ -163,6 +159,7 @@ public class PlayerController : MonoBehaviour
     public float impactPower = 3000f;
     //public List<Zombie> contactingZombies = new List<Zombie>();
     public List<Zombie2> contactingZombies = new List<Zombie2>();
+    public float crashDrag = 1000f;
 
     void OnCollisionEnter(Collision collision)
     {
@@ -177,7 +174,8 @@ public class PlayerController : MonoBehaviour
             {
                 Vector3 targetDirection = (collision.transform.position - transform.position).normalized;
                 //float dotProduct = Vector2.Dot(transform.forward.normalized, targetDirection);
-                float dotProduct = Vector3.Dot(carRigidbody.velocity.normalized, targetDirection);
+                Vector3 carVel = carRigidbody.velocity.normalized;
+                float dotProduct = Vector3.Dot(carVel, targetDirection);
                 // 내적의 값이 > 0 이면 플레이어 앞에있고, < 0이면 뒤에있다.
                 // Target과 Player사이의 각도
                 float theta = Mathf.Acos(dotProduct) * Mathf.Rad2Deg;
@@ -189,6 +187,16 @@ public class PlayerController : MonoBehaviour
                     if (theta <= 120f / 2f)
                     {
                         //Debug.Log("속도 방향과 충돌 방향 일치 -> 힘 전달 " + carRigidbody.velocity.magnitude);
+
+                        float playerDot = Vector3.Dot(carVel, transform.forward); // 차앞 방향과 속도 내적
+                        if (playerDot >= 0)
+                        {
+                            carRigidbody.AddForce(-1f * crashDrag * transform.forward, ForceMode.Impulse);
+                        }
+                        else
+                        {
+                            carRigidbody.AddForce(crashDrag * transform.forward, ForceMode.Impulse);
+                        }
 
                         AudioManager.Instance.PlaySFX(Sfx.zombieCrash);
                         zombie.Hit(cp.point, speedPercent, targetDirection);
@@ -274,36 +282,10 @@ public class PlayerController : MonoBehaviour
           initialCarEngineSoundPitch = carEngineSound.pitch;
         }
 
-        // We invoke 2 methods inside this script. CarSpeedUI() changes the text of the UI object that stores
         // the speed of the car and CarSounds() controls the engine and drifting sounds. Both methods are invoked
         // in 0 seconds, and repeatedly called every 0.1 seconds.
-        if (useUI)
-        {
-            InvokeRepeating(nameof(CarSpeedUI), 0f, 0.1f);
-        }
-        else if (!useUI)
-        {
-            if (carSpeedText != null)
-            {
-                carSpeedText.text = "0";
-            }
-        }
-
-        if (useSounds)
-        {
-            InvokeRepeating(nameof(CarSounds), 0f, 0.1f);
-        }
-        else if (!useSounds)
-        {
-            if (carEngineSound != null)
-            {
-                carEngineSound.Stop();
-            }
-            if (tireScreechSound != null)
-            {
-                tireScreechSound.Stop();
-            }
-        }
+        // 사운드
+        InvokeRepeating(nameof(CarSounds), 0f, 0.1f);
 
         if (!useEffects){
           if(RLWParticleSystem != null){
@@ -352,6 +334,9 @@ public class PlayerController : MonoBehaviour
         localVelocityX = transform.InverseTransformDirection(carRigidbody.velocity).x;
         // Save the local velocity of the car in the z axis. Used to know if the car is going forward or backwards.
         localVelocityZ = transform.InverseTransformDirection(carRigidbody.velocity).z;
+
+        CarSpeedUI();
+        carEngineSound.enabled = !GM.Instance.stop_control;
 
         if (GM.Instance.stop_control) return;
 
@@ -480,12 +465,8 @@ public class PlayerController : MonoBehaviour
     // This method converts the car speed data from float to string, and then set the text of the UI carSpeedText with this value.
     public void CarSpeedUI()
     {
-        if (useUI)
-        {
-            float absoluteCarSpeed = Mathf.Abs(carSpeed);
-            carSpeedText.text = Mathf.RoundToInt(absoluteCarSpeed).ToString();
-        }
-
+        float absoluteCarSpeed = Mathf.Abs(carSpeed);
+        carSpeedText.text = Mathf.RoundToInt(absoluteCarSpeed).ToString();
     }
 
     // This method controls the car sounds. For example, the car engine will sound slow when the car speed is low because the
@@ -494,35 +475,21 @@ public class PlayerController : MonoBehaviour
     // Apart from that, the tireScreechSound will play whenever the car starts drifting or losing traction.
     public void CarSounds()
     {
-        if (useSounds)
+        if (carEngineSound != null)
         {
-            if (carEngineSound != null)
+            float engineSoundPitch = initialCarEngineSoundPitch + (Mathf.Abs(carRigidbody.velocity.magnitude) / 25f);
+            carEngineSound.pitch = engineSoundPitch;
+        }
+        if ((isDrifting) || (isTractionLocked && Mathf.Abs(carSpeed) > 12f))
+        {
+            if (!tireScreechSound.isPlaying)
             {
-                float engineSoundPitch = initialCarEngineSoundPitch + (Mathf.Abs(carRigidbody.velocity.magnitude) / 25f);
-                carEngineSound.pitch = engineSoundPitch;
-            }
-            if ((isDrifting) || (isTractionLocked && Mathf.Abs(carSpeed) > 12f))
-            {
-                if (!tireScreechSound.isPlaying)
-                {
-                    tireScreechSound.Play();
-                }
-            }
-            else if ((!isDrifting) && (!isTractionLocked || Mathf.Abs(carSpeed) < 12f))
-            {
-                tireScreechSound.Stop();
+                tireScreechSound.Play();
             }
         }
-        else if (!useSounds)
+        else if ((!isDrifting) && (!isTractionLocked || Mathf.Abs(carSpeed) < 12f))
         {
-            if (carEngineSound != null && carEngineSound.isPlaying)
-            {
-                carEngineSound.Stop();
-            }
-            if (tireScreechSound != null && tireScreechSound.isPlaying)
-            {
-                tireScreechSound.Stop();
-            }
+            tireScreechSound.Stop();
         }
     }
 

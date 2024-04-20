@@ -12,4 +12,22 @@ public class UIManager : Singleton<UIManager>
     public UtilUI utilUI;
 
 
+    public Button toLobbyButton;
+
+    public void Start()
+    {
+        toLobbyButton.onClick.AddListener(() =>
+        {
+            LoadingSceneManager.Instance.ToLobby();
+        });
+    }
+
+    public void QuitGame()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
+    }
 }

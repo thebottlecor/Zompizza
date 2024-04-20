@@ -44,10 +44,10 @@ public class CSVReader
 			case "String":
 				action = AA4;
 				break;
-			//case "KeyMap":
-			//	action = AA5;
-			//	break;
-			case "KeyCode":
+            case "KeyMap":
+                action = AA5;
+                break;
+            case "KeyCode":
 				action = AA6;
 				break;
 		}
@@ -103,12 +103,12 @@ public class CSVReader
 	{
 		(list as Dictionary<string, Dictionary<string, object>>).Add(key, entry);
 	}
-	//private static void AA5<T>(Dictionary<T, Dictionary<string, object>> list, string key, Dictionary<string, object> entry)
-	//{
-	//	if (Enum.TryParse(typeof(KeyMap), key, out object n))
-	//		(list as Dictionary<KeyMap, Dictionary<string, object>>).Add((KeyMap)n, entry);
-	//}
-	private static void AA6<T>(Dictionary<T, Dictionary<string, object>> list, string key, Dictionary<string, object> entry)
+    private static void AA5<T>(Dictionary<T, Dictionary<string, object>> list, string key, Dictionary<string, object> entry)
+    {
+        if (Enum.TryParse(typeof(KeyMap), key, out object n))
+            (list as Dictionary<KeyMap, Dictionary<string, object>>).Add((KeyMap)n, entry);
+    }
+    private static void AA6<T>(Dictionary<T, Dictionary<string, object>> list, string key, Dictionary<string, object> entry)
 	{
 		if (Enum.TryParse(typeof(KeyCode), key, out object n))
 			(list as Dictionary<KeyCode, Dictionary<string, object>>).Add((KeyCode)n, entry);
