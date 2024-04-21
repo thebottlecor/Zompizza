@@ -26,6 +26,8 @@ public class ZombieTitle : MonoBehaviour
     public float seekTime = 3f;
     public float seekDist = 5f;
 
+    public bool alwaysWalking;
+
     private void Start()
     {
         rigid = GetComponent<Rigidbody>();
@@ -44,31 +46,38 @@ public class ZombieTitle : MonoBehaviour
 
     void Update()
     {
-        bool walk = false;
-        bool attack = false;
-
-        if (timer > 0f)
+        if (alwaysWalking)
         {
-            timer -= Time.deltaTime;
+            
         }
         else
         {
-            targetPos = initPos + new Vector3(UnityEngine.Random.Range(-seekDist, seekDist), 0f, UnityEngine.Random.Range(-seekDist, seekDist));
-            timer = seekTime + UnityEngine.Random.Range(-0.5f, 0.5f);
-        }
+            bool walk = false;
+            bool attack = false;
 
-        Vector3 diff = (targetPos - transform.position);
-        float dist = diff.magnitude;
-        if (dist > 0.25f)
-        {
-            Vector3 dir = diff.normalized;
-            Vector3 look = new Vector3(dir.x, 0f, dir.z);
-            transform.rotation = Quaternion.LookRotation(look);
-            transform.position += speed * Time.deltaTime * dir;
-            walk = true;
-        }
+            if (timer > 0f)
+            {
+                timer -= Time.deltaTime;
+            }
+            else
+            {
+                targetPos = initPos + new Vector3(UnityEngine.Random.Range(-seekDist, seekDist), 0f, UnityEngine.Random.Range(-seekDist, seekDist));
+                timer = seekTime + UnityEngine.Random.Range(-0.5f, 0.5f);
+            }
 
-        animator.SetBool("Walk", walk);
-        animator.SetBool("Attack", attack);
+            Vector3 diff = (targetPos - transform.position);
+            float dist = diff.magnitude;
+            if (dist > 0.25f)
+            {
+                Vector3 dir = diff.normalized;
+                Vector3 look = new Vector3(dir.x, 0f, dir.z);
+                transform.rotation = Quaternion.LookRotation(look);
+                transform.position += speed * Time.deltaTime * dir;
+                walk = true;
+            }
+
+            animator.SetBool("Walk", walk);
+            animator.SetBool("Attack", attack);
+        }
     }
 }

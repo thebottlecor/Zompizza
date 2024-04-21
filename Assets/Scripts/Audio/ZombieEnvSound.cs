@@ -10,8 +10,6 @@ public class ZombieEnvSound : MonoBehaviour
     private float timer;
     private float randomInterval;
 
-    private HashSet<int> playList;
-
     float minInterval = 1f;
     float maxInterval = 5f;
 
@@ -19,12 +17,13 @@ public class ZombieEnvSound : MonoBehaviour
     void Start()
     {
         randomInterval = maxInterval;
-        playList = new HashSet<int>();
     }
 
     private float GetSoundInterval()
     {
-        float result = ((minInterval - maxInterval) / ZombiePooler.Instance.maxZombie) * ZombiePooler.Instance.GetActiveZomibes() + maxInterval;
+        float result = 10f;
+        if (ZombiePooler.Instance != null)
+            result = ((minInterval - maxInterval) / ZombiePooler.Instance.maxZombie) * ZombiePooler.Instance.GetActiveZomibes() + maxInterval;
         float random = UnityEngine.Random.Range(-1f, 1f) + result;
         return Mathf.Max(random, 1f);
     }
@@ -69,35 +68,14 @@ public class ZombieEnvSound : MonoBehaviour
         sources[randomSource].Play();
 
         StartCoroutine(StopSound(randomSource));
-
-        //while (playList.Count < sources.Length)
-        //{
-        //    int randomSource = UnityEngine.Random.Range(0, sources.Length);
-
-        //    if (sources[randomSource].isPlaying) continue;
-
-        //    float randomVolume = UnityEngine.Random.Range(0.6f, 0.8f);
-        //    float randomPitch = UnityEngine.Random.Range(0.9f, 1.1f);
-
-        //    sources[randomSource].volume = randomVolume;
-        //    sources[randomSource].pitch = randomPitch;
-
-        //    sources[randomSource].Play();
-
-        //    StartCoroutine(StopSound(randomSource));
-
-        //    break;
-        //}
     }
 
     private IEnumerator StopSound(int idx)
     {
-        //playList.Add(idx);
         float duration = sources[idx].clip.length * 0.99f;
 
         yield return CoroutineHelper.WaitForSeconds(duration);
 
         sources[idx].Stop();
-        //playList.Remove(idx);
     }
 }
