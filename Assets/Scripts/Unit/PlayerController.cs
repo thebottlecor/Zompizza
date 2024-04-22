@@ -161,6 +161,8 @@ public class PlayerController : MonoBehaviour
     public List<Zombie2> contactingZombies = new List<Zombie2>();
     public float crashDrag = 1000f;
 
+    private SerializableDictionary<KeyMap, KeyMapping> HotKey => SettingManager.Instance.keyMappings;
+
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Zombie"))
@@ -401,47 +403,54 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            if (Input.GetKey(KeyCode.W))
+            bool forward = HotKey[KeyMap.carForward].Getkey();
+            bool backward = HotKey[KeyMap.carBackward].Getkey();
+            bool left = HotKey[KeyMap.carLeft].Getkey();
+            bool right = HotKey[KeyMap.carRight].Getkey();
+            bool pressBreak = HotKey[KeyMap.carBreak].Getkey();
+            bool upBreak = HotKey[KeyMap.carBreak].GetkeyUp();
+
+            if (forward)
             {
                 CancelInvoke("DecelerateCar");
                 deceleratingCar = false;
                 GoForward();
             }
-            if (Input.GetKey(KeyCode.S))
+            if (backward)
             {
                 CancelInvoke("DecelerateCar");
                 deceleratingCar = false;
                 GoReverse();
             }
 
-            if (Input.GetKey(KeyCode.A))
+            if (left)
             {
                 TurnLeft();
             }
-            if (Input.GetKey(KeyCode.D))
+            if (right)
             {
                 TurnRight();
             }
-            if (Input.GetKey(KeyCode.Space))
+            if (pressBreak)
             {
                 CancelInvoke("DecelerateCar");
                 deceleratingCar = false;
                 Handbrake();
             }
-            if (Input.GetKeyUp(KeyCode.Space))
+            if (upBreak)
             {
                 RecoverTraction();
             }
-            if ((!Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.W)))
+            if (!backward && !forward)
             {
                 ThrottleOff();
             }
-            if ((!Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.W)) && !Input.GetKey(KeyCode.Space) && !deceleratingCar)
+            if (!backward && !forward && !pressBreak && !deceleratingCar)
             {
                 InvokeRepeating(nameof(DecelerateCar), 0f, 0.1f);
                 deceleratingCar = true;
             }
-            if (!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D) && steeringAxis != 0f)
+            if (!left && !right && steeringAxis != 0f)
             {
                 ResetSteeringAngle();
             }

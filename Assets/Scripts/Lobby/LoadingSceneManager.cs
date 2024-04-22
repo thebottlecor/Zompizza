@@ -47,6 +47,7 @@ public class LoadingSceneManager : Singleton<LoadingSceneManager>
 
     public void ToLobby()
     {
+        SettingManager.Instance.ReturnToParent();
         LoadScene("lobby");
         Time.timeScale = 1f;
     }

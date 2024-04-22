@@ -253,7 +253,7 @@ TextureImporter:
         height: 751
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 55, y: 55, z: 55, w: 55}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -1315,7 +1315,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ZOM_GUI_60
+      name: check
       rect:
         serializedVersion: 2
         x: 404
@@ -1415,12 +1415,12 @@ TextureImporter:
       ZOM_GUI_58: -2024360725
       ZOM_GUI_59: -1146135056
       ZOM_GUI_6: -710229829
-      ZOM_GUI_60: -1068914690
       ZOM_GUI_9: 1591077140
       button_01: 793004247
       button_02: 1118936077
       button_03: 748944128
       cancel: -532384255
+      check: -1068914690
       circle: -796150030
       edge_01: 284716777
       panel_01: 1496360435

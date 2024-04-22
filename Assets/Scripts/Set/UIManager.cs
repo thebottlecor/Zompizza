@@ -11,26 +11,20 @@ public class UIManager : Singleton<UIManager>
     public ShopUI shopUI;
     public UtilUI utilUI;
 
-    public Button toLobbyButton;
+    public RectTransform movingSettingsPanelParent;
 
     private SerializableDictionary<KeyMap, KeyMapping> HotKey => SettingManager.Instance.keyMappings;
 
-    public void Start()
+    private void Start()
     {
-        toLobbyButton.onClick.AddListener(() =>
-        {
-            LoadingSceneManager.Instance.ToLobby();
-        });
+        var panel = SettingManager.Instance.ingameMovingPanel;
+        panel.SetParent(movingSettingsPanelParent);
+        panel.gameObject.SetActive(true);
+
+        panel.offsetMin = new Vector2(0f, 0f);
+        panel.offsetMax = new Vector2(0f, 0f);
     }
 
-    public void QuitGame()
-    {
-#if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-#else
-        Application.Quit();
-#endif
-    }
 
     private void Update()
     {

@@ -11,6 +11,7 @@ public class LoadingObject : EventListener
 
     public Slider loadingBar;
     public TextMeshProUGUI loadingTMP;
+    public Image blackScreen;
 
     protected override void AddListeners()
     {
@@ -40,7 +41,8 @@ public class LoadingObject : EventListener
     {
         if (e.Equals("lobby"))
         {
-            gameObject.SetActive(false);
+            blackScreen.enabled = true;
+            //gameObject.SetActive(false);
         }
     }
 

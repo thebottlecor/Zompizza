@@ -94,6 +94,7 @@ public class UtilUI : EventListener
 
     public void HideUI()
     {
+        if (!opened) return;
         if (loading) return;
 
         opened = false;

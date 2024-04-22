@@ -21,6 +21,5 @@ public class LanguageObject : MonoBehaviour
     {
         panel.SetLanguage(language);
         AudioManager.Instance.PlaySFX(Sfx.buttons); // 언어 변경 버튼
-        panel.Hide();
     }
 }

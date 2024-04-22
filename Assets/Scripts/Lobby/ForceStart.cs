@@ -30,6 +30,8 @@ public class ForceStart : MonoBehaviour
 
     private void Start()
     {
+        Lobby.Instance.LobbyUISwitch(false);
+
         GameStartInfo gameStartInfo = new GameStartInfo
         {
             cityName = "Pixel Colony",

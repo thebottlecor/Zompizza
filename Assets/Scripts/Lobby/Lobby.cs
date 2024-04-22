@@ -29,12 +29,11 @@ public class Lobby : Singleton<Lobby>
     public GameObject lobbyUIObjects;
 
     public LanguagePanel languagePanel;
-    public Canvas creditsCanvas;
     private LobbyCloseButton[] lobbyCloseButtons;
 
     public bool SaveDataLoading { get; private set; }
 
-    //private SerializableDictionary<KeyMap, KeyMapping> HotKey => SettingManager.Instance.keyMappings;
+    private SerializableDictionary<KeyMap, KeyMapping> HotKey => SettingManager.Instance.keyMappings;
 
     protected override void Awake()
     {
@@ -42,6 +41,7 @@ public class Lobby : Singleton<Lobby>
         DontDestroyOnLoad(this.gameObject);
         lobbyCloseButtons = FindObjectsOfType<LobbyCloseButton>(true);
 
+        LobbyUISwitch(true);
         //CallAfterAwake();
     }
 
@@ -93,28 +93,28 @@ public class Lobby : Singleton<Lobby>
         if (e.Equals("lobby"))
         {
             // 로비 귀환시 UI 복구
-            lobbyUIObjects.SetActive(true);
+            LobbyUISwitch(true);
         }
+    }
+    public void LobbyUISwitch(bool on)
+    {
+        lobbyUIObjects.SetActive(on);
+        SettingManager.Instance.LobbySwitch(on);
     }
 
     private void Update()
     {
-        //if (GM.Instance != null) return; // 인게임 씬에서는 단축키 막음
+        if (GM.Instance != null) return; // 인게임 씬에서는 단축키 막음
 
-        //if (HotKey[KeyMap.escape].GetkeyDown())
-        //{
-        //    CloseAllPanel();
-        //}
-    }
-
-    public void OpenCreditsPanel()
-    {
-        CloseAllPanel();
-        creditsCanvas.gameObject.SetActive(true);
+        if (HotKey[KeyMap.escape].GetkeyDown())
+        {
+            CloseAllPanel();
+        }
     }
 
     public void CloseAllPanel()
     {
+        SettingManager.Instance.HideSettings();
         for (int i = 0; i < lobbyCloseButtons.Length; i++)
         {
             lobbyCloseButtons[i].Close();
@@ -133,7 +133,7 @@ public class Lobby : Singleton<Lobby>
     public void LoadGameStart(string saveName)
     {
         CloseAllPanel();
-        lobbyUIObjects.SetActive(false);
+        LobbyUISwitch(false);
         GameStartInfo gameStartInfo = new GameStartInfo
         {
             saveName = saveName
@@ -144,7 +144,7 @@ public class Lobby : Singleton<Lobby>
     public void TEMP_GameSTART()
     {
         CloseAllPanel();
-        lobbyUIObjects.SetActive(false);
+        LobbyUISwitch(false);
         GameStartInfo gameStartInfo = new GameStartInfo
         {
             saveName = string.Empty,
@@ -180,7 +180,7 @@ public class Lobby : Singleton<Lobby>
         var tm = TextManager.Instance;
         newGameTMP.text = tm.GetCommons("NewGame");
         //loadGameTMP.text = tm.GetCommons("Load");
-        //settingsTMP.text = tm.GetCommons("Settings");
+        settingsTMP.text = tm.GetCommons("Settings");
         exitTMP.text = tm.GetCommons("Exit");
         versionTMP.text = string.Format("v{0:0.00}", (SaveManager.Instance.version / 100f));
         creditButtonTMP.text = tm.GetCommons("Credits");
@@ -290,7 +290,7 @@ public class Lobby : Singleton<Lobby>
     public void NewGameStart()
     {
         CloseAllPanel();
-        lobbyUIObjects.SetActive(false);
+        LobbyUISwitch(false);
         // 플레이어가 시작 전에 설정할 수 있는 정보
 
         int.TryParse(mapseedInputField.text, out int mapseed);

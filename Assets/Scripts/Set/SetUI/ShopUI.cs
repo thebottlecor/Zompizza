@@ -118,6 +118,7 @@ public class ShopUI : EventListener
 
     public void HideUI()
     {
+        if (!opened) return;
         if (loading) return;
 
         opened = false;

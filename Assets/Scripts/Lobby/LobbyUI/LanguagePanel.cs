@@ -62,15 +62,4 @@ public class LanguagePanel : MonoBehaviour
         SaveManager.Instance.SaveConfig();
     }
 
-    public void Show()
-    {
-        Lobby.Instance.CloseAllPanel();
-        gameObject.SetActive(true);
-    }
-
-    public void Hide()
-    {
-        gameObject.SetActive(false);
-    }
-
 }

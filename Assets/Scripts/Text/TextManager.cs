@@ -116,7 +116,7 @@ public class TextManager : Singleton<TextManager>
         traders = CSVReader.ReadCSV<int>("TextManager - trader.csv");
 
         Lobby.Instance.UpdateTexts();
-        //SettingManager.Instance.UpdateTexts();
+        SettingManager.Instance.UpdateTexts();
         //SaveManager.Instance.UpdateTexts();
     }
 }

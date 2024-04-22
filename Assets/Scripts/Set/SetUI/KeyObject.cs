@@ -23,7 +23,7 @@ public class KeyObject : MonoBehaviour
     private void ActiveThisKey()
     {
         SettingManager.Instance.currentActiveKeyNum = keyMap;
-        AudioManager.Instance.PlaySFX(Sfx.inputFieldStart);
+        //AudioManager.Instance.PlaySFX(Sfx.inputFieldStart);
         highlight.SetActive(true);
     }
 

@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,31 +13,16 @@ using UnityEngine.UI;
 public enum KeyMap
 {
     escape,
+
+    carForward,
+    carBackward,
+    carLeft,
+    carRight,
+    carBreak,
+
     worldMap,
-
-    cameraMove_Up,
-    cameraMove_Down,
-    cameraMove_Left,
-    cameraMove_Right,
-    cameraZoom_In,
-    cameraZoom_Out,
-    time_Pause,
-    time_Speed_1,
-    time_Speed_2,
-    time_Speed_3,
-    toggle_UI_Display,
-    demolish_Building,
-    jobPriority_Up,
-    jobPriority_Down,
-    pause,
-    upgrade,
-
-    //help,
-    trade,
-    research,
-    stockManagement,
-
-    remove,
+    worldMapZoomIn,
+    worldMapZoomOut,
 
     LAST,
 }
@@ -47,33 +33,16 @@ public class KeySaveData
     public SerializableDictionary<KeyMap, KeyCode> keyCodes = new()
     {
         new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.escape, Value = KeyCode.Escape },
+
+        new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.carForward, Value = KeyCode.W },
+        new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.carBackward, Value = KeyCode.S },
+        new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.carLeft, Value = KeyCode.A },
+        new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.carRight, Value = KeyCode.D },
+        new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.carBreak, Value = KeyCode.Space },
+
         new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.worldMap, Value = KeyCode.M },
-
-        new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.cameraMove_Up, Value = KeyCode.W },
-        new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.cameraMove_Down, Value = KeyCode.S },
-        new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.cameraMove_Left, Value = KeyCode.A },
-        new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.cameraMove_Right, Value = KeyCode.D },
-        new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.cameraZoom_In, Value = KeyCode.PageDown },
-        new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.cameraZoom_Out, Value = KeyCode.PageUp },
-
-        new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.time_Pause, Value = KeyCode.Space },
-        new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.time_Speed_1, Value = KeyCode.Alpha1 },
-        new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.time_Speed_2, Value = KeyCode.Alpha2 },
-        new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.time_Speed_3, Value = KeyCode.Alpha3 },
-
-        new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.toggle_UI_Display, Value = KeyCode.I },
-
-        new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.demolish_Building, Value = KeyCode.X },
-        new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.jobPriority_Up, Value = KeyCode.J },
-        new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.jobPriority_Down, Value = KeyCode.H },
-        new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.pause, Value = KeyCode.F },
-        new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.upgrade, Value = KeyCode.U },
-        new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.remove, Value = KeyCode.Z },
-
-        //new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.help, Value = KeyCode.Home },
-        new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.trade, Value = KeyCode.T },
-        new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.research, Value = KeyCode.R },
-        new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.stockManagement, Value = KeyCode.N },
+        new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.worldMapZoomIn, Value = KeyCode.PageDown },
+        new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.worldMapZoomOut, Value = KeyCode.PageUp },
     };
 }
 [Serializable]
@@ -99,9 +68,18 @@ public class KeyMapping
         //if (SteamHelper.Instance != null && SteamHelper.Instance.SteamOverlayIsOn) return false;
 
         if (key != KeyCode.None)
-        {
             return Input.GetKeyDown(key);
-        }
+        else
+            return false;
+    }
+
+    public bool GetkeyUp()
+    {
+        if (SettingManager.Instance.DisableControl) return false;
+        //if (SteamHelper.Instance != null && SteamHelper.Instance.SteamOverlayIsOn) return false;
+
+        if (key != KeyCode.None)
+            return Input.GetKeyUp(key);
         else
             return false;
     }
@@ -135,33 +113,16 @@ public class SettingManager : Singleton<SettingManager>
     private readonly List<KeyMap> keyOrder = new List<KeyMap>
     {
         KeyMap.escape,
+
+        KeyMap.carForward,
+        KeyMap.carBackward,
+        KeyMap.carLeft,
+        KeyMap.carRight,
+        KeyMap.carBreak,
+
         KeyMap.worldMap,
-
-        KeyMap.cameraMove_Up,
-        KeyMap.cameraMove_Down,
-        KeyMap.cameraMove_Left,
-        KeyMap.cameraMove_Right,
-        KeyMap.cameraZoom_In,
-        KeyMap.cameraZoom_Out,
-
-        KeyMap.time_Pause,
-        KeyMap.time_Speed_1,
-        KeyMap.time_Speed_2,
-        KeyMap.time_Speed_3,
-
-        KeyMap.toggle_UI_Display,
-        KeyMap.demolish_Building,
-
-        KeyMap.jobPriority_Up,
-        KeyMap.jobPriority_Down,
-        KeyMap.pause,
-        KeyMap.upgrade,
-        KeyMap.remove,
-
-        //KeyMap.help,
-        KeyMap.trade,
-        KeyMap.research,
-        KeyMap.stockManagement,
+        KeyMap.worldMapZoomIn,
+        KeyMap.worldMapZoomOut,
     };
 
     public bool DisableControl => WindowOutOfFocus || currentActiveKeyNum != KeyMap.LAST;
@@ -226,14 +187,12 @@ public class SettingManager : Singleton<SettingManager>
 
             if (Application.systemLanguage == SystemLanguage.French)
             {
-                keySave.keyCodes[KeyMap.cameraMove_Up] = KeyCode.Z;
-                keySave.keyCodes[KeyMap.cameraMove_Left] = KeyCode.Q;
-                keySave.keyCodes[KeyMap.remove] = KeyCode.W;
-                keySave.keyCodes[KeyMap.stockManagement] = KeyCode.N;
+                keySave.keyCodes[KeyMap.carForward] = KeyCode.Z;
+                keySave.keyCodes[KeyMap.carLeft] = KeyCode.Q;
             }
             else if (Application.systemLanguage == SystemLanguage.German)
             {
-                keySave.keyCodes[KeyMap.remove] = KeyCode.Y;
+
             }
         }
     }
@@ -328,7 +287,7 @@ public class SettingManager : Singleton<SettingManager>
                         keyObjects[currentActiveKeyNum].UpdateName();
                         KeySave();
                         //LanguageChangeApply();
-                        AudioManager.Instance.PlaySFX(Sfx.inputFieldEnd);
+                        //AudioManager.Instance.PlaySFX(Sfx.inputFieldEnd);
                         currentActiveKeyNum = KeyMap.LAST;
                         break;
                     }
@@ -339,7 +298,7 @@ public class SettingManager : Singleton<SettingManager>
                     {
                         keyObjects[currentActiveKeyNum].UpdateName();
                         currentActiveKeyNum = KeyMap.LAST;
-                        AudioManager.Instance.PlaySFX(Sfx.smallButtons);
+                        //AudioManager.Instance.PlaySFX(Sfx.smallButtons);
                         break;
                     }
                 }
@@ -377,21 +336,101 @@ public class SettingManager : Singleton<SettingManager>
 
     #region (통합) 설정
     [Header("Settings")]
-    public Canvas settingCanvas;
-    [SerializeField] private TextMeshProUGUI settingsTMP;
     [SerializeField] private TextMeshProUGUI[] subSettingPanelTMP;
-
     [SerializeField] private GameObject[] subSettingsPanels;
+    [SerializeField] private TextMeshProUGUI settingPanelCloseTMP;
+
+    public GameObject[] ingameObjects;
+    public RectTransform ingameMovingPanel;
+    public RectTransform movingPanelParent;
+
+    public List<PanelButtonPair> panelButtonPairs;
+    public int activeSubPanel = 0;
+    public float fadeTime = 1f;
+    public CanvasGroup settingCanvasGroup;
+    public RectTransform settingRectTransform;
+
+    public bool loading;
+    public bool opened;
+
+    public bool IsActive => loading || opened;
+
+    public void ReturnToParent()
+    {
+        ingameMovingPanel.SetParent(movingPanelParent);
+        ingameMovingPanel.SetSiblingIndex(1);
+        ingameMovingPanel.offsetMin = new Vector2(0f, 0f);
+        ingameMovingPanel.offsetMax = new Vector2(0f, 0f);
+    }
+
+    public void LobbySwitch(bool lobby)
+    {
+        if (lobby)
+        {
+            for (int i = 0; i < ingameObjects.Length; i++)
+            {
+                ingameObjects[i].SetActive(false);
+            }
+        }
+        else
+        {
+            for (int i = 0; i < ingameObjects.Length; i++)
+            {
+                ingameObjects[i].SetActive(true);
+            }
+        }
+    }
+
+    public void OpenPanel(int num)
+    {
+        activeSubPanel = num;
+        OpenSettings();
+    }
 
     public void OpenSettings()
     {
-        Lobby.Instance.CloseAllPanel();
-        settingCanvas.gameObject.SetActive(true);
+        if (loading) return;
+
+        if (opened)
+        {
+            HideSettings();
+            return;
+        }
+
+        loading = true;
+
+        SelectSubPanel(activeSubPanel);
         ShowSubSettingPanel(0);
+
+        settingCanvasGroup.alpha = 0f;
+        settingRectTransform.transform.localPosition = new Vector3(0f, 1000f, 0f);
+        settingRectTransform.DOAnchorPos(new Vector2(0f, 0f), fadeTime, false).SetEase(Ease.OutElastic).SetUpdate(true);
+        settingCanvasGroup.DOFade(1f, fadeTime).SetUpdate(true).OnComplete(() =>
+        {
+            loading = false;
+            opened = true;
+        });
     }
     public void HideSettings()
     {
-        settingCanvas.gameObject.SetActive(false);
+        if (!opened) return;
+        if (loading) return;
+
+        opened = false;
+        loading = true;
+
+        for (int i = 0; i < panelButtonPairs.Count; i++)
+        {
+            panelButtonPairs[i].button.Hide();
+        }
+
+        settingCanvasGroup.alpha = 1f;
+        settingRectTransform.transform.localPosition = new Vector3(0f, 0f, 0f);
+        settingRectTransform.DOAnchorPos(new Vector2(0f, -2000f), fadeTime, false).SetEase(Ease.InOutQuint).SetUpdate(true);
+        settingCanvasGroup.DOFade(0f, fadeTime).SetUpdate(true).OnComplete(() =>
+        {
+            loading = false;
+        });
     }
 
     public void ShowSubSettingPanel(int idx)
@@ -399,11 +438,23 @@ public class SettingManager : Singleton<SettingManager>
         for (int i = 0; i < subSettingsPanels.Length; i++)
         {
             subSettingsPanels[i].SetActive(false);
-            subSettingPanelTMP[i].color = Color.white;
         }
 
         subSettingsPanels[idx].SetActive(true);
-        //subSettingPanelTMP[idx].color = DataManager.Instance.uiLibrary.settingPanelHighlight;
+    }
+
+    public void SelectSubPanel(int idx)
+    {
+        for (int i = 0; i < panelButtonPairs.Count; i++)
+        {
+            panelButtonPairs[i].panel.SetActive(false);
+            panelButtonPairs[i].button.SetHighlight(false);
+        }
+
+        panelButtonPairs[idx].panel.SetActive(true);
+        panelButtonPairs[idx].button.SetHighlight(true);
+
+        activeSubPanel = idx;
     }
 
     public void UpdateTexts()
@@ -417,8 +468,7 @@ public class SettingManager : Singleton<SettingManager>
         resolutionTMP.text = tm.GetCommons("Resoultion");
         fullScreenTMP.text = tm.GetCommons("FullScreen");
 
-        settingsTMP.text = tm.GetCommons("Settings");
-        subSettingPanelTMP[0].text = tm.GetCommons("CommonSettings");
+        subSettingPanelTMP[0].text = tm.GetCommons("Settings");
         subSettingPanelTMP[1].text = tm.GetCommons("KeySettings");
 
         cameraSpeedTMP.text = string.Format(tm.defaultCultureInfo, tm.GetCommons("CameraSpeed"), cameraSpeed);
@@ -426,11 +476,14 @@ public class SettingManager : Singleton<SettingManager>
         edgeScrollingTMP.text = tm.GetCommons("EdgeScrolling");
         autosaveTMP.text = tm.GetCommons("Autosave");
 
+        settingPanelCloseTMP.text = tm.GetCommons("Back");
+
         KeySetting_TextUpdate();
     }
     #endregion
 
     #region 볼륨 설정    
+    [Header("Settings 세부 UI")]
     public Slider bgmSlider;
     public Slider sfxSlider;
     [SerializeField] private TextMeshProUGUI bgmSliderTMP;
