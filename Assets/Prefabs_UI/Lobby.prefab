@@ -640,6 +640,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 3471212327479134542}
+        m_TargetAssemblyTypeName: SettingManager, Assembly-CSharp
+        m_MethodName: ButtonSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2566917928377403816
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1805,6 +1817,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 3471212327479134542}
+        m_TargetAssemblyTypeName: SettingManager, Assembly-CSharp
+        m_MethodName: ButtonSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &920407199395379990
 GameObject:
   m_ObjectHideFlags: 0
@@ -2007,6 +2031,10 @@ MonoBehaviour:
   subSettingPanelTMP:
   - {fileID: 5923163961774672364}
   - {fileID: 1287306913439112447}
+  - {fileID: 1788541690768742790}
+  - {fileID: 988739978222357786}
+  - {fileID: 3039467279638520290}
+  - {fileID: 6700830772349669030}
   subSettingsPanels:
   - {fileID: 920407199395379990}
   - {fileID: 3387897428871628300}
@@ -3026,6 +3054,18 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 3471212327479134542}
         m_TargetAssemblyTypeName: SettingManager, Assembly-CSharp
+        m_MethodName: ButtonSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 3471212327479134542}
+        m_TargetAssemblyTypeName: SettingManager, Assembly-CSharp
         m_MethodName: ShowSubSettingPanel
         m_Mode: 3
         m_Arguments:
@@ -3189,7 +3229,7 @@ GameObject:
   - component: {fileID: 241533419761837892}
   - component: {fileID: 6700830772349669030}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Text_Quit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3432,6 +3472,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 3471212327479134542}
+        m_TargetAssemblyTypeName: SettingManager, Assembly-CSharp
+        m_MethodName: ButtonSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 5424088862362106474}
         m_TargetAssemblyTypeName: LoadingSceneManager, Assembly-CSharp
         m_MethodName: ToLobby
@@ -4754,14 +4806,49 @@ MonoBehaviour:
         clip: {fileID: 8300000, guid: 5cb5ed0b492d0ce4e89d7c796facb3ea, type: 3}
         volumeOffset: 0
         maxPlay: 0
-    - Key: 5
+    - Key: 3
       Value:
         clip: {fileID: 8300000, guid: d586816547fb1f5499ec1cbd62c2933a, type: 3}
-        volumeOffset: -0.3
+        volumeOffset: 0
+        maxPlay: 0
+    - Key: 4
+      Value:
+        clip: {fileID: 8300000, guid: 345723cbc9982164db9ae982a00a0e7e, type: 3}
+        volumeOffset: 0
+        maxPlay: 0
+    - Key: 5
+      Value:
+        clip: {fileID: 8300000, guid: d23c9837f840ebd4dac55d324a6083b0, type: 3}
+        volumeOffset: 0
         maxPlay: 0
     - Key: 6
       Value:
-        clip: {fileID: 8300000, guid: ee99517d2c95ea44bafc892e8bd51fc8, type: 3}
+        clip: {fileID: 8300000, guid: ffa78d5975364484d8fc56eb033e0919, type: 3}
+        volumeOffset: 0
+        maxPlay: 0
+    - Key: 7
+      Value:
+        clip: {fileID: 8300000, guid: a21e0a1e4281b634895068a52e2939fc, type: 3}
+        volumeOffset: 0
+        maxPlay: 0
+    - Key: 8
+      Value:
+        clip: {fileID: 8300000, guid: 50c9fe2116016a24db33f1a8206a25f6, type: 3}
+        volumeOffset: 0
+        maxPlay: 0
+    - Key: 9
+      Value:
+        clip: {fileID: 8300000, guid: 3d7f8bad609bc834d9cdd4d57c45aed9, type: 3}
+        volumeOffset: 0
+        maxPlay: 0
+    - Key: 10
+      Value:
+        clip: {fileID: 8300000, guid: 12d9a77a8fba0f04b855850cdc6d2ed4, type: 3}
+        volumeOffset: 0
+        maxPlay: 0
+    - Key: 11
+      Value:
+        clip: {fileID: 8300000, guid: 89e18edc2d9d3e7469dced4461184159, type: 3}
         volumeOffset: 0
         maxPlay: 0
 --- !u!1 &3230877239920990169
@@ -5360,7 +5447,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7070231065871457631}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3471212327479134542}
+        m_TargetAssemblyTypeName: SettingManager, Assembly-CSharp
+        m_MethodName: ButtonSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   others:
   - {fileID: 1788541690768742790}
   clearOtherAction: 0
@@ -7058,6 +7157,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 3471212327479134542}
+        m_TargetAssemblyTypeName: SettingManager, Assembly-CSharp
+        m_MethodName: ButtonSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &8867374566946744078
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7205,7 +7316,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4932223348443869607}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3471212327479134542}
+        m_TargetAssemblyTypeName: SettingManager, Assembly-CSharp
+        m_MethodName: ButtonSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   others:
   - {fileID: 988739978222357786}
   clearOtherAction: 0
@@ -7580,6 +7703,18 @@ MonoBehaviour:
       - m_Target: {fileID: 3752986621092190742}
         m_TargetAssemblyTypeName: Lobby, Assembly-CSharp
         m_MethodName: QuitGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 3471212327479134542}
+        m_TargetAssemblyTypeName: SettingManager, Assembly-CSharp
+        m_MethodName: ButtonSound
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -8506,6 +8641,18 @@ MonoBehaviour:
       - m_Target: {fileID: 3471212327479134542}
         m_TargetAssemblyTypeName: SettingManager, Assembly-CSharp
         m_MethodName: HideSettings
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 3471212327479134542}
+        m_TargetAssemblyTypeName: SettingManager, Assembly-CSharp
+        m_MethodName: ButtonSound
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -10672,7 +10819,7 @@ GameObject:
   - component: {fileID: 8697082568084222191}
   - component: {fileID: 3039467279638520290}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Text_ToTitle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12115,6 +12262,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 3471212327479134542}
+        m_TargetAssemblyTypeName: SettingManager, Assembly-CSharp
+        m_MethodName: ButtonSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &7930753446056862043
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12473,6 +12632,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 3471212327479134542}
+        m_TargetAssemblyTypeName: SettingManager, Assembly-CSharp
+        m_MethodName: ButtonSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 3471212327479134542}
         m_TargetAssemblyTypeName: SettingManager, Assembly-CSharp
         m_MethodName: ShowSubSettingPanel
@@ -12954,6 +13125,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 3471212327479134542}
+        m_TargetAssemblyTypeName: SettingManager, Assembly-CSharp
+        m_MethodName: ButtonSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 3752986621092190742}
         m_TargetAssemblyTypeName: Lobby, Assembly-CSharp
         m_MethodName: QuitGame

@@ -74,7 +74,7 @@ public class ZombieEnvSound : MonoBehaviour
     {
         float duration = sources[idx].clip.length * 0.99f;
 
-        yield return CoroutineHelper.WaitForSeconds(duration);
+        yield return CoroutineHelper.WaitForSecondsRealtime(duration);
 
         sources[idx].Stop();
     }

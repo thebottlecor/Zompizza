@@ -2,6 +2,7 @@ using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class UtilUI : EventListener
@@ -18,6 +19,18 @@ public class UtilUI : EventListener
     public bool opened;
 
     public bool IsActive => loading || opened;
+
+    public TextManager tm => TextManager.Instance;
+    public TextMeshProUGUI[] buttonTexts;
+
+    public void UpdateTexts()
+    {
+        buttonTexts[0].text = tm.GetCommons("Worldmap");
+        buttonTexts[1].text = tm.GetCommons("Menu");
+
+        buttonTexts[2].text = tm.GetCommons("Back");
+
+    }
 
     protected override void AddListeners()
     {

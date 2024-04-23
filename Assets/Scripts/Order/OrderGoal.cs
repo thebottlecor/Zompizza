@@ -43,6 +43,8 @@ public class OrderGoal : MonoBehaviour
     public void SuccessEffect()
     {
         EffectUpdate(false);
+        AudioManager.Instance.PlaySFX(Sfx.money);
+        AudioManager.Instance.PlaySFX(Sfx.complete);
         var source = DataManager.Instance.effectLibrary.dollarBoomEffect;
         Vector3 pos = this.transform.position;
         pos.y = 4f;

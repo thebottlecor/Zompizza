@@ -160,6 +160,8 @@ public class PlayerController : MonoBehaviour
     //public List<Zombie> contactingZombies = new List<Zombie>();
     public List<Zombie2> contactingZombies = new List<Zombie2>();
     public float crashDrag = 1000f;
+    private float beforeCollisionSpeed;
+    private bool isCollision;
 
     private SerializableDictionary<KeyMap, KeyMapping> HotKey => SettingManager.Instance.keyMappings;
 
@@ -216,11 +218,14 @@ public class PlayerController : MonoBehaviour
         //else if (!collision.gameObject.CompareTag("Plane") && collision.gameObject.layer == 6)
         else if (collision.gameObject.layer == 6)
         {
-            float speedPercent = Mathf.Abs(carSpeed) / maxSpeed;
-            if (speedPercent >= 0.15f)
-            {
-                AudioManager.Instance.PlaySFX(Sfx.crash);
-            }
+            beforeCollisionSpeed = carSpeed;
+            isCollision = true;
+
+            //float speedPercent = Mathf.Abs(carSpeed) / maxSpeed;
+            //if (speedPercent >= 0.15f)
+            //{
+            //    AudioManager.Instance.PlaySFX(Sfx.crash);
+            //}
         }
     }
 
@@ -339,6 +344,17 @@ public class PlayerController : MonoBehaviour
 
         CarSpeedUI();
         carEngineSound.enabled = !GM.Instance.stop_control;
+
+        if (isCollision)
+        {
+            isCollision = false;
+            float speedDiff = carSpeed - beforeCollisionSpeed;
+            //Debug.Log(speedDiff);
+            if (Mathf.Abs(speedDiff) > 0.5f)
+            {
+                AudioManager.Instance.PlaySFX(Sfx.crash);
+            }
+        }
 
         if (GM.Instance.stop_control) return;
 

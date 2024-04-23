@@ -385,6 +385,12 @@ public class SettingManager : Singleton<SettingManager>
     {
         activeSubPanel = num;
         OpenSettings();
+        AudioManager.Instance.PlaySFX(Sfx.buttons);
+    }
+
+    public void ButtonSound()
+    {
+        AudioManager.Instance.PlaySFX(Sfx.buttons);
     }
 
     public void OpenSettings()
@@ -470,6 +476,10 @@ public class SettingManager : Singleton<SettingManager>
 
         subSettingPanelTMP[0].text = tm.GetCommons("Settings");
         subSettingPanelTMP[1].text = tm.GetCommons("KeySettings");
+        subSettingPanelTMP[2].text = tm.GetCommons("Save");
+        subSettingPanelTMP[3].text = tm.GetCommons("Load");
+        subSettingPanelTMP[4].text = tm.GetCommons("Main Menu");
+        subSettingPanelTMP[5].text = tm.GetCommons("Quit");
 
         cameraSpeedTMP.text = string.Format(tm.defaultCultureInfo, tm.GetCommons("CameraSpeed"), cameraSpeed);
         invertZoomTMP.text = tm.GetCommons("InvertZoom");

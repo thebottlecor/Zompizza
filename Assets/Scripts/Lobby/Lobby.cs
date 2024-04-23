@@ -180,7 +180,7 @@ public class Lobby : Singleton<Lobby>
         var tm = TextManager.Instance;
         newGameTMP.text = tm.GetCommons("NewGame");
         //loadGameTMP.text = tm.GetCommons("Load");
-        settingsTMP.text = tm.GetCommons("Settings");
+        settingsTMP.text = tm.GetCommons("Menu");
         exitTMP.text = tm.GetCommons("Exit");
         versionTMP.text = string.Format("v{0:0.00}", (SaveManager.Instance.version / 100f));
         creditButtonTMP.text = tm.GetCommons("Credits");

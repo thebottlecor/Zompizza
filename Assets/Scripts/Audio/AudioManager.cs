@@ -163,7 +163,7 @@ public class AudioManager : Singleton<AudioManager>
         frameLimit[idx]++;
         float shortDuration = audios[idx].clip.length * 0.1f;
         shortDuration = Mathf.Max(shortDuration, 0.02f);
-        yield return CoroutineHelper.WaitForSeconds(shortDuration);
+        yield return CoroutineHelper.WaitForSecondsRealtime(shortDuration);
         frameLimit[idx]--;
     }
 
@@ -171,7 +171,7 @@ public class AudioManager : Singleton<AudioManager>
     {
         concurrentLimit[idx]++;
         float duration = audios[idx].clip.length;
-        yield return CoroutineHelper.WaitForSeconds(duration);
+        yield return CoroutineHelper.WaitForSecondsRealtime(duration);
         concurrentLimit[idx]--;
     }
 
@@ -193,24 +193,13 @@ public enum Sfx
     crash,
     zombieCrash,
     hittngPlayer,
-
-    construction,
-    demolish,
     toggle,
     buttons,
-    speedButtons,
-    newYear,
-    newInformation,
-    research,
-    researchUnlockSuccess,
     deny,
     inputFieldStart,
     inputFieldEnd,
-    smallButtons,
-    tradeSuccess,
-    recipe,
-    entityUtils,
-    naturalObjectRemove,
-    entitySelect,
-    tutorialComplete,
+    newInfo,
+    money,
+    select,
+    complete,
 }

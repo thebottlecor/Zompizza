@@ -2,6 +2,7 @@ using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 [Serializable]
@@ -29,6 +30,19 @@ public class ShopUI : EventListener
     public bool IsActive => loading || opened;
 
     public bool playerStay;
+
+    public TextManager tm => TextManager.Instance;
+    public TextMeshProUGUI[] buttonTexts;
+
+    public void UpdateTexts()
+    {
+        buttonTexts[0].text = tm.GetCommons("Order");
+        buttonTexts[1].text = tm.GetCommons("Management");
+        buttonTexts[2].text = tm.GetCommons("Shop");
+
+        buttonTexts[3].text = tm.GetCommons("Back");
+
+    }
 
     protected override void AddListeners()
     {

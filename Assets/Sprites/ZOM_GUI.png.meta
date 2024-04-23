@@ -937,7 +937,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ZOM_GUI_42
+      name: shop
       rect:
         serializedVersion: 2
         x: 397
@@ -1395,7 +1395,6 @@ TextureImporter:
       ZOM_GUI_39: -1271976586
       ZOM_GUI_4: -1784701257
       ZOM_GUI_40: 1216761451
-      ZOM_GUI_42: 384743576
       ZOM_GUI_43: -1696656974
       ZOM_GUI_44: -78393942
       ZOM_GUI_45: 1560674181
@@ -1429,6 +1428,7 @@ TextureImporter:
       scroll_bar: -854652288
       scroll_extra: -1301179045
       settings: 977260030
+      shop: 384743576
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -90,8 +90,8 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 0.15294118, g: 0.25882354, b: 0.3764706, a: 1}
-    m_HighlightedColor: {r: 0.1882353, g: 0.4745098, b: 0.5254902, a: 1}
+    m_NormalColor: {r: 0, g: 0, b: 0, a: 1}
+    m_HighlightedColor: {r: 0.3018868, g: 0.3018868, b: 0.3018868, a: 1}
     m_PressedColor: {r: 0.14509805, g: 0.21176471, b: 0.34117648, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
@@ -188,8 +188,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Restore Defaults
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: cb7f52a0ab1685446a507c48aa8b5951, type: 2}
-  m_sharedMaterial: {fileID: -1681530342882697786, guid: cb7f52a0ab1685446a507c48aa8b5951, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: dd233bf8bdb8cc54e81ad98a1da16fc9, type: 2}
+  m_sharedMaterial: {fileID: 4247387016874453569, guid: dd233bf8bdb8cc54e81ad98a1da16fc9, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -213,8 +213,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 24
+  m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

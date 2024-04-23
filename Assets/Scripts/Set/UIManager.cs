@@ -23,8 +23,15 @@ public class UIManager : Singleton<UIManager>
 
         panel.offsetMin = new Vector2(0f, 0f);
         panel.offsetMax = new Vector2(0f, 0f);
+
+        shopUI.UpdateTexts();
+        utilUI.UpdateTexts();
     }
 
+    public void ButtonSound()
+    {
+        AudioManager.Instance.PlaySFX(Sfx.buttons);
+    }
 
     private void Update()
     {
