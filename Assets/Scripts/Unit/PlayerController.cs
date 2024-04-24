@@ -345,14 +345,20 @@ public class PlayerController : MonoBehaviour
         CarSpeedUI();
         carEngineSound.enabled = !GM.Instance.stop_control;
 
+        Physics.Raycast(transform.position, Vector3.down, 10f, 1 << LayerMask.NameToLayer("UI"));
+
         if (isCollision)
         {
             isCollision = false;
-            float speedDiff = carSpeed - beforeCollisionSpeed;
-            //Debug.Log(speedDiff);
-            if (Mathf.Abs(speedDiff) > 0.5f)
+            float speedPercent = Mathf.Abs(beforeCollisionSpeed) / maxSpeed;
+            if (speedPercent > 0.15f)
             {
-                AudioManager.Instance.PlaySFX(Sfx.crash);
+                float speedDiff = carSpeed - beforeCollisionSpeed;
+                //Debug.Log(speedDiff);
+                if (Mathf.Abs(speedDiff) > 0.5f)
+                {
+                    AudioManager.Instance.PlaySFX(Sfx.crash);
+                }
             }
         }
 

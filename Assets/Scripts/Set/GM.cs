@@ -11,9 +11,10 @@ public class GM : Singleton<GM>
     public bool stop_control;
 
 
-    public const float dayTime = 360f;
+    public const float dayTime = 30f;
     public const int dayStartHour = 8;
-    public const float oneHour = dayTime / 24f;
+    public const int dayEndHour = 20;
+    public const float oneHour = dayTime / (dayEndHour - dayStartHour);
     public const float oneMinute = oneHour / 60f;
     public const float oneSec = oneMinute / 60f;
 
@@ -24,22 +25,34 @@ public class GM : Singleton<GM>
 
     private void Update()
     {
+
         timer += Time.deltaTime;
 
         if (timer >= dayTime)
         {
-            timer = 0;
-            day++;
+            timer = dayTime;
         }
 
         int hour = (int)(timer / oneHour);
         int minute = (int)((timer - hour * oneHour) / oneMinute);
         int sec = (int)((timer - minute * oneMinute - hour * oneHour) / oneSec);
 
+        bool endtime = false;
         hour += dayStartHour;
-        if (hour >= 24) hour -= 24;
+        if (hour >= dayEndHour)
+        {
+            hour = dayEndHour;
+            minute = 0;
+            sec = 0;
 
-        timeText.text = $"Day {day} :: {hour:00}:{minute:00}:{sec:00}";
+            // 마감 시간 시간 정지
+            endtime = true;
+        }
+
+        if (endtime)
+            timeText.text = $"Day {day} :: <color=#ff0000>{hour:00}:{minute:00}:{sec:00}</color>";
+        else
+            timeText.text = $"Day {day} :: {hour:00}:{minute:00}:{sec:00}";
     }
 
 }

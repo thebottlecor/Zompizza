@@ -4784,7 +4784,7 @@ MonoBehaviour:
   audioSourceSFX: {fileID: 489626377017305655}
   audioSourceSFX_Loop: {fileID: 0}
   bgms:
-  - clip: {fileID: 8300000, guid: 608ba41193e27ec47b55d9f435aa3fb9, type: 3}
+  - clip: {fileID: 8300000, guid: 3c67ae5173c816b44899562f273aefae, type: 3}
     volumeOffset: -0.3
     maxPlay: 0
   globalBGMVolumeOffset: 0
