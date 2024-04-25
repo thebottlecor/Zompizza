@@ -12,4 +12,7 @@ public class UILibrary : ScriptableObject
     public Sprite shopButton;
     public Sprite shopButtonHighlighted;
 
+
+    public Sprite[] customerProfile;
+
 }

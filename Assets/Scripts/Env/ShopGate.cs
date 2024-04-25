@@ -14,6 +14,9 @@ public class ShopGate : MonoBehaviour
 
     public bool alwaysClosed;
 
+    public AudioSource openSFX;
+    private bool sfxPlayed;
+
     [Header("개발자 설정값")]
     public Vector3 closedPos;
     public Vector3 openPos;
@@ -43,13 +46,32 @@ public class ShopGate : MonoBehaviour
 
         if (dist > openDist)
         {
+            if (targetPos_Left == openPos) sfxPlayed = false;
+
             targetPos_Left = closedPos;
             targetPos_Right = closedPos_Right;
         }
         else
         {
+            if (targetPos_Left == closedPos) sfxPlayed = false;
+
             targetPos_Left = openPos;
             targetPos_Right = openPos_Right;
+        }
+
+        float targetDist = (targetPos_Left - movingChild.position).magnitude;
+
+        if (Mathf.Abs(targetDist) > 1f)
+        {
+            if (!sfxPlayed && !openSFX.isPlaying)
+            {
+                openSFX.Play();
+                sfxPlayed = true;
+            }
+        }
+        else
+        {
+            sfxPlayed = false;
         }
 
         movingChild.position = Vector3.SmoothDamp(movingChild.position, targetPos_Left, ref vel, smoothTime, Time.deltaTime * gateSpeed);

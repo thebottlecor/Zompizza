@@ -1482,6 +1482,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: pizza
+      rect:
+        serializedVersion: 2
+        x: 991
+        y: 1611
+        width: 129
+        height: 122
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f4ebcf802867b0d4488e3a0b076398c3
+      internalID: 172551813
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -1585,6 +1606,7 @@ TextureImporter:
       panel_big_01: -753564506
       pin: -1112364879
       pin 2: 976728236
+      pizza: 172551813
       scroll_bar: -854652288
       scroll_extra: -1301179045
       settings: 977260030

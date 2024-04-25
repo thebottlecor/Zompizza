@@ -28,7 +28,7 @@ public class OrderManager : Singleton<OrderManager>
             if (gIndex == e)
             {
                 // 배달 성공
-                Debug.Log($"배달 성공 {orderList[i].pay}");
+                Debug.Log($"배달 성공 {orderList[i].rewards}");
                 orderGoals[gIndex].SuccessEffect();   
                 //
                 orderList.RemoveAt(i);
@@ -43,18 +43,24 @@ public class OrderManager : Singleton<OrderManager>
         NewOrder();
     }
 
-    [ContextMenu("새로운 메뉴")]
+    [ContextMenu("새로운 주문")]
     public void NewOrder()
     {
         OrderInfo newOrder = new OrderInfo
         {
+            accepted = false,
+            customerIdx = 0,
             goal = 0,
-            pay = UnityEngine.Random.Range(500, 1000),
+            rewards = UnityEngine.Random.Range(500, 1000),
+            timeLimit = 60f,
         };
         orderList.Add(newOrder);
 
+        UIManager.Instance.OrderUIUpdate();
+
         OrderGoalUpdate();
     }
+
 
     public void OrderGoalUpdate()
     {
@@ -65,7 +71,8 @@ public class OrderManager : Singleton<OrderManager>
 
         for (int i = 0; i < orderList.Count; i++)
         {
-            orderGoals[i].Show();
+            if (orderList[i].accepted)
+                orderGoals[i].Show();
         }
     }
 

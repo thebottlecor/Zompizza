@@ -13,6 +13,8 @@ public class UIManager : Singleton<UIManager>
 
     public RectTransform movingSettingsPanelParent;
 
+    public List<OrderUIObject> orderUIObjects;
+
     private SerializableDictionary<KeyMap, KeyMapping> HotKey => SettingManager.Instance.keyMappings;
 
     private void Start()
@@ -58,4 +60,20 @@ public class UIManager : Singleton<UIManager>
             }
         }
     }
+
+
+    #region ¡÷πÆ UI
+    public void OrderUIUpdate()
+    {
+        var list = OrderManager.Instance.orderList;
+        for (int i = 0; i < list.Count; i++)
+        {
+            if (!list[i].accepted)
+            {
+                orderUIObjects[list[i].customerIdx].UIUpdate(list[i]);
+                orderUIObjects[list[i].customerIdx].gameObject.SetActive(true);
+            }
+        }
+    }
+    #endregion
 }
