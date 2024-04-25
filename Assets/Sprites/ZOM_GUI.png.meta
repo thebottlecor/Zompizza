@@ -139,7 +139,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ZOM_GUI_2
+      name: pin 2
       rect:
         serializedVersion: 2
         x: 267
@@ -247,7 +247,7 @@ TextureImporter:
       name: panel_02
       rect:
         serializedVersion: 2
-        x: 2112
+        x: 2114
         y: 982
         width: 582
         height: 751
@@ -517,7 +517,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: circle
+      name: button_05
       rect:
         serializedVersion: 2
         x: 2734
@@ -778,7 +778,7 @@ TextureImporter:
         height: 885
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 0, y: 67, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -799,7 +799,7 @@ TextureImporter:
         height: 904
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 0, y: 88, z: 15, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -1356,6 +1356,132 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: line_01
+      rect:
+        serializedVersion: 2
+        x: 83
+        y: 1779
+        width: 546
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 45c17fcffb0af964e84c7cb5367b61be
+      internalID: -1077415394
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: panel_03
+      rect:
+        serializedVersion: 2
+        x: 1349
+        y: 1782
+        width: 668
+        height: 874
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 13, y: 85, z: 33, w: 37}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 60eb1e78e731481408ad00a62ed4be36
+      internalID: -1377739310
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: panel_04
+      rect:
+        serializedVersion: 2
+        x: 2209
+        y: 1784
+        width: 902
+        height: 881
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 15, y: 60, z: 27, w: 146}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bfe88038e25d64a4590d03189e461507
+      internalID: 156398273
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: line_02
+      rect:
+        serializedVersion: 2
+        x: 730
+        y: 1777
+        width: 546
+        height: 6
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6533c54ec53db9e42b6188d06c9da40e
+      internalID: 1388350798
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: pin
+      rect:
+        serializedVersion: 2
+        x: 286
+        y: 1489
+        width: 91
+        height: 111
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5924c7d2a39a31c4fb7aa9c4169c4476
+      internalID: -1112364879
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_04
+      rect:
+        serializedVersion: 2
+        x: 1664
+        y: 1265
+        width: 409
+        height: 93
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 290d714236ac5a742a927d519d616783
+      internalID: 50558002
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -1373,10 +1499,13 @@ TextureImporter:
       ZOM_GUI_12: -455512047
       ZOM_GUI_13: -473345904
       ZOM_GUI_14: 1878053812
+      ZOM_GUI_16: -501285516
       ZOM_GUI_17: -1912592998
       ZOM_GUI_18: -1870893056
       ZOM_GUI_19: -916891236
-      ZOM_GUI_2: 976728236
+      ZOM_GUI_20: 1000988405
+      ZOM_GUI_21: 763294211
+      ZOM_GUI_22: 333894533
       ZOM_GUI_23: 1509540875
       ZOM_GUI_24: 827845098
       ZOM_GUI_25: -1471986665
@@ -1389,12 +1518,16 @@ TextureImporter:
       ZOM_GUI_31: 2013824448
       ZOM_GUI_32: 720264181
       ZOM_GUI_33: -1269812617
+      ZOM_GUI_34: -129203971
+      ZOM_GUI_35: 887272147
       ZOM_GUI_36: 608238976
       ZOM_GUI_37: 872452833
       ZOM_GUI_38: 830426757
       ZOM_GUI_39: -1271976586
       ZOM_GUI_4: -1784701257
       ZOM_GUI_40: 1216761451
+      ZOM_GUI_41: -1886665554
+      ZOM_GUI_42: 1467668265
       ZOM_GUI_43: -1696656974
       ZOM_GUI_44: -78393942
       ZOM_GUI_45: 1560674181
@@ -1414,17 +1547,44 @@ TextureImporter:
       ZOM_GUI_58: -2024360725
       ZOM_GUI_59: -1146135056
       ZOM_GUI_6: -710229829
+      ZOM_GUI_60: -1178401396
+      ZOM_GUI_61: 1188979254
+      ZOM_GUI_62: 74425075
+      ZOM_GUI_63: 1089275062
+      ZOM_GUI_64: 1229617565
+      ZOM_GUI_65: 1797070215
+      ZOM_GUI_66: -1699911307
+      ZOM_GUI_67: 941866686
+      ZOM_GUI_68: 2129165098
+      ZOM_GUI_69: -375839105
+      ZOM_GUI_70: -354942728
+      ZOM_GUI_71: -126506132
+      ZOM_GUI_72: -86188652
+      ZOM_GUI_73: 1667106787
+      ZOM_GUI_74: -1249543591
+      ZOM_GUI_75: -1613388636
+      ZOM_GUI_76: -929890260
+      ZOM_GUI_77: -520518505
+      ZOM_GUI_78: -1473313620
+      ZOM_GUI_79: 2054952763
       ZOM_GUI_9: 1591077140
       button_01: 793004247
       button_02: 1118936077
       button_03: 748944128
+      button_04: 50558002
+      button_05: -796150030
       cancel: -532384255
       check: -1068914690
-      circle: -796150030
       edge_01: 284716777
+      line_01: -1077415394
+      line_02: 1388350798
       panel_01: 1496360435
       panel_02: -1911093180
+      panel_03: -1377739310
+      panel_04: 156398273
       panel_big_01: -753564506
+      pin: -1112364879
+      pin 2: 976728236
       scroll_bar: -854652288
       scroll_extra: -1301179045
       settings: 977260030

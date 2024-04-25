@@ -39,8 +39,9 @@ public class ShopUI : EventListener
         buttonTexts[0].text = tm.GetCommons("Order");
         buttonTexts[1].text = tm.GetCommons("Management");
         buttonTexts[2].text = tm.GetCommons("Shop");
+        buttonTexts[3].text = tm.GetCommons("News");
 
-        buttonTexts[3].text = tm.GetCommons("Back");
+        buttonTexts[4].text = tm.GetCommons("Back");
 
     }
 
