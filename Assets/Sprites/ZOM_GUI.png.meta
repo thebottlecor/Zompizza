@@ -520,10 +520,10 @@ TextureImporter:
       name: button_05
       rect:
         serializedVersion: 2
-        x: 2734
-        y: 1016
-        width: 164
-        height: 164
+        x: 2750
+        y: 1032
+        width: 132
+        height: 132
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -727,48 +727,6 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ZOM_GUI_32
-      rect:
-        serializedVersion: 2
-        x: 576
-        y: 877
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 9b476cfa7a7ce9748be2fb42f8844676
-      internalID: 720264181
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ZOM_GUI_33
-      rect:
-        serializedVersion: 2
-        x: 610
-        y: 879
-        width: 78
-        height: 31
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 24f592e2229b1144785bc0c34eb0dbc7
-      internalID: -1269812617
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: panel_01
       rect:
         serializedVersion: 2
@@ -806,90 +764,6 @@ TextureImporter:
       bones: []
       spriteID: 67d7e17f7bf4d6c4586e763b65fff5d2
       internalID: -753564506
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ZOM_GUI_36
-      rect:
-        serializedVersion: 2
-        x: 576
-        y: 843
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1e5e0e5854dbcb94aa805737a3d67c6d
-      internalID: 608238976
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ZOM_GUI_37
-      rect:
-        serializedVersion: 2
-        x: 610
-        y: 845
-        width: 78
-        height: 31
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 66740829cd1f78d438aa64b845a79183
-      internalID: 872452833
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ZOM_GUI_38
-      rect:
-        serializedVersion: 2
-        x: 576
-        y: 809
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: f5086a503b06a3f41961afc083784e7f
-      internalID: 830426757
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ZOM_GUI_39
-      rect:
-        serializedVersion: 2
-        x: 610
-        y: 811
-        width: 78
-        height: 31
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 85b2d25c433a633499200b737778f62b
-      internalID: -1271976586
       vertices: []
       indices: 
       edges: []
@@ -1471,7 +1345,7 @@ TextureImporter:
         height: 93
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 28, y: 16, z: 42, w: 1}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -1491,7 +1365,7 @@ TextureImporter:
         width: 129
         height: 122
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1499,6 +1373,27 @@ TextureImporter:
       bones: []
       spriteID: f4ebcf802867b0d4488e3a0b076398c3
       internalID: 172551813
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ZOM_GUI_2
+      rect:
+        serializedVersion: 2
+        x: 573
+        y: 807
+        width: 119
+        height: 106
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 43fe6a5e5b16e9749ab695ad029871b4
+      internalID: 2126943300
       vertices: []
       indices: 
       edges: []
@@ -1524,6 +1419,7 @@ TextureImporter:
       ZOM_GUI_17: -1912592998
       ZOM_GUI_18: -1870893056
       ZOM_GUI_19: -916891236
+      ZOM_GUI_2: 2126943300
       ZOM_GUI_20: 1000988405
       ZOM_GUI_21: 763294211
       ZOM_GUI_22: 333894533

@@ -106,7 +106,7 @@ ModelImporter:
       takeName: Cube.001|Close
       internalID: -8441773388199324994
       firstFrame: 0
-      lastFrame: 0
+      lastFrame: 3
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -135,7 +135,7 @@ ModelImporter:
       takeName: Cube.001|Open
       internalID: 3215709252058461924
       firstFrame: 0
-      lastFrame: 0
+      lastFrame: 3
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

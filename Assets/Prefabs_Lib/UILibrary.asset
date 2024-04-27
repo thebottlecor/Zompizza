@@ -35,3 +35,23 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 697de66ddf8b2574c8bc6b191981903c, type: 3}
   - {fileID: 21300000, guid: e9d9afdc287eaf149863eb9f794b0191, type: 3}
   - {fileID: 21300000, guid: 219d15414c06f754caca74cee93c737b, type: 3}
+  ingredients:
+    array:
+    - Key: 0
+      Value: {fileID: 1425526771, guid: 4e0f9f6a1ebab7c44b366155ffe54ecc, type: 3}
+    - Key: 1
+      Value: {fileID: -764546118, guid: 4e0f9f6a1ebab7c44b366155ffe54ecc, type: 3}
+    - Key: 2
+      Value: {fileID: 819518548, guid: 4e0f9f6a1ebab7c44b366155ffe54ecc, type: 3}
+    - Key: 3
+      Value: {fileID: 1549477349, guid: 4e0f9f6a1ebab7c44b366155ffe54ecc, type: 3}
+    - Key: 4
+      Value: {fileID: -870310167, guid: 4e0f9f6a1ebab7c44b366155ffe54ecc, type: 3}
+    - Key: 5
+      Value: {fileID: -933393449, guid: 4e0f9f6a1ebab7c44b366155ffe54ecc, type: 3}
+    - Key: 6
+      Value: {fileID: -1499718772, guid: 4e0f9f6a1ebab7c44b366155ffe54ecc, type: 3}
+    - Key: 7
+      Value: {fileID: -1451025748, guid: 4e0f9f6a1ebab7c44b366155ffe54ecc, type: 3}
+    - Key: 8
+      Value: {fileID: -2132155421, guid: 4e0f9f6a1ebab7c44b366155ffe54ecc, type: 3}

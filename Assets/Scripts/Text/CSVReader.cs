@@ -35,13 +35,13 @@ public class CSVReader
 			case "Idx":
 				action = AA;
 				break;
-			//case "ResourceType":
-			//	action = AA2;
-			//	break;
-			//case "BuildingType":
-			//	action = AA3;
-			//	break;
-			case "String":
+            case "Ingredient":
+                action = AA2;
+                break;
+            //case "BuildingType":
+            //	action = AA3;
+            //	break;
+            case "String":
 				action = AA4;
 				break;
             case "KeyMap":
@@ -89,17 +89,17 @@ public class CSVReader
 		int.TryParse(key, out int n);
 		(list as Dictionary<int, Dictionary<string, object>>).Add(n, entry);
 	}
-	//private static void AA2<T>(Dictionary<T, Dictionary<string, object>> list, string key, Dictionary<string, object> entry)
-	//{
-	//	if (Enum.TryParse(typeof(ResourceType), key, out object n))
-	//		(list as Dictionary<ResourceType, Dictionary<string, object>>).Add((ResourceType)n, entry);
-	//}
-	//private static void AA3<T>(Dictionary<T, Dictionary<string, object>> list, string key, Dictionary<string, object> entry)
-	//{
-	//	if (Enum.TryParse(typeof(BuildingType), key, out object n))
-	//		(list as Dictionary<BuildingType, Dictionary<string, object>>).Add((BuildingType)n, entry);
-	//}
-	private static void AA4<T>(Dictionary<T, Dictionary<string, object>> list, string key, Dictionary<string, object> entry)
+    private static void AA2<T>(Dictionary<T, Dictionary<string, object>> list, string key, Dictionary<string, object> entry)
+    {
+        if (Enum.TryParse(typeof(Ingredient), key, out object n))
+            (list as Dictionary<Ingredient, Dictionary<string, object>>).Add((Ingredient)n, entry);
+    }
+    //private static void AA3<T>(Dictionary<T, Dictionary<string, object>> list, string key, Dictionary<string, object> entry)
+    //{
+    //	if (Enum.TryParse(typeof(BuildingType), key, out object n))
+    //		(list as Dictionary<BuildingType, Dictionary<string, object>>).Add((BuildingType)n, entry);
+    //}
+    private static void AA4<T>(Dictionary<T, Dictionary<string, object>> list, string key, Dictionary<string, object> entry)
 	{
 		(list as Dictionary<string, Dictionary<string, object>>).Add(key, entry);
 	}

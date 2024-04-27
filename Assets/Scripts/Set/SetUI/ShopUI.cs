@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 [Serializable]
 public struct PanelButtonPair
@@ -34,6 +35,12 @@ public class ShopUI : EventListener
     public TextManager tm => TextManager.Instance;
     public TextMeshProUGUI[] buttonTexts;
 
+    public Image[] pizzaBoys;
+    public Image[] pizzaBoxes;
+
+    public ScrollRect scrollRect;
+    public RectTransform contentPanel;
+
     public void UpdateTexts()
     {
         buttonTexts[0].text = tm.GetCommons("Order");
@@ -49,12 +56,14 @@ public class ShopUI : EventListener
     {
         ShopEnter.PlayerArriveEvent += OnPlayerArriveShop;
         ShopEnter.PlayerExitEvent += OnPlayerExitShop;
+        PizzaDirection.PizzaCompleteEvent += OnPizzaCompleted;
     }
 
     protected override void RemoveListeners()
     {
         ShopEnter.PlayerArriveEvent -= OnPlayerArriveShop;
         ShopEnter.PlayerExitEvent -= OnPlayerExitShop;
+        PizzaDirection.PizzaCompleteEvent -= OnPizzaCompleted;
     }
 
     private void OnPlayerArriveShop(object sender, EventArgs e)
@@ -66,6 +75,57 @@ public class ShopUI : EventListener
     private void OnPlayerExitShop(object sender, EventArgs e)
     {
         playerStay = false;
+    }
+
+    private void OnPizzaCompleted(object sender, OrderInfo e)
+    {
+        UpdatePizzaBox();
+    }
+
+    public void ShowOrder(int customerIdx)
+    {
+        activeSubPanel = 0;
+        SnapTo(UIManager.Instance.orderUIObjects[customerIdx].transform as RectTransform);
+        OpenUI();
+    }
+
+    public void SnapTo(RectTransform target)
+    {
+        //Canvas.ForceUpdateCanvases();
+
+        //float value = target.anchoredPosition.y / (scrollRect.content.rect.height - (scrollRect.transform as RectTransform).rect.height);
+        //Debug.Log(target.anchoredPosition.y + " > " + (scrollRect.content.rect.height - (scrollRect.transform as RectTransform).rect.height) + " >> " + value);
+
+        //float value = (Mathf.Abs(target.anchoredPosition.y) - target.sizeDelta.y) / scrollRect.content.rect.height;
+        //Debug.Log((Mathf.Abs(target.anchoredPosition.y) + target.sizeDelta.y) + " > " + scrollRect.content.rect.height + " >> " + value);
+
+        float value = Mathf.Abs(target.anchoredPosition.y) / scrollRect.content.rect.height;
+
+        scrollRect.verticalNormalizedPosition = 1f - value;
+    }
+
+    private void UpdatePizzaBox()
+    {
+        int count = OrderManager.Instance.GetCurrentPizzaBox();
+
+        pizzaBoys[0].gameObject.SetActive(count != 0);
+        pizzaBoys[1].gameObject.SetActive(count == 0);
+
+        for (int i = 0; i < pizzaBoxes.Length; i++)
+        {
+            pizzaBoxes[i].gameObject.SetActive(false);
+        }
+
+        for (int i = 0; i < pizzaBoxes.Length; i++)
+        {
+            if (count <= 0)
+                break;
+            if (!pizzaBoxes[i].gameObject.activeSelf)
+            {
+                pizzaBoxes[i].gameObject.SetActive(true);
+                count--;
+            }
+        }
     }
 
     private void Update()
@@ -84,6 +144,8 @@ public class ShopUI : EventListener
 
     public void OpenUI()
     {
+        if (UIManager.Instance.isDirecting) return;
+
         if (loading) return;
 
         if (UIManager.Instance.utilUI.IsActive)
@@ -133,6 +195,8 @@ public class ShopUI : EventListener
 
     public void HideUI()
     {
+        if (UIManager.Instance.isDirecting) return;
+
         if (!opened) return;
         if (loading) return;
 
@@ -160,6 +224,11 @@ public class ShopUI : EventListener
 
     public void SelectSubPanel(int idx)
     {
+        if (idx == 0)
+        {
+            UpdatePizzaBox();
+        }
+
         for (int i = 0; i < panelButtonPairs.Count; i++)
         {
             panelButtonPairs[i].panel.SetActive(false);

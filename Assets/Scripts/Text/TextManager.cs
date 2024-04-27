@@ -27,6 +27,9 @@ public class TextManager : Singleton<TextManager>
     public static string SoftRed = "<color=#FF8B8B>";
     public static string Yellow = "<color=#EBFFA5>";
 
+    Dictionary<Ingredient, Dictionary<string, object>> ingredients;
+    public string GetIngredient(Ingredient idx) => ingredients[idx][language.ToString()].ToString();
+
     Dictionary<int, Dictionary<string, object>> recipes;
     public string GetRecipes(int idx) => recipes[idx][language.ToString()].ToString();
 
@@ -44,8 +47,8 @@ public class TextManager : Singleton<TextManager>
     public string GetKeyCodes(KeyCode idx) => keycodes[idx]["all"].ToString();
     public bool HasKeyCode(KeyCode idx) => keycodes.ContainsKey(idx);
 
-    Dictionary<int, Dictionary<string, object>> traders;
-    public string GetTraders(int idx) => traders[idx][language.ToString()].ToString();
+    Dictionary<int, Dictionary<string, object>> characters;
+    public string GetNames(int idx) => characters[idx][language.ToString()].ToString();
 
     public CultureInfo defaultCultureInfo = new CultureInfo("en-US");
 
@@ -108,12 +111,13 @@ public class TextManager : Singleton<TextManager>
     {
         this.language = language;
 
+        ingredients = CSVReader.ReadCSV<Ingredient>("TextManager - resource.csv");
         recipes = CSVReader.ReadCSV<int>("TextManager - recipe.csv");
         researches = CSVReader.ReadCSV<int>("TextManager - research.csv");
         commons = CSVReader.ReadCSV<string>("TextManager - common.csv");
         keymaps = CSVReader.ReadCSV<KeyMap>("TextManager - keymap.csv");
         keycodes = CSVReader.ReadCSV<KeyCode>("TextManager - keycode.csv");
-        traders = CSVReader.ReadCSV<int>("TextManager - trader.csv");
+        characters = CSVReader.ReadCSV<int>("TextManager - character.csv");
 
         Lobby.Instance.UpdateTexts();
         SettingManager.Instance.UpdateTexts();

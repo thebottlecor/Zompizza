@@ -15,4 +15,6 @@ public class UILibrary : ScriptableObject
 
     public Sprite[] customerProfile;
 
+    public SerializableDictionary<Ingredient, Sprite> ingredients;
+
 }

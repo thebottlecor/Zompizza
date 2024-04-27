@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,9 +18,64 @@ public class WorldMapManager : Singleton<WorldMapManager>
     public MinimapRenderer minimap;
     public Transform minimapItemsTarget;
 
+
     // My Custom
     public Vector2 worldmapLimitX;
     public Vector2 worldmapLimitZ;
+
+
+    public SerializableDictionary<MinimapItem, int> customerPin;
+    public Vector3 customerPin_InitScale = new Vector3(45f, 0f, 45f);
+    public Vector3 customerPin_OverScale = new Vector3(60f, 0f, 60f);
+    private MinimapItem mouseOverPin;
+
+    public bool customerMode;
+    private Vector3 customerPos;
+    public Button customerBtn;
+    public TextMeshProUGUI customerBtnText;
+
+    private void Start()
+    {
+        ToggleCustomerMode(false, new Vector3(0f, 0f, -1000f));
+    }
+
+    public void ToggleCustomerMode_Btn()
+    {
+        customerMode = !customerMode;
+        ToggleCustomerMode(customerMode, new Vector3(0f, 0f, -1000f));
+    }
+
+    public void ToggleCustomerMode(bool on, Vector3 customerPos)
+    {
+        customerMode = on;
+        this.customerPos = customerPos;
+        if (on)
+        {
+            var orderList = OrderManager.Instance.orderList;
+            HashSet<int> idx = new HashSet<int>();
+            for (int i = 0; i < orderList.Count; i++)
+            {
+                idx.Add(orderList[i].customerIdx);
+            }
+            foreach (var temp in customerPin)
+            {
+                if (idx.Contains(temp.Value))
+                    temp.Key.gameObject.SetActive(true);
+                else
+                    temp.Key.gameObject.SetActive(false);
+            }
+            customerBtnText.text = TextManager.Instance.GetCommons("WorldmapMode0");
+        }
+        else
+        {
+            customerPos.z = -1000;
+            foreach (var temp in customerPin)
+            {
+                temp.Key.gameObject.SetActive(false);
+            }
+            customerBtnText.text = TextManager.Instance.GetCommons("WorldmapMode1");
+        }
+    }
 
     //void Update()
     //{
@@ -38,16 +94,27 @@ public class WorldMapManager : Singleton<WorldMapManager>
 
         //worldmap.renderContent = true;
         MinimapDataGlobal.SetMinimapItemsSizeGlobalMultiplier(1.5f);
+
+        customerBtn.gameObject.SetActive(UIManager.Instance.shopUI.playerStay);
     }
 
-    public void FocusPlayerPos()
+    public void FirstFocus()
     {
-        // 처음 열 때 플레이어 위치로 고정
-        worldMapCamera.transform.position = minimapItemsTarget.position;
+        if (customerPos.z == -1000)
+        {
+            // 처음 열 때 플레이어 위치로 고정
+            worldMapCamera.transform.position = minimapItemsTarget.position;
+        }
+        else
+        {
+            worldMapCamera.transform.position = customerPos;
+        }
     }
 
     public void CloseFullscreenMap()
     {
+        ToggleCustomerMode(false, new Vector3(0f, 0f, -1000f));
+
         //worldMapObj.SetActive(false);
         //worldMapCamera.gameObject.SetActive(false);
         //playerFieldOfView.enabled = true;
@@ -82,5 +149,42 @@ public class WorldMapManager : Singleton<WorldMapManager>
         worldMapCamera.transform.position = new Vector3(
             Mathf.Clamp(worldMapCamera.transform.position.x, worldmapLimitX.x, worldmapLimitX.y), 0f,
             Mathf.Clamp(worldMapCamera.transform.position.z, worldmapLimitZ.x, worldmapLimitZ.y));
+    }
+
+    public void OnClickInMinimapRendererArea(Vector3 clickWorldPos, MinimapItem clickedMinimapItem)
+    {
+        //Show the Minimap Item Clicked
+        if (clickedMinimapItem != null)
+        {
+            if (UIManager.Instance.shopUI.playerStay)
+            {
+                if (customerPin.ContainsKey(clickedMinimapItem))
+                {
+                    UIManager.Instance.shopUI.ShowOrder(customerPin[clickedMinimapItem]);
+                }
+            }
+        }
+    }
+
+    public void OnOverInMinimapRendererArea(bool isOverMinimapRendererArea, Vector3 mouseWorldPos, MinimapItem overMinimapItem)
+    {
+        if (isOverMinimapRendererArea)
+        {
+            //Increase size of the selected item (avoid increase size of same minimap item various times)
+            if (overMinimapItem != null)
+            {
+                if (overMinimapItem != mouseOverPin)
+                {
+                    mouseOverPin = overMinimapItem;
+                    overMinimapItem.sizeOnMinimap = customerPin_OverScale;
+                }
+            }
+            else
+            {
+                if (mouseOverPin != null)
+                    mouseOverPin.sizeOnMinimap = customerPin_InitScale;
+                mouseOverPin = null;
+            }
+        }
     }
 }

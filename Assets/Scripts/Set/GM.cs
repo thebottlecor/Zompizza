@@ -23,6 +23,22 @@ public class GM : Singleton<GM>
 
     public TextMeshProUGUI timeText;
 
+
+    // 플레이어가 가진 자원
+    public int gold;
+    public SerializableDictionary<Ingredient, int> ingredients;
+
+    private void Start()
+    {
+        ingredients = new SerializableDictionary<Ingredient, int>();
+        var list = System.Enum.GetValues(typeof(Ingredient));
+        foreach (var temp in list)
+        {
+            Ingredient key = (Ingredient)temp;
+            ingredients.Add(new SerializableDictionary<Ingredient, int>.Pair(key, 1));
+        }
+    }
+
     private void Update()
     {
 

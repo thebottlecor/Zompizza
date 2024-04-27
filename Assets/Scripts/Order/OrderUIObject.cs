@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Text;
 
 public class OrderUIObject : MonoBehaviour
 {
@@ -12,26 +13,127 @@ public class OrderUIObject : MonoBehaviour
 
     public TextMeshProUGUI order_detail;
 
+    public Button acceptButton;
+    public TextMeshProUGUI buttonTmp;
+
+    public TextMeshProUGUI viewLocationTmp;
+
     private OrderInfo info;
+
+    private const float distanceScale = 0.005f;
+    private const int ingredientSpriteOffset = 1;
+    private TextManager tm => TextManager.Instance;
 
     public void UIUpdate(OrderInfo info)
     {
         this.info = info;
 
         customer_profile.sprite = DataManager.Instance.uiLibrary.customerProfile[info.customerIdx];
-        customer_name.text = "Mike";
+        customer_name.text = tm.GetNames(info.customerIdx + 2);
 
-        order_detail.text = "detail";
+        StringBuilder st = new StringBuilder();
+        st.AppendFormat("{0} : {1:0.#}km", tm.GetCommons("Distance"), info.distance * distanceScale);
+        //st.AppendFormat("{0:0.##}", info.distance);
+        st.AppendLine();
+        st.AppendFormat("{0} : {1}$", tm.GetCommons("Rewards"), info.rewards);
+        st.AppendLine();
+
+        // 글자로 풀어서 표시
+        //for (int i = 0; i < info.pizzas.Count; i++)
+        //{
+        //    string subStr = tm.GetCommons("OrderDetail_Sub");
+
+        //    string pizza = string.Format("<color=#002a8e><sprite=0>{0} {1}</color>{2}", tm.GetCommons("Pizza"), info.pizzas[i].stack, string.IsNullOrEmpty(subStr) ? string.Empty : subStr);
+        //    StringBuilder ele = new StringBuilder();
+        //    int count = info.pizzas[i].ingredients.Count;
+        //    foreach (var element in info.pizzas[i].ingredients)
+        //    {
+        //        ele.AppendFormat("<color=#002a8e><sprite={0}>{1} {2}</color>{3}", (int)element.Key + ingredientSpriteOffset, tm.GetIngredient(element.Key), element.Value, string.IsNullOrEmpty(subStr) ? string.Empty : subStr);
+        //        count--;
+        //        if (count > 0)
+        //            ele.Append(", ");
+        //    }
+        //    st.AppendFormat(tm.GetCommons("OrderDetail"), ele, pizza);
+
+        //    if (i + 1 < info.pizzas.Count)
+        //        st.Append("\n");
+        //}
+
+        string subStr = tm.GetCommons("OrderDetail_Sub");
+        string subStr2 = tm.GetCommons("OrderDetail_Sub2");
+
+        for (int i = 0; i < info.pizzas.Count; i++)
+        {
+
+            //string pizza = string.Format("{0} {1}{2}", tm.GetCommons("Pizza"), info.pizzas[i].stack, string.IsNullOrEmpty(subStr) ? string.Empty : subStr);
+            string pizza = string.Format("{0}", tm.GetCommons("Pizza"));
+            StringBuilder ele = new StringBuilder();
+            int count = info.pizzas[i].ingredients.Count;
+            foreach (var element in info.pizzas[i].ingredients)
+            {
+                //ele.AppendFormat("<color=#002a8e><sprite={0}>{1} {2}</color>{3}", (int)element.Key + ingredientSpriteOffset, tm.GetIngredient(element.Key), element.Value, string.IsNullOrEmpty(subStr) ? string.Empty : subStr);
+                ele.Append("<color=#002a8e>");
+                ele.AppendFormat(subStr, (int)element.Key + ingredientSpriteOffset, tm.GetIngredient(element.Key), element.Value);
+                count--;
+                if (count > 0)
+                    ele.AppendFormat("{0}", string.IsNullOrEmpty(subStr2) ? ", " : subStr2);
+            }
+            st.AppendFormat(tm.GetCommons("OrderDetail"), ele, pizza);
+
+            if (i + 1 < info.pizzas.Count)
+                st.Append("\n");
+        }
+
+        // 아이콘으로만 표시
+        //for (int i = 0; i < info.pizzas.Count; i++)
+        //{
+        //    st.AppendFormat("<sprite=0> {0} :", info.pizzas[i].stack);
+        //    foreach (var element in info.pizzas[i].ingredients)
+        //    {
+        //        st.AppendFormat(" <sprite={0}> {1}", (int)element.Key + ingredientSpriteOffset, element.Value);
+        //    }
+        //    if (i + 1 < info.pizzas.Count)
+        //        st.Append("\n");
+        //}
+
+        order_detail.text = st.ToString();
+
+        viewLocationTmp.text = tm.GetCommons("ViewCustomer");
+    }
+
+    private void Update()
+    {
+        if (info == null || info.accepted) return;
+
+        bool makable = OrderManager.Instance.CheckIngredient(info);
+
+        acceptButton.interactable = makable;
+        if (makable)
+            buttonTmp.text = tm.GetCommons("Accept");
+        else
+            buttonTmp.text = tm.GetCommons("AcceptDisable");
     }
 
     public void OrderAccept()
     {
         info.accepted = true;
 
+        OrderManager.Instance.OrderAccepted(info);
+
         gameObject.SetActive(false);
         info = null;
 
         OrderManager.Instance.OrderGoalUpdate();
+    }
+
+    public void ViewLocation()
+    {
+        if (info == null) return;
+
+        Vector3 pos = OrderManager.Instance.orderGoals[info.goal].transform.position;
+
+        WorldMapManager.Instance.ToggleCustomerMode(true, pos);
+        UIManager.Instance.utilUI.OpenWorldMap();
     }
 
 }

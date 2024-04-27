@@ -12,8 +12,13 @@ public class OrderInfo
     // 주문자 인덱스
     public int customerIdx;
 
+    // 주문한 피자
+    public List<PizzaInfo> pizzas;
+
     // 주문 배달 장소의 인덱스 정보 (OrderManager 참조)
     public int goal;
+    // 주문 배달 장소와의 거리
+    public float distance;
 
     // 배달 성공시 받는 금액
     public int rewards;
@@ -21,4 +26,26 @@ public class OrderInfo
     // 배달 제한 시간
     public float timeLimit;
 
+}
+
+[System.Serializable]
+public struct PizzaInfo
+{
+    // 필요한 재료
+    public SerializableDictionary<Ingredient, int> ingredients;
+}
+
+public enum Ingredient
+{
+    meat1,
+    meat2,
+    meat3,
+
+    vegetable1,
+    vegetable2,
+    vegetable3,
+
+    herb1,
+    herb2,
+    herb3,
 }

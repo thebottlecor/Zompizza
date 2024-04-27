@@ -344,6 +344,7 @@ public class PlayerController : MonoBehaviour
 
         CarSpeedUI();
         carEngineSound.enabled = !GM.Instance.stop_control;
+        tireScreechSound.enabled = !GM.Instance.stop_control;
 
         Physics.Raycast(transform.position, Vector3.down, 10f, 1 << LayerMask.NameToLayer("UI"));
 

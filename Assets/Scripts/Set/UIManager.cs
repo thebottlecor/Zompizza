@@ -15,6 +15,8 @@ public class UIManager : Singleton<UIManager>
 
     public List<OrderUIObject> orderUIObjects;
 
+    public bool isDirecting;
+
     private SerializableDictionary<KeyMap, KeyMapping> HotKey => SettingManager.Instance.keyMappings;
 
     private void Start()
@@ -37,6 +39,8 @@ public class UIManager : Singleton<UIManager>
 
     private void Update()
     {
+        if (isDirecting) return;
+
         if (HotKey[KeyMap.escape].GetkeyDown())
         {
             if (utilUI.IsActive)

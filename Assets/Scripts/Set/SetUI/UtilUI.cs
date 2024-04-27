@@ -56,6 +56,8 @@ public class UtilUI : EventListener
 
     public void OpenUI()
     {
+        if (UIManager.Instance.isDirecting) return;
+
         if (loading) return;
 
         if (UIManager.Instance.shopUI.IsActive)
@@ -107,6 +109,8 @@ public class UtilUI : EventListener
 
     public void HideUI()
     {
+        if (UIManager.Instance.isDirecting) return;
+
         if (!opened) return;
         if (loading) return;
 
@@ -137,7 +141,8 @@ public class UtilUI : EventListener
         if (idx == 0) // ¿ùµå¸Ê
         {
             //WorldMapManager.Instance.OpenFullscreenMap();
-            WorldMapManager.Instance.FocusPlayerPos();
+
+            WorldMapManager.Instance.FirstFocus();
         }
         else
         {
