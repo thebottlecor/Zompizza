@@ -12,6 +12,9 @@ public class UILibrary : ScriptableObject
     public Sprite shopButton;
     public Sprite shopButtonHighlighted;
 
+    public Color[] customerPinColor;
+    public Gradient pizaaHpGradient;
+
 
     public Sprite[] customerProfile;
 

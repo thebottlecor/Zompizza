@@ -75,6 +75,7 @@ public class UtilUI : EventListener
         Time.timeScale = 0f;
         loading = true;
 
+        UIManager.Instance.orderMiniUIParent.SetActive(false);
         WorldMapManager.Instance.CloseMinimap();
         WorldMapManager.Instance.OpenFullscreenMap();
 
@@ -119,6 +120,7 @@ public class UtilUI : EventListener
         Time.timeScale = 1f;
         loading = true;
 
+        UIManager.Instance.orderMiniUIParent.SetActive(true);
         WorldMapManager.Instance.CloseFullscreenMap();
         WorldMapManager.Instance.OpenMinimap();
 

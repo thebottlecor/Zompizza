@@ -165,6 +165,8 @@ public class PlayerController : MonoBehaviour
 
     private SerializableDictionary<KeyMap, KeyMapping> HotKey => SettingManager.Instance.keyMappings;
 
+    public static EventHandler<float> DamageEvent;
+
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Zombie"))
@@ -359,6 +361,9 @@ public class PlayerController : MonoBehaviour
                 if (Mathf.Abs(speedDiff) > 0.5f)
                 {
                     AudioManager.Instance.PlaySFX(Sfx.crash);
+
+                    if (DamageEvent != null)
+                        DamageEvent(null, 0.05f * UnityEngine.Random.Range(0.75f, 1.25f));
                 }
             }
         }

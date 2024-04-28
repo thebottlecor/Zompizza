@@ -163,6 +163,7 @@ public class ShopUI : EventListener
         Time.timeScale = 0f;
         loading = true;
 
+        UIManager.Instance.orderMiniUIParent.SetActive(false);
         WorldMapManager.Instance.CloseMinimap();
 
         SelectSubPanel(activeSubPanel);
@@ -205,6 +206,7 @@ public class ShopUI : EventListener
         Time.timeScale = 1f;
         loading = true;
 
+        UIManager.Instance.orderMiniUIParent.SetActive(true);
         WorldMapManager.Instance.OpenMinimap();
 
         for (int i = 0; i < panelButtonPairs.Count; i++)

@@ -1,11 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 [System.Serializable]
 public class OrderInfo
 {
-
     // 주문을 승낙했는지?
     public bool accepted;
 
@@ -23,8 +23,13 @@ public class OrderInfo
     // 배달 성공시 받는 금액
     public int rewards;
 
+    // 현재 피자 Hp 퍼센트 (최소 0 최대 1)
+    public float hp;
+
     // 배달 제한 시간
     public float timeLimit;
+    // 배달 수락후 지나간 시간
+    public float timer;
 
 }
 

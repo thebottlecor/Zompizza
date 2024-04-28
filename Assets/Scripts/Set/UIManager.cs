@@ -14,6 +14,7 @@ public class UIManager : Singleton<UIManager>
     public RectTransform movingSettingsPanelParent;
 
     public List<OrderUIObject> orderUIObjects;
+    public GameObject orderMiniUIParent;
 
     public bool isDirecting;
 

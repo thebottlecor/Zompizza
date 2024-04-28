@@ -11,7 +11,7 @@ public class GM : Singleton<GM>
     public bool stop_control;
 
 
-    public const float dayTime = 30f;
+    public const float dayTime = 180f;
     public const int dayStartHour = 8;
     public const int dayEndHour = 20;
     public const float oneHour = dayTime / (dayEndHour - dayStartHour);
@@ -66,9 +66,11 @@ public class GM : Singleton<GM>
         }
 
         if (endtime)
-            timeText.text = $"Day {day} :: <color=#ff0000>{hour:00}:{minute:00}:{sec:00}</color>";
+            //timeText.text = $"Day {day} :: <color=#ff0000>{hour:00}:{minute:00}:{sec:00}</color>";
+            timeText.text = $"Day {day} :: <color=#ff0000>{hour:00}:{minute:00}</color>";
         else
-            timeText.text = $"Day {day} :: {hour:00}:{minute:00}:{sec:00}";
+            //timeText.text = $"Day {day} :: {hour:00}:{minute:00}:{sec:00}";
+            timeText.text = $"Day {day} :: {hour:00}:{minute:00}";
     }
 
 }

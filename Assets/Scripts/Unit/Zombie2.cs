@@ -29,6 +29,8 @@ public class Zombie2 : MonoBehaviour
     protected AIDestinationSetter destinationSetter;
     public Seeker seeker;
 
+    public static EventHandler<float> DamageEvent;
+
     public void Init(Transform target)
     {
         rigid = GetComponent<Rigidbody>();
@@ -135,6 +137,9 @@ public class Zombie2 : MonoBehaviour
         {
             attackTimer = 0f;
             AudioManager.Instance.PlaySFX(Sfx.hittngPlayer);
+
+            if (DamageEvent != null)
+                DamageEvent(null, 0.01f * UnityEngine.Random.Range(0.75f, 1.25f));
         }
     }
 

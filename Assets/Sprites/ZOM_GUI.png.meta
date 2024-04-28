@@ -622,7 +622,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ZOM_GUI_27
+      name: timer
       rect:
         serializedVersion: 2
         x: 406
@@ -1427,7 +1427,6 @@ TextureImporter:
       ZOM_GUI_24: 827845098
       ZOM_GUI_25: -1471986665
       ZOM_GUI_26: 1958567784
-      ZOM_GUI_27: 1513074758
       ZOM_GUI_28: 612039958
       ZOM_GUI_29: 398142997
       ZOM_GUI_3: 1898971037
@@ -1507,6 +1506,7 @@ TextureImporter:
       scroll_extra: -1301179045
       settings: 977260030
       shop: 384743576
+      timer: 1513074758
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

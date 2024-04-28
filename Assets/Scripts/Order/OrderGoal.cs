@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using DG.Tweening;
+using MTAssets.EasyMinimapSystem;
 
 public class OrderGoal : MonoBehaviour
 {
 
     public int index;
     public GameObject goalEffectObj;
+    public MinimapItem minimapItem;
+    public MinimapItem minimapItem_customer;
 
     public static EventHandler<int> PlayerArriveEvent;
 
