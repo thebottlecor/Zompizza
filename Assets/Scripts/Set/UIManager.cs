@@ -13,14 +13,27 @@ public class UIManager : Singleton<UIManager>
 
     public RectTransform movingSettingsPanelParent;
 
+    public bool isDirecting;
+
     public List<OrderUIObject> orderUIObjects;
+
+    [Header("운행중 배달 정보")]
+    public GameObject orderMiniUI_Source;
+    public int maxOrderMiniUI = 20;
+    public Transform orderMiniUIContexts;
+    public List<OrderMiniUI> orderMiniUIs;
     public GameObject orderMiniUIParent;
 
-    public bool isDirecting;
+    public GameObject otherDrivingInfo;
+
+    [Header("재료창")]
+    public GameObject ingredient_Source;
+    public Transform[] ingredient_Parents;
+    public List<IngredientUI> ingredientUIs;
 
     private SerializableDictionary<KeyMap, KeyMapping> HotKey => SettingManager.Instance.keyMappings;
 
-    private void Start()
+    public void Init()
     {
         var panel = SettingManager.Instance.ingameMovingPanel;
         panel.SetParent(movingSettingsPanelParent);
@@ -31,6 +44,43 @@ public class UIManager : Singleton<UIManager>
 
         shopUI.UpdateTexts();
         utilUI.UpdateTexts();
+
+        // 운행중 배달 정보
+        orderMiniUIs = new List<OrderMiniUI>(maxOrderMiniUI);
+        for (int i = 0; i < maxOrderMiniUI; i++)
+        {
+            var obj = Instantiate(orderMiniUI_Source, orderMiniUIContexts);
+            OrderMiniUI miniUI = obj.GetComponent<OrderMiniUI>();
+            orderMiniUIs.Add(miniUI);
+            obj.SetActive(false);
+        }
+        // 재료창
+        var ingredients = Enum.GetValues(typeof(Ingredient));
+        foreach(var temp in ingredients)
+        {
+            Ingredient ingredient = (Ingredient)temp;
+            int parentIdx = 0;
+            if (DataManager.Instance.ingredientLib.vegetables.ContainsKey(ingredient))
+            {
+                parentIdx = 1;
+            }
+            else if (DataManager.Instance.ingredientLib.herbs.ContainsKey(ingredient))
+            {
+                parentIdx = 2;
+            }
+            var obj = Instantiate(ingredient_Source, ingredient_Parents[parentIdx]);
+            IngredientUI ingredientUI = obj.GetComponent<IngredientUI>();
+            ingredientUI.Init(ingredient);
+            ingredientUIs.Add(ingredientUI);
+        }
+    }
+
+    public void UpdateIngredients()
+    {
+        for (int i = 0; i < ingredientUIs.Count; i++)
+        {
+            ingredientUIs[i].UpdateDetailUI();
+        }
     }
 
     public void ButtonSound()
@@ -40,7 +90,7 @@ public class UIManager : Singleton<UIManager>
 
     private void Update()
     {
-        if (isDirecting) return;
+        //if (isDirecting) return;
 
         if (HotKey[KeyMap.escape].GetkeyDown())
         {

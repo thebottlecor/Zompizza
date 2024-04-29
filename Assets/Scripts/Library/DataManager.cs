@@ -6,10 +6,11 @@ using UnityEngine;
 public class DataManager : Singleton<DataManager>
 {
 
-    public UILibrary uiLibrary;
-    public MaterialLibrary materialLibrary;
-    public CursorLibrary cursorLibrary;
-    public EffectLibrary effectLibrary;
+    public IngredientLibrary ingredientLib;
+    public UILibrary uiLib;
+    public MaterialLibrary materialLib;
+    public CursorLibrary cursorLib;
+    public EffectLibrary effectLib;
 
     protected override void Awake()
     {

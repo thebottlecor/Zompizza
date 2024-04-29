@@ -41,6 +41,11 @@ public class ShopUI : EventListener
     public ScrollRect scrollRect;
     public RectTransform contentPanel;
 
+    [Header("야간 모드")]
+    public GameObject orderPanel;
+    public GameObject explorePanel;
+    private bool endTime;
+
     public void UpdateTexts()
     {
         buttonTexts[0].text = tm.GetCommons("Order");
@@ -57,6 +62,7 @@ public class ShopUI : EventListener
         ShopEnter.PlayerArriveEvent += OnPlayerArriveShop;
         ShopEnter.PlayerExitEvent += OnPlayerExitShop;
         PizzaDirection.PizzaCompleteEvent += OnPizzaCompleted;
+        GM.EndTimeEvent += OnEndtime;
     }
 
     protected override void RemoveListeners()
@@ -64,6 +70,7 @@ public class ShopUI : EventListener
         ShopEnter.PlayerArriveEvent -= OnPlayerArriveShop;
         ShopEnter.PlayerExitEvent -= OnPlayerExitShop;
         PizzaDirection.PizzaCompleteEvent -= OnPizzaCompleted;
+        GM.EndTimeEvent -= OnEndtime;
     }
 
     private void OnPlayerArriveShop(object sender, EventArgs e)
@@ -77,9 +84,34 @@ public class ShopUI : EventListener
         playerStay = false;
     }
 
-    private void OnPizzaCompleted(object sender, OrderInfo e)
+    private void OnPizzaCompleted(object sender, OrderInfo e) // OrderInfo <= 제외할 정보
     {
-        UpdatePizzaBox();
+        UpdatePizzaBox(e);
+    }
+
+    private void OnEndtime(object sender, bool e)
+    {
+        endTime = e;
+
+        if (e) // 마감
+        {
+            orderPanel.SetActive(false);
+            explorePanel.SetActive(true);
+
+            pizzaBoys[0].gameObject.SetActive(false);
+            pizzaBoys[1].gameObject.SetActive(false);
+            pizzaBoys[2].gameObject.SetActive(true);
+        }
+        else
+        {
+            orderPanel.SetActive(true);
+            explorePanel.SetActive(false);
+
+            pizzaBoys[0].gameObject.SetActive(false);
+            pizzaBoys[1].gameObject.SetActive(true);
+            pizzaBoys[2].gameObject.SetActive(false);
+
+        }
     }
 
     public void ShowOrder(int customerIdx)
@@ -87,45 +119,6 @@ public class ShopUI : EventListener
         activeSubPanel = 0;
         SnapTo(UIManager.Instance.orderUIObjects[customerIdx].transform as RectTransform);
         OpenUI();
-    }
-
-    public void SnapTo(RectTransform target)
-    {
-        //Canvas.ForceUpdateCanvases();
-
-        //float value = target.anchoredPosition.y / (scrollRect.content.rect.height - (scrollRect.transform as RectTransform).rect.height);
-        //Debug.Log(target.anchoredPosition.y + " > " + (scrollRect.content.rect.height - (scrollRect.transform as RectTransform).rect.height) + " >> " + value);
-
-        //float value = (Mathf.Abs(target.anchoredPosition.y) - target.sizeDelta.y) / scrollRect.content.rect.height;
-        //Debug.Log((Mathf.Abs(target.anchoredPosition.y) + target.sizeDelta.y) + " > " + scrollRect.content.rect.height + " >> " + value);
-
-        float value = Mathf.Abs(target.anchoredPosition.y) / scrollRect.content.rect.height;
-
-        scrollRect.verticalNormalizedPosition = 1f - value;
-    }
-
-    private void UpdatePizzaBox()
-    {
-        int count = OrderManager.Instance.GetCurrentPizzaBox();
-
-        pizzaBoys[0].gameObject.SetActive(count != 0);
-        pizzaBoys[1].gameObject.SetActive(count == 0);
-
-        for (int i = 0; i < pizzaBoxes.Length; i++)
-        {
-            pizzaBoxes[i].gameObject.SetActive(false);
-        }
-
-        for (int i = 0; i < pizzaBoxes.Length; i++)
-        {
-            if (count <= 0)
-                break;
-            if (!pizzaBoxes[i].gameObject.activeSelf)
-            {
-                pizzaBoxes[i].gameObject.SetActive(true);
-                count--;
-            }
-        }
     }
 
     private void Update()
@@ -141,10 +134,9 @@ public class ShopUI : EventListener
         }
     }
 
-
     public void OpenUI()
     {
-        if (UIManager.Instance.isDirecting) return;
+        //if (UIManager.Instance.isDirecting) return;
 
         if (loading) return;
 
@@ -164,6 +156,7 @@ public class ShopUI : EventListener
         loading = true;
 
         UIManager.Instance.orderMiniUIParent.SetActive(false);
+        UIManager.Instance.otherDrivingInfo.SetActive(false);
         WorldMapManager.Instance.CloseMinimap();
 
         SelectSubPanel(activeSubPanel);
@@ -196,7 +189,7 @@ public class ShopUI : EventListener
 
     public void HideUI()
     {
-        if (UIManager.Instance.isDirecting) return;
+        if (UIManager.Instance.isDirecting) OrderManager.Instance.pizzaDirection.StopSequence();
 
         if (!opened) return;
         if (loading) return;
@@ -207,6 +200,7 @@ public class ShopUI : EventListener
         loading = true;
 
         UIManager.Instance.orderMiniUIParent.SetActive(true);
+        UIManager.Instance.otherDrivingInfo.SetActive(true);
         WorldMapManager.Instance.OpenMinimap();
 
         for (int i = 0; i < panelButtonPairs.Count; i++)
@@ -228,7 +222,11 @@ public class ShopUI : EventListener
     {
         if (idx == 0)
         {
-            UpdatePizzaBox();
+            UpdatePizzaBox(null);
+        }
+        else
+        {
+            if (UIManager.Instance.isDirecting) OrderManager.Instance.pizzaDirection.StopSequence();
         }
 
         for (int i = 0; i < panelButtonPairs.Count; i++)
@@ -242,4 +240,48 @@ public class ShopUI : EventListener
 
         activeSubPanel = idx;
     }
+
+    //연출
+    public void SnapTo(RectTransform target)
+    {
+        float value = Mathf.Abs(target.anchoredPosition.y) / scrollRect.content.rect.height;
+
+        scrollRect.verticalNormalizedPosition = 1f - value;
+    }
+
+    private void UpdatePizzaBox(OrderInfo info)
+    {
+        int count = OrderManager.Instance.GetCurrentPizzaBox();
+
+        if (info != null)
+            count -= info.pizzas.Count;
+
+        if (endTime)
+        {
+            pizzaBoys[0].gameObject.SetActive(false);
+            pizzaBoys[1].gameObject.SetActive(false);
+        }
+        else
+        {
+            pizzaBoys[0].gameObject.SetActive(count != 0);
+            pizzaBoys[1].gameObject.SetActive(count == 0);
+        }
+
+        for (int i = 0; i < pizzaBoxes.Length; i++)
+        {
+            pizzaBoxes[i].gameObject.SetActive(false);
+        }
+
+        for (int i = 0; i < pizzaBoxes.Length; i++)
+        {
+            if (count <= 0)
+                break;
+            if (!pizzaBoxes[i].gameObject.activeSelf)
+            {
+                pizzaBoxes[i].gameObject.SetActive(true);
+                count--;
+            }
+        }
+    }
+
 }

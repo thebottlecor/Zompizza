@@ -22,13 +22,13 @@ public class OrderMiniUI : MonoBehaviour
     public void Init(OrderInfo info)
     {
         prevHp = info.hp;
-        pizzaHpGauge.color = DataManager.Instance.uiLibrary.pizaaHpGradient.Evaluate(1f);
+        pizzaHpGauge.color = DataManager.Instance.uiLib.pizaaHpGradient.Evaluate(1f);
 
         this.info = info;
         isActive = true;
 
-        pin.color = DataManager.Instance.uiLibrary.customerPinColor[info.customerIdx];
-        profile.sprite = DataManager.Instance.uiLibrary.customerProfile[info.customerIdx];
+        pin.color = DataManager.Instance.uiLib.customerPinColor[info.customerIdx];
+        profile.sprite = DataManager.Instance.uiLib.customerProfile[info.customerIdx];
 
         pizzaHpGauge.DOKill();
         pizzaHpGauge.fillAmount = info.hp;
@@ -67,13 +67,12 @@ public class OrderMiniUI : MonoBehaviour
     {
         pizzaHpGauge.DOKill();
 
-        //float diff = Mathf.Abs(prevHp - goalPercent) * 100f;
-        float diff = 1f;
-        float length = Mathf.Max(diff, 0.1f);
+        float diff = Mathf.Abs(prevHp - goalPercent) * 100f;
+        float length = Mathf.Min(diff, 1f);
 
         pizzaHpGauge.DOColor(new Color(1f, 0f, 0f, 0.66f), length * 0.1f).SetEase(Ease.OutBounce).OnComplete(() =>
         {
-            pizzaHpGauge.DOColor(DataManager.Instance.uiLibrary.pizaaHpGradient.Evaluate(goalPercent), length * 0.1f).SetEase(Ease.OutBack);
+            pizzaHpGauge.DOColor(DataManager.Instance.uiLib.pizaaHpGradient.Evaluate(goalPercent), length * 0.1f).SetEase(Ease.OutBack);
         });
         pizzaHpGauge.DOFillAmount(goalPercent, length).SetEase(Ease.OutQuart);
         prevHp = goalPercent;

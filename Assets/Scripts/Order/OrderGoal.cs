@@ -48,7 +48,7 @@ public class OrderGoal : MonoBehaviour
         EffectUpdate(false);
         AudioManager.Instance.PlaySFX(Sfx.money);
         AudioManager.Instance.PlaySFX(Sfx.complete);
-        var source = DataManager.Instance.effectLibrary.dollarBoomEffect;
+        var source = DataManager.Instance.effectLib.dollarBoomEffect;
         Vector3 pos = this.transform.position;
         pos.y = 4f;
         var obj = Instantiate(source, pos, Quaternion.identity);

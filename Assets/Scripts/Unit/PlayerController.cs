@@ -85,15 +85,6 @@ public class PlayerController : MonoBehaviour
     public TrailRenderer RLWTireSkid;
     public TrailRenderer RRWTireSkid;
 
-    //SPEED TEXT (UI)
-
-    [Space(20)]
-    //[Header("UI")]
-    [Space(10)]
-    public TextMeshProUGUI carSpeedText; // Used to store the UI object that is going to show the speed of the car.
-
-    //SOUNDS
-
     [Space(20)]
     //[Header("Sounds")]
     [Space(10)]
@@ -344,7 +335,6 @@ public class PlayerController : MonoBehaviour
         // Save the local velocity of the car in the z axis. Used to know if the car is going forward or backwards.
         localVelocityZ = transform.InverseTransformDirection(carRigidbody.velocity).z;
 
-        CarSpeedUI();
         carEngineSound.enabled = !GM.Instance.stop_control;
         tireScreechSound.enabled = !GM.Instance.stop_control;
 
@@ -497,13 +487,6 @@ public class PlayerController : MonoBehaviour
         // We call the method AnimateWheelMeshes() in order to match the wheel collider movements with the 3D meshes of the wheels.
         AnimateWheelMeshes();
 
-    }
-
-    // This method converts the car speed data from float to string, and then set the text of the UI carSpeedText with this value.
-    public void CarSpeedUI()
-    {
-        float absoluteCarSpeed = Mathf.Abs(carSpeed);
-        carSpeedText.text = Mathf.RoundToInt(absoluteCarSpeed).ToString();
     }
 
     // This method controls the car sounds. For example, the car engine will sound slow when the car speed is low because the

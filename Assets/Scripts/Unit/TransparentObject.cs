@@ -32,14 +32,14 @@ public class TransparentObject : MonoBehaviour
 	{
 		for (int i = 0; i < meshes.Length; i++)
 		{
-			meshes[i].material = DataManager.Instance.materialLibrary.transparentMaterial;
+			meshes[i].material = DataManager.Instance.materialLib.transparentMaterial;
 		}
 	}
 	public void ResetTransparent()
 	{
 		for (int i = 0; i < meshes.Length; i++)
 		{
-			meshes[i].material = DataManager.Instance.materialLibrary.baseMaterial;
+			meshes[i].material = DataManager.Instance.materialLib.baseMaterial;
 		}
 	}
 }

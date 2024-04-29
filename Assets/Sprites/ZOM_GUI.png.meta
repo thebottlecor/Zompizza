@@ -160,7 +160,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ZOM_GUI_3
+      name: pin3
       rect:
         serializedVersion: 2
         x: 348
@@ -370,7 +370,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ZOM_GUI_13
+      name: gold
       rect:
         serializedVersion: 2
         x: 280
@@ -454,7 +454,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ZOM_GUI_17
+      name: rating
       rect:
         serializedVersion: 2
         x: 57
@@ -1413,10 +1413,8 @@ TextureImporter:
       ZOM_GUI_1: 1870865058
       ZOM_GUI_10: -282567330
       ZOM_GUI_12: -455512047
-      ZOM_GUI_13: -473345904
       ZOM_GUI_14: 1878053812
       ZOM_GUI_16: -501285516
-      ZOM_GUI_17: -1912592998
       ZOM_GUI_18: -1870893056
       ZOM_GUI_19: -916891236
       ZOM_GUI_2: 2126943300
@@ -1429,7 +1427,6 @@ TextureImporter:
       ZOM_GUI_26: 1958567784
       ZOM_GUI_28: 612039958
       ZOM_GUI_29: 398142997
-      ZOM_GUI_3: 1898971037
       ZOM_GUI_30: 895953832
       ZOM_GUI_31: 2013824448
       ZOM_GUI_32: 720264181
@@ -1492,6 +1489,7 @@ TextureImporter:
       cancel: -532384255
       check: -1068914690
       edge_01: 284716777
+      gold: -473345904
       line_01: -1077415394
       line_02: 1388350798
       panel_01: 1496360435
@@ -1501,7 +1499,9 @@ TextureImporter:
       panel_big_01: -753564506
       pin: -1112364879
       pin 2: 976728236
+      pin3: 1898971037
       pizza: 172551813
+      rating: -1912592998
       scroll_bar: -854652288
       scroll_extra: -1301179045
       settings: 977260030

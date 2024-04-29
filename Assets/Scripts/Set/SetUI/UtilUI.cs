@@ -56,7 +56,7 @@ public class UtilUI : EventListener
 
     public void OpenUI()
     {
-        if (UIManager.Instance.isDirecting) return;
+        //if (UIManager.Instance.isDirecting) return;
 
         if (loading) return;
 
@@ -76,6 +76,7 @@ public class UtilUI : EventListener
         loading = true;
 
         UIManager.Instance.orderMiniUIParent.SetActive(false);
+        UIManager.Instance.otherDrivingInfo.SetActive(false);
         WorldMapManager.Instance.CloseMinimap();
         WorldMapManager.Instance.OpenFullscreenMap();
 
@@ -110,7 +111,7 @@ public class UtilUI : EventListener
 
     public void HideUI()
     {
-        if (UIManager.Instance.isDirecting) return;
+        if (UIManager.Instance.isDirecting) OrderManager.Instance.pizzaDirection.StopSequence();
 
         if (!opened) return;
         if (loading) return;
@@ -121,6 +122,7 @@ public class UtilUI : EventListener
         loading = true;
 
         UIManager.Instance.orderMiniUIParent.SetActive(true);
+        UIManager.Instance.otherDrivingInfo.SetActive(true);
         WorldMapManager.Instance.CloseFullscreenMap();
         WorldMapManager.Instance.OpenMinimap();
 

@@ -13,7 +13,6 @@ public class OrderManager : Singleton<OrderManager>
 
     public PizzaDirection pizzaDirection;
 
-    public List<OrderMiniUI> orderMiniUISources;
     public SerializableDictionary<OrderInfo, OrderMiniUI> orderMiniUIPair;
 
     private void Start()
@@ -21,7 +20,7 @@ public class OrderManager : Singleton<OrderManager>
         for (int i = 0; i < orderGoals.Count; i++)
         {
             orderGoals[i].index = i;
-            orderGoals[i].minimapItem.spriteColor = DataManager.Instance.uiLibrary.customerPinColor[i];
+            orderGoals[i].minimapItem.spriteColor = DataManager.Instance.uiLib.customerPinColor[i];
 
             // orderGoals[i].minimapItem_customer.itemSprite = ?
         }
@@ -53,7 +52,9 @@ public class OrderManager : Singleton<OrderManager>
             if (gIndex == e)
             {
                 // 배달 성공
-                Debug.Log($"배달 성공 {orderList[i].rewards}");
+                GM.Instance.AddGold(orderList[i].rewards);
+                GM.Instance.AddRating(0.5f);
+
                 orderGoals[gIndex].SuccessEffect();
                 //
                 orderMiniUIPair[orderList[i]].Hide();
@@ -99,15 +100,7 @@ public class OrderManager : Singleton<OrderManager>
             timer = 0f,
         };
         orderList.Add(newOrder);
-        for (int i = 0; i < orderMiniUISources.Count; i++)
-        {
-            if (!orderMiniUISources[i].isActive)
-            {
-                orderMiniUIPair.Add(new SerializableDictionary<OrderInfo, OrderMiniUI>.Pair { Key = newOrder, Value = orderMiniUISources[i] });
-                orderMiniUISources[i].Init(newOrder);
-                break;
-            }
-        }
+        PairingMiniUI(newOrder);
 
         goal = 2;
         distance = (orderGoals[goal].transform.position - pizzeria.transform.position).magnitude;
@@ -129,19 +122,25 @@ public class OrderManager : Singleton<OrderManager>
             timer = 0f,
         };
         orderList.Add(newOrder);
-        for (int i = 0; i < orderMiniUISources.Count; i++)
-        {
-            if (!orderMiniUISources[i].isActive)
-            {
-                orderMiniUIPair.Add(new SerializableDictionary<OrderInfo, OrderMiniUI>.Pair { Key = newOrder, Value = orderMiniUISources[i] });
-                orderMiniUISources[i].Init(newOrder);
-                break;
-            }
-        }
+        PairingMiniUI(newOrder);
 
         UIManager.Instance.OrderUIUpdate();
 
         OrderGoalUpdate();
+    }
+
+    private void PairingMiniUI(OrderInfo info)
+    {
+        var list = UIManager.Instance.orderMiniUIs;
+        for (int i = 0; i < list.Count; i++)
+        {
+            if (!list[i].isActive)
+            {
+                orderMiniUIPair.Add(new SerializableDictionary<OrderInfo, OrderMiniUI>.Pair { Key = info, Value = list[i] });
+                list[i].Init(info);
+                break;
+            }
+        }
     }
 
     private void Update()
@@ -178,6 +177,17 @@ public class OrderManager : Singleton<OrderManager>
     {
         if (orderMiniUIPair.ContainsKey(info))
             orderMiniUIPair[info].gameObject.SetActive(true);
+
+        // 재료 소모
+        for (int i = 0; i < info.pizzas.Count; i++)
+        {
+            foreach (var temp in info.pizzas[i].ingredients)
+            {
+                GM.Instance.ingredients[temp.Key] -= temp.Value;
+            }
+        }
+        UIManager.Instance.UpdateIngredients();
+
         pizzaDirection.RestartSequence(info);
     }
 

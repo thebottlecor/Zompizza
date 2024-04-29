@@ -7,14 +7,11 @@ using DG.Tweening;
 
 public class PizzaDirection : MonoBehaviour
 {
-
     public CanvasGroup parentPanel;
 
     public Transform initParent;
 
     public Animator pizzaBoxAnimator;
-    
-
 
     public Transform pizza;
     public Transform pizzaEffect;
@@ -44,7 +41,7 @@ public class PizzaDirection : MonoBehaviour
             Ingredient key = (Ingredient)temp;
             var obj = Instantiate(ingredientsSource);
             SpriteRenderer spriteRenderer = obj.GetComponent<SpriteRenderer>();
-            spriteRenderer.sprite = DataManager.Instance.uiLibrary.ingredients[key];
+            spriteRenderer.sprite = DataManager.Instance.uiLib.ingredients[key];
             obj.transform.position = ingredientsRandomPos[count].position;
             obj.transform.SetParent(initParent);
             count++;
@@ -83,22 +80,33 @@ public class PizzaDirection : MonoBehaviour
         gameObject.SetActive(false);
         gameObject.SetActive(true);
 
+        // 연출 변경에 따른 추가
+        Vector3 tempPos2 = stackTarget.position;
+        tempPos2.z = 0.86f;
+        pizzaEffect.transform.position = tempPos2;
+        tempPos2.z = 0f;
+        pizzaBoxAnimator.transform.position = tempPos2;
+
 
         sequence = DOTween.Sequence().SetAutoKill(false).SetUpdate(true);
         // 닫힌 상태로 초기화
         sequence.AppendCallback(() =>
         {
+            transform.localScale = Vector3.one;
+
             UIManager.Instance.isDirecting = true;
-            parentPanel.alpha = 1f;
-            parentPanel.interactable = false;
+            //parentPanel.alpha = 1f;
+            //parentPanel.interactable = false;
 
             pizzaBoxAnimator.gameObject.SetActive(true);
+            pizzaBoxAnimator.transform.localEulerAngles = new Vector3(45f, 180f, 0f);
             pizzaBoxAnimator.Play("Closed");
             pizza.gameObject.SetActive(false);
             pizzaEffect.gameObject.SetActive(false);
+            pizzaEffect.localScale = Vector3.one;
         });
         // 열린다
-        sequence.Append(parentPanel.DOFade(0.1f, 0.5f));
+        //sequence.Append(parentPanel.DOFade(0.1f, 0.5f));
         //sequence.AppendInterval(0.5f);
         sequence.AppendCallback(() =>
         {
@@ -107,14 +115,15 @@ public class PizzaDirection : MonoBehaviour
         sequence.AppendInterval(0.25f);
 
         // 재료들이 들어간다
-        sequence.Append(ingredients[0].DOMoveX(pizzaBoxAnimator.transform.position.x, 0.75f).SetEase(Ease.OutQuad));
-        sequence.Join(ingredients[0].DOMoveY(pizzaBoxAnimator.transform.position.y + 0.15f, 0.75f).SetEase(Ease.InQuad));
-        sequence.Join(ingredients[0].DOScale(0.4f, 0.75f).SetEase(Ease.OutQuint));
+        sequence.AppendInterval(0.75f); // 더미
+        //sequence.Append(ingredients[0].DOLocalMoveX(pizzaBoxAnimator.transform.localPosition.x, 0.75f).SetEase(Ease.OutQuad));
+        //sequence.Join(ingredients[0].DOLocalMoveY(pizzaBoxAnimator.transform.localPosition.y + 0.15f, 0.75f).SetEase(Ease.InQuad));
+        //sequence.Join(ingredients[0].DOScale(0.4f, 0.75f).SetEase(Ease.OutQuint));
 
         foreach (var temp in ingredients)
         {
-            sequence.Join(temp.Value.DOMoveX(pizzaBoxAnimator.transform.position.x, 0.75f).SetEase(Ease.OutQuad));
-            sequence.Join(temp.Value.DOMoveY(pizzaBoxAnimator.transform.position.y + 0.15f, 0.75f).SetEase(Ease.InQuad));
+            sequence.Join(temp.Value.DOLocalMoveX(pizzaBoxAnimator.transform.localPosition.x, 0.75f).SetEase(Ease.OutQuad));
+            sequence.Join(temp.Value.DOLocalMoveY(pizzaBoxAnimator.transform.localPosition.y + 0.15f, 0.75f).SetEase(Ease.InQuad));
             sequence.Join(temp.Value.DOScale(0.4f, 0.75f).SetEase(Ease.OutQuint));
         }
 
@@ -145,7 +154,7 @@ public class PizzaDirection : MonoBehaviour
             pizzaEffect.gameObject.SetActive(true);
         });
         sequence.Append(pizzaBoxAnimator.transform.DOLocalRotate(new Vector3(0, 360, 0), 0.25f, RotateMode.FastBeyond360).SetRelative(true).SetEase(Ease.Linear));
-        sequence.Join(pizzaEffect.DOScale(5f, 0.25f).SetEase(Ease.InBounce));
+        sequence.Join(pizzaEffect.DOScale(5f, 0.25f).SetEase(Ease.InBack));
 
         // 빵빠레 효과 - 완성
         sequence.AppendCallback(() =>
@@ -153,8 +162,11 @@ public class PizzaDirection : MonoBehaviour
             pizza.gameObject.SetActive(true);
         });
 
+        sequence.Append(pizzaBoxAnimator.transform.DOPunchScale(new Vector3(1f, 0.05f, 0.05f), 0.25f));
+        sequence.Join(pizzaEffect.DOPunchScale(new Vector3(1f, 0.05f, 0.05f), 0.25f));
+
         // 오른쪽으로 옮기기
-        sequence.AppendInterval(0.75f);
+        sequence.AppendInterval(0.5f);
         sequence.AppendCallback(() =>
         {
             pizzaBoxAnimator.Play("Closing");
@@ -165,23 +177,20 @@ public class PizzaDirection : MonoBehaviour
             pizza.gameObject.SetActive(false);
             pizzaEffect.gameObject.SetActive(false);
         });
-        sequence.Append(pizzaBoxAnimator.transform.DOMove(stackTarget.position, 0.5f));
-        sequence.Append(pizzaBoxAnimator.transform.DOMove(stackTarget2.position, 0.5f).SetEase(Ease.OutQuad));
-        sequence.Join(parentPanel.DOFade(1f, 0.5f));
+        //sequence.Append(pizzaBoxAnimator.transform.DOMove(stackTarget.position, 0.5f));
+        sequence.Append(pizzaBoxAnimator.transform.DOLocalMove(stackTarget2.localPosition, 0.5f).SetEase(Ease.OutQuad));
+        //sequence.Join(parentPanel.DOFade(1f, 0.5f));
         sequence.AppendCallback(() =>
         {
             pizzaBoxAnimator.gameObject.SetActive(false);
 
-            parentPanel.alpha = 1f;
-            parentPanel.interactable = true;
+            //parentPanel.alpha = 1f;
+            //parentPanel.interactable = true;
             UIManager.Instance.isDirecting = false;
 
-            if (info != null)
-            {
-                if (PizzaCompleteEvent != null)
-                    PizzaCompleteEvent(this, info);
-                info = null;
-            }
+            if (PizzaCompleteEvent != null)
+                PizzaCompleteEvent(this, null);
+            info = null;
         });
 
         sequence.Pause();
@@ -201,8 +210,15 @@ public class PizzaDirection : MonoBehaviour
                         ingredientList.Add(temp.Key);
                 }
             }
+            int count = 0;
             foreach (var temp in ingredients)
             {
+                temp.Value.position = ingredientsRandomPos[count].position;
+                count++;
+                if (count >= ingredientsRandomPos.Count)
+                    count = 0;
+                temp.Value.localScale = Vector3.one;
+
                 temp.Value.SetParent(initParent);
                 if (ingredientList.Contains(temp.Key))
                     temp.Value.gameObject.SetActive(true);
@@ -210,13 +226,42 @@ public class PizzaDirection : MonoBehaviour
                     temp.Value.gameObject.SetActive(false);
             }
         }
+        else
+        {
+            int count = 0;
+            foreach (var temp in ingredients)
+            {
+                temp.Value.position = ingredientsRandomPos[count].position;
+                count++;
+                if (count >= ingredientsRandomPos.Count)
+                    count = 0;
+                temp.Value.localScale = Vector3.one;
+
+                temp.Value.SetParent(initParent);
+                temp.Value.gameObject.SetActive(true);
+            }
+        }
 
         sequence.Restart();
+    }
+
+    public void StopSequence()
+    {
+        if (sequence.IsPlaying())
+        {
+            transform.localScale = Vector3.zero;
+        }
     }
 
     public void RestartSequence(OrderInfo info)
     {
         if (info == null) return;
+
+        if (sequence.IsPlaying())
+        {
+            if (PizzaCompleteEvent != null)
+                PizzaCompleteEvent(this, info);
+        }
 
         this.info = info;
 
@@ -229,8 +274,16 @@ public class PizzaDirection : MonoBehaviour
                     ingredientList.Add(temp.Key);
             }
         }
+
+        int count = 0;
         foreach (var temp in ingredients)
         {
+            temp.Value.position = ingredientsRandomPos[count].position;
+            count++;
+            if (count >= ingredientsRandomPos.Count)
+                count = 0;
+            temp.Value.localScale = Vector3.one;
+
             temp.Value.SetParent(initParent);
             if (ingredientList.Contains(temp.Key))
                 temp.Value.gameObject.SetActive(true);

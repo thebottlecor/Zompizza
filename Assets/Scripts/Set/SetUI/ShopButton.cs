@@ -19,12 +19,12 @@ public class ShopButton : MonoBehaviour //, IPointerEnterHandler, IPointerExitHa
     {
         if (on)
         {
-            buttonImage.sprite = DataManager.Instance.uiLibrary.shopButtonHighlighted;
+            buttonImage.sprite = DataManager.Instance.uiLib.shopButtonHighlighted;
             scrollingUI.enabled = true;
         }
         else
         {
-            buttonImage.sprite = DataManager.Instance.uiLibrary.shopButton;
+            buttonImage.sprite = DataManager.Instance.uiLib.shopButton;
             scrollingUI.enabled = false;
         }
     }

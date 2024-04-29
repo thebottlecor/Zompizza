@@ -101,7 +101,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 400
+        y: 800
         width: 200
         height: 200
       alignment: 0
@@ -122,7 +122,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 200
-        y: 400
+        y: 800
         width: 200
         height: 200
       alignment: 0
@@ -143,7 +143,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 400
-        y: 400
+        y: 800
         width: 200
         height: 200
       alignment: 0
@@ -160,32 +160,11 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Resource_Icon_Pizza
-      rect:
-        serializedVersion: 2
-        x: 600
-        y: 400
-        width: 200
-        height: 200
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 60520653511a4fa4a9083380f959afca
-      internalID: -1734709282
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: Resource_Icon_4
       rect:
         serializedVersion: 2
-        x: 0
-        y: 200
+        x: 200
+        y: 600
         width: 200
         height: 200
       alignment: 0
@@ -205,8 +184,8 @@ TextureImporter:
       name: Resource_Icon_5
       rect:
         serializedVersion: 2
-        x: 200
-        y: 200
+        x: 400
+        y: 600
         width: 200
         height: 200
       alignment: 0
@@ -226,8 +205,8 @@ TextureImporter:
       name: Resource_Icon_6
       rect:
         serializedVersion: 2
-        x: 400
-        y: 200
+        x: 0
+        y: 400
         width: 200
         height: 200
       alignment: 0
@@ -247,8 +226,8 @@ TextureImporter:
       name: Resource_Icon_7
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
+        x: 200
+        y: 400
         width: 200
         height: 200
       alignment: 0
@@ -268,8 +247,8 @@ TextureImporter:
       name: Resource_Icon_8
       rect:
         serializedVersion: 2
-        x: 200
-        y: 0
+        x: 400
+        y: 400
         width: 200
         height: 200
       alignment: 0
@@ -289,8 +268,8 @@ TextureImporter:
       name: Resource_Icon_9
       rect:
         serializedVersion: 2
-        x: 400
-        y: 0
+        x: 0
+        y: 200
         width: 200
         height: 200
       alignment: 0
@@ -302,6 +281,132 @@ TextureImporter:
       bones: []
       spriteID: c7d5158784b947a4980d33c7e6380b77
       internalID: 648623735
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Resource_Icon_3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 600
+        width: 200
+        height: 200
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 607352bb19e7e0e4f83f3860d3e920ff
+      internalID: -543496047
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Resource_Icon_10
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 200
+        width: 200
+        height: 200
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 264fc498e3fdc564bafb1c84eee3dc23
+      internalID: -778362435
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Resource_Icon_11
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 200
+        width: 200
+        height: 200
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 027347983b3a65844acae2b634df505c
+      internalID: 2042367604
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Resource_Icon_12
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 200
+        height: 200
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e0a8119ddbc96e44f82440009628888f
+      internalID: -535575831
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Resource_Icon_13
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 0
+        width: 200
+        height: 200
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f16852f69a158044facecbfe2faa7aff
+      internalID: -1504259253
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Resource_Icon_14
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 0
+        width: 200
+        height: 200
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 09d3e353cea335e43a50161cdf626cf7
+      internalID: 21513758
       vertices: []
       indices: 
       edges: []
@@ -319,14 +424,19 @@ TextureImporter:
     nameFileIdTable:
       Resource_Icon_0: -50998888
       Resource_Icon_1: -2134813436
+      Resource_Icon_10: -778362435
+      Resource_Icon_11: 2042367604
+      Resource_Icon_12: -535575831
+      Resource_Icon_13: -1504259253
+      Resource_Icon_14: 21513758
       Resource_Icon_2: -308755391
+      Resource_Icon_3: -543496047
       Resource_Icon_4: -1208501331
       Resource_Icon_5: -1014907396
       Resource_Icon_6: 1801218054
       Resource_Icon_7: 1389277336
       Resource_Icon_8: 69270305
       Resource_Icon_9: 648623735
-      Resource_Icon_Pizza: -1734709282
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

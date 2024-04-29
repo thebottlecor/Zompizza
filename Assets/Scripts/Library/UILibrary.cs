@@ -15,6 +15,8 @@ public class UILibrary : ScriptableObject
     public Color[] customerPinColor;
     public Gradient pizaaHpGradient;
 
+    public Gradient timeLightGradient;
+
 
     public Sprite[] customerProfile;
 

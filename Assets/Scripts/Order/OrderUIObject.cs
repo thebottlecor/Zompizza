@@ -21,14 +21,14 @@ public class OrderUIObject : MonoBehaviour
     private OrderInfo info;
 
     private const float distanceScale = 0.005f;
-    private const int ingredientSpriteOffset = 1;
+    private const int ingredientSpriteOffset = 3;
     private TextManager tm => TextManager.Instance;
 
     public void UIUpdate(OrderInfo info)
     {
         this.info = info;
 
-        customer_profile.sprite = DataManager.Instance.uiLibrary.customerProfile[info.customerIdx];
+        customer_profile.sprite = DataManager.Instance.uiLib.customerProfile[info.customerIdx];
         customer_name.text = tm.GetNames(info.customerIdx + 2);
 
         StringBuilder st = new StringBuilder();
