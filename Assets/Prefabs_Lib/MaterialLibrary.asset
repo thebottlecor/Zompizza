@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: MaterialLibrary
   m_EditorClassIdentifier: 
   baseMaterial: {fileID: 2100000, guid: 965e421d30d6a2a419dfd5b3597456b8, type: 2}
+  hitMaterial: {fileID: 2100000, guid: 5d980ec565fef264db2103cab8556faa, type: 2}
   transparentMaterial: {fileID: 2100000, guid: 840a151e2b1f2c9489f4f269d27ce2fe, type: 2}

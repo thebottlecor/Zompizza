@@ -46,6 +46,10 @@ public class ShopUI : EventListener
     public GameObject explorePanel;
     private bool endTime;
 
+    public TextMeshProUGUI orderText;
+    public TextMeshProUGUI ingredientText;
+    public TextMeshProUGUI[] ingredientsSub;
+
     public void UpdateTexts()
     {
         buttonTexts[0].text = tm.GetCommons("Order");
@@ -55,6 +59,11 @@ public class ShopUI : EventListener
 
         buttonTexts[4].text = tm.GetCommons("Back");
 
+        orderText.text = tm.GetCommons("Order");
+        ingredientText.text = tm.GetCommons("Ingredient");
+        ingredientsSub[0].text = tm.GetCommons("Meat");
+        ingredientsSub[1].text = tm.GetCommons("Vegetable");
+        ingredientsSub[2].text = tm.GetCommons("Herb");
     }
 
     protected override void AddListeners()
@@ -62,6 +71,7 @@ public class ShopUI : EventListener
         ShopEnter.PlayerArriveEvent += OnPlayerArriveShop;
         ShopEnter.PlayerExitEvent += OnPlayerExitShop;
         PizzaDirection.PizzaCompleteEvent += OnPizzaCompleted;
+        OrderManager.AllOrderRemovedEvent += OnOrderRemoved;
         GM.EndTimeEvent += OnEndtime;
     }
 
@@ -70,12 +80,13 @@ public class ShopUI : EventListener
         ShopEnter.PlayerArriveEvent -= OnPlayerArriveShop;
         ShopEnter.PlayerExitEvent -= OnPlayerExitShop;
         PizzaDirection.PizzaCompleteEvent -= OnPizzaCompleted;
+        OrderManager.AllOrderRemovedEvent -= OnOrderRemoved;
         GM.EndTimeEvent -= OnEndtime;
     }
 
     private void OnPlayerArriveShop(object sender, EventArgs e)
     {
-        OpenUI();
+        ShowOrder();
         playerStay = true;
     }
 
@@ -88,6 +99,10 @@ public class ShopUI : EventListener
     {
         UpdatePizzaBox(e);
     }
+    private void OnOrderRemoved(object sender, EventArgs e)
+    {
+        UpdatePizzaBox(null);
+    }
 
     private void OnEndtime(object sender, bool e)
     {
@@ -98,6 +113,8 @@ public class ShopUI : EventListener
             orderPanel.SetActive(false);
             explorePanel.SetActive(true);
 
+            buttonTexts[0].text = tm.GetCommons("Explore");
+
             pizzaBoys[0].gameObject.SetActive(false);
             pizzaBoys[1].gameObject.SetActive(false);
             pizzaBoys[2].gameObject.SetActive(true);
@@ -107,6 +124,8 @@ public class ShopUI : EventListener
             orderPanel.SetActive(true);
             explorePanel.SetActive(false);
 
+            buttonTexts[0].text = tm.GetCommons("Order");
+
             pizzaBoys[0].gameObject.SetActive(false);
             pizzaBoys[1].gameObject.SetActive(true);
             pizzaBoys[2].gameObject.SetActive(false);
@@ -114,11 +133,10 @@ public class ShopUI : EventListener
         }
     }
 
-    public void ShowOrder(int customerIdx)
+    private void Start()
     {
-        activeSubPanel = 0;
-        SnapTo(UIManager.Instance.orderUIObjects[customerIdx].transform as RectTransform);
-        OpenUI();
+        orderPanel.SetActive(true);
+        explorePanel.SetActive(false);
     }
 
     private void Update()
@@ -134,9 +152,22 @@ public class ShopUI : EventListener
         }
     }
 
+    public void ShowOrder()
+    {
+        activeSubPanel = 0;
+        OpenUI();
+    }
+    public void ShowOrder(int customerIdx)
+    {
+        activeSubPanel = 0;
+        SnapTo(UIManager.Instance.orderUIObjects[customerIdx].transform as RectTransform);
+        OpenUI();
+    }
+
     public void OpenUI()
     {
-        //if (UIManager.Instance.isDirecting) return;
+        if (UIManager.Instance.isDirecting) return;
+        if (GM.Instance.loading) return;
 
         if (loading) return;
 
@@ -151,12 +182,14 @@ public class ShopUI : EventListener
             return;
         }
 
+        UIManager.Instance.OffAll_Ingredient_Highlight();
         GM.Instance.stop_control = true;
         Time.timeScale = 0f;
         loading = true;
 
         UIManager.Instance.orderMiniUIParent.SetActive(false);
         UIManager.Instance.otherDrivingInfo.SetActive(false);
+        ExplorationManager.Instance.HideUI_ResultPanel_Instant();
         WorldMapManager.Instance.CloseMinimap();
 
         SelectSubPanel(activeSubPanel);
@@ -189,7 +222,9 @@ public class ShopUI : EventListener
 
     public void HideUI()
     {
-        if (UIManager.Instance.isDirecting) OrderManager.Instance.pizzaDirection.StopSequence();
+        //if (UIManager.Instance.isDirecting) OrderManager.Instance.pizzaDirection.StopSequence();
+        if (UIManager.Instance.isDirecting) return;
+        if (GM.Instance.loading) return;
 
         if (!opened) return;
         if (loading) return;
@@ -201,6 +236,7 @@ public class ShopUI : EventListener
 
         UIManager.Instance.orderMiniUIParent.SetActive(true);
         UIManager.Instance.otherDrivingInfo.SetActive(true);
+        ExplorationManager.Instance.HideUI_ResultPanel_Instant();
         WorldMapManager.Instance.OpenMinimap();
 
         for (int i = 0; i < panelButtonPairs.Count; i++)
@@ -223,10 +259,13 @@ public class ShopUI : EventListener
         if (idx == 0)
         {
             UpdatePizzaBox(null);
+            ExplorationManager.Instance.UpdateBtn();
         }
         else
         {
-            if (UIManager.Instance.isDirecting) OrderManager.Instance.pizzaDirection.StopSequence();
+            if (UIManager.Instance.isDirecting) 
+                OrderManager.Instance.pizzaDirection.StopSequence();
+            ExplorationManager.Instance.HideUI_ResultPanel_Instant();
         }
 
         for (int i = 0; i < panelButtonPairs.Count; i++)
@@ -258,13 +297,15 @@ public class ShopUI : EventListener
 
         if (endTime)
         {
-            pizzaBoys[0].gameObject.SetActive(false);
+            pizzaBoys[0].gameObject.SetActive(count != 0);
             pizzaBoys[1].gameObject.SetActive(false);
+            pizzaBoys[2].gameObject.SetActive(count == 0);
         }
         else
         {
             pizzaBoys[0].gameObject.SetActive(count != 0);
             pizzaBoys[1].gameObject.SetActive(count == 0);
+            pizzaBoys[2].gameObject.SetActive(false);
         }
 
         for (int i = 0; i < pizzaBoxes.Length; i++)

@@ -13,6 +13,13 @@ public class PizzaDirection : MonoBehaviour
 
     public Animator pizzaBoxAnimator;
 
+    [System.Serializable]
+    public struct pizzaModel
+    {
+        public Mesh mesh;
+        public Material material;
+    }
+    public List<pizzaModel> pizzaModels;
     public Transform pizza;
     public Transform pizzaEffect;
 
@@ -77,8 +84,8 @@ public class PizzaDirection : MonoBehaviour
         pos2.x = adjust_Xpos;
         stackTarget2.localPosition = pos2;
 
-        gameObject.SetActive(false);
-        gameObject.SetActive(true);
+        //gameObject.SetActive(false);
+        //gameObject.SetActive(true);
 
         // 연출 변경에 따른 추가
         Vector3 tempPos2 = stackTarget.position;
@@ -95,8 +102,9 @@ public class PizzaDirection : MonoBehaviour
             transform.localScale = Vector3.one;
 
             UIManager.Instance.isDirecting = true;
-            //parentPanel.alpha = 1f;
-            //parentPanel.interactable = false;
+
+            parentPanel.alpha = 1f;
+            parentPanel.interactable = false;
 
             pizzaBoxAnimator.gameObject.SetActive(true);
             pizzaBoxAnimator.transform.localEulerAngles = new Vector3(45f, 180f, 0f);
@@ -106,7 +114,7 @@ public class PizzaDirection : MonoBehaviour
             pizzaEffect.localScale = Vector3.one;
         });
         // 열린다
-        //sequence.Append(parentPanel.DOFade(0.1f, 0.5f));
+        sequence.Append(parentPanel.DOFade(0.1f, 0.25f));
         //sequence.AppendInterval(0.5f);
         sequence.AppendCallback(() =>
         {
@@ -179,13 +187,13 @@ public class PizzaDirection : MonoBehaviour
         });
         //sequence.Append(pizzaBoxAnimator.transform.DOMove(stackTarget.position, 0.5f));
         sequence.Append(pizzaBoxAnimator.transform.DOLocalMove(stackTarget2.localPosition, 0.5f).SetEase(Ease.OutQuad));
-        //sequence.Join(parentPanel.DOFade(1f, 0.5f));
+        sequence.Join(parentPanel.DOFade(1f, 0.5f));
         sequence.AppendCallback(() =>
         {
             pizzaBoxAnimator.gameObject.SetActive(false);
 
-            //parentPanel.alpha = 1f;
-            //parentPanel.interactable = true;
+            parentPanel.alpha = 1f;
+            parentPanel.interactable = true;
             UIManager.Instance.isDirecting = false;
 
             if (PizzaCompleteEvent != null)
@@ -242,6 +250,10 @@ public class PizzaDirection : MonoBehaviour
             }
         }
 
+        int random = UnityEngine.Random.Range(0, pizzaModels.Count);
+        pizza.GetComponent<MeshFilter>().mesh = pizzaModels[random].mesh;
+        pizza.GetComponent<MeshRenderer>().material = pizzaModels[random].material;
+
         sequence.Restart();
     }
 
@@ -290,6 +302,10 @@ public class PizzaDirection : MonoBehaviour
             else
                 temp.Value.gameObject.SetActive(false);
         }
+
+        int random = UnityEngine.Random.Range(0, pizzaModels.Count);
+        pizza.GetComponent<MeshFilter>().mesh = pizzaModels[random].mesh;
+        pizza.GetComponent<MeshRenderer>().material = pizzaModels[random].material;
 
         sequence.Restart();
     }

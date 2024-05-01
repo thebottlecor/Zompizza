@@ -154,6 +154,30 @@ public class PlayerController : MonoBehaviour
     private float beforeCollisionSpeed;
     private bool isCollision;
 
+    public MeshRenderer[] meshRenderers;
+    private Coroutine hitCoroutine;
+
+    public CameraFollow2 cam;
+
+    public void HitBlink()
+    {
+        if (hitCoroutine != null)
+            StopCoroutine(hitCoroutine);
+        hitCoroutine = StartCoroutine(HitBlinkSequence());
+    }
+    private IEnumerator HitBlinkSequence()
+    {
+        for (int i = 0; i < meshRenderers.Length; i++)
+        {
+            meshRenderers[i].material = DataManager.Instance.materialLib.hitMaterial;
+        }
+        yield return CoroutineHelper.WaitForSeconds(0.1f);
+        for (int i = 0; i < meshRenderers.Length; i++)
+        {
+            meshRenderers[i].material = DataManager.Instance.materialLib.baseMaterial;
+        }
+    }
+
     private SerializableDictionary<KeyMap, KeyMapping> HotKey => SettingManager.Instance.keyMappings;
 
     public static EventHandler<float> DamageEvent;
@@ -197,6 +221,7 @@ public class PlayerController : MonoBehaviour
 
                         AudioManager.Instance.PlaySFX(Sfx.zombieCrash);
                         zombie.Hit(cp.point, speedPercent, targetDirection);
+                        cam.Shake(2f);
 
                         return;
                     }
@@ -239,6 +264,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
       //In this part, we set the 'carRigidbody' value with the Rigidbody attached to this
       //gameObject. Also, we define the center of mass of the car with the Vector3 given
       //in the inspector.
@@ -354,6 +380,8 @@ public class PlayerController : MonoBehaviour
 
                     if (DamageEvent != null)
                         DamageEvent(null, 0.05f * UnityEngine.Random.Range(0.75f, 1.25f));
+
+                    cam.Shake(5f);
                 }
             }
         }

@@ -17,6 +17,11 @@ public class WorldMapManager : Singleton<WorldMapManager>
 
     public MinimapRenderer minimap;
     public Transform minimapItemsTarget;
+    public MinimapItem pizzaShopPin;
+    public Vector3 pizzaShopPinSize_minimap = new Vector3(900f, 0f, 900f);
+    public float pizzaShopPinHighlight_minimap = 40f;
+    public Vector3 pizzaShopPinSize_worldmap = new Vector3(600f, 0f, 600f);
+    public float pizzaShopPinHighlight_worldmap = 60f;
 
 
     // My Custom
@@ -28,6 +33,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
     public Vector3 customerPin_InitScale = new Vector3(45f, 0f, 45f);
     public Vector3 customerPin_OverScale = new Vector3(60f, 0f, 60f);
     private MinimapItem mouseOverPin;
+    private MinimapItem hightlightPin;
 
     public bool customerMode;
     private Vector3 customerPos;
@@ -37,6 +43,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
     private void Start()
     {
         ToggleCustomerMode(false, new Vector3(0f, 0f, -1000f));
+        //pizzaShopPin.gameObject.SetActive(false);
     }
 
     public void ToggleCustomerMode_Btn()
@@ -45,10 +52,17 @@ public class WorldMapManager : Singleton<WorldMapManager>
         ToggleCustomerMode(customerMode, new Vector3(0f, 0f, -1000f));
     }
 
-    public void ToggleCustomerMode(bool on, Vector3 customerPos)
+    public void ToggleCustomerMode(bool on, Vector3 customerPos, int customerIdx = -1)
     {
         customerMode = on;
         this.customerPos = customerPos;
+
+        if (hightlightPin != null)
+        {
+            hightlightPin.sizeOnMinimap = customerPin_InitScale;
+            hightlightPin = null;
+        }
+
         if (on)
         {
             var orderList = OrderManager.Instance.orderList;
@@ -63,6 +77,9 @@ public class WorldMapManager : Singleton<WorldMapManager>
                     temp.Key.gameObject.SetActive(true);
                 else
                     temp.Key.gameObject.SetActive(false);
+
+                if (customerIdx >= 0 && temp.Value == customerIdx)
+                    hightlightPin = temp.Key;
             }
             customerBtnText.text = TextManager.Instance.GetCommons("WorldmapMode0");
         }
@@ -108,6 +125,11 @@ public class WorldMapManager : Singleton<WorldMapManager>
         else
         {
             worldMapCamera.transform.position = customerPos;
+
+            if (hightlightPin != null)
+            {
+                hightlightPin.sizeOnMinimap = customerPin_OverScale;
+            }
         }
     }
 
@@ -130,6 +152,10 @@ public class WorldMapManager : Singleton<WorldMapManager>
         {
             minimap.minimapItemsToHightlight[i].customGameObjectToFollowRotation = minimapItemsTarget;
         }
+        //pizzaShopPin.gameObject.SetActive(false);
+        pizzaShopPin.sizeOnMinimap = pizzaShopPinSize_minimap;
+        pizzaShopPin.sizeOnHighlight = pizzaShopPinHighlight_minimap;
+        pizzaShopPin.customGameObjectToFollowRotation = minimapItemsTarget;
     }
     public void CloseMinimap()
     {
@@ -138,6 +164,10 @@ public class WorldMapManager : Singleton<WorldMapManager>
         {
             minimap.minimapItemsToHightlight[i].customGameObjectToFollowRotation = worldMapCamera.customGameObjectToFollowRotation;
         }
+        //pizzaShopPin.gameObject.SetActive(true);
+        pizzaShopPin.sizeOnMinimap = pizzaShopPinSize_worldmap;
+        pizzaShopPin.sizeOnHighlight = pizzaShopPinHighlight_worldmap;
+        pizzaShopPin.customGameObjectToFollowRotation = worldMapCamera.customGameObjectToFollowRotation;
     }
 
     public void OnDragInMinimapRendererArea(Vector3 onStartThisDragWorldPos, Vector3 onDraggingWorldPos)

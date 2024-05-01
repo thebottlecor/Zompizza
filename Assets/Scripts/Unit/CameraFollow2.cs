@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class CameraFollow2 : MonoBehaviour {
 
@@ -13,8 +14,19 @@ public class CameraFollow2 : MonoBehaviour {
 	Vector3 initialCarPosition;
 	Vector3 absoluteInitCameraPosition;
 
-	void Start()
+	public Transform camTransform;
+
+	public Camera uiCam;
+
+    private void Awake()
+    {
+		uiCam.gameObject.SetActive(false);
+	}
+
+    void Start()
 	{
+		uiCam.gameObject.SetActive(true);
+
 		initialCameraPosition = gameObject.transform.position;
 		initialCarPosition = carTransform.position;
 		absoluteInitCameraPosition = initialCameraPosition - initialCarPosition;
@@ -55,4 +67,9 @@ public class CameraFollow2 : MonoBehaviour {
             }
 		}
 	}
+
+	public void Shake(float strength)
+    {
+		camTransform.DOShakePosition(strength * 0.02f, strength * 0.1f);
+    }
 }

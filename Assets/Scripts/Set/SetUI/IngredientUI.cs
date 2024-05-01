@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using DG.Tweening;
 
 public class IngredientUI : MonoBehaviour
 {
@@ -25,4 +26,10 @@ public class IngredientUI : MonoBehaviour
     {
         detail.text = $"{TextManager.Instance.GetIngredient(info)}\nx{GM.Instance.ingredients[info]}";
     }
+
+    public void ToggleHighlight(bool on)
+    {
+        highlight.SetActive(on);
+    }
+
 }

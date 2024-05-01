@@ -22,4 +22,7 @@ public class UILibrary : ScriptableObject
 
     public SerializableDictionary<Ingredient, Sprite> ingredients;
 
+    public Color miniOrderUI_maskColor;
+    public Color miniOrderUI_maskColor_angry;
+
 }

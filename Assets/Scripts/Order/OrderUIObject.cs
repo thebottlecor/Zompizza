@@ -4,8 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Text;
+using UnityEngine.EventSystems;
 
-public class OrderUIObject : MonoBehaviour
+public class OrderUIObject : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
 
     public Image customer_profile;
@@ -20,8 +21,6 @@ public class OrderUIObject : MonoBehaviour
 
     private OrderInfo info;
 
-    private const float distanceScale = 0.005f;
-    private const int ingredientSpriteOffset = 3;
     private TextManager tm => TextManager.Instance;
 
     public void UIUpdate(OrderInfo info)
@@ -32,7 +31,7 @@ public class OrderUIObject : MonoBehaviour
         customer_name.text = tm.GetNames(info.customerIdx + 2);
 
         StringBuilder st = new StringBuilder();
-        st.AppendFormat("{0} : {1:0.#}km", tm.GetCommons("Distance"), info.distance * distanceScale);
+        st.AppendFormat("{0} : {1:0.#}km", tm.GetCommons("Distance"), info.distance * Constant.distanceScale);
         //st.AppendFormat("{0:0.##}", info.distance);
         st.AppendLine();
         st.AppendFormat("{0} : {1}$", tm.GetCommons("Rewards"), info.rewards);
@@ -73,7 +72,7 @@ public class OrderUIObject : MonoBehaviour
             {
                 //ele.AppendFormat("<color=#002a8e><sprite={0}>{1} {2}</color>{3}", (int)element.Key + ingredientSpriteOffset, tm.GetIngredient(element.Key), element.Value, string.IsNullOrEmpty(subStr) ? string.Empty : subStr);
                 ele.Append("<color=#002a8e>");
-                ele.AppendFormat(subStr, (int)element.Key + ingredientSpriteOffset, tm.GetIngredient(element.Key), element.Value);
+                ele.AppendFormat(subStr, (int)element.Key + Constant.ingredientSpriteOffset, tm.GetIngredient(element.Key), element.Value);
                 count--;
                 if (count > 0)
                     ele.AppendFormat("{0}", string.IsNullOrEmpty(subStr2) ? ", " : subStr2);
@@ -120,10 +119,15 @@ public class OrderUIObject : MonoBehaviour
 
         OrderManager.Instance.OrderAccepted(info);
 
-        gameObject.SetActive(false);
-        info = null;
+        OrderReset();
 
         OrderManager.Instance.OrderGoalUpdate();
+    }
+
+    public void OrderReset()
+    {
+        gameObject.SetActive(false);
+        info = null;
     }
 
     public void ViewLocation()
@@ -132,8 +136,34 @@ public class OrderUIObject : MonoBehaviour
 
         Vector3 pos = OrderManager.Instance.orderGoals[info.goal].transform.position;
 
-        WorldMapManager.Instance.ToggleCustomerMode(true, pos);
+        WorldMapManager.Instance.ToggleCustomerMode(true, pos, info.customerIdx);
         UIManager.Instance.utilUI.OpenWorldMap();
     }
 
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (info == null) return;
+        if (UIManager.Instance.isDirecting) return;
+
+        for (int i = 0; i < info.pizzas.Count; i++)
+        {
+            foreach (var item in info.pizzas[i].ingredients)
+            {
+                UIManager.Instance.ingredientUIPairs[item.Key].ToggleHighlight(true);
+            }
+        }
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if (info == null) return;
+
+        for (int i = 0; i < info.pizzas.Count; i++)
+        {
+            foreach (var item in info.pizzas[i].ingredients)
+            {
+                UIManager.Instance.ingredientUIPairs[item.Key].ToggleHighlight(false);
+            }
+        }
+    }
 }

@@ -12,14 +12,6 @@ public class GM : Singleton<GM>
 
     public bool stop_control;
 
-
-    public const float dayTime = 30f;
-    public const int dayStartHour = 8;
-    public const int dayEndHour = 20;
-    public const float oneHour = dayTime / (dayEndHour - dayStartHour);
-    public const float oneMinute = oneHour / 60f;
-    public const float oneSec = oneMinute / 60f;
-
     public int day;
     public float timer;
 
@@ -37,12 +29,18 @@ public class GM : Singleton<GM>
     public int gold;
     public float rating;
     public SerializableDictionary<Ingredient, int> ingredients;
-
+    public int IngredientCount => ingredients.Count;
 
     public Light globalLight;
     public Vector3 lightAngleX = new Vector3(140f, 120f, 160f);
     public Vector2 lightAngleY = new Vector2(-60f, 100f);
     private bool endTime;
+
+    public CanvasGroup darkCanvas;
+    public GameObject gameOverObj;
+    public Button gameOverBtn_ToLobby;
+    public TextMeshProUGUI gameOverBtn_ToLobby_Text;
+    public bool loading;
 
     public static EventHandler<bool> EndTimeEvent; // true일시 마감
 
@@ -53,32 +51,46 @@ public class GM : Singleton<GM>
         foreach (var temp in list)
         {
             Ingredient key = (Ingredient)temp;
-            ingredients.Add(new SerializableDictionary<Ingredient, int>.Pair(key, 1));
+            ingredients.Add(new SerializableDictionary<Ingredient, int>.Pair(key, 10));
         }
 
         UIManager.Instance.Init();
 
         SetGold(1000);
         SetRating(5f);
+
+        darkCanvas.alpha = 0f;
+        darkCanvas.interactable = false;
+        darkCanvas.blocksRaycasts = false;
+        gameOverBtn_ToLobby.onClick.AddListener(() => { LoadingSceneManager.Instance.ToLobby(); });
+
+        TextUpdate();
+    }
+
+    public void TextUpdate()
+    {
+        gameOverBtn_ToLobby_Text.text = $"> {TextManager.Instance.GetCommons("Menu")} <";
     }
 
     private void Update()
     {
+        if (loading) return;
+
         timer += Time.deltaTime;
 
-        if (timer >= dayTime)
+        if (timer >= Constant.dayTime)
         {
-            timer = dayTime;
+            timer = Constant.dayTime;
         }
 
-        int hour = (int)(timer / oneHour);
-        int minute = (int)((timer - hour * oneHour) / oneMinute);
-        int sec = (int)((timer - minute * oneMinute - hour * oneHour) / oneSec);
+        int hour = (int)(timer / Constant.oneHour);
+        int minute = (int)((timer - hour * Constant.oneHour) / Constant.oneMinute);
+        int sec = (int)((timer - minute * Constant.oneMinute - hour * Constant.oneHour) / Constant.oneSec);
 
-        hour += dayStartHour;
-        if (hour >= dayEndHour)
+        hour += Constant.dayStartHour;
+        if (hour >= Constant.dayEndHour)
         {
-            hour = dayEndHour;
+            hour = Constant.dayEndHour;
             minute = 0;
             sec = 0;
 
@@ -114,25 +126,64 @@ public class GM : Singleton<GM>
         for (int i = 0; i < ratingText.Length; i++)
             ratingText[i].text = $"{displayRating:0.#}";
 
-        float timePercent = timer / dayTime;
+        float timePercent = timer / Constant.dayTime;
         globalLight.color = DataManager.Instance.uiLib.timeLightGradient.Evaluate(timePercent);
         Vector3 lightAngle = globalLight.transform.localEulerAngles;
         lightAngle.y = (lightAngleY.y - lightAngleY.x) * timePercent + lightAngleY.x;
 
         if (hour < 12)
         {
-            timePercent = timer / (oneHour * 4);
+            timePercent = timer / (Constant.oneHour * 4);
             lightAngle.x = (lightAngleX.y - lightAngleX.x) * timePercent + lightAngleX.x;
         }
         else
         {
-            timePercent = timer / (oneHour * 8) - 0.5f;
+            timePercent = timer / (Constant.oneHour * 8) - 0.5f;
             lightAngle.x = (lightAngleX.z - lightAngleX.y) * timePercent + lightAngleX.y;
         }
 
         globalLight.transform.localEulerAngles = lightAngle;
     }
 
+    public void NextDay()
+    {
+        timer = 0f;
+        day++;
+
+        Sequence sequence = DOTween.Sequence().SetUpdate(true).SetAutoKill(true);
+        sequence.AppendCallback(() =>
+        {
+            darkCanvas.alpha = 0f;
+            darkCanvas.blocksRaycasts = true;
+            loading = true;
+        });
+        sequence.Append(darkCanvas.DOFade(1f, 0.5f));
+        sequence.AppendInterval(0.75f);
+        sequence.AppendCallback(() =>
+        {
+            AudioManager.Instance.PlaySFX(Sfx.nextDay);
+
+            darkCanvas.blocksRaycasts = false;
+            darkCanvas.alpha = 0f;
+
+            loading = false;
+            OrderManager.Instance.NewOrder();
+            ExplorationManager.Instance.ShowResultPanel();
+        });
+        sequence.Append(darkCanvas.DOFade(0f, 0.5f));
+    }
+    public void GameOver()
+    {
+        darkCanvas.alpha = 1f;
+        darkCanvas.blocksRaycasts = true;
+        darkCanvas.interactable = true;
+        loading = true;
+
+        gameOverObj.SetActive(true);
+    }
+
+
+    #region UI 표시
     public void CarSpeedUI(float carSpeed)
     {
         float absoluteCarSpeed = Mathf.Abs(carSpeed);
@@ -142,7 +193,7 @@ public class GM : Singleton<GM>
     public void AddGold(int value)
     {
         int target = gold + value;
-        DOVirtual.Int(gold, target, 0.5f, (x) =>
+        DOVirtual.Int(gold, target, 0.75f, (x) =>
         {
             displayGold = x;
         }).SetEase(Ease.OutCirc).SetUpdate(true);
@@ -156,7 +207,7 @@ public class GM : Singleton<GM>
     public void AddRating(float value)
     {
         float target = rating + value;
-        DOVirtual.Float(rating, target, 0.5f, (x) =>
+        DOVirtual.Float(rating, target, 0.75f, (x) =>
         {
             displayRating = x;
         }).SetEase(Ease.OutCirc).SetUpdate(true);
@@ -167,5 +218,6 @@ public class GM : Singleton<GM>
         displayRating = value;
         rating = value;
     }
+    #endregion
 
 }

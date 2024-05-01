@@ -4,6 +4,8 @@ using UnityEngine;
 using System;
 using DG.Tweening;
 using MTAssets.EasyMinimapSystem;
+using UnityEngine.UI;
+using TMPro;
 
 public class OrderGoal : MonoBehaviour
 {
@@ -12,6 +14,9 @@ public class OrderGoal : MonoBehaviour
     public GameObject goalEffectObj;
     public MinimapItem minimapItem;
     public MinimapItem minimapItem_customer;
+
+    public Canvas textCanvas;
+    public TextMeshProUGUI goldText;
 
     public static EventHandler<int> PlayerArriveEvent;
 
@@ -43,8 +48,12 @@ public class OrderGoal : MonoBehaviour
         goalEffectObj.SetActive(on);
     }
 
-    public void SuccessEffect()
+    public void SuccessEffect(int gold, bool isBonus, float rating)
     {
+        textCanvas.gameObject.SetActive(true);
+        goldText.text = $"+{gold}$";
+        CoroutineHelper.StartCoroutine(HideText());
+
         EffectUpdate(false);
         AudioManager.Instance.PlaySFX(Sfx.money);
         AudioManager.Instance.PlaySFX(Sfx.complete);
@@ -54,6 +63,13 @@ public class OrderGoal : MonoBehaviour
         var obj = Instantiate(source, pos, Quaternion.identity);
         Destroy(obj, 5f);
         Hide();
+    }
+
+    private IEnumerator HideText()
+    {
+        yield return CoroutineHelper.WaitForSeconds(1.9f);
+
+        textCanvas.gameObject.SetActive(false);
     }
 
 }

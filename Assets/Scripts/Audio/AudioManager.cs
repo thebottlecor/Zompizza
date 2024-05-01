@@ -202,4 +202,5 @@ public enum Sfx
     money,
     select,
     complete,
+    nextDay,
 }

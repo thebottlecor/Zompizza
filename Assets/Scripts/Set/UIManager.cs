@@ -30,6 +30,7 @@ public class UIManager : Singleton<UIManager>
     public GameObject ingredient_Source;
     public Transform[] ingredient_Parents;
     public List<IngredientUI> ingredientUIs;
+    public Dictionary<Ingredient, IngredientUI> ingredientUIPairs;
 
     private SerializableDictionary<KeyMap, KeyMapping> HotKey => SettingManager.Instance.keyMappings;
 
@@ -56,6 +57,7 @@ public class UIManager : Singleton<UIManager>
         }
         // ¿Á∑·√¢
         var ingredients = Enum.GetValues(typeof(Ingredient));
+        ingredientUIPairs = new Dictionary<Ingredient, IngredientUI>();
         foreach(var temp in ingredients)
         {
             Ingredient ingredient = (Ingredient)temp;
@@ -71,6 +73,7 @@ public class UIManager : Singleton<UIManager>
             var obj = Instantiate(ingredient_Source, ingredient_Parents[parentIdx]);
             IngredientUI ingredientUI = obj.GetComponent<IngredientUI>();
             ingredientUI.Init(ingredient);
+            ingredientUIPairs.Add(ingredient, ingredientUI);
             ingredientUIs.Add(ingredientUI);
         }
     }
@@ -82,6 +85,13 @@ public class UIManager : Singleton<UIManager>
             ingredientUIs[i].UpdateDetailUI();
         }
     }
+    public void OffAll_Ingredient_Highlight()
+    {
+        for (int i = 0; i < ingredientUIs.Count; i++)
+        {
+            ingredientUIs[i].ToggleHighlight(false);
+        }
+    }
 
     public void ButtonSound()
     {
@@ -90,7 +100,8 @@ public class UIManager : Singleton<UIManager>
 
     private void Update()
     {
-        //if (isDirecting) return;
+        if (isDirecting) return;
+        if (GM.Instance.loading) return;
 
         if (HotKey[KeyMap.escape].GetkeyDown())
         {
@@ -128,6 +139,13 @@ public class UIManager : Singleton<UIManager>
                 orderUIObjects[list[i].customerIdx].UIUpdate(list[i]);
                 orderUIObjects[list[i].customerIdx].gameObject.SetActive(true);
             }
+        }
+    }
+    public void OrderUIReset()
+    {
+        for (int i = 0; i < orderUIObjects.Count; i++)
+        {
+            orderUIObjects[i].OrderReset();
         }
     }
     #endregion

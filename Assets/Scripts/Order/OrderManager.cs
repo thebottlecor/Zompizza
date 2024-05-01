@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class OrderManager : Singleton<OrderManager>
 {
@@ -12,11 +13,24 @@ public class OrderManager : Singleton<OrderManager>
     public List<OrderInfo> orderList;
 
     public PizzaDirection pizzaDirection;
+    public MoneyDirection moneyDirection;
 
     public SerializableDictionary<OrderInfo, OrderMiniUI> orderMiniUIPair;
 
+    public static EventHandler AllOrderRemovedEvent;
+
+    public List<Ingredient> ingredients;
+
     private void Start()
     {
+        var list = Enum.GetValues(typeof(Ingredient));
+        ingredients = new List<Ingredient>();
+        foreach (var temp in list)
+        {
+            Ingredient ingredient = (Ingredient)temp;
+            ingredients.Add(ingredient);
+        }
+
         for (int i = 0; i < orderGoals.Count; i++)
         {
             orderGoals[i].index = i;
@@ -52,10 +66,42 @@ public class OrderManager : Singleton<OrderManager>
             if (gIndex == e)
             {
                 // 배달 성공
-                GM.Instance.AddGold(orderList[i].rewards);
-                GM.Instance.AddRating(0.5f);
 
-                orderGoals[gIndex].SuccessEffect();
+                float statePercent = orderList[i].hp;
+                bool keepTime = orderList[i].timer <= orderList[i].timeLimit;
+
+                // 평점 최대 +0.5, 최소 -0.5
+                // 시간 초과시 -0.5 깎임
+                // 상태 0%면 -0.5 (비례)
+
+                float ratingModify = statePercent;
+                if (!keepTime) ratingModify -= 1f;
+
+                float resultRating = 0.5f * ratingModify;
+
+                GM.Instance.AddRating(resultRating);
+
+                // 최대 평점 구간 (90%~100%)일시 10% 보너스
+                // 마이너스일시 0에서 시작해서 최대 20% 패널티
+
+                bool bonus = false;
+
+                int rewards = orderList[i].rewards;
+                if (ratingModify >= 0.9f)
+                {
+                    rewards = (int)(1.1f * rewards);
+                    bonus = true;
+                }
+                else if (ratingModify < 0f)
+                {
+                    rewards = (int)((1f - (0.2f * ratingModify)) * rewards);
+                }
+
+                GM.Instance.AddGold(rewards);
+
+                orderGoals[gIndex].SuccessEffect(rewards, bonus, resultRating);
+
+                //moneyDirection.RestartSequence_Debug();
                 //
                 orderMiniUIPair[orderList[i]].Hide();
                 orderMiniUIPair.Remove(orderList[i]);
@@ -74,6 +120,8 @@ public class OrderManager : Singleton<OrderManager>
                 if (orderList[i].hp < 0f) orderList[i].hp = 0f;
 
                 orderMiniUIPair[orderList[i]].UpdateHpGauge(orderList[i].hp);
+
+                GM.Instance.player.HitBlink();
             }
         }
     }
@@ -81,52 +129,60 @@ public class OrderManager : Singleton<OrderManager>
     [ContextMenu("새로운 주문")]
     public void NewOrder()
     {
-        int goal = 0;
-        float distance = (orderGoals[goal].transform.position - pizzeria.transform.position).magnitude;
 
-        OrderInfo newOrder = new OrderInfo
+        List<int> rand = new List<int> { 0, 1, 2, 3, 4, 5 };
+        rand.Shuffle();
+
+        for (int i = 0; i < 4; i++)
         {
-            accepted = false,
-            customerIdx = 0,
-            goal = goal,
-            pizzas = new List<PizzaInfo>
-            {
-                new PizzaInfo { ingredients = new SerializableDictionary<Ingredient, int> { new SerializableDictionary<Ingredient, int>.Pair { Key = Ingredient.meat1, Value = 1} }},
-            },
-            distance = distance,
-            rewards = UnityEngine.Random.Range(500, 1000),
-            hp = 1f,
-            timeLimit = 60f,
-            timer = 0f,
-        };
-        orderList.Add(newOrder);
-        PairingMiniUI(newOrder);
-
-        goal = 2;
-        distance = (orderGoals[goal].transform.position - pizzeria.transform.position).magnitude;
-
-        newOrder = new OrderInfo
-        {
-            accepted = false,
-            customerIdx = 2,
-            goal = goal,
-            pizzas = new List<PizzaInfo>
-            {
-                new PizzaInfo { ingredients = new SerializableDictionary<Ingredient, int> { new SerializableDictionary<Ingredient, int>.Pair { Key = Ingredient.herb1, Value = 1},
-                new SerializableDictionary<Ingredient, int>.Pair { Key = Ingredient.meat2, Value = 1}}},
-            },
-            distance = distance,
-            rewards = UnityEngine.Random.Range(500, 1000),
-            hp = 1f,
-            timeLimit = 60f,
-            timer = 0f,
-        };
-        orderList.Add(newOrder);
-        PairingMiniUI(newOrder);
+            AddOrder(rand[i]);
+        }
 
         UIManager.Instance.OrderUIUpdate();
 
         OrderGoalUpdate();
+    }
+
+    private void AddOrder(int goal)
+    {
+        float distance = (orderGoals[goal].transform.position - pizzeria.transform.position).magnitude;
+
+        List<PizzaInfo> randPizzas = new List<PizzaInfo>();
+        SerializableDictionary<Ingredient, int> randInfo_sub = new SerializableDictionary<Ingredient, int>();
+
+        int rand2 = UnityEngine.Random.Range(1, 4);
+        int ingredientTotal = 0;
+        ingredients.Shuffle();
+        for (int i = 0; i < rand2; i++)
+        {
+            int count = UnityEngine.Random.Range(1, 4);
+            ingredientTotal += count;
+            randInfo_sub.Add(new SerializableDictionary<Ingredient, int>.Pair { Key = ingredients[i], Value = count });
+        }
+
+        PizzaInfo randInfo = new PizzaInfo { ingredients = randInfo_sub };
+        randPizzas.Add(randInfo);
+
+        int rewards = UnityEngine.Random.Range(400, 600);
+        rewards += ingredientTotal * 50;
+        // 400이 가장 작은 거리로 정함
+        rewards = (int)(rewards * ((distance / 800f) + 0.5f));
+        float timeLimit = 90f * (distance / 400f);
+
+        OrderInfo newOrder = new OrderInfo
+        {
+            accepted = false,
+            customerIdx = goal,
+            goal = goal,
+            pizzas = randPizzas,
+            distance = distance,
+            rewards = rewards,
+            hp = 1f,
+            timeLimit = timeLimit,
+            timer = 0f,
+        };
+        orderList.Add(newOrder);
+        PairingMiniUI(newOrder);
     }
 
     private void PairingMiniUI(OrderInfo info)
@@ -187,6 +243,7 @@ public class OrderManager : Singleton<OrderManager>
             }
         }
         UIManager.Instance.UpdateIngredients();
+        UIManager.Instance.OffAll_Ingredient_Highlight();
 
         pizzaDirection.RestartSequence(info);
     }
@@ -222,5 +279,38 @@ public class OrderManager : Singleton<OrderManager>
         }
 
         return makable;
+    }
+
+
+    public int GetAcceptedOrderCount()
+    {
+        int count = 0;
+        for (int i = 0; i < orderList.Count; i++)
+        {
+            if (orderList[i].accepted)
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+    public void RemoveAllOrders()
+    {
+        for (int i = orderList.Count - 1; i >= 0; i--)
+        {
+            if (orderList[i].accepted)
+            {
+                // 미완료 패널티
+            }
+
+            orderMiniUIPair[orderList[i]].Hide();
+            orderMiniUIPair.Remove(orderList[i]);
+            orderList.RemoveAt(i);
+        }
+
+        UIManager.Instance.OrderUIReset();
+
+        if (AllOrderRemovedEvent != null)
+            AllOrderRemovedEvent(null, null);
     }
 }
