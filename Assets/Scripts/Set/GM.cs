@@ -318,7 +318,9 @@ public class GM : Singleton<GM>
     {
         float absoluteCarSpeed = Mathf.Abs(carSpeed);
         float vel = Mathf.FloorToInt(absoluteCarSpeed);
-        carSpeedText.text = $"{vel}<size=75%>km/h</size>";
+
+        displaySpeed = Mathf.Lerp(displaySpeed, vel, Time.fixedDeltaTime);
+        carSpeedText.text = $"{displaySpeed:F0}<size=75%>km/h</size>";
 
         float percent = vel / maxSpeed;
         if (percent > 1f) percent = 1f;
