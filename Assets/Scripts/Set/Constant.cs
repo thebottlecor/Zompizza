@@ -14,6 +14,7 @@ public class Constant
 
     public const float distanceScale = 0.005f;
 
-    public const int ingredientSpriteOffset = 3;
+    public const int npcNameOffset = 2;
+    public const int ingredientSpriteOffset = 6;
 
 }

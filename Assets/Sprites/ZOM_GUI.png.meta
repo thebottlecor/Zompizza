@@ -1398,6 +1398,195 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: ZOM_GUI_3
+      rect:
+        serializedVersion: 2
+        x: 56
+        y: 1810
+        width: 186
+        height: 185
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 274d3790c22375d4aa462ef60e761b41
+      internalID: -435436588
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ZOM_GUI_7
+      rect:
+        serializedVersion: 2
+        x: 1696
+        y: 1486
+        width: 345
+        height: 124
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c3ed60314f41dc44bb37f383887bd5b0
+      internalID: 338934223
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ZOM_GUI_8
+      rect:
+        serializedVersion: 2
+        x: 1664
+        y: 1369
+        width: 409
+        height: 93
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4a9891d4df85102499d93d8d6a3e284e
+      internalID: -302447942
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ZOM_GUI_11
+      rect:
+        serializedVersion: 2
+        x: 1911
+        y: 1117
+        width: 130
+        height: 130
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 713ffce2d0f5e784b96912beca78cf61
+      internalID: -1511401379
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: speed
+      rect:
+        serializedVersion: 2
+        x: 2766
+        y: 3033
+        width: 287
+        height: 144
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f3e3078087c55114cba9405293a0e687
+      internalID: 1336644462
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: speed_niddle
+      rect:
+        serializedVersion: 2
+        x: 3125
+        y: 3081
+        width: 36
+        height: 96
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 410c9a9d05709d149bf28ae3319873c5
+      internalID: -1761030070
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: clock
+      rect:
+        serializedVersion: 2
+        x: 2867
+        y: 2860
+        width: 294
+        height: 148
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 59, y: 57, z: 62, w: 61}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e7da2739988884845a2de87377d96cf2
+      internalID: 2078011449
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: open
+      rect:
+        serializedVersion: 2
+        x: 2618
+        y: 2725
+        width: 223
+        height: 75
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 638fb8f39acbc774ea7412d3f8b5f89f
+      internalID: -294951090
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: close
+      rect:
+        serializedVersion: 2
+        x: 2881
+        y: 2731
+        width: 266
+        height: 61
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f27f94322467b7844aef64e243d80bb1
+      internalID: 1410198721
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -1412,9 +1601,10 @@ TextureImporter:
       ZOM_GUI_0: 638396757
       ZOM_GUI_1: 1870865058
       ZOM_GUI_10: -282567330
+      ZOM_GUI_11: -1511401379
       ZOM_GUI_12: -455512047
       ZOM_GUI_14: 1878053812
-      ZOM_GUI_16: -501285516
+      ZOM_GUI_15: 90537806
       ZOM_GUI_18: -1870893056
       ZOM_GUI_19: -916891236
       ZOM_GUI_2: 2126943300
@@ -1427,6 +1617,7 @@ TextureImporter:
       ZOM_GUI_26: 1958567784
       ZOM_GUI_28: 612039958
       ZOM_GUI_29: 398142997
+      ZOM_GUI_3: -435436588
       ZOM_GUI_30: 895953832
       ZOM_GUI_31: 2013824448
       ZOM_GUI_32: 720264181
@@ -1470,6 +1661,7 @@ TextureImporter:
       ZOM_GUI_67: 941866686
       ZOM_GUI_68: 2129165098
       ZOM_GUI_69: -375839105
+      ZOM_GUI_7: 338934223
       ZOM_GUI_70: -354942728
       ZOM_GUI_71: -126506132
       ZOM_GUI_72: -86188652
@@ -1480,6 +1672,7 @@ TextureImporter:
       ZOM_GUI_77: -520518505
       ZOM_GUI_78: -1473313620
       ZOM_GUI_79: 2054952763
+      ZOM_GUI_8: -302447942
       ZOM_GUI_9: 1591077140
       button_01: 793004247
       button_02: 1118936077
@@ -1488,10 +1681,14 @@ TextureImporter:
       button_05: -796150030
       cancel: -532384255
       check: -1068914690
+      clock: 2078011449
+      clock_close: -497519325
+      close: 1410198721
       edge_01: 284716777
       gold: -473345904
       line_01: -1077415394
       line_02: 1388350798
+      open: -294951090
       panel_01: 1496360435
       panel_02: -1911093180
       panel_03: -1377739310
@@ -1506,6 +1703,8 @@ TextureImporter:
       scroll_extra: -1301179045
       settings: 977260030
       shop: 384743576
+      speed: 1336644462
+      speed_niddle: -1761030070
       timer: 1513074758
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0

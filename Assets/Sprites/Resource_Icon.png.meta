@@ -163,8 +163,8 @@ TextureImporter:
       name: Resource_Icon_4
       rect:
         serializedVersion: 2
-        x: 200
-        y: 600
+        x: 800
+        y: 800
         width: 200
         height: 200
       alignment: 0
@@ -184,8 +184,8 @@ TextureImporter:
       name: Resource_Icon_5
       rect:
         serializedVersion: 2
-        x: 400
-        y: 600
+        x: 1000
+        y: 800
         width: 200
         height: 200
       alignment: 0
@@ -206,7 +206,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 400
+        y: 600
         width: 200
         height: 200
       alignment: 0
@@ -227,7 +227,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 200
-        y: 400
+        y: 600
         width: 200
         height: 200
       alignment: 0
@@ -248,7 +248,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 400
-        y: 400
+        y: 600
         width: 200
         height: 200
       alignment: 0
@@ -269,7 +269,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 200
+        y: 400
         width: 200
         height: 200
       alignment: 0
@@ -289,8 +289,8 @@ TextureImporter:
       name: Resource_Icon_3
       rect:
         serializedVersion: 2
-        x: 0
-        y: 600
+        x: 600
+        y: 800
         width: 200
         height: 200
       alignment: 0
@@ -311,7 +311,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 200
-        y: 200
+        y: 400
         width: 200
         height: 200
       alignment: 0
@@ -332,7 +332,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 400
-        y: 200
+        y: 400
         width: 200
         height: 200
       alignment: 0
@@ -353,7 +353,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
+        y: 200
         width: 200
         height: 200
       alignment: 0
@@ -374,7 +374,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 200
-        y: 0
+        y: 200
         width: 200
         height: 200
       alignment: 0
@@ -395,7 +395,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 400
-        y: 0
+        y: 200
         width: 200
         height: 200
       alignment: 0
@@ -407,6 +407,69 @@ TextureImporter:
       bones: []
       spriteID: 09d3e353cea335e43a50161cdf626cf7
       internalID: 21513758
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Resource_Icon_15
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 200
+        height: 200
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6cb66d9f75dfdf145b94c359fa437acd
+      internalID: -1011802017
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Resource_Icon_16
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 0
+        width: 200
+        height: 200
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ec7efcc42926eb348ada1eae11189549
+      internalID: -1808170979
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Resource_Icon_17
+      rect:
+        serializedVersion: 2
+        x: 400
+        y: 0
+        width: 200
+        height: 200
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: db2cb027dda877844af277a67dccd105
+      internalID: -122293305
       vertices: []
       indices: 
       edges: []
@@ -429,6 +492,9 @@ TextureImporter:
       Resource_Icon_12: -535575831
       Resource_Icon_13: -1504259253
       Resource_Icon_14: 21513758
+      Resource_Icon_15: -1011802017
+      Resource_Icon_16: -1808170979
+      Resource_Icon_17: -122293305
       Resource_Icon_2: -308755391
       Resource_Icon_3: -543496047
       Resource_Icon_4: -1208501331

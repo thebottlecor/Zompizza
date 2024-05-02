@@ -112,7 +112,7 @@ public class ExplorationManager : Singleton<ExplorationManager>
 
         OrderManager.Instance.RemoveAllOrders();
 
-        GM.Instance.AddGold(-1 * cost);
+        GM.Instance.AddGold(-1 * cost, GM.GetGoldSource.explore);
 
         ExplorationResult();
 

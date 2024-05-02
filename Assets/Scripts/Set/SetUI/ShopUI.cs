@@ -50,6 +50,25 @@ public class ShopUI : EventListener
     public TextMeshProUGUI ingredientText;
     public TextMeshProUGUI[] ingredientsSub;
 
+    [Header("°ü¸®ÅÇ")]
+    public TextMeshProUGUI reviewsText;
+    public TextMeshProUGUI achievementText;
+    public TextMeshProUGUI statsText;
+
+    public GameObject reviewObject_Day_Source;
+    public GameObject reviewObject_Source;
+    public Transform reviewObject_Parent;
+    public List<ReviewDayObject> reviewDayObjects;
+    public List<Review> reviewObjects;
+
+    public void Init()
+    {
+        reviewDayObjects = new List<ReviewDayObject>();
+        reviewObjects = new List<Review>();
+
+        DayFirstReview();
+    }
+
     public void UpdateTexts()
     {
         buttonTexts[0].text = tm.GetCommons("Order");
@@ -64,6 +83,10 @@ public class ShopUI : EventListener
         ingredientsSub[0].text = tm.GetCommons("Meat");
         ingredientsSub[1].text = tm.GetCommons("Vegetable");
         ingredientsSub[2].text = tm.GetCommons("Herb");
+
+        reviewsText.text = tm.GetCommons("Reviews");
+        achievementText.text = tm.GetCommons("Achievement");
+        statsText.text = tm.GetCommons("Stats");
     }
 
     protected override void AddListeners()
@@ -323,6 +346,31 @@ public class ShopUI : EventListener
                 count--;
             }
         }
+    }
+
+
+    public void DayFirstReview()
+    {
+        var obj = Instantiate(reviewObject_Day_Source, reviewObject_Parent);
+        ReviewDayObject reviewDay = obj.GetComponent<ReviewDayObject>();
+        reviewDay.Init(GM.Instance.day);
+
+        reviewDayObjects.Add(reviewDay);
+        reviewDay.transform.SetAsFirstSibling();
+    }
+
+    public void AddReview(OrderInfo info)
+    {
+        int day = GM.Instance.day;
+
+        var obj = Instantiate(reviewObject_Source, reviewObject_Parent);
+        ReviewObject reviewObj = obj.GetComponent<ReviewObject>();
+        reviewObj.Init(day, info.customerIdx, 5f, 5f);
+
+        reviewObjects.Add(reviewObj);
+
+        reviewObj.transform.SetAsFirstSibling();
+        reviewDayObjects[day].transform.SetAsFirstSibling();
     }
 
 }

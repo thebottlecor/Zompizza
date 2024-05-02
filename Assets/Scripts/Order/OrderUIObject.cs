@@ -28,7 +28,7 @@ public class OrderUIObject : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         this.info = info;
 
         customer_profile.sprite = DataManager.Instance.uiLib.customerProfile[info.customerIdx];
-        customer_name.text = tm.GetNames(info.customerIdx + 2);
+        customer_name.text = tm.GetNames(info.customerIdx + Constant.npcNameOffset);
 
         StringBuilder st = new StringBuilder();
         st.AppendFormat("{0} : {1:0.#}km", tm.GetCommons("Distance"), info.distance * Constant.distanceScale);

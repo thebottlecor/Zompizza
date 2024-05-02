@@ -257,5 +257,8 @@ public class Zombie2 : MonoBehaviour
     {
         dead = true;
         shadow.SetActive(false);
+
+        if (OrderManager.Instance.IsDelivering())
+            GM.Instance.AddGold(1, GM.GetGoldSource.zombie);
     }
 }

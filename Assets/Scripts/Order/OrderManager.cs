@@ -97,7 +97,8 @@ public class OrderManager : Singleton<OrderManager>
                     rewards = (int)((1f - (0.2f * ratingModify)) * rewards);
                 }
 
-                GM.Instance.AddGold(rewards);
+                GM.Instance.AddGold(rewards, GM.GetGoldSource.delivery);
+                UIManager.Instance.shopUI.AddReview(orderList[i]);
 
                 orderGoals[gIndex].SuccessEffect(rewards, bonus, resultRating);
 
@@ -248,6 +249,17 @@ public class OrderManager : Singleton<OrderManager>
         pizzaDirection.RestartSequence(info);
     }
 
+    public bool IsDelivering()
+    {
+        for (int i = 0; i < orderList.Count; i++)
+        {
+            if (orderList[i].accepted)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
     public int GetCurrentPizzaBox()
     {
         int count = 0;

@@ -150,6 +150,7 @@ public class SettingManager : Singleton<SettingManager>
 
         InitResolutionUI();
         fullscreen = true;
+        vsync = false;
         edgeScrolling = true;
         invertZoom = false;
         autosave = true;
@@ -473,6 +474,7 @@ public class SettingManager : Singleton<SettingManager>
         bgmSliderTMP.text = tm.GetCommons("BGMvolume");
         resolutionTMP.text = tm.GetCommons("Resoultion");
         fullScreenTMP.text = tm.GetCommons("FullScreen");
+        vsyncTMP.text = tm.GetCommons("VSync");
 
         subSettingPanelTMP[0].text = tm.GetCommons("Settings");
         subSettingPanelTMP[1].text = tm.GetCommons("KeySettings");
@@ -554,9 +556,12 @@ public class SettingManager : Singleton<SettingManager>
     #region 해상도 설정
     [SerializeField] private TMP_Dropdown resolutionDropdown;
     public bool fullscreen { get; private set; }
+    public bool vsync { get; private set; }
     [SerializeField] private Toggle fullScreenToggle;
+    [SerializeField] private Toggle vsyncToggle;
     [SerializeField] private TextMeshProUGUI resolutionTMP;
     [SerializeField] private TextMeshProUGUI fullScreenTMP;
+    [SerializeField] private TextMeshProUGUI vsyncTMP;
     private List<Resolution> possibleResolution;
     public Vector2Int settingResolution { get; private set; }
 
@@ -590,6 +595,7 @@ public class SettingManager : Singleton<SettingManager>
             }
 
             fullScreenToggle.isOn = config.fullScreen;
+            vsyncToggle.isOn = config.vsync;
 
             bgmSlider.value = Mathf.Clamp(config.volumeBGM, 0.001f, 1f);
             sfxSlider.value = Mathf.Clamp(config.volumeSFX, 0.001f, 1f);
@@ -605,6 +611,7 @@ public class SettingManager : Singleton<SettingManager>
             SetResolution(possibleResolution.Count - 1);
 
             fullScreenToggle.isOn = true;
+            vsyncToggle.isOn = false;
 
             bgmSlider.value = 1f;
             sfxSlider.value = 1f;
@@ -644,6 +651,12 @@ public class SettingManager : Singleton<SettingManager>
     {
         fullscreen = on;
         Screen.SetResolution(settingResolution.x, settingResolution.y, fullscreen);
+        SaveManager.Instance.SaveConfig();
+    }
+    public void SetVSync(bool on)
+    {
+        vsync = on;
+        QualitySettings.vSyncCount = on ? 1 : 0;
         SaveManager.Instance.SaveConfig();
     }
     public void SetResolution(int idx)
