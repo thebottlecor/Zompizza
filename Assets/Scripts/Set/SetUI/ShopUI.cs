@@ -359,13 +359,13 @@ public class ShopUI : EventListener
         reviewDay.transform.SetAsFirstSibling();
     }
 
-    public void AddReview(OrderInfo info)
+    public void AddReview(OrderInfo info, float time, float hp)
     {
         int day = GM.Instance.day;
 
         var obj = Instantiate(reviewObject_Source, reviewObject_Parent);
         ReviewObject reviewObj = obj.GetComponent<ReviewObject>();
-        reviewObj.Init(day, info.customerIdx, 5f, 5f);
+        reviewObj.Init(day, info.customerIdx, time, hp);
 
         reviewObjects.Add(reviewObj);
 

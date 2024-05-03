@@ -23,6 +23,14 @@ public class OrderUIObject : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     private TextManager tm => TextManager.Instance;
 
+    private void Start()
+    {
+        acceptButton.onClick.AddListener(() =>
+        {
+            UIManager.Instance.ButtonSound();
+        });
+    }
+
     public void UIUpdate(OrderInfo info)
     {
         this.info = info;
@@ -31,7 +39,7 @@ public class OrderUIObject : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         customer_name.text = tm.GetNames(info.customerIdx + Constant.npcNameOffset);
 
         StringBuilder st = new StringBuilder();
-        st.AppendFormat("{0} : {1:0.#}km", tm.GetCommons("Distance"), info.distance * Constant.distanceScale);
+        st.AppendFormat("{0} : {1:0.#}km", tm.GetCommons("Distance"), info.km);
         //st.AppendFormat("{0:0.##}", info.distance);
         st.AppendLine();
         st.AppendFormat("{0} : {1}$", tm.GetCommons("Rewards"), info.rewards);

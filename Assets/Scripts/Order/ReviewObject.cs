@@ -15,20 +15,20 @@ public class ReviewObject : Review
     private int day;
     private int customerIdx;
     private float timeRating; // -5 ~ 5 사이
-    private float pizzaRating; // -5 ~ 5 사이
+    private float hpRating; // -5 ~ 5 사이
 
-    public void Init(int day, int idx, float time, float pizza)
+    public void Init(int day, int idx, float time, float hp)
     {
         this.day = day;
         customerIdx = idx;
 
         timeRating = time;
-        pizzaRating = pizza;
+        hpRating = hp;
 
         profile.sprite = DataManager.Instance.uiLib.customerProfile[customerIdx];
         nameText.text = TextManager.Instance.GetNames(customerIdx + Constant.npcNameOffset);
 
-        float rating = timeRating + pizzaRating;
+        float rating = timeRating + hpRating;
 
         StringBuilder st = new StringBuilder();
 
@@ -45,13 +45,13 @@ public class ReviewObject : Review
             emoji_Time = 0;
 
         int emoji_Pizza;
-        if (pizza >= 4f)
+        if (hp >= 4f)
             emoji_Pizza = 4;
-        else if (pizza >= 1f)
+        else if (hp >= 1f)
             emoji_Pizza = 3;
-        else if (pizza > -1f)
+        else if (hp > -1f)
             emoji_Pizza = 2;
-        else if (pizza > -4f)
+        else if (hp > -4f)
             emoji_Pizza = 1;
         else
             emoji_Pizza = 0;
@@ -78,9 +78,9 @@ public class ReviewObject : Review
         {
             for (int i = 0; i < count; i++)
             {
-                st.Append("<sprite=1 color=#ff0000> ");
+                st.Append("<sprite=1 color=#FF1C1C> ");
             }
-            if (hasPoint) st.Append("<sprite=4 color=#ff0000> ");
+            if (hasPoint) st.Append("<sprite=4 color=#FF1C1C> ");
         }
 
         context.text = st.ToString();

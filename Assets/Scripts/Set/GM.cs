@@ -35,11 +35,23 @@ public class GM : Singleton<GM>
     public int gold;
     public float rating;
     public SerializableDictionary<Ingredient, int> ingredients;
-    public int IngredientCount => ingredients.Count;
+    public int HasIngredient
+    {
+        get
+        {
+            int count = 0;
+            foreach (var temp in ingredients)
+            {
+                count += temp.Value;
+            }
+            return count;
+        }
+    }
+    public int IngredientTypeCount => ingredients.Count;
 
 
     public SerializableDictionary<GetGoldSource, int> dayOne_Gold;
-    public SerializableDictionary<GetRatingSource, int> dayOne_Rating;
+    public SerializableDictionary<GetRatingSource, float> dayOne_Rating;
 
     public enum GetGoldSource
     {
@@ -50,6 +62,8 @@ public class GM : Singleton<GM>
     public enum GetRatingSource
     {
         delivery,
+        notComplete,
+        notAccepted,
     }
 
     public Light globalLight;
@@ -60,18 +74,20 @@ public class GM : Singleton<GM>
     public CanvasGroup darkCanvas;
 
     public GameObject accountObj;
-    public TextMeshProUGUI accountDayText;
-    public TextMeshProUGUI profitText;
-    public TextMeshProUGUI profitNumText;
-    public TextMeshProUGUI profit_totalText;
-    public TextMeshProUGUI profit_totalNumText;
+    public TextMeshProUGUI[] accountText;
+    public TextMeshProUGUI[] profitText;
+    public TextMeshProUGUI[] profit_totalText;
     public Button nextDayBtn;
     public TextMeshProUGUI nextDayBtn_Text;
 
     public GameObject gameOverObj;
     public Button gameOverBtn_ToLobby;
+    public TextMeshProUGUI[] gameOverText;
     public TextMeshProUGUI gameOverBtn_ToLobby_Text;
     public bool loading;
+
+    // 패배 트리거
+    public bool warning_gameOver;
 
     public static EventHandler<bool> EndTimeEvent; // true일시 마감
     private TextManager tm => TextManager.Instance;
@@ -83,7 +99,7 @@ public class GM : Singleton<GM>
         foreach (var temp in list)
         {
             Ingredient key = (Ingredient)temp;
-            ingredients.Add(new SerializableDictionary<Ingredient, int>.Pair(key, 10));
+            ingredients.Add(new SerializableDictionary<Ingredient, int>.Pair(key, 1));
         }
 
         UIManager.Instance.Init();
@@ -92,7 +108,7 @@ public class GM : Singleton<GM>
         SetRating(10f);
 
         dayOne_Gold = new SerializableDictionary<GetGoldSource, int>();
-        dayOne_Rating = new SerializableDictionary<GetRatingSource, int>();
+        dayOne_Rating = new SerializableDictionary<GetRatingSource, float>();
 
         darkCanvas.alpha = 0f;
         darkCanvas.interactable = false;
@@ -105,18 +121,33 @@ public class GM : Singleton<GM>
 
         day = 0;
         UIManager.Instance.shopUI.Init();
+        OrderManager.Instance.Init();
     }
 
     public void TextUpdate()
     {
+        accountText[1].text = $"<sprite={2}> {tm.GetCommons("Money")}";
+        accountText[2].text = $"<sprite={1}> {tm.GetCommons("Rating")}";
+
         StringBuilder st = new StringBuilder();
         st.Append(tm.GetCommons("Delivery")).AppendLine();
         st.Append(tm.GetCommons("Explore")).AppendLine();
         st.Append(tm.GetCommons("Zombie")).AppendLine();
 
-        profitText.text = st.ToString();
+        profitText[0].text = st.ToString();
 
-        profit_totalText.text = tm.GetCommons("Total");
+        StringBuilder st2 = new StringBuilder();
+        st2.Append(tm.GetCommons("Delivery")).AppendLine();
+        st2.Append(tm.GetCommons("NotCompleted")).AppendLine();
+        st2.Append(tm.GetCommons("NotAccepted")).AppendLine();
+
+        profitText[2].text = st2.ToString();
+
+        profit_totalText[0].text = tm.GetCommons("Total");
+        profit_totalText[2].text = tm.GetCommons("Total");
+
+        gameOverText[0].text = tm.GetCommons("Gameover");
+        gameOverText[1].text = tm.GetCommons("Gameover2");
 
         nextDayBtn_Text.text = $"> {tm.GetCommons("NextDay")} <";
         gameOverBtn_ToLobby_Text.text = $"> {tm.GetCommons("Menu")} <";
@@ -207,9 +238,24 @@ public class GM : Singleton<GM>
     public void NextDay()
     {
         timer = 0f;
-        accountDayText.text = string.Format(tm.GetCommons("Day"), day + 1);
+        accountText[0].text = string.Format(tm.GetCommons("Day"), day + 1);
         day++;
         UIManager.Instance.shopUI.DayFirstReview();
+
+        if (rating <= 0f)
+        {
+            if (!warning_gameOver)
+            {
+                warning_gameOver = true;
+            }
+            else
+            {
+                GameOver();
+                return;
+            }
+        }
+        else
+            warning_gameOver = false;
 
         Sequence sequence = DOTween.Sequence().SetUpdate(true).SetAutoKill(true);
         sequence.AppendCallback(() =>
@@ -231,60 +277,96 @@ public class GM : Singleton<GM>
     }
     public void UpdateAccountUI()
     {
-        int total = 0;
-
-        StringBuilder st = new StringBuilder();
-
-
-        var list2 = System.Enum.GetValues(typeof(GetGoldSource));
-        foreach (var temp in list2)
+        // 머니
         {
-            if (!dayOne_Gold.ContainsKey((GetGoldSource)temp))
-                dayOne_Gold.Add(new SerializableDictionary<GetGoldSource, int>.Pair { Key = (GetGoldSource)temp, Value = 0 });
-        }
-        var list3 = System.Enum.GetValues(typeof(GetRatingSource));
-        foreach (var temp in list3)
-        {
-            if (!dayOne_Rating.ContainsKey((GetRatingSource)temp))
-                dayOne_Rating.Add(new SerializableDictionary<GetRatingSource, int>.Pair { Key = (GetRatingSource)temp, Value = 0 });
-        }
-
-        int count = dayOne_Gold.Count;
-        foreach (var temp in dayOne_Gold)
-        {
-            int value = temp.Value;
-            if (value >= 0)
+            int total = 0;
+            StringBuilder st = new StringBuilder();
+            var list2 = System.Enum.GetValues(typeof(GetGoldSource));
+            foreach (var temp in list2)
             {
-                if (value == 0)
-                    st.Append("0");
+                if (!dayOne_Gold.ContainsKey((GetGoldSource)temp))
+                    dayOne_Gold.Add(new SerializableDictionary<GetGoldSource, int>.Pair { Key = (GetGoldSource)temp, Value = 0 });
+            }
+
+            int count = dayOne_Gold.Count;
+            foreach (var temp in dayOne_Gold)
+            {
+                int value = temp.Value;
+                if (value >= 0)
+                {
+                    if (value == 0)
+                        st.Append("0");
+                    else
+                        st.AppendFormat("+{0}", value);
+                }
                 else
-                    st.AppendFormat("+{0}", value);
+                    st.AppendFormat("<color=#A91111>{0}</color>", value);
+                total += value;
+                count--;
+                if (count > 0)
+                    st.AppendLine();
+            }
+            profitText[1].text = st.ToString();
+
+            if (total >= 0)
+            {
+                if (total == 0)
+                    profit_totalText[1].text = "0";
+                else
+                    profit_totalText[1].text = $"+{total}";
             }
             else
-                st.AppendFormat("<color=#A91111>{0}</color>", value);
-            total += value;
-            count--;
-            if (count > 0)
-                st.AppendLine();
+                profit_totalText[1].text = $"<color=#A91111>{total}</color>";
         }
-        profitNumText.text = st.ToString();
 
-        if (total >= 0)
+        // 평점
         {
-            if (total == 0)
-                profit_totalNumText.text = "0";
+            float total = 0;
+            StringBuilder st = new StringBuilder();
+            var list3 = System.Enum.GetValues(typeof(GetRatingSource));
+            foreach (var temp in list3)
+            {
+                if (!dayOne_Rating.ContainsKey((GetRatingSource)temp))
+                    dayOne_Rating.Add(new SerializableDictionary<GetRatingSource, float>.Pair { Key = (GetRatingSource)temp, Value = 0 });
+            }
+
+            int count = dayOne_Rating.Count;
+            foreach (var temp in dayOne_Rating)
+            {
+                float value = temp.Value;
+                if (value >= 0)
+                {
+                    if (value == 0)
+                        st.Append("0");
+                    else
+                        st.AppendFormat("+{0:0.#}", value);
+                }
+                else
+                    st.AppendFormat("<color=#A91111>{0:0.#}</color>", value);
+                total += value;
+                count--;
+                if (count > 0)
+                    st.AppendLine();
+            }
+            profitText[3].text = st.ToString();
+
+            if (total >= 0)
+            {
+                if (total == 0)
+                    profit_totalText[3].text = "0";
+                else
+                    profit_totalText[3].text = $"+{total:0.#}";
+            }
             else
-                profit_totalNumText.text = $"+{total}";
+                profit_totalText[3].text = $"<color=#A91111>{total:0.#}</color>";
         }
-        else
-            profit_totalNumText.text = $"<color=#A91111>{total}</color>";
     }
 
     public void NextDay_Late()
     {
         accountObj.SetActive(false);
         dayOne_Gold = new SerializableDictionary<GetGoldSource, int>();
-        dayOne_Rating = new SerializableDictionary<GetRatingSource, int>();
+        dayOne_Rating = new SerializableDictionary<GetRatingSource, float>();
 
         Sequence sequence = DOTween.Sequence().SetUpdate(true).SetAutoKill(true);
         sequence.AppendCallback(() =>
@@ -351,7 +433,7 @@ public class GM : Singleton<GM>
         displayGold = value;
         gold = value;
     }
-    public void AddRating(float value)
+    public void AddRating(float value, GetRatingSource source)
     {
         float target = rating + value;
         DOVirtual.Float(rating, target, 0.75f, (x) =>
@@ -359,6 +441,11 @@ public class GM : Singleton<GM>
             displayRating = x;
         }).SetEase(Ease.OutCirc).SetUpdate(true);
         rating = target;
+
+        if (!dayOne_Rating.ContainsKey(source))
+            dayOne_Rating.Add(new SerializableDictionary<GetRatingSource, float>.Pair { Key = source, Value = value });
+        else
+            dayOne_Rating[source] += value;
     }
     public void SetRating(float value)
     {

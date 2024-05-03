@@ -90,6 +90,7 @@ public class PlayerController : MonoBehaviour
     [Space(10)]
     public AudioSource carEngineSound; // This variable stores the sound of the car engine.
     public AudioSource tireScreechSound; // This variable stores the sound of the tire screech (when the car is drifting).
+    public AudioSource backupSound; // 후진 사운드
     float initialCarEngineSoundPitch; // Used to store the initial pitch of the car engine sound.
 
     //CONTROLS
@@ -118,6 +119,8 @@ public class PlayerController : MonoBehaviour
     public bool isDrifting; // Used to know whether the car is drifting or not.
     [HideInInspector]
     public bool isTractionLocked; // Used to know whether the traction of the car is locked or not.
+    [HideInInspector]
+    public bool isGoBack; // 후진중?
 
     //PRIVATE VARIABLES
 
@@ -364,6 +367,8 @@ public class PlayerController : MonoBehaviour
         carEngineSound.enabled = !GM.Instance.stop_control;
         tireScreechSound.enabled = !GM.Instance.stop_control;
 
+        backupSound.enabled = !GM.Instance.stop_control;
+
         Physics.Raycast(transform.position, Vector3.down, 10f, 1 << LayerMask.NameToLayer("UI"));
 
         if (isCollision)
@@ -467,6 +472,7 @@ public class PlayerController : MonoBehaviour
                 CancelInvoke("DecelerateCar");
                 deceleratingCar = false;
                 GoReverse();
+                isGoBack = true;
             }
 
             if (left)
@@ -523,6 +529,8 @@ public class PlayerController : MonoBehaviour
     // Apart from that, the tireScreechSound will play whenever the car starts drifting or losing traction.
     public void CarSounds()
     {
+        if (GM.Instance.stop_control) return;
+
         if (carEngineSound != null)
         {
             float engineSoundPitch = initialCarEngineSoundPitch + (Mathf.Abs(carRigidbody.velocity.magnitude) / 25f);
@@ -539,6 +547,16 @@ public class PlayerController : MonoBehaviour
         {
             tireScreechSound.Stop();
         }
+        if (isGoBack && carSpeed < -0.1f)
+        {
+            if (!backupSound.isPlaying)
+                backupSound.Play();
+        }
+        else
+        {
+            backupSound.Stop();
+        }
+        isGoBack = false;
     }
 
     //

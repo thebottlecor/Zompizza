@@ -104,12 +104,11 @@ public class ExplorationManager : Singleton<ExplorationManager>
         {
             // 아직 완료되지 않은 주문이 있는데 다음날로 갈 것인가? 경고
 
-            GM.Instance.AddRating(-1f * notCompletedOrder);
+            // 미완료 패널티
+            GM.Instance.AddRating(Constant.delivery_Not_completed_rating * notCompletedOrder, GM.GetRatingSource.notComplete);
         }
 
-        if (GM.Instance.rating <= 0f)
-            GM.Instance.GameOver();
-
+        // 받지 않았던 주문 패널티 
         OrderManager.Instance.RemoveAllOrders();
 
         GM.Instance.AddGold(-1 * cost, GM.GetGoldSource.explore);
@@ -131,7 +130,7 @@ public class ExplorationManager : Singleton<ExplorationManager>
         int count = result_quantity;
         while (count > 0)
         {
-            Ingredient rand = (Ingredient)UnityEngine.Random.Range(0, GM.Instance.IngredientCount);
+            Ingredient rand = (Ingredient)UnityEngine.Random.Range(0, GM.Instance.IngredientTypeCount);
 
             if (!resultDict.ContainsKey(rand))
                 resultDict.Add(rand, 1);

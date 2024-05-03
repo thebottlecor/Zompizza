@@ -203,4 +203,6 @@ public enum Sfx
     select,
     complete,
     nextDay,
+    chop,
+    kitchenTimer,
 }

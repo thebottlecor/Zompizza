@@ -121,6 +121,10 @@ public class PizzaDirection : MonoBehaviour
             pizzaBoxAnimator.Play("Opening");
         });
         sequence.AppendInterval(0.25f);
+        sequence.AppendCallback(() =>
+        {
+            AudioManager.Instance.PlaySFX(Sfx.chop, true);
+        });
 
         // 재료들이 들어간다
         sequence.AppendInterval(0.75f); // 더미
@@ -137,11 +141,13 @@ public class PizzaDirection : MonoBehaviour
 
         sequence.AppendCallback(() =>
         {
+            AudioManager.Instance.StopSFX(true);
             foreach (var temp in ingredients)
             {
                 temp.Value.SetParent(pizzaBoxAnimator.transform);
             }
             pizzaBoxAnimator.Play("Closing");
+            AudioManager.Instance.PlaySFX(Sfx.kitchenTimer);
         });
 
         // 4번 돈다
@@ -157,6 +163,7 @@ public class PizzaDirection : MonoBehaviour
         sequence.Append(pizzaBoxAnimator.transform.DOLocalRotate(new Vector3(0, 360, 0), 0.25f, RotateMode.FastBeyond360).SetRelative(true).SetEase(Ease.Linear));
         sequence.AppendCallback(() =>
         {
+            AudioManager.Instance.PlaySFX(Sfx.complete);
             pizzaBoxAnimator.Play("Opening");
             pizzaEffect.localScale = Vector3.one;
             pizzaEffect.gameObject.SetActive(true);
