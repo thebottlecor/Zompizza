@@ -384,7 +384,7 @@ public class PlayerController : MonoBehaviour
                     AudioManager.Instance.PlaySFX(Sfx.crash);
 
                     if (DamageEvent != null)
-                        DamageEvent(null, 0.05f * UnityEngine.Random.Range(0.75f, 1.25f));
+                        DamageEvent(null, Constant.crash_damage * UnityEngine.Random.Range(0.75f, 1.25f));
 
                     cam.Shake(5f);
                 }

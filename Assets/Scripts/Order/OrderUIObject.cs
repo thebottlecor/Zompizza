@@ -108,21 +108,35 @@ public class OrderUIObject : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         viewLocationTmp.text = tm.GetCommons("ViewCustomer");
     }
 
-    private void Update()
+    public void ButtonUpdate()
     {
         if (info == null || info.accepted) return;
 
         bool makable = OrderManager.Instance.CheckIngredient(info);
+        bool loadLimit = false;
+
+        if (OrderManager.Instance.IsMaxDelivery)
+        {
+            makable = false;
+            loadLimit = true;
+        }
 
         acceptButton.interactable = makable;
         if (makable)
             buttonTmp.text = tm.GetCommons("Accept");
         else
-            buttonTmp.text = tm.GetCommons("AcceptDisable");
+        {   
+            if (loadLimit)
+                buttonTmp.text = tm.GetCommons("AcceptDisable2");
+            else
+                buttonTmp.text = tm.GetCommons("AcceptDisable");
+        }
     }
 
     public void OrderAccept()
     {
+        if (OrderManager.Instance.IsMaxDelivery) return;
+
         info.accepted = true;
 
         OrderManager.Instance.OrderAccepted(info);

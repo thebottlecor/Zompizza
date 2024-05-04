@@ -33,25 +33,25 @@ public class ReviewObject : Review
         StringBuilder st = new StringBuilder();
 
         int emoji_Time;
-        if (time >= 4f)
+        if (time == 2.5f)
             emoji_Time = 4;
-        else if (time >= 1f)
+        else if (time >= 1.0f)
             emoji_Time = 3;
-        else if (time > -1f)
+        else if (time > -0.5f)
             emoji_Time = 2;
-        else if (time > -4f)
+        else if (time > -2f)
             emoji_Time = 1;
         else
             emoji_Time = 0;
 
         int emoji_Pizza;
-        if (hp >= 4f)
+        if (hp == 2.5f)
             emoji_Pizza = 4;
-        else if (hp >= 1f)
+        else if (hp >= 1.0f)
             emoji_Pizza = 3;
-        else if (hp > -1f)
+        else if (hp > -0.5f)
             emoji_Pizza = 2;
-        else if (hp > -4f)
+        else if (hp > -2f)
             emoji_Pizza = 1;
         else
             emoji_Pizza = 0;
@@ -68,11 +68,18 @@ public class ReviewObject : Review
 
         if (!minus)
         {
-            for (int i = 0; i < count; i++)
+            if (count == 0)
             {
-                st.Append("<sprite=1> ");
+                st.Append("<sprite=5> ");
             }
-            if (hasPoint) st.Append("<sprite=4> ");
+            else
+            {
+                for (int i = 0; i < count; i++)
+                {
+                    st.Append("<sprite=1> ");
+                }
+                if (hasPoint) st.Append("<sprite=4> ");
+            }
         }
         else
         {

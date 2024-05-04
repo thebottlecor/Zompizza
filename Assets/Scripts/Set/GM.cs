@@ -15,8 +15,10 @@ public class GM : Singleton<GM>
 
     public int day;
     public float timer;
+    [HideInInspector] public float remainTime;
 
     public TextMeshProUGUI timeText;
+    private string[] dayStr = new string[2];
     public GameObject openImage;
     public GameObject closeImage;
 
@@ -58,6 +60,7 @@ public class GM : Singleton<GM>
         delivery,
         explore,
         zombie,
+        upgrade,
     }
     public enum GetRatingSource
     {
@@ -86,6 +89,11 @@ public class GM : Singleton<GM>
     public TextMeshProUGUI gameOverBtn_ToLobby_Text;
     public bool loading;
 
+    public GameObject gameOverWaringObj;
+    public TextMeshProUGUI gameOverWaringBtn_Text;
+    public TextMeshProUGUI gameOverWaring_Text;
+    public TextMeshProUGUI gameOverWaringDetail_Text;
+
     // 패배 트리거
     public bool warning_gameOver;
 
@@ -99,13 +107,13 @@ public class GM : Singleton<GM>
         foreach (var temp in list)
         {
             Ingredient key = (Ingredient)temp;
-            ingredients.Add(new SerializableDictionary<Ingredient, int>.Pair(key, 1));
+            ingredients.Add(new SerializableDictionary<Ingredient, int>.Pair(key, 10));
         }
 
         UIManager.Instance.Init();
 
         SetGold(1000);
-        SetRating(10f);
+        SetRating(5f);
 
         dayOne_Gold = new SerializableDictionary<GetGoldSource, int>();
         dayOne_Rating = new SerializableDictionary<GetRatingSource, float>();
@@ -120,19 +128,21 @@ public class GM : Singleton<GM>
         TextUpdate();
 
         day = 0;
+        DayStringUpdate();
         UIManager.Instance.shopUI.Init();
         OrderManager.Instance.Init();
     }
 
     public void TextUpdate()
     {
-        accountText[1].text = $"<sprite={2}> {tm.GetCommons("Money")}";
-        accountText[2].text = $"<sprite={1}> {tm.GetCommons("Rating")}";
+        //accountText[1].text = $"<sprite={2}> {tm.GetCommons("Money")}";
+        //accountText[2].text = $"<sprite={1}> {tm.GetCommons("Rating")}";
 
         StringBuilder st = new StringBuilder();
         st.Append(tm.GetCommons("Delivery")).AppendLine();
         st.Append(tm.GetCommons("Explore")).AppendLine();
         st.Append(tm.GetCommons("Zombie")).AppendLine();
+        st.Append(tm.GetCommons("Upgrade")).AppendLine();
 
         profitText[0].text = st.ToString();
 
@@ -151,6 +161,10 @@ public class GM : Singleton<GM>
 
         nextDayBtn_Text.text = $"> {tm.GetCommons("NextDay")} <";
         gameOverBtn_ToLobby_Text.text = $"> {tm.GetCommons("Menu")} <";
+
+        gameOverWaringBtn_Text.text = tm.GetCommons("Close");
+        gameOverWaring_Text.text = tm.GetCommons("Warning");
+        gameOverWaringDetail_Text.text = tm.GetCommons("GameoverWarning");
     }
 
     private void Update()
@@ -163,6 +177,8 @@ public class GM : Singleton<GM>
         {
             timer = Constant.dayTime;
         }
+
+        remainTime = Constant.dayTime - timer;
 
         int hour = (int)(timer / Constant.oneHour);
         int minute = (int)((timer - hour * Constant.oneHour) / Constant.oneMinute);
@@ -183,6 +199,8 @@ public class GM : Singleton<GM>
 
                 if (EndTimeEvent != null)
                     EndTimeEvent(null, true);
+
+                timeText.text = dayStr[1];
             }
             endTime = true;
         }
@@ -200,16 +218,11 @@ public class GM : Singleton<GM>
         }
 
         if (endTime)
-            //timeText.text = $"Day {day} :: <color=#ff0000>{hour:00}:{minute:00}:{sec:00}</color>";
-            timeText.text = string.Format(tm.GetCommons("Day"), day + 1) + $"  <color=#ff0000>{hour:00}:{minute:00}</color>";
+        {
+            //timeText.text = dayStr[1];
+        }
         else
-            //timeText.text = $"Day {day} :: {hour:00}:{minute:00}:{sec:00}";
-            timeText.text = string.Format(tm.GetCommons("Day"), day + 1) + $"  {hour:00}:{minute:00}";
-
-        for (int i = 0; i < goldText.Length; i++)
-            goldText[i].text = $"{displayGold}$";
-        for (int i = 0; i < ratingText.Length; i++)
-            ratingText[i].text = $"{displayRating:0.#}";
+            timeText.text = dayStr[0] + $"{hour:00}:{minute:00}";
 
         float timePercent = timer / Constant.dayTime;
         globalLight.color = DataManager.Instance.uiLib.timeLightGradient.Evaluate(timePercent);
@@ -235,27 +248,19 @@ public class GM : Singleton<GM>
         CarSpeedUI(player.carSpeed, player.maxSpeed);
     }
 
+    public void DayStringUpdate()
+    {
+        dayStr[0] = string.Format(tm.GetCommons("Day"), day + 1) + "  ";
+        dayStr[1] = string.Format(tm.GetCommons("Day"), day + 1) + "  <color=#ff0000>18:00</color>"; // 영업 종료시
+    }
+
     public void NextDay()
     {
         timer = 0f;
         accountText[0].text = string.Format(tm.GetCommons("Day"), day + 1);
         day++;
+        DayStringUpdate();
         UIManager.Instance.shopUI.DayFirstReview();
-
-        if (rating <= 0f)
-        {
-            if (!warning_gameOver)
-            {
-                warning_gameOver = true;
-            }
-            else
-            {
-                GameOver();
-                return;
-            }
-        }
-        else
-            warning_gameOver = false;
 
         Sequence sequence = DOTween.Sequence().SetUpdate(true).SetAutoKill(true);
         sequence.AppendCallback(() =>
@@ -360,11 +365,36 @@ public class GM : Singleton<GM>
             else
                 profit_totalText[3].text = $"<color=#A91111>{total:0.#}</color>";
         }
+
+        accountText[1].text = $"<sprite={2}> {tm.GetCommons("Money")} ({gold})";
+        if (rating > 0)
+            accountText[2].text = $"<sprite={1}> {tm.GetCommons("Rating")} ({rating:0.#})";
+        else
+            accountText[2].text = $"<sprite={1}> {tm.GetCommons("Rating")} (<color=#A91111>{rating:0.#}</color>)";
+
     }
 
     public void NextDay_Late()
     {
         accountObj.SetActive(false);
+
+        bool showWarning = false;
+        if (rating <= 0f)
+        {
+            if (!warning_gameOver)
+            {
+                warning_gameOver = true;
+                showWarning = true;
+            }
+            else
+            {
+                GameOver();
+                return;
+            }
+        }
+        else
+            warning_gameOver = false;
+
         dayOne_Gold = new SerializableDictionary<GetGoldSource, int>();
         dayOne_Rating = new SerializableDictionary<GetRatingSource, float>();
 
@@ -380,6 +410,11 @@ public class GM : Singleton<GM>
             loading = false;
             OrderManager.Instance.NewOrder();
             ExplorationManager.Instance.ShowResultPanel();
+
+            if (showWarning)
+            {
+                ShowGameOverWaring(true);
+            }
         });
         sequence.Append(darkCanvas.DOFade(0f, 0.5f));
     }
@@ -393,16 +428,22 @@ public class GM : Singleton<GM>
 
         gameOverObj.SetActive(true);
     }
+    public void ShowGameOverWaring(bool on)
+    {
+        gameOverWaringObj.SetActive(on);
+    }
 
 
     #region UI 표시
     public void CarSpeedUI(float carSpeed, float maxSpeed)
     {
+        if (stop_control) return;
+
         float absoluteCarSpeed = Mathf.Abs(carSpeed);
         float vel = Mathf.FloorToInt(absoluteCarSpeed);
 
         displaySpeed = Mathf.Lerp(displaySpeed, vel, Time.fixedDeltaTime);
-        carSpeedText.text = $"{displaySpeed:F0}<size=75%>km/h</size>";
+        carSpeedText.text = ((int)displaySpeed).ToString();
 
         float percent = vel / maxSpeed;
         if (percent > 1f) percent = 1f;
@@ -420,6 +461,10 @@ public class GM : Singleton<GM>
         DOVirtual.Int(gold, target, 0.75f, (x) =>
         {
             displayGold = x;
+
+            for (int i = 0; i < goldText.Length; i++)
+                goldText[i].text = $"{displayGold}$";
+
         }).SetEase(Ease.OutCirc).SetUpdate(true);
         gold = target;
 
@@ -432,6 +477,9 @@ public class GM : Singleton<GM>
     {
         displayGold = value;
         gold = value;
+
+        for (int i = 0; i < goldText.Length; i++)
+            goldText[i].text = $"{displayGold}$";
     }
     public void AddRating(float value, GetRatingSource source)
     {
@@ -439,6 +487,15 @@ public class GM : Singleton<GM>
         DOVirtual.Float(rating, target, 0.75f, (x) =>
         {
             displayRating = x;
+
+            for (int i = 0; i < ratingText.Length; i++)
+            {
+                if (displayRating <= 0)
+                    ratingText[i].text = $"<color=#A91111>{displayRating:0.#}</color>";
+                else
+                    ratingText[i].text = $"{displayRating:0.#}";
+            }
+
         }).SetEase(Ease.OutCirc).SetUpdate(true);
         rating = target;
 
@@ -451,6 +508,14 @@ public class GM : Singleton<GM>
     {
         displayRating = value;
         rating = value;
+
+        for (int i = 0; i < ratingText.Length; i++)
+        {
+            if (displayRating <= 0)
+                ratingText[i].text = $"<color=#A91111>{displayRating:0.#}</color>";
+            else
+                ratingText[i].text = $"{displayRating:0.#}";
+        }
     }
     #endregion
 

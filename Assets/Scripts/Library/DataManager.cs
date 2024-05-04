@@ -12,6 +12,9 @@ public class DataManager : Singleton<DataManager>
     public CursorLibrary cursorLib;
     public EffectLibrary effectLib;
 
+    public ResearchLibrary researchLib;
+    public Dictionary<int, ResearchInfo> researches;
+
     protected override void Awake()
     {
         base.Awake();
@@ -20,6 +23,7 @@ public class DataManager : Singleton<DataManager>
 
     private void Start()
     {
+        researches = researchLib.GetHashMap();
         DOTween.Init();
     }
 

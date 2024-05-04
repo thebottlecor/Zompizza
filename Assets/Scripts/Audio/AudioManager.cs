@@ -56,6 +56,22 @@ public class AudioManager : Singleton<AudioManager>
             concurrentLimit.Add(sfx, 0);
             frameLimit.Add(sfx, 0);
         }
+
+        bgms.Shuffle();
+        audioSourceBGM.volume = 1f + globalBGMVolumeOffset;
+        StartBGM(0);
+    }
+
+    bool isPaused;
+
+    void OnApplicationFocus(bool hasFocus)
+    {
+        isPaused = !hasFocus;
+    }
+
+    void OnApplicationPause(bool pauseStatus)
+    {
+        isPaused = pauseStatus;
     }
 
     public void SetBGMVolume(float value)
@@ -71,6 +87,8 @@ public class AudioManager : Singleton<AudioManager>
 
     private void Update()
     {
+        if (isPaused) return;
+
         if (!audioSourceBGM.isPlaying)
         {
             if (++currentBGM >= bgms.Length)
@@ -78,61 +96,18 @@ public class AudioManager : Singleton<AudioManager>
                 currentBGM = 0;
                 bgms.Shuffle();
             }
-            StartBGMPeace(currentBGM);
+            StartBGM(currentBGM);
         }
     }
 
-    public void StartBGMPeace(int num)
+    public void StartBGM(int num)
     {
-        //if (BGMReplaceCoroutine != null)
-        //{
-        //    StopCoroutine(BGMReplaceCoroutine);
-        //    BGMReplaceCoroutine = null;
-        //}
-
         audioSourceBGM.clip = bgms[num].clip;
         audioSourceBGM.volume = 1f + bgms[num].volumeOffset + globalBGMVolumeOffset;
-
-        //if (currentBGM == -1)
-        //{
-        //    audioSourceBGMPeace.Play();
-        //    currentBGM = num;
-        //}
-        //else
-        //{
-        //    BGMReplaceCoroutine = StartCoroutine(BGMReplaceSeq(num));
-        //}
 
         audioSourceBGM.Play();
         currentBGM = num;
     }
-
-    private Coroutine BGMReplaceCoroutine;
-    //private IEnumerator BGMReplaceSeq(int num)
-    //{
-    //    currentBGM = num;
-
-    //    float timer = 0f;
-    //    float duration = 2f;
-
-    //    float battleBGMVolume = audioSourceBGM.volume;
-    //    float peaceBGMVolume = audioSourceBGMPeace.volume;
-
-    //    audioSourceBGMPeace.mute = false;
-    //    audioSourceBGMPeace.volume = 0f;
-
-    //    while (timer < duration)
-    //    {
-    //        yield return CoroutineHelper.WaitForSecondsRealtime(Time.unscaledDeltaTime);
-    //        timer += Time.unscaledDeltaTime;
-    //        audioSourceBGM.volume = battleBGMVolume * (duration - timer) / duration;
-    //        audioSourceBGMPeace.volume = peaceBGMVolume * (timer) / duration;
-    //    }
-
-    //    audioSourceBGM.mute = true;
-
-    //    audioSourceBGMPeace.volume = peaceBGMVolume;
-    //}
 
     public bool IsPlayingSFX()
     {

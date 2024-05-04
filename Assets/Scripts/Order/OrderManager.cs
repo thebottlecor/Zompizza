@@ -19,6 +19,10 @@ public class OrderManager : Singleton<OrderManager>
 
     public static EventHandler AllOrderRemovedEvent;
 
+    public int MaxAccpetance => Constant.baseMaxDeliveryAcceptance;
+    public int currentAcceptance;
+    public bool IsMaxDelivery => currentAcceptance >= MaxAccpetance;
+
     public List<Ingredient> ingredients;
 
     public void Init()
@@ -68,24 +72,38 @@ public class OrderManager : Singleton<OrderManager>
                 // 배달 성공
 
                 float timeRating;
-                float overTime = orderList[i].timer - orderList[i].timeLimit;
+                float timeLimit = orderList[i].timeLimit;
+                float overTime = orderList[i].timer - timeLimit;
                 if (overTime <= 0f)
-                    timeRating = 5f;
+                {
+                    float remainPercent = Mathf.Abs(overTime) / timeLimit;
+                    if (remainPercent >= Constant.remainTime_Percent) // 남은 시간이 33% 이상
+                        timeRating = Constant.remainTimeRating1;
+                    else
+                    {
+                        timeRating = Constant.Point05((Constant.remainTimeRating2 - Constant.remainTimeRating3) / Constant.remainTime_Percent * remainPercent + Constant.remainTimeRating3);
+                    }
+                }
                 else
                 {
-                    float overPercent = Mathf.Min(1f, overTime / orderList[i].timeLimit); // 1이면 최대
-                    timeRating = -5f * overPercent;
+                    float overPercent = Mathf.Min(1f, overTime / timeLimit); // 1이면 최대
+                    timeRating = Constant.Point05(Constant.remainTimeRating4 * overPercent);
                 }
 
                 float hpRating;
                 float hpPercent = orderList[i].hp;
-                if (hpPercent >= 0.9f)
+                if (hpPercent == 1f)
                 {
-                    hpRating = 5f;
+                    hpRating = Constant.remainHpRating1;
+                }
+                else if (hpPercent >= Constant.remainHP_Percent)
+                {
+                    hpRating = Constant.Point05(((Constant.remainHpRating2 - Constant.remainHpRating3) / (1f - Constant.remainHP_Percent)) * hpPercent +
+                        ((-Constant.remainHP_Percent * Constant.remainHpRating2) + Constant.remainHpRating3) / (1f - Constant.remainHP_Percent));
                 }
                 else
                 {
-                    hpRating = 11f * hpPercent - 5f; // 90%면 +4.9 ~ 0%면 -5
+                    hpRating = Constant.Point05((-1f * Constant.remainHpRating4 / Constant.remainHP_Percent) * hpPercent + Constant.remainHpRating4);
                 }
 
                 float resultRating = timeRating + hpRating;
@@ -105,6 +123,10 @@ public class OrderManager : Singleton<OrderManager>
                 orderList.RemoveAt(i);
             }
         }
+
+        UIManager.Instance.shopUI.OrderTextUpdate();
+
+        UIManager.Instance.OrderUIBtnUpdate();
     }
 
     private void OnPlayerDamaged(object sender, float e)
@@ -126,7 +148,6 @@ public class OrderManager : Singleton<OrderManager>
     [ContextMenu("새로운 주문")]
     public void NewOrder()
     {
-
         List<int> rand = new List<int> { 0, 1, 2, 3, 4, 5 };
         rand.Shuffle();
 
@@ -186,6 +207,8 @@ public class OrderManager : Singleton<OrderManager>
         UIManager.Instance.OrderUIUpdate();
 
         OrderGoalUpdate();
+
+        UIManager.Instance.shopUI.OrderTextUpdate();
     }
 
     private bool AddOrder_Adjust(int goal, ref SerializableDictionary<Ingredient, int> tempRes)
@@ -351,7 +374,8 @@ public class OrderManager : Singleton<OrderManager>
 
     private void Update()
     {
-        for (int i = 0; i < orderList.Count; i++)
+        bool someOrderRemoved = false;
+        for (int i = orderList.Count - 1; i >= 0; i--)
         {
             if (orderList[i].accepted)
             {
@@ -359,9 +383,28 @@ public class OrderManager : Singleton<OrderManager>
 
                 orderMiniUIPair[orderList[i]].UpdateTimer(orderList[i]);
             }
+            else
+            {
+                if (orderList[i].timeLimit > GM.Instance.remainTime) // 배달 제한 시간이 남은 영업 시간 초과시
+                {
+                    // 미-접수 패널티
+                    NotAcceptedOrderPenalty(orderList[i]);
+
+                    UIManager.Instance.orderUIObjects[orderList[i].customerIdx].OrderReset();
+                    orderMiniUIPair[orderList[i]].Hide();
+                    orderMiniUIPair.Remove(orderList[i]);
+                    orderList.RemoveAt(i);
+                    
+                    someOrderRemoved = true;
+                }
+            }
+        }
+        if (someOrderRemoved)
+        {
+            if (AllOrderRemovedEvent != null)
+                AllOrderRemovedEvent(null, null);
         }
     }
-
 
     public void OrderGoalUpdate()
     {
@@ -395,6 +438,10 @@ public class OrderManager : Singleton<OrderManager>
         UIManager.Instance.UpdateIngredients();
         UIManager.Instance.OffAll_Ingredient_Highlight();
 
+        UIManager.Instance.shopUI.OrderTextUpdate();
+
+        UIManager.Instance.OrderUIBtnUpdate();
+
         pizzaDirection.RestartSequence(info);
     }
 
@@ -408,6 +455,19 @@ public class OrderManager : Singleton<OrderManager>
             }
         }
         return false;
+    }
+    public int GetDeliveringCount()
+    {
+        int value = 0;
+        for (int i = 0; i < orderList.Count; i++)
+        {
+            if (orderList[i].accepted)
+            {
+                value++;
+            }
+        }
+        currentAcceptance = value;
+        return value;
     }
     public int GetCurrentPizzaBox()
     {
@@ -455,6 +515,7 @@ public class OrderManager : Singleton<OrderManager>
         }
         return count;
     }
+
     public void RemoveAllOrders()
     {
         for (int i = orderList.Count - 1; i >= 0; i--)
@@ -462,21 +523,12 @@ public class OrderManager : Singleton<OrderManager>
             if (!orderList[i].accepted)
             {
                 // 미-접수 패널티
-                if (CheckIngredient(orderList[i])) // 재료를 가지고 있었던 경우
-                {
-                    GM.Instance.AddRating(Constant.delivery_Not_accepted_rating, GM.GetRatingSource.notAccepted);
-                    UIManager.Instance.shopUI.AddReview(orderList[i], -2.5f, -2.5f);
-                }
-                else
-                {
-                    GM.Instance.AddRating(Constant.delivery_Impossible_accepted_rating, GM.GetRatingSource.notAccepted);
-                    UIManager.Instance.shopUI.AddReview(orderList[i], -1.25f, -1.25f);
-                }
+                NotAcceptedOrderPenalty(orderList[i]);
             }
             else
             {
-                // 미완료 리뷰 남기기 -10점
-                UIManager.Instance.shopUI.AddReview(orderList[i], -5f, -5f);
+                // 미완료 리뷰 남기기 -5점
+                UIManager.Instance.shopUI.AddReview(orderList[i], -2.5f, -2.5f);
             }
 
             orderMiniUIPair[orderList[i]].Hide();
@@ -488,5 +540,19 @@ public class OrderManager : Singleton<OrderManager>
 
         if (AllOrderRemovedEvent != null)
             AllOrderRemovedEvent(null, null);
+    }
+
+    private void NotAcceptedOrderPenalty(OrderInfo info)
+    {
+        if (CheckIngredient(info)) // 재료를 가지고 있었던 경우
+        {
+            GM.Instance.AddRating(Constant.delivery_Not_accepted_rating, GM.GetRatingSource.notAccepted);
+            UIManager.Instance.shopUI.AddReview(info, -1.5f, -1.0f);
+        }
+        else
+        {
+            GM.Instance.AddRating(Constant.delivery_Impossible_accepted_rating, GM.GetRatingSource.notAccepted);
+            UIManager.Instance.shopUI.AddReview(info, -1.0f, -0.5f);
+        }
     }
 }

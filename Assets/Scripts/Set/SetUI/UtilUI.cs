@@ -20,6 +20,8 @@ public class UtilUI : EventListener
 
     public bool IsActive => loading || opened;
 
+    public ScrollingUIEffect scrollEffect;
+
     public TextManager tm => TextManager.Instance;
     public TextMeshProUGUI[] buttonTexts;
 
@@ -72,12 +74,14 @@ public class UtilUI : EventListener
             return;
         }
 
+        scrollEffect.enabled = true;
         GM.Instance.stop_control = true;
         Time.timeScale = 0f;
         loading = true;
 
         UIManager.Instance.orderMiniUIParent.SetActive(false);
-        UIManager.Instance.otherDrivingInfo.SetActive(false);
+        UIManager.Instance.speedInfo.SetActive(false);
+        UIManager.Instance.timeInfo.SetActive(false);
         WorldMapManager.Instance.CloseMinimap();
         WorldMapManager.Instance.OpenFullscreenMap();
 
@@ -102,6 +106,7 @@ public class UtilUI : EventListener
 
         DOTween.Kill(rectTransform);
         DOTween.Kill(canvasGroup);
+        scrollEffect.enabled = false;
         loading = false;
         opened = false;
         WorldMapManager.Instance.CloseFullscreenMap();
@@ -119,13 +124,15 @@ public class UtilUI : EventListener
         if (!opened) return;
         if (loading) return;
 
+        scrollEffect.enabled = false;
         opened = false;
         GM.Instance.stop_control = false;
         Time.timeScale = 1f;
         loading = true;
 
         UIManager.Instance.orderMiniUIParent.SetActive(true);
-        UIManager.Instance.otherDrivingInfo.SetActive(true);
+        UIManager.Instance.speedInfo.SetActive(true);
+        UIManager.Instance.timeInfo.SetActive(true);
         WorldMapManager.Instance.CloseFullscreenMap();
         WorldMapManager.Instance.OpenMinimap();
 
@@ -163,8 +170,17 @@ public class UtilUI : EventListener
         }
 
         panelButtonPairs[idx].panel.SetActive(true);
+        //if (idx != 0)
+        //    panelButtonPairs[idx].panel.SetActive(true);
+        //else
+        //    StartCoroutine(DelayShow(idx));
         panelButtonPairs[idx].button.SetHighlight(true);
 
         activeSubPanel = idx;
+    }
+    private IEnumerator DelayShow(int idx)
+    {
+        yield return CoroutineHelper.WaitForSecondsRealtime(0.01f);
+        panelButtonPairs[idx].panel.SetActive(true);
     }
 }

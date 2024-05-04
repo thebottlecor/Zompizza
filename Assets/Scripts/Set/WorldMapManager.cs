@@ -39,11 +39,18 @@ public class WorldMapManager : Singleton<WorldMapManager>
     private Vector3 customerPos;
     public Button customerBtn;
     public TextMeshProUGUI customerBtnText;
+    public Button toShopBtn;
+    public TextMeshProUGUI toShopBtnText;
 
     private void Start()
     {
         ToggleCustomerMode(false, new Vector3(0f, 0f, -1000f));
         //pizzaShopPin.gameObject.SetActive(false);
+
+        toShopBtnText.text = TextManager.Instance.GetCommons("Order");
+        toShopBtn.gameObject.SetActive(false);
+
+        worldmap.gameObject.SetActive(false);
     }
 
     public void ToggleCustomerMode_Btn()
@@ -81,6 +88,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
                 if (customerIdx >= 0 && temp.Value == customerIdx)
                     hightlightPin = temp.Key;
             }
+            toShopBtn.gameObject.SetActive(true);
             customerBtnText.text = TextManager.Instance.GetCommons("WorldmapMode0");
         }
         else
@@ -90,6 +98,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
             {
                 temp.Key.gameObject.SetActive(false);
             }
+            toShopBtn.gameObject.SetActive(false);
             customerBtnText.text = TextManager.Instance.GetCommons("WorldmapMode1");
         }
     }
@@ -147,6 +156,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
 
     public void OpenMinimap()
     {
+        worldmap.gameObject.SetActive(false);
         minimap.gameObject.SetActive(true);
         for (int i = 0; i < minimap.minimapItemsToHightlight.Count; i++)
         {
@@ -159,6 +169,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
     }
     public void CloseMinimap()
     {
+        worldmap.gameObject.SetActive(true);
         minimap.gameObject.SetActive(false);
         for (int i = 0; i < minimap.minimapItemsToHightlight.Count; i++)
         {

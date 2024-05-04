@@ -83,7 +83,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 113395114589668684}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 409d6dda85b39394b8973c962b183819, type: 3}
   m_Name: 
@@ -2056,6 +2056,7 @@ MonoBehaviour:
   fadeTime: 0.5
   settingCanvasGroup: {fileID: 5733181468252803584}
   settingRectTransform: {fileID: 2139409472008072845}
+  scrollEffect: {fileID: 2931072937346662061}
   loading: 0
   opened: 0
   bgmSlider: {fileID: 6897039946895976125}
@@ -4407,6 +4408,7 @@ MonoBehaviour:
   materialLib: {fileID: 11400000, guid: a05134f48e1ac634690c50f70e7d7821, type: 2}
   cursorLib: {fileID: 11400000, guid: 1223258829c43354e9b244178b3ad8c1, type: 2}
   effectLib: {fileID: 11400000, guid: d02c3656d26cdbb4d9d92fe6d541fe63, type: 2}
+  researchLib: {fileID: 11400000, guid: 36359bd0f362fec4db980e1146001752, type: 2}
 --- !u!1 &2507890894523905929
 GameObject:
   m_ObjectHideFlags: 0
@@ -4887,8 +4889,20 @@ MonoBehaviour:
   audioSourceSFX: {fileID: 489626377017305655}
   audioSourceSFX_Loop: {fileID: 134922840975558114}
   bgms:
-  - clip: {fileID: 8300000, guid: 31f903cd2bab37b4bb5f2851e0232b20, type: 3}
-    volumeOffset: -0.3
+  - clip: {fileID: 8300000, guid: a7abc01b5ebe6354984519f5a873c2b5, type: 3}
+    volumeOffset: 0
+    maxPlay: 0
+  - clip: {fileID: 8300000, guid: 5f31aec34738a26458a7c9cfc2811de7, type: 3}
+    volumeOffset: 0
+    maxPlay: 0
+  - clip: {fileID: 8300000, guid: bff326944f69a5847bd2f68459e846c6, type: 3}
+    volumeOffset: 0
+    maxPlay: 0
+  - clip: {fileID: 8300000, guid: cc2cf7c242e89b740b69f7b3132becf6, type: 3}
+    volumeOffset: 0
+    maxPlay: 0
+  - clip: {fileID: 8300000, guid: 97bb397204832e443aae670190b1ebec, type: 3}
+    volumeOffset: 0
     maxPlay: 0
   globalBGMVolumeOffset: 0
   masterMixer: {fileID: 24100000, guid: 003f3addf47f17f4cadaded4762c0df6, type: 2}

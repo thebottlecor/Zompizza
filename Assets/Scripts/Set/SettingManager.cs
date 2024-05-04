@@ -351,6 +351,8 @@ public class SettingManager : Singleton<SettingManager>
     public CanvasGroup settingCanvasGroup;
     public RectTransform settingRectTransform;
 
+    public ScrollingUIEffect scrollEffect;
+
     public bool loading;
     public bool opened;
 
@@ -404,6 +406,7 @@ public class SettingManager : Singleton<SettingManager>
             return;
         }
 
+        scrollEffect.enabled = true;
         loading = true;
 
         SelectSubPanel(activeSubPanel);
@@ -423,6 +426,7 @@ public class SettingManager : Singleton<SettingManager>
         if (!opened) return;
         if (loading) return;
 
+        scrollEffect.enabled = false;
         opened = false;
         loading = true;
 

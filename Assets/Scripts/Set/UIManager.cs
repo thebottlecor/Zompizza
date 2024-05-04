@@ -24,7 +24,8 @@ public class UIManager : Singleton<UIManager>
     public List<OrderMiniUI> orderMiniUIs;
     public GameObject orderMiniUIParent;
 
-    public GameObject otherDrivingInfo;
+    public GameObject speedInfo;
+    public GameObject timeInfo;
 
     [Header("¿Á∑·√¢")]
     public GameObject ingredient_Source;
@@ -105,6 +106,12 @@ public class UIManager : Singleton<UIManager>
 
         if (HotKey[KeyMap.escape].GetkeyDown())
         {
+            if (GM.Instance.gameOverWaringObj.activeSelf)
+            {
+                GM.Instance.ShowGameOverWaring(false);
+                return;
+            }
+
             if (utilUI.IsActive)
             {
                 utilUI.HideUI();
@@ -138,6 +145,18 @@ public class UIManager : Singleton<UIManager>
             {
                 orderUIObjects[list[i].customerIdx].UIUpdate(list[i]);
                 orderUIObjects[list[i].customerIdx].gameObject.SetActive(true);
+                orderUIObjects[list[i].customerIdx].ButtonUpdate();
+            }
+        }
+    }
+    public void OrderUIBtnUpdate()
+    {
+        var list = OrderManager.Instance.orderList;
+        for (int i = 0; i < list.Count; i++)
+        {
+            if (!list[i].accepted)
+            {
+                orderUIObjects[list[i].customerIdx].ButtonUpdate();
             }
         }
     }

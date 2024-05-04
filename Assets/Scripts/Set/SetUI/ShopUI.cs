@@ -32,6 +32,8 @@ public class ShopUI : EventListener
 
     public bool playerStay;
 
+    public ScrollingUIEffect scrollEffect;
+
     public TextManager tm => TextManager.Instance;
     public TextMeshProUGUI[] buttonTexts;
 
@@ -73,7 +75,7 @@ public class ShopUI : EventListener
     {
         buttonTexts[0].text = tm.GetCommons("Order");
         buttonTexts[1].text = tm.GetCommons("Management");
-        buttonTexts[2].text = tm.GetCommons("Shop");
+        buttonTexts[2].text = tm.GetCommons("Upgrade");
         buttonTexts[3].text = tm.GetCommons("News");
 
         buttonTexts[4].text = tm.GetCommons("Back");
@@ -205,13 +207,15 @@ public class ShopUI : EventListener
             return;
         }
 
+        scrollEffect.enabled = true;
         UIManager.Instance.OffAll_Ingredient_Highlight();
         GM.Instance.stop_control = true;
         Time.timeScale = 0f;
         loading = true;
 
         UIManager.Instance.orderMiniUIParent.SetActive(false);
-        UIManager.Instance.otherDrivingInfo.SetActive(false);
+        UIManager.Instance.speedInfo.SetActive(false);
+        UIManager.Instance.timeInfo.SetActive(false);
         ExplorationManager.Instance.HideUI_ResultPanel_Instant();
         WorldMapManager.Instance.CloseMinimap();
 
@@ -236,6 +240,7 @@ public class ShopUI : EventListener
 
         DOTween.Kill(rectTransform);
         DOTween.Kill(canvasGroup);
+        scrollEffect.enabled = false;
         loading = false;
         opened = false;
 
@@ -252,13 +257,15 @@ public class ShopUI : EventListener
         if (!opened) return;
         if (loading) return;
 
+        scrollEffect.enabled = false;
         opened = false;
         GM.Instance.stop_control = false;
         Time.timeScale = 1f;
         loading = true;
 
         UIManager.Instance.orderMiniUIParent.SetActive(true);
-        UIManager.Instance.otherDrivingInfo.SetActive(true);
+        UIManager.Instance.speedInfo.SetActive(true);
+        UIManager.Instance.timeInfo.SetActive(true);
         ExplorationManager.Instance.HideUI_ResultPanel_Instant();
         WorldMapManager.Instance.OpenMinimap();
 
@@ -371,6 +378,19 @@ public class ShopUI : EventListener
 
         reviewObj.transform.SetAsFirstSibling();
         reviewDayObjects[day].transform.SetAsFirstSibling();
+    }
+
+    public void OrderTextUpdate()
+    {
+        OrderManager.Instance.GetDeliveringCount();
+        int current = OrderManager.Instance.currentAcceptance;
+        int max = OrderManager.Instance.MaxAccpetance;
+
+        if (current >= max)
+            orderText.text = tm.GetCommons("Order") + $" <color=#A91111><size=75%>({current}/{max})</color>";
+        else
+            orderText.text = tm.GetCommons("Order") + $" <size=75%>({current}/{max})";
+
     }
 
 }

@@ -139,7 +139,7 @@ public class Zombie2 : MonoBehaviour
             AudioManager.Instance.PlaySFX(Sfx.hittngPlayer);
 
             if (DamageEvent != null)
-                DamageEvent(null, 0.005f * UnityEngine.Random.Range(0.75f, 1.25f));
+                DamageEvent(null, Constant.zombie_damage * UnityEngine.Random.Range(0.75f, 1.25f));
         }
     }
 
