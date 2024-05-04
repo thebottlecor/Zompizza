@@ -5,7 +5,7 @@ using UnityEngine;
 public class Constant
 {
 
-    public const float dayTime = 180f;
+    public const float dayTime = 240f;
     public const int dayStartHour = 6;
     public const int dayEndHour = 18;
     public const float oneHour = dayTime / (dayEndHour - dayStartHour);
@@ -19,7 +19,7 @@ public class Constant
     public const float distanceScale = 0.005f; // 게임상 거리 200 = 1km
     public const float distance_1km = 1 / distanceScale;
 
-    public const float delivery_timeLimit_1km = 30f;
+    public const float delivery_timeLimit_1km = 40f;
     public const int delivery_reward_1km = 100;
 
     public const float delivery_order_km = 10f;
@@ -36,7 +36,7 @@ public class Constant
     // 동시 배달 가능 수 (기본)
     public const int baseMaxDeliveryAcceptance = 3;
 
-    public const float remainTime_Percent = 0.334f;
+    public const float remainTime_Percent = 0.5f;
     public const float remainTimeRating1 = 2.5f;
     public const float remainTimeRating2 = 2f;
     public const float remainTimeRating3 = 0.5f;

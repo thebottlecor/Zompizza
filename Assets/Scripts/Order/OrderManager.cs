@@ -17,7 +17,7 @@ public class OrderManager : Singleton<OrderManager>
 
     public SerializableDictionary<OrderInfo, OrderMiniUI> orderMiniUIPair;
 
-    public static EventHandler AllOrderRemovedEvent;
+    public static EventHandler<int> OrderRemovedEvent;
 
     public int MaxAccpetance => Constant.baseMaxDeliveryAcceptance;
     public int currentAcceptance;
@@ -123,6 +123,9 @@ public class OrderManager : Singleton<OrderManager>
                 orderList.RemoveAt(i);
             }
         }
+
+        if (OrderRemovedEvent != null)
+            OrderRemovedEvent(null, orderList.Count);
 
         UIManager.Instance.shopUI.OrderTextUpdate();
 
@@ -385,7 +388,7 @@ public class OrderManager : Singleton<OrderManager>
             }
             else
             {
-                if (orderList[i].timeLimit > GM.Instance.remainTime) // 배달 제한 시간이 남은 영업 시간 초과시
+                if (orderList[i].timeLimit * 0.5f > GM.Instance.remainTime) // 배달 제한 시간이 남은 영업 시간 초과시
                 {
                     // 미-접수 패널티
                     NotAcceptedOrderPenalty(orderList[i]);
@@ -401,8 +404,8 @@ public class OrderManager : Singleton<OrderManager>
         }
         if (someOrderRemoved)
         {
-            if (AllOrderRemovedEvent != null)
-                AllOrderRemovedEvent(null, null);
+            if (OrderRemovedEvent != null)
+                OrderRemovedEvent(null, orderList.Count);
         }
     }
 
@@ -538,8 +541,8 @@ public class OrderManager : Singleton<OrderManager>
 
         UIManager.Instance.OrderUIReset();
 
-        if (AllOrderRemovedEvent != null)
-            AllOrderRemovedEvent(null, null);
+        if (OrderRemovedEvent != null)
+            OrderRemovedEvent(null, orderList.Count);
     }
 
     private void NotAcceptedOrderPenalty(OrderInfo info)

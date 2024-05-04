@@ -100,6 +100,25 @@ public class GM : Singleton<GM>
     public static EventHandler<bool> EndTimeEvent; // true일시 마감
     private TextManager tm => TextManager.Instance;
 
+    protected override void AddListeners()
+    {
+        OrderManager.OrderRemovedEvent += OnOrderRemoved;
+    }
+
+    protected override void RemoveListeners()
+    {
+        OrderManager.OrderRemovedEvent -= OnOrderRemoved;
+    }
+
+    private void OnOrderRemoved(object sender, int e)
+    {
+        if (e == 0)
+        {
+            openImage.SetActive(false);
+            closeImage.SetActive(true);
+        }
+    }
+
     private void Start()
     {
         ingredients = new SerializableDictionary<Ingredient, int>();
@@ -182,14 +201,14 @@ public class GM : Singleton<GM>
 
         int hour = (int)(timer / Constant.oneHour);
         int minute = (int)((timer - hour * Constant.oneHour) / Constant.oneMinute);
-        int sec = (int)((timer - minute * Constant.oneMinute - hour * Constant.oneHour) / Constant.oneSec);
+        //int sec = (int)((timer - minute * Constant.oneMinute - hour * Constant.oneHour) / Constant.oneSec);
 
         hour += Constant.dayStartHour;
         if (hour >= Constant.dayEndHour)
         {
             hour = Constant.dayEndHour;
             minute = 0;
-            sec = 0;
+            //sec = 0;
 
             // 마감 시간 시간 정지
             if (!endTime)
@@ -203,18 +222,6 @@ public class GM : Singleton<GM>
                 timeText.text = dayStr[1];
             }
             endTime = true;
-        }
-        else
-        {
-            if (endTime)
-            {
-                openImage.SetActive(true);
-                closeImage.SetActive(false);
-
-                if (EndTimeEvent != null)
-                    EndTimeEvent(null, false);
-            }
-            endTime = false;
         }
 
         if (endTime)
@@ -394,6 +401,13 @@ public class GM : Singleton<GM>
         }
         else
             warning_gameOver = false;
+
+        openImage.SetActive(true);
+        closeImage.SetActive(false);
+
+        if (EndTimeEvent != null)
+            EndTimeEvent(null, false);
+        endTime = false;
 
         dayOne_Gold = new SerializableDictionary<GetGoldSource, int>();
         dayOne_Rating = new SerializableDictionary<GetRatingSource, float>();

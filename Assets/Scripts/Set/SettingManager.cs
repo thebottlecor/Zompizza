@@ -617,8 +617,8 @@ public class SettingManager : Singleton<SettingManager>
             fullScreenToggle.isOn = true;
             vsyncToggle.isOn = false;
 
-            bgmSlider.value = 1f;
-            sfxSlider.value = 1f;
+            bgmSlider.value = 0.5f;
+            sfxSlider.value = 0.5f;
         }
     }
 

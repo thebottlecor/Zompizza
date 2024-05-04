@@ -96,7 +96,7 @@ public class ShopUI : EventListener
         ShopEnter.PlayerArriveEvent += OnPlayerArriveShop;
         ShopEnter.PlayerExitEvent += OnPlayerExitShop;
         PizzaDirection.PizzaCompleteEvent += OnPizzaCompleted;
-        OrderManager.AllOrderRemovedEvent += OnOrderRemoved;
+        OrderManager.OrderRemovedEvent += OnOrderRemoved;
         GM.EndTimeEvent += OnEndtime;
     }
 
@@ -105,7 +105,7 @@ public class ShopUI : EventListener
         ShopEnter.PlayerArriveEvent -= OnPlayerArriveShop;
         ShopEnter.PlayerExitEvent -= OnPlayerExitShop;
         PizzaDirection.PizzaCompleteEvent -= OnPizzaCompleted;
-        OrderManager.AllOrderRemovedEvent -= OnOrderRemoved;
+        OrderManager.OrderRemovedEvent -= OnOrderRemoved;
         GM.EndTimeEvent -= OnEndtime;
     }
 
@@ -124,8 +124,13 @@ public class ShopUI : EventListener
     {
         UpdatePizzaBox(e);
     }
-    private void OnOrderRemoved(object sender, EventArgs e)
+    private void OnOrderRemoved(object sender, int e)
     {
+        if (e == 0)
+        {
+            OnEndtime(null, true);
+        }
+
         UpdatePizzaBox(null);
     }
 
