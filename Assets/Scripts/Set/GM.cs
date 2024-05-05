@@ -27,6 +27,7 @@ public class GM : Singleton<GM>
     public RectTransform speedNiddle;
 
     public PlayerController player;
+    public Transform pizzeriaPos;
 
     private int displayGold;
     public TextMeshProUGUI[] goldText;
@@ -71,7 +72,7 @@ public class GM : Singleton<GM>
 
     public Light globalLight;
     public Vector3 lightAngleX = new Vector3(140f, 120f, 160f);
-    public Vector2 lightAngleY = new Vector2(-60f, 100f);
+    public Vector2 lightAngleY = new Vector2(-80f, 100f);
     private bool endTime;
 
     public CanvasGroup darkCanvas;
@@ -229,7 +230,9 @@ public class GM : Singleton<GM>
             //timeText.text = dayStr[1];
         }
         else
+        {
             timeText.text = dayStr[0] + $"{hour:00}:{minute:00}";
+        }
 
         float timePercent = timer / Constant.dayTime;
         globalLight.color = DataManager.Instance.uiLib.timeLightGradient.Evaluate(timePercent);
@@ -238,12 +241,12 @@ public class GM : Singleton<GM>
 
         if (hour < 12)
         {
-            timePercent = timer / (Constant.oneHour * 4);
+            timePercent = timer / (Constant.oneHour * 6);
             lightAngle.x = (lightAngleX.y - lightAngleX.x) * timePercent + lightAngleX.x;
         }
         else
         {
-            timePercent = timer / (Constant.oneHour * 8) - 0.5f;
+            timePercent = timer / (Constant.oneHour * 12) - 0.5f;
             lightAngle.x = (lightAngleX.z - lightAngleX.y) * timePercent + lightAngleX.y;
         }
 
@@ -258,7 +261,7 @@ public class GM : Singleton<GM>
     public void DayStringUpdate()
     {
         dayStr[0] = string.Format(tm.GetCommons("Day"), day + 1) + "  ";
-        dayStr[1] = string.Format(tm.GetCommons("Day"), day + 1) + "  <color=#ff0000>18:00</color>"; // 영업 종료시
+        dayStr[1] = string.Format(tm.GetCommons("Day"), day + 1) + "  <color=#A91111>18:00</color>"; // 영업 종료시
     }
 
     public void NextDay()

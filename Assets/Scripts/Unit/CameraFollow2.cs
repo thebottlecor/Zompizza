@@ -18,8 +18,11 @@ public class CameraFollow2 : MonoBehaviour {
 
 	public Camera uiCam;
 
+	int layerMask;
+
     private void Awake()
     {
+		layerMask = 1 << LayerMask.NameToLayer("EnvironmentObject");
 		uiCam.gameObject.SetActive(false);
 	}
 
@@ -50,22 +53,39 @@ public class CameraFollow2 : MonoBehaviour {
 	void LateUpdate()
 	{
 		Vector3 direction = (carTransform.position - transform.position).normalized;
-		RaycastHit[] hits = Physics.RaycastAll(transform.position, direction, Mathf.Infinity, 1 << LayerMask.NameToLayer("EnvironmentObject"));
+		//RaycastHit[] hits = Physics.RaycastAll(transform.position, direction, Mathf.Infinity, 1 << LayerMask.NameToLayer("EnvironmentObject"));
 
-		for (int i = 0; i < hits.Length; i++)
+		//for (int i = 0; i < hits.Length; i++)
+		//{
+		//	var hitsTransform = hits[i].transform;
+		//	var check = hitsTransform.gameObject.GetComponent<TransparentObject>();
+		//	if (check == null)
+		//          {
+		//		var obj = hitsTransform.gameObject.AddComponent<TransparentObject>();
+		//		obj.Init(1f);
+		//          }
+		//	else
+		//          {
+		//		check.timer = 1f;
+		//          }
+		//}
+
+		RaycastHit hitInfo;
+		Ray ray = new Ray(transform.position, direction);
+		if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, layerMask, QueryTriggerInteraction.UseGlobal))
 		{
-			var hitsTransform = hits[i].transform;
-			var check = hitsTransform.gameObject.GetComponent<TransparentObject>();
-			if (check == null)
+			var hitsTransform = hitInfo.transform;
+            var check = hitsTransform.gameObject.GetComponent<TransparentObject>();
+            if (check == null)
             {
-				var obj = hitsTransform.gameObject.AddComponent<TransparentObject>();
-				obj.Init(1f);
+                var obj = hitsTransform.gameObject.AddComponent<TransparentObject>();
+                obj.Init(1f);
             }
-			else
+            else
             {
-				check.timer = 1f;
+                check.timer = 1f;
             }
-		}
+        }
 	}
 
 	public void Shake(float strength)

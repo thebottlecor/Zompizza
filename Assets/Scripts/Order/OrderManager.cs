@@ -531,7 +531,7 @@ public class OrderManager : Singleton<OrderManager>
             else
             {
                 // 미완료 리뷰 남기기 -5점
-                UIManager.Instance.shopUI.AddReview(orderList[i], -2.5f, -2.5f);
+                UIManager.Instance.shopUI.AddReview(orderList[i], -10000f, -5f); // 구분 기능 -1000 => -5는 점수
             }
 
             orderMiniUIPair[orderList[i]].Hide();
@@ -550,12 +550,12 @@ public class OrderManager : Singleton<OrderManager>
         if (CheckIngredient(info)) // 재료를 가지고 있었던 경우
         {
             GM.Instance.AddRating(Constant.delivery_Not_accepted_rating, GM.GetRatingSource.notAccepted);
-            UIManager.Instance.shopUI.AddReview(info, -1.5f, -1.0f);
+            UIManager.Instance.shopUI.AddReview(info, -1000f, -2.5f); // 구분 기능 -100 => -2.5는 점수
         }
         else
         {
             GM.Instance.AddRating(Constant.delivery_Impossible_accepted_rating, GM.GetRatingSource.notAccepted);
-            UIManager.Instance.shopUI.AddReview(info, -1.0f, -0.5f);
+            UIManager.Instance.shopUI.AddReview(info, -100f, -1.5f); // 구분 기능 -100 => -1.5는 점수
         }
     }
 }

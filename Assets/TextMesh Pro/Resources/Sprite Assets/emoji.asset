@@ -70,6 +70,12 @@ MonoBehaviour:
     m_Scale: 1
     m_Name: emoji_4
     m_HashCode: 1050437583
+  - m_ElementType: 2
+    m_Unicode: 65534
+    m_GlyphIndex: 5
+    m_Scale: 1
+    m_Name: emoji_5
+    m_HashCode: 1050437582
   m_SpriteGlyphTable:
   - m_Index: 0
     m_Metrics:
@@ -151,6 +157,22 @@ MonoBehaviour:
     m_AtlasIndex: 0
     m_ClassDefinitionType: 0
     sprite: {fileID: -835645486, guid: 7a479848be6d29f4da206bc36108386a, type: 3}
+  - m_Index: 5
+    m_Metrics:
+      m_Width: 32
+      m_Height: 32
+      m_HorizontalBearingX: -4
+      m_HorizontalBearingY: 28
+      m_HorizontalAdvance: 28
+    m_GlyphRect:
+      m_X: 69
+      m_Y: 61
+      m_Width: 32
+      m_Height: 32
+    m_Scale: 1
+    m_AtlasIndex: 0
+    m_ClassDefinitionType: 0
+    sprite: {fileID: 311702552, guid: 7a479848be6d29f4da206bc36108386a, type: 3}
   spriteInfoList: []
   fallbackSpriteAssets: []
 --- !u!21 &702325599951436389

@@ -30,6 +30,24 @@ public class ReviewObject : Review
 
         float rating = timeRating + hpRating;
 
+        int specialCase = 0;
+
+        if (timeRating == -10000f)
+        {
+            rating = hpRating; // 주문 미배달의 경우
+            specialCase = 1;
+        }
+        else if (timeRating == -1000f)
+        {
+            rating = hpRating; // 재료가 있어도 받지 않았던 경우
+            specialCase = 2;
+        }
+        else if (timeRating == -100f)
+        {
+            rating = hpRating; // 재료가 부족했던 경우
+            specialCase = 3;
+        }
+
         StringBuilder st = new StringBuilder();
 
         int emoji_Time;
@@ -56,9 +74,26 @@ public class ReviewObject : Review
         else
             emoji_Pizza = 0;
 
-        st.AppendFormat("<size=120%><sprite={0}></size>   <sprite=\"emoji\" index={1}>", 3, emoji_Time);
-        st.Append("          ");
-        st.AppendFormat("<size=120%><sprite={0}></size>   <sprite=\"emoji\" index={1}>", 0, emoji_Pizza);
+        switch (specialCase)
+        {
+            case 0:
+                st.AppendFormat("<size=120%><sprite={0}></size>   <sprite=\"emoji\" index={1}>", 3, emoji_Time);
+                st.Append("          ");
+                st.AppendFormat("<size=120%><sprite={0}></size>   <sprite=\"emoji\" index={1}>", 0, emoji_Pizza);
+                break;
+            case 1:
+                st.AppendFormat("<size=120%><sprite={0}></size>   <sprite=\"emoji\" index={1}>", 3, 5);
+                st.Append("          ");
+                st.AppendFormat("<size=120%><sprite={0}></size>   <sprite=\"emoji\" index={1}>", 0, 5);
+                break;
+            case 2:
+                st.AppendFormat("<size=120%><sprite={0}></size>   <sprite=\"emoji\" index={1}>", 3, 5);
+                break;
+            case 3:
+                st.AppendFormat("<size=120%><sprite={0}></size>   <sprite=\"emoji\" index={1}>", 0, 5);
+                break;
+        }
+
         st.Append("\n<line-height=50%> \n");
         st.AppendFormat("   {0:0.#}  ", rating);
 
