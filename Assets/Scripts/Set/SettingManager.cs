@@ -260,7 +260,7 @@ public class SettingManager : Singleton<SettingManager>
             AudioManager.Instance.PlaySFX(Sfx.buttons);
         });
         restoreDefaultsTMP = resetButton.GetComponentInChildren<TextMeshProUGUI>();
-        restoreDefaultsTMP.text = TextManager.Instance.GetCommons("RestoreDefaults");
+        restoreDefaultsTMP.text = tm.GetCommons("RestoreDefaults");
     }
 
     private void Update()
@@ -357,6 +357,8 @@ public class SettingManager : Singleton<SettingManager>
     public bool opened;
 
     public bool IsActive => loading || opened;
+
+    private TextManager tm => TextManager.Instance;
 
     public void ReturnToParent()
     {
@@ -470,7 +472,6 @@ public class SettingManager : Singleton<SettingManager>
 
     public void UpdateTexts()
     {
-        var tm = TextManager.Instance;
         if (restoreDefaultsTMP != null)
             restoreDefaultsTMP.text = tm.GetCommons("RestoreDefaults");
 
@@ -537,7 +538,7 @@ public class SettingManager : Singleton<SettingManager>
     public void SetCameraSpeed(float value)
     {
         cameraSpeed = value;
-        cameraSpeedTMP.text = string.Format(TextManager.Instance.GetCommons("CameraSpeed"), cameraSpeed);
+        cameraSpeedTMP.text = string.Format(tm.defaultCultureInfo, tm.GetCommons("CameraSpeed"), cameraSpeed);
         SaveManager.Instance.SaveConfig();
     }
 

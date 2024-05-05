@@ -2,6 +2,7 @@ using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -63,12 +64,25 @@ public class ShopUI : EventListener
     public List<ReviewDayObject> reviewDayObjects;
     public List<Review> reviewObjects;
 
+    [Header("업그레이드탭")]
+    public TextMeshProUGUI upgradeText;
+    public int currentSelectUpgrade;
+    public GameObject upgradeUI_Source;
+    public TextMeshProUGUI[] upgradeUI_GroupText;
+    public Transform[] upgradeUI_Parent;
+    public TextMeshProUGUI upgradeDetailText;
+    public Dictionary<int, ResearchUI> researchUIs;
+    public Button upgrade_UnlockBtn;
+    public TextMeshProUGUI upgrade_UnlockBtnText;
+    public UpgradeDirection upgradeDirection;
+
     public void Init()
     {
         reviewDayObjects = new List<ReviewDayObject>();
         reviewObjects = new List<Review>();
 
         DayFirstReview();
+        CreateUpgradeUI();
     }
 
     public void UpdateTexts()
@@ -89,6 +103,12 @@ public class ShopUI : EventListener
         reviewsText.text = tm.GetCommons("Reviews");
         achievementText.text = tm.GetCommons("Achievement");
         statsText.text = tm.GetCommons("Stats");
+
+        upgradeText.text = tm.GetCommons("Upgrade");
+        upgrade_UnlockBtnText.text = tm.GetCommons("Upgrade");
+
+        upgradeUI_GroupText[0].text = tm.GetCommons("Shop");
+        upgradeUI_GroupText[1].text = tm.GetCommons("Vehicle");
     }
 
     protected override void AddListeners()
@@ -301,6 +321,11 @@ public class ShopUI : EventListener
             if (UIManager.Instance.isDirecting) 
                 OrderManager.Instance.pizzaDirection.StopSequence();
             ExplorationManager.Instance.HideUI_ResultPanel_Instant();
+
+            if (idx == 2)
+            {
+                SelectUpgrade(-1);
+            }
         }
 
         for (int i = 0; i < panelButtonPairs.Count; i++)
@@ -398,4 +423,117 @@ public class ShopUI : EventListener
 
     }
 
+    #region 업그레이드
+    ResearchManager rm => ResearchManager.Instance;
+    public void CreateUpgradeUI()
+    {
+        var infos = DataManager.Instance.researches;
+        researchUIs = new Dictionary<int, ResearchUI>();
+
+        foreach (var temp in infos)
+        {
+            var obj = Instantiate(upgradeUI_Source, upgradeUI_Parent[temp.Value.group]);
+            ResearchUI researchUI = obj.GetComponent<ResearchUI>();
+            researchUI.Init(temp.Key);
+            researchUIs.Add(temp.Key, researchUI);
+        }
+    }
+
+    public void SelectUpgrade(int idx)
+    {
+        currentSelectUpgrade = idx;
+
+        if (idx == -1)
+        {
+            upgradeDetailText.text = string.Empty;
+            upgrade_UnlockBtn.gameObject.SetActive(false);
+            return;
+        }
+
+        var info = DataManager.Instance.researches[idx];
+
+        StringBuilder st = new StringBuilder();
+        st.AppendFormat("<size=120%><b>{0}</b> ({1}/{2})</size>", tm.GetResearch(idx), rm.GetResearchCount(idx), info.max);
+        st.AppendLine();
+        st.AppendFormat("{0} : {1}$", tm.GetCommons("Costs"), rm.GetCost(idx));
+        st.AppendLine();
+        st.AppendLine();
+        st.AppendFormat("<b>{0}</b>", tm.GetCommons("Effect"));
+        st.AppendLine();
+
+        float goldGet = info.effect.goldGet;
+        float ratingGet = info.effect.ratingGet;
+        int maxSpeed = info.effect.maxSpeed;
+        float defense = info.effect.damageReduce;
+
+        st.Append("<size=90%>");
+        if (goldGet != 0f)
+        {
+            string sub;
+            if (goldGet > 0f)
+                sub = string.Format(tm.defaultCultureInfo, "+{0:P0}", goldGet);
+            else
+                sub = string.Format(tm.defaultCultureInfo, "{0:P0}", goldGet);
+            st.AppendFormat(tm.GetCommons("UpgradeEffect0"), "<sprite=2>", sub);
+            st.AppendLine();
+        }
+        if (ratingGet != 0f)
+        {
+            string sub;
+            if (ratingGet > 0f)
+                sub = string.Format(tm.defaultCultureInfo, "+{0:P0}", ratingGet);
+            else
+                sub = string.Format(tm.defaultCultureInfo, "{0:P0}", ratingGet);
+            st.AppendFormat(tm.GetCommons("UpgradeEffect1"), "<sprite=1>", sub);
+            st.AppendLine();
+        }
+        if (maxSpeed != 0)
+        {
+            string sub;
+            if (maxSpeed > 0f)
+                sub = string.Format("+{0}km/h", maxSpeed);
+            else
+                sub = string.Format("{0}km/h", maxSpeed);
+            st.AppendFormat(tm.GetCommons("UpgradeEffect2"), sub);
+            st.AppendLine();
+        }
+        if (defense != 0)
+        {
+            string sub;
+            if (defense > 0f)
+                sub = string.Format(tm.defaultCultureInfo, "+{0:P0}", defense);
+            else
+                sub = string.Format(tm.defaultCultureInfo, "{0:P0}", defense);
+            st.AppendFormat(tm.GetCommons("UpgradeEffect3"), sub);
+            st.AppendLine();
+        }
+
+        upgradeDetailText.text = st.ToString();
+
+        upgrade_UnlockBtn.gameObject.SetActive(true);
+        upgrade_UnlockBtn.enabled = !rm.MaxResearched(idx);
+    }
+
+    public void ClickUpgrade()
+    {
+        if (currentSelectUpgrade < 0) return;
+
+        bool result = rm.ResearchUnlock(currentSelectUpgrade);
+
+        if (result)
+        {
+            // 성공 연출
+            AudioManager.Instance.PlaySFX(Sfx.complete);
+            upgradeDirection.Show();
+
+            researchUIs[currentSelectUpgrade].UpdateUI();
+
+            SelectUpgrade(currentSelectUpgrade);
+        }
+        else
+        {
+            AudioManager.Instance.PlaySFX(Sfx.deny);
+        }
+    }
+    #endregion
 }

@@ -71,9 +71,7 @@ public class OrderUIObject : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
         for (int i = 0; i < info.pizzas.Count; i++)
         {
-
             //string pizza = string.Format("{0} {1}{2}", tm.GetCommons("Pizza"), info.pizzas[i].stack, string.IsNullOrEmpty(subStr) ? string.Empty : subStr);
-            string pizza = string.Format("{0}", tm.GetCommons("Pizza"));
             StringBuilder ele = new StringBuilder();
             int count = info.pizzas[i].ingredients.Count;
             foreach (var element in info.pizzas[i].ingredients)
@@ -85,7 +83,7 @@ public class OrderUIObject : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                 if (count > 0)
                     ele.AppendFormat("{0}", string.IsNullOrEmpty(subStr2) ? ", " : subStr2);
             }
-            st.AppendFormat(tm.GetCommons("OrderDetail"), ele, pizza);
+            st.AppendFormat(tm.GetCommons("OrderDetail"), ele, tm.GetCommons("Pizza"));
 
             if (i + 1 < info.pizzas.Count)
                 st.Append("\n");

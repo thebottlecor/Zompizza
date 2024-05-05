@@ -5,9 +5,10 @@ using UnityEngine;
 [System.Serializable]
 public struct ResearchEffect
 {
-    public float happiness;
-    public float health;
-    public float efficiency;
+    public float goldGet;
+    public float ratingGet;
+    public int maxSpeed;
+    public float damageReduce;
 }
 //[System.Serializable]
 //public struct ResearchUnlockRecipe
@@ -21,8 +22,9 @@ public class ResearchInfo : ScriptableObject
 {
 
     public int idx;
-    public int tier;
-    public int height;
+    //public int tier;
+    //public int height;
+    public int group;
 
     // 최대 연구 가능 횟수
     public int max = 1;
@@ -39,13 +41,26 @@ public class ResearchInfo : ScriptableObject
 
     public Sprite icon;
 
+    public int Cost(int level = 0)
+    {
+        int value = cost;
+
+        if (level >= 1)
+            value += (int)(level * increaseCost);
+
+        return value;
+    }
+
     public ResearchEffect AddEffect(ResearchEffect global)
     {
+
         ResearchEffect temp = new ResearchEffect
         {
-            happiness = effect.happiness + global.happiness,
-            health = effect.health + global.health,
-            efficiency = effect.efficiency + global.efficiency,
+            goldGet = effect.goldGet + global.goldGet,
+            ratingGet = effect.ratingGet + global.ratingGet,
+            maxSpeed = effect.maxSpeed + global.maxSpeed,
+            damageReduce = effect.damageReduce + global.damageReduce,
+
         };
         return temp;
     }

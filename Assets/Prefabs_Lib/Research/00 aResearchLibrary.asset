@@ -10,7 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: abeff7909108b6f4292cde58c8cb08fc, type: 3}
-  m_Name: 00 ResearchLibrary
+  m_Name: 00 aResearchLibrary
   m_EditorClassIdentifier: 
   researchInfos:
   - {fileID: 11400000, guid: 9ead68186c5b6bf48b6639bda12c4ced, type: 2}
+  - {fileID: 11400000, guid: 5122d7314cca14b4a8e00c742d2823ce, type: 2}
+  - {fileID: 11400000, guid: 5ddefd42d7a32fd4895e86e32a1719cc, type: 2}
+  - {fileID: 11400000, guid: a544197b1108b8e428061ff21cf06b5d, type: 2}

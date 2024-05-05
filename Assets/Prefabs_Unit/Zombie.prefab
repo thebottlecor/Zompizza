@@ -184,13 +184,13 @@ MonoBehaviour:
     autoRepath:
       mode: 2
       period: 0.5
-      sensitivity: 10
-      maximumPeriod: 2
+      sensitivity: 9
+      maximumPeriod: 3
       visualizeSensitivity: 0
     rvoSettings:
-      agentTimeHorizon: 0.5
-      obstacleTimeHorizon: 0.25
-      maxNeighbours: 5
+      agentTimeHorizon: 1
+      obstacleTimeHorizon: 0.5
+      maxNeighbours: 4
       layer: 1
       collidesWith: 1
       priority: 0.5

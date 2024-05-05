@@ -42,12 +42,16 @@ public class ResearchManager : Singleton<ResearchManager>
 
     private SerializableDictionary<int, int> researchedCount;
     public bool Researched(int idx) => researchedCount[idx] >= 1;
-    public bool Researched2(int idx)
+    public bool MaxResearched(int idx)
     {
         if (ResearchInfo[idx].max == 1)
             return Researched(idx);
         else
             return researchedCount[idx] >= ResearchInfo[idx].max;
+    }
+    public float GetResearchedPercent(int idx)
+    {
+        return (float)researchedCount[idx] / ResearchInfo[idx].max;
     }
     public int GetResearchCount(int idx) => researchedCount[idx];
 
@@ -127,7 +131,7 @@ public class ResearchManager : Singleton<ResearchManager>
 
     public static EventHandler<int> researchCompleteEvent;
 
-    private void Start()
+    public void Init()
     {
         globalEffect = new ResearchEffect();
         researchedCount = new SerializableDictionary<int, int>();
@@ -263,16 +267,7 @@ public class ResearchManager : Singleton<ResearchManager>
         int gold = GM.Instance.gold;
         var info = ResearchInfo[idx];
 
-        int needCost;
-
-        if (info.max > 1)
-        {
-            needCost = info.cost + (int)(info.increaseCost * researchedCount[idx]);
-        }
-        else
-        {
-            needCost = info.cost;
-        }
+        int needCost = GetCost(idx);
 
         if (gold < needCost)
             return false;
@@ -281,7 +276,11 @@ public class ResearchManager : Singleton<ResearchManager>
         GM.Instance.AddGold(-1 * needCost, GM.GetGoldSource.upgrade);
         return true;
     }
-
+    public int GetCost(int idx)
+    {
+        var info = ResearchInfo[idx];
+        return info.Cost(researchedCount[idx]);
+    }
     public bool AllResearched()
     {
         bool result = true;

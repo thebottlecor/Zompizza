@@ -25,6 +25,9 @@ public class PlayerController : MonoBehaviour
     [Space(10)]
     [Range(20, 190)]
     public int maxSpeed = 90; //The maximum speed that the car can reach in km/h.
+    public int MaxSpeed => ResearchManager.Instance.globalEffect.maxSpeed + maxSpeed;
+    public float DamageReduction => 1f - ResearchManager.Instance.globalEffect.damageReduce;
+
     [Range(10, 120)]
     public int maxReverseSpeed = 45; //The maximum speed that the car can reach while going on reverse in km/h.
     [Range(1, 10)]
@@ -180,6 +183,7 @@ public class PlayerController : MonoBehaviour
         {
             meshRenderers[i].material = DataManager.Instance.materialLib.baseMaterial;
         }
+        hitCoroutine = null;
     }
 
     private SerializableDictionary<KeyMap, KeyMapping> HotKey => SettingManager.Instance.keyMappings;
@@ -194,7 +198,7 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Zombie"))
         {
-            float speedPercent = Mathf.Abs(carSpeed) / maxSpeed;
+            float speedPercent = Mathf.Abs(carSpeed) / MaxSpeed;
             ContactPoint cp = collision.GetContact(0);
             Zombie2 zombie = collision.gameObject.GetComponent<Zombie2>();
             //Zombie zombie = collision.gameObject.GetComponent<Zombie>();
@@ -381,7 +385,7 @@ public class PlayerController : MonoBehaviour
         if (isCollision)
         {
             isCollision = false;
-            float speedPercent = Mathf.Abs(beforeCollisionSpeed) / maxSpeed;
+            float speedPercent = Mathf.Abs(beforeCollisionSpeed) / MaxSpeed;
             if (speedPercent > 0.15f)
             {
                 float speedDiff = carSpeed - beforeCollisionSpeed;
@@ -523,7 +527,7 @@ public class PlayerController : MonoBehaviour
         {
             for (int i = contactingZombies.Count - 1; i >= 0; i--)
             {
-                float speedPercent = Mathf.Abs(carSpeed) / maxSpeed;
+                float speedPercent = Mathf.Abs(carSpeed) / MaxSpeed;
                 contactingZombies[i].DriftOffContact(localVelocityX, speedPercent);
                 contactingZombies.RemoveAt(i);
             }
@@ -680,7 +684,7 @@ public class PlayerController : MonoBehaviour
       if(localVelocityZ < -1f){
         Brakes();
       }else{
-        if(Mathf.RoundToInt(carSpeed) < maxSpeed){
+        if(Mathf.RoundToInt(carSpeed) < MaxSpeed){
           //Apply positive torque in all wheels to go forward if maxSpeed has not been reached.
           frontLeftCollider.brakeTorque = 0;
           frontLeftCollider.motorTorque = (accelerationMultiplier * 50f) * throttleAxis;

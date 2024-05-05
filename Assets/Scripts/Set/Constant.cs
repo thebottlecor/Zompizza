@@ -32,6 +32,7 @@ public class Constant
 
     public const float crash_damage = 0.05f;
     public const float zombie_damage = 0.01f;
+    public const float min_damage = 0.001f;
 
     // 동시 배달 가능 수 (기본)
     public const int baseMaxDeliveryAcceptance = 3;

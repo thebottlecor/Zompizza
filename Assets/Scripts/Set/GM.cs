@@ -149,6 +149,7 @@ public class GM : Singleton<GM>
 
         day = 0;
         DayStringUpdate();
+        ResearchManager.Instance.Init();
         UIManager.Instance.shopUI.Init();
         OrderManager.Instance.Init();
     }
@@ -184,7 +185,7 @@ public class GM : Singleton<GM>
 
         gameOverWaringBtn_Text.text = tm.GetCommons("Close");
         gameOverWaring_Text.text = tm.GetCommons("Warning");
-        gameOverWaringDetail_Text.text = tm.GetCommons("GameoverWarning");
+        gameOverWaringDetail_Text.text = string.Format(tm.GetCommons("GameoverWarning"), "<size=90%><sprite=1></size>");
     }
 
     private void Update()
@@ -255,7 +256,7 @@ public class GM : Singleton<GM>
 
     private void FixedUpdate()
     {
-        CarSpeedUI(player.carSpeed, player.maxSpeed);
+        CarSpeedUI(player.carSpeed, player.MaxSpeed);
     }
 
     public void DayStringUpdate()
@@ -474,6 +475,7 @@ public class GM : Singleton<GM>
 
     public void AddGold(int value, GetGoldSource source)
     {
+        //if (value > 0f) value = (int)(value * (1f + ResearchManager.Instance.globalEffect.goldGet));
         int target = gold + value;
         DOVirtual.Int(gold, target, 0.75f, (x) =>
         {
@@ -500,6 +502,7 @@ public class GM : Singleton<GM>
     }
     public void AddRating(float value, GetRatingSource source)
     {
+        //if (value > 0f) value *= (1f + ResearchManager.Instance.globalEffect.ratingGet);
         float target = rating + value;
         DOVirtual.Float(rating, target, 0.75f, (x) =>
         {

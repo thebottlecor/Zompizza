@@ -107,9 +107,12 @@ public class OrderManager : Singleton<OrderManager>
                 }
 
                 float resultRating = timeRating + hpRating;
+                if (resultRating > 0f) resultRating *= (1f + ResearchManager.Instance.globalEffect.ratingGet);
+                resultRating = Mathf.Min(Constant.remainHpRating1 + Constant.remainTimeRating1, resultRating);
                 GM.Instance.AddRating(resultRating, GM.GetRatingSource.delivery);
 
                 int rewards = orderList[i].rewards;
+                if (rewards > 0f) rewards = (int)(rewards * (1f + ResearchManager.Instance.globalEffect.goldGet));
 
                 GM.Instance.AddGold(rewards, GM.GetGoldSource.delivery);
                 UIManager.Instance.shopUI.AddReview(orderList[i], timeRating, hpRating);
@@ -138,7 +141,8 @@ public class OrderManager : Singleton<OrderManager>
         {
             if (orderList[i].accepted)
             {
-                orderList[i].hp -= e;
+                float damage = Mathf.Max(Constant.min_damage, GM.Instance.player.DamageReduction * e);
+                orderList[i].hp -= damage;
                 if (orderList[i].hp < 0f) orderList[i].hp = 0f;
 
                 orderMiniUIPair[orderList[i]].UpdateHpGauge(orderList[i].hp);
