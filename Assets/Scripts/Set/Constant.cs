@@ -5,7 +5,7 @@ using UnityEngine;
 public class Constant
 {
 
-    public const float dayTime = 240f;
+    public const float dayTime = 180f;
     public const int dayStartHour = 6;
     public const int dayEndHour = 18;
     public const float oneHour = dayTime / (dayEndHour - dayStartHour);
@@ -35,7 +35,9 @@ public class Constant
     public const float min_damage = 0.001f;
 
     // 동시 배달 가능 수 (기본)
-    public const int baseMaxDeliveryAcceptance = 3;
+    public const int baseMaxDeliveryAcceptance = 2;
+
+    public const int explorationQuantityMax = 30;
 
     public const float remainTime_Percent = 0.5f;
     public const float remainTimeRating1 = 2.5f;

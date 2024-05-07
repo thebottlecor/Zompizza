@@ -85,6 +85,7 @@ MonoBehaviour:
   animator: {fileID: 9090047537539905066}
   contactingPlayer: 0
   contact: 0
+  isHeavy: 0
   dead: 0
   meshRenderer: {fileID: 7066969436891953704}
   shadow: {fileID: 5551583242430911235}
@@ -163,7 +164,7 @@ MonoBehaviour:
   movement:
     follower:
       rotationSpeed: 600
-      speed: 3
+      speed: 3.5
       maxRotationSpeed: 720
       maxOnSpotRotationSpeed: 720
       slowdownTime: 0.5
@@ -1092,7 +1093,7 @@ GameObject:
   - component: {fileID: 9090047537539905066}
   - component: {fileID: 7608486549936029157}
   m_Layer: 7
-  m_Name: SA_Zombie_AirportSecurity (1)
+  m_Name: SA_Zombie
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1156,5 +1157,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 3, z: 1}
+  m_Size: {x: 1, y: 3, z: 0.5}
   m_Center: {x: 0, y: 1.5, z: 0}

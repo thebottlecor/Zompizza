@@ -158,6 +158,7 @@ public class OrderUIObject : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
         WorldMapManager.Instance.ToggleCustomerMode(true, pos, info.customerIdx);
         UIManager.Instance.utilUI.OpenWorldMap();
+        UIManager.Instance.ButtonSound();
     }
 
     public void OnPointerEnter(PointerEventData eventData)

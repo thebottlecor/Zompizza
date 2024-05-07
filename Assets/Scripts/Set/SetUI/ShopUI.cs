@@ -38,11 +38,19 @@ public class ShopUI : EventListener
     public TextManager tm => TextManager.Instance;
     public TextMeshProUGUI[] buttonTexts;
 
+    [Header("상점탭")]
     public Image[] pizzaBoys;
     public Image[] pizzaBoxes;
 
     public ScrollRect scrollRect;
     public RectTransform contentPanel;
+
+    public Button shopCloseBtn;
+    public TextMeshProUGUI shopCloseBtn_Text;
+    public GameObject shopCloseWarningObj;
+    public TextMeshProUGUI[] shopCloseWarningBtn_Text;
+    public TextMeshProUGUI shopCloseWarning_Text;
+    public TextMeshProUGUI shopCloseWarningDetail_Text;
 
     [Header("야간 모드")]
     public GameObject orderPanel;
@@ -109,12 +117,18 @@ public class ShopUI : EventListener
 
         upgradeUI_GroupText[0].text = tm.GetCommons("Shop");
         upgradeUI_GroupText[1].text = tm.GetCommons("Vehicle");
+
+        shopCloseBtn_Text.text = tm.GetCommons("ShopClose");
+        shopCloseWarning_Text.text = tm.GetCommons("Warning");
+        shopCloseWarningDetail_Text.text = tm.GetCommons("ShopCloseWarning");
+        shopCloseWarningBtn_Text[0].text = tm.GetCommons("Close");
+        shopCloseWarningBtn_Text[1].text = tm.GetCommons("Cancel");
     }
 
     protected override void AddListeners()
     {
         ShopEnter.PlayerArriveEvent += OnPlayerArriveShop;
-        ShopEnter.PlayerExitEvent += OnPlayerExitShop;
+        ShopExiter.PlayerExitEvent += OnPlayerExitShop;
         PizzaDirection.PizzaCompleteEvent += OnPizzaCompleted;
         OrderManager.OrderRemovedEvent += OnOrderRemoved;
         GM.EndTimeEvent += OnEndtime;
@@ -123,7 +137,7 @@ public class ShopUI : EventListener
     protected override void RemoveListeners()
     {
         ShopEnter.PlayerArriveEvent -= OnPlayerArriveShop;
-        ShopEnter.PlayerExitEvent -= OnPlayerExitShop;
+        ShopExiter.PlayerExitEvent -= OnPlayerExitShop;
         PizzaDirection.PizzaCompleteEvent -= OnPizzaCompleted;
         OrderManager.OrderRemovedEvent -= OnOrderRemoved;
         GM.EndTimeEvent -= OnEndtime;
@@ -137,7 +151,10 @@ public class ShopUI : EventListener
 
     private void OnPlayerExitShop(object sender, EventArgs e)
     {
-        playerStay = false;
+        if (playerStay)
+        {
+            playerStay = false;
+        }
     }
 
     private void OnPizzaCompleted(object sender, OrderInfo e) // OrderInfo <= 제외할 정보
@@ -168,6 +185,8 @@ public class ShopUI : EventListener
             pizzaBoys[0].gameObject.SetActive(false);
             pizzaBoys[1].gameObject.SetActive(false);
             pizzaBoys[2].gameObject.SetActive(true);
+
+            shopCloseBtn.gameObject.SetActive(false);
         }
         else
         {
@@ -180,6 +199,7 @@ public class ShopUI : EventListener
             pizzaBoys[1].gameObject.SetActive(true);
             pizzaBoys[2].gameObject.SetActive(false);
 
+            shopCloseBtn.gameObject.SetActive(true);
         }
     }
 
@@ -299,6 +319,8 @@ public class ShopUI : EventListener
             panelButtonPairs[i].button.Hide();
         }
 
+        TutorialManager.Instance.ShopWindowHide();
+
         canvasGroup.alpha = 1f;
         rectTransform.transform.localPosition = new Vector3(0f, 0f, 0f);
         float hideFast = fadeTime * 0.5f;
@@ -306,6 +328,7 @@ public class ShopUI : EventListener
         canvasGroup.DOFade(0f, hideFast).SetUpdate(true).OnComplete(() =>
         {
             loading = false;
+            TutorialManager.Instance.ShopWindowHideComplete();
         });
     }
 
@@ -351,6 +374,7 @@ public class ShopUI : EventListener
     private void UpdatePizzaBox(OrderInfo info)
     {
         int count = OrderManager.Instance.GetCurrentPizzaBox();
+        GM.Instance.player.UpdateBox(count);
 
         if (info != null)
             count -= info.pizzas.Count;
@@ -422,6 +446,20 @@ public class ShopUI : EventListener
             orderText.text = tm.GetCommons("Order") + $" <size=75%>({current}/{max})";
 
     }
+
+    #region 상점 닫기
+    public void ShowShopCloseWarning(bool on)
+    {
+        shopCloseWarningObj.SetActive(on);
+    }
+    public void Force_CloseShop()
+    {
+        ShowShopCloseWarning(false);
+        AudioManager.Instance.PlaySFX(Sfx.close);
+        OrderManager.Instance.RemoveAllOrders();
+    }
+
+    #endregion
 
     #region 업그레이드
     ResearchManager rm => ResearchManager.Instance;

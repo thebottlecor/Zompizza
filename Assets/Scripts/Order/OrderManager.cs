@@ -46,7 +46,11 @@ public class OrderManager : Singleton<OrderManager>
         orderMiniUIPair = new SerializableDictionary<OrderInfo, OrderMiniUI>();
         orderList = new List<OrderInfo>();
 
-        NewOrder();
+
+        if (TutorialManager.Instance.training)
+            NewOrder_Tutorial();
+        else
+            NewOrder();
     }
     protected override void AddListeners()
     {
@@ -124,6 +128,8 @@ public class OrderManager : Singleton<OrderManager>
                 orderMiniUIPair[orderList[i]].Hide();
                 orderMiniUIPair.Remove(orderList[i]);
                 orderList.RemoveAt(i);
+
+                TutorialManager.Instance.OrderCompleted();
             }
         }
 
@@ -210,6 +216,25 @@ public class OrderManager : Singleton<OrderManager>
             AddOrder(rand[i + halfRand - error]);
         }
         //Debug.Log(error);
+
+        UIManager.Instance.OrderUIUpdate();
+
+        OrderGoalUpdate();
+
+        UIManager.Instance.shopUI.OrderTextUpdate();
+    }
+
+    public void NewOrder_Tutorial()
+    {
+        // 튜토리얼 - 노인
+        SerializableDictionary<Ingredient, int> randInfo_sub = new SerializableDictionary<Ingredient, int>();
+        ingredients.Shuffle();
+        randInfo_sub.Add(new SerializableDictionary<Ingredient, int>.Pair { Key = ingredients[0], Value = 1 });
+        randInfo_sub.Add(new SerializableDictionary<Ingredient, int>.Pair { Key = ingredients[1], Value = 1 });
+        randInfo_sub.Add(new SerializableDictionary<Ingredient, int>.Pair { Key = ingredients[2], Value = 1 });
+        int ingredientTotal = 3;
+
+        AddOrder_Sub(4, randInfo_sub, ingredientTotal);
 
         UIManager.Instance.OrderUIUpdate();
 
@@ -448,6 +473,8 @@ public class OrderManager : Singleton<OrderManager>
         UIManager.Instance.shopUI.OrderTextUpdate();
 
         UIManager.Instance.OrderUIBtnUpdate();
+
+        TutorialManager.Instance.OrderAccpeted();
 
         pizzaDirection.RestartSequence(info);
     }

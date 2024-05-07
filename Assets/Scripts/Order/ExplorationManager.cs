@@ -29,6 +29,7 @@ public class ExplorationManager : Singleton<ExplorationManager>
     public float fadeTime = 0.5f;
     public CanvasGroup canvasGroup_resultPanel;
     public RectTransform rectTransform_resultPanel;
+    public bool canvasGroupLoading;
 
     Dictionary<Ingredient, int> resultDict;
 
@@ -44,6 +45,9 @@ public class ExplorationManager : Singleton<ExplorationManager>
 
         HideUI_ResultPanel_Instant();
         UpdateText();
+
+        quantity.slider.maxValue = Constant.explorationQuantityMax;
+        quantity.slider.value = 5;
     }
 
     public void UpdateText()
@@ -99,6 +103,8 @@ public class ExplorationManager : Singleton<ExplorationManager>
     {
         if (GM.Instance.gold < cost) return;
 
+        TutorialManager.Instance.SendExploration();
+
         int notCompletedOrder = OrderManager.Instance.GetAcceptedOrderCount();
         if (notCompletedOrder > 0)
         {
@@ -115,14 +121,12 @@ public class ExplorationManager : Singleton<ExplorationManager>
 
         ExplorationResult();
 
-        UIManager.Instance.UpdateIngredients();
-
         GM.Instance.NextDay();
     }
 
-    public void ExplorationResult()
+    private void ExplorationResult()
     {
-        int maxQuantity = 10;
+        int maxQuantity = Constant.explorationQuantityMax;
 
         int result_quantity = (int)(maxQuantity * quantity.Percent);
 
@@ -144,18 +148,30 @@ public class ExplorationManager : Singleton<ExplorationManager>
         {
             GM.Instance.ingredients[temp.Key] += temp.Value;
         }
-
     }
 
     public void ShowResultPanel()
     {
         if (resultDict.Count > 0)
         {
+            int maxLine = 7;
+            int exceedRow = (resultDict.Count - 1) / maxLine;
+            int rowCount = 0;
+
             StringBuilder st = new StringBuilder();
 
             foreach (var temp in resultDict)
             {
-                st.AppendFormat("<sprite={0}><size=90%>{2}</size> +{1}\n", (int)temp.Key + Constant.ingredientSpriteOffset, temp.Value, TextManager.Instance.GetIngredient(temp.Key));
+                if (exceedRow > 0 && rowCount < exceedRow)
+                {
+                    st.AppendFormat("<sprite={0}><size=90%>{2}</size> +{1}  ", (int)temp.Key + Constant.ingredientSpriteOffset, temp.Value, TextManager.Instance.GetIngredient(temp.Key));
+                    rowCount++;
+                }
+                else
+                {
+                    st.AppendFormat("<sprite={0}><size=90%>{2}</size> +{1}\n", (int)temp.Key + Constant.ingredientSpriteOffset, temp.Value, TextManager.Instance.GetIngredient(temp.Key));
+                    rowCount = 0;
+                }
             }
 
             resultText_Detail.text = st.ToString();
@@ -172,23 +188,34 @@ public class ExplorationManager : Singleton<ExplorationManager>
 
     public void OpenUI_ResultPanel()
     {
+        canvasGroupLoading = true;
         canvasGroup_resultPanel.alpha = 0f;
         canvasGroup_resultPanel.blocksRaycasts = true;
         canvasGroup_resultPanel.interactable = true;
         rectTransform_resultPanel.transform.localPosition = new Vector3(0f, 1000f, 0f);
         rectTransform_resultPanel.DOAnchorPos(new Vector2(0f, 0f), fadeTime, false).SetEase(Ease.OutElastic).SetUpdate(true);
-        canvasGroup_resultPanel.DOFade(1f, fadeTime).SetUpdate(true);
+        canvasGroup_resultPanel.DOFade(1f, fadeTime).SetUpdate(true).OnComplete(() =>
+        {
+            canvasGroupLoading = false;
+        });
     }
 
     public void HideUI_ResultPanel()
     {
+        UIManager.Instance.UpdateIngredients();
+
+        canvasGroupLoading = true;
         canvasGroup_resultPanel.alpha = 1f;
         canvasGroup_resultPanel.blocksRaycasts = false;
         canvasGroup_resultPanel.interactable = false;
         rectTransform_resultPanel.transform.localPosition = new Vector3(0f, 0f, 0f);
         float hideFast = fadeTime * 0.5f;
         rectTransform_resultPanel.DOAnchorPos(new Vector2(0f, -2000f), hideFast, false).SetEase(Ease.InOutQuint).SetUpdate(true);
-        canvasGroup_resultPanel.DOFade(0f, hideFast).SetUpdate(true);
+        canvasGroup_resultPanel.DOFade(0f, hideFast).SetUpdate(true).OnComplete(() =>
+        {
+            canvasGroupLoading = false;
+            GM.Instance.ShowWarningQueue();
+        });
     }
 
     public void HideUI_ResultPanel_Instant()

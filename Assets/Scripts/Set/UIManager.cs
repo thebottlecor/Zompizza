@@ -106,9 +106,22 @@ public class UIManager : Singleton<UIManager>
 
         if (HotKey[KeyMap.escape].GetkeyDown())
         {
-            if (GM.Instance.gameOverWaringObj.activeSelf)
+            if (ExplorationManager.Instance.canvasGroupLoading)
+                return;
+            else if (ExplorationManager.Instance.canvasGroup_resultPanel.alpha >= 0.99f)
             {
-                GM.Instance.ShowGameOverWaring(false);
+                ExplorationManager.Instance.HideUI_ResultPanel();
+                return;
+            }
+
+            if (GM.Instance.gameOverWarningObj.activeSelf)
+            {
+                GM.Instance.ShowGameOverWarning(false);
+                return;
+            }
+            if (shopUI.shopCloseWarningObj.activeSelf)
+            {
+                shopUI.ShowShopCloseWarning(false);
                 return;
             }
 

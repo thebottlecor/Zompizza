@@ -10,9 +10,9 @@ public class CameraFollow2 : MonoBehaviour {
 	public float followSpeed = 2;
 	[Range(1, 10)]
 	public float lookSpeed = 5;
-	Vector3 initialCameraPosition;
-	Vector3 initialCarPosition;
-	Vector3 absoluteInitCameraPosition;
+	//Vector3 initialCameraPosition;
+	//Vector3 initialCarPosition;
+	public Vector3 absoluteInitCameraPosition;
 
 	public Transform camTransform;
 
@@ -30,9 +30,9 @@ public class CameraFollow2 : MonoBehaviour {
 	{
 		uiCam.gameObject.SetActive(true);
 
-		initialCameraPosition = gameObject.transform.position;
-		initialCarPosition = carTransform.position;
-		absoluteInitCameraPosition = initialCameraPosition - initialCarPosition;
+		//initialCameraPosition = gameObject.transform.position;
+		//initialCarPosition = carTransform.position;
+		//absoluteInitCameraPosition = initialCameraPosition - initialCarPosition;
 	}
 
 	void FixedUpdate()
@@ -86,6 +86,16 @@ public class CameraFollow2 : MonoBehaviour {
                 check.timer = 1f;
             }
         }
+	}
+
+	public void ForceUpdate()
+    {
+		Vector3 _lookDirection = (new Vector3(carTransform.position.x, carTransform.position.y, carTransform.position.z)) - transform.position;
+		Quaternion _rot = Quaternion.LookRotation(_lookDirection, Vector3.up);
+		transform.rotation = _rot;
+
+		Vector3 _targetPos = absoluteInitCameraPosition + carTransform.transform.position;
+		transform.position = _targetPos;
 	}
 
 	public void Shake(float strength)

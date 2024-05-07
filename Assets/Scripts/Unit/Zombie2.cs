@@ -6,24 +6,19 @@ using MoreMountains.Feedbacks;
 using Pathfinding;
 using System;
 
-public class Zombie2 : MonoBehaviour
+public class Zombie2 : ZombieBase
 {
-
-    protected Rigidbody rigid;
-
-    protected MMFeedbacks hitFeedback;
-    [SerializeField] protected Collider coll;
-    [SerializeField] protected Animator animator;
 
     public bool contactingPlayer;
     public bool contact;
     private float attackTimer;
     private float contactTimer;
 
-    public bool dead;
+    public float range = 3.5f;
+    public bool isInstall;
+    private bool installUsed;
 
-    public SkinnedMeshRenderer meshRenderer;
-    public GameObject shadow;
+    public bool isRun;
 
     protected IAstarAI ai;
     protected AIDestinationSetter destinationSetter;
@@ -34,7 +29,6 @@ public class Zombie2 : MonoBehaviour
     public void Init(Transform target)
     {
         rigid = GetComponent<Rigidbody>();
-        hitFeedback = GetComponent<MMFeedbacks>();
 
         ai = GetComponent<IAstarAI>();
         destinationSetter = GetComponent<AIDestinationSetter>();
@@ -51,7 +45,7 @@ public class Zombie2 : MonoBehaviour
         float dist = Vector3.Distance(ZombiePooler.Instance.target.transform.position, transform.position);
         if (dist >= 100f)
         {
-            this.gameObject.SetActive(false);
+            gameObject.SetActive(false);
             return;
         }
 
@@ -100,9 +94,11 @@ public class Zombie2 : MonoBehaviour
                         //}
 
                         if (ai.remainingDistance <= (ai as FollowerEntity).stopDistance 
-                            && dist <= 3.5f) // 적당한 거리 (거리에 민감)
+                            && dist <= range) // 적당한 거리 (거리에 민감)
                         {
                             contactingPlayer = true;
+                            //transform.LookAt(ZombiePooler.Instance.target);
+                            if (attackTimer < 0.5f) attackTimer = 0.5f; // 근접 공격의 경우, 붙는 것보다 공격속도가 2배 빠름 (어차피 유효타가 적으므로)
                         }
                     }
 
@@ -117,9 +113,23 @@ public class Zombie2 : MonoBehaviour
         animator.SetBool("Walk", walk);
         animator.SetBool("Attack", attack);
 
+        if (isRun)
+            animator.SetBool("Contact", contact);
+
         if (attack)
         {
-            Attack();
+            if (isInstall)
+            {
+                if (!installUsed)
+                {
+                    installUsed = true;
+                    ZombiePooler.Instance.SpawnRangeSub(transform.position);
+                }
+            }
+            else
+            {
+                Attack();
+            }
         }
         else if (contact)
         {
@@ -143,7 +153,7 @@ public class Zombie2 : MonoBehaviour
         }
     }
 
-    public void Hit(Vector3 hitPos, float speed, Vector3 knockbackDir)
+    public override void Hit(Vector3 hitPos, float speed, Vector3 knockbackDir)
     {
         //hitFeedback?.PlayFeedbacks();
         ai.isStopped = true;
@@ -161,13 +171,19 @@ public class Zombie2 : MonoBehaviour
             rigid.AddForce(speed * ZombiePooler.Instance.knockbackPower * knockbackDir, ForceMode.Impulse);
         }
         coll.gameObject.layer = LayerMask.NameToLayer("Flying Zombie");
-        rigid.AddExplosionForce(ZombiePooler.Instance.power * speed, expPos, ZombiePooler.Instance.radius, ZombiePooler.Instance.height);
+
+        if (isHeavy)
+            rigid.AddExplosionForce(0.05f * ZombiePooler.Instance.power * speed, expPos, ZombiePooler.Instance.radius, ZombiePooler.Instance.height * 0.05f);
+        else
+            rigid.AddExplosionForce(ZombiePooler.Instance.power * speed, expPos, ZombiePooler.Instance.radius, ZombiePooler.Instance.height);
+
 
         DeadHandle();
     }
 
-    public bool CloseContact(Vector3 hitPos)
+    public override bool CloseContact(Vector3 hitPos)
     {
+        if (isHeavy) return false;
         if (dead) return false;
 
         ai.isStopped = true;
@@ -193,7 +209,7 @@ public class Zombie2 : MonoBehaviour
         return true;
     }
 
-    public void DriftOffContact(float localXvel, float speed) // localXvel < 0 오른쪽 , > 0 왼쪽 (로컬 기준)
+    public override void DriftOffContact(float localXvel, float speed) // localXvel < 0 오른쪽 , > 0 왼쪽 (로컬 기준)
     {
         if (contactTimer <= 0.25f) // 붙자마자 드리프트로 떼어졌을 때 -> 거의 충돌한 것과 마찬가지
         {
@@ -229,36 +245,25 @@ public class Zombie2 : MonoBehaviour
         DeadHandle();
     }
 
-    [ContextMenu("부활")]
-    public void StateReset()
+    public override void StateReset()
     {
-        transform.eulerAngles = Vector3.zero;
+        base.StateReset();
 
         ai.isStopped = false;
         ai.canMove = false;
 
-        rigid.velocity = Vector3.zero;
-        rigid.angularVelocity = Vector3.zero;
-        rigid.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
-        rigid.isKinematic = false;
-        coll.enabled = true;
-
         contact = false;
-        dead = false;
-        shadow.SetActive(true);
+        installUsed = false;
 
         attackTimer = 0f;
         contactTimer = 0f;
-
-        coll.gameObject.layer = LayerMask.NameToLayer("Zombie");
     }
 
-    public void DeadHandle()
+    public override void DeadHandle()
     {
-        dead = true;
-        shadow.SetActive(false);
+        base.DeadHandle();
 
-        if (OrderManager.Instance.IsDelivering())
+        if (!GM.Instance.EndTime && OrderManager.Instance.IsDelivering())
             GM.Instance.AddGold(1, GM.GetGoldSource.zombie);
     }
 }

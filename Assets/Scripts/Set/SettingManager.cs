@@ -149,12 +149,6 @@ public class SettingManager : Singleton<SettingManager>
         base.Awake();
 
         InitResolutionUI();
-        fullscreen = true;
-        vsync = false;
-        edgeScrolling = true;
-        invertZoom = false;
-        autosave = true;
-        cameraSpeed = 1f;
     }
 
     public override void CallAfterAwake()
@@ -580,6 +574,11 @@ public class SettingManager : Singleton<SettingManager>
             edgeScrollingToggle.isOn = config.edgeScrolling;
             autosaveToggle.isOn = config.autosave;
 
+            fullScreenToggle.isOn = config.fullScreen;
+            SetFullScreen(config.fullScreen);
+            vsyncToggle.isOn = config.vsync;
+            SetVSync(config.vsync);
+
             int findResolution = -1;
             for (int i = 0; i < possibleResolution.Count; i++)
             {
@@ -600,9 +599,6 @@ public class SettingManager : Singleton<SettingManager>
                 SetResolution(possibleResolution.Count - 1);
             }
 
-            fullScreenToggle.isOn = config.fullScreen;
-            vsyncToggle.isOn = config.vsync;
-
             bgmSlider.value = Mathf.Clamp(config.volumeBGM, 0.001f, 1f);
             sfxSlider.value = Mathf.Clamp(config.volumeSFX, 0.001f, 1f);
         }
@@ -613,11 +609,13 @@ public class SettingManager : Singleton<SettingManager>
             edgeScrollingToggle.isOn = true;
             autosaveToggle.isOn = true;
 
+            fullScreenToggle.isOn = true;
+            SetFullScreen(true);
+            vsyncToggle.isOn = false;
+            SetVSync(false);
+
             resolutionDropdown.value = possibleResolution.Count - 1;
             SetResolution(possibleResolution.Count - 1);
-
-            fullScreenToggle.isOn = true;
-            vsyncToggle.isOn = false;
 
             bgmSlider.value = 0.5f;
             sfxSlider.value = 0.5f;

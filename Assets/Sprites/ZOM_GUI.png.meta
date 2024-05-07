@@ -1339,7 +1339,7 @@ TextureImporter:
       name: button_04
       rect:
         serializedVersion: 2
-        x: 1664
+        x: 1663
         y: 1265
         width: 409
         height: 93
@@ -1420,7 +1420,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ZOM_GUI_7
+      name: button_07
       rect:
         serializedVersion: 2
         x: 1696
@@ -1441,7 +1441,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ZOM_GUI_8
+      name: button_06
       rect:
         serializedVersion: 2
         x: 1664
@@ -1450,7 +1450,7 @@ TextureImporter:
         height: 93
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
+      border: {x: 28, y: 16, z: 42, w: 1}
       outline: []
       physicsShape: []
       tessellationDetail: 0
@@ -1462,7 +1462,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ZOM_GUI_11
+      name: button_08
       rect:
         serializedVersion: 2
         x: 1911
@@ -1601,7 +1601,6 @@ TextureImporter:
       ZOM_GUI_0: 638396757
       ZOM_GUI_1: 1870865058
       ZOM_GUI_10: -282567330
-      ZOM_GUI_11: -1511401379
       ZOM_GUI_12: -455512047
       ZOM_GUI_14: 1878053812
       ZOM_GUI_15: 90537806
@@ -1661,7 +1660,6 @@ TextureImporter:
       ZOM_GUI_67: 941866686
       ZOM_GUI_68: 2129165098
       ZOM_GUI_69: -375839105
-      ZOM_GUI_7: 338934223
       ZOM_GUI_70: -354942728
       ZOM_GUI_71: -126506132
       ZOM_GUI_72: -86188652
@@ -1672,13 +1670,15 @@ TextureImporter:
       ZOM_GUI_77: -520518505
       ZOM_GUI_78: -1473313620
       ZOM_GUI_79: 2054952763
-      ZOM_GUI_8: -302447942
       ZOM_GUI_9: 1591077140
       button_01: 793004247
       button_02: 1118936077
       button_03: 748944128
       button_04: 50558002
       button_05: -796150030
+      button_06: -302447942
+      button_07: 338934223
+      button_08: -1511401379
       cancel: -532384255
       check: -1068914690
       clock: 2078011449

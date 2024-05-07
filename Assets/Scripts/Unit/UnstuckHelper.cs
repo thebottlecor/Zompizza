@@ -21,6 +21,7 @@ public class UnstuckHelper : MonoBehaviour
     {
         if (cooldown > 0f) return;
         if (GM.Instance == null) return;
+        if (TutorialManager.Instance.training) return;
 
         var player = GM.Instance.player;
 
@@ -32,6 +33,7 @@ public class UnstuckHelper : MonoBehaviour
         //var node = AstarPath.active.GetNearest(player.transform.position, Pathfinding.NNConstraint.Walkable).position;
 
         Vector3 node = player.transform.position;
+        node.y = 0f;
 
         CapsuleCollider coll = player.coll;
 
@@ -46,6 +48,7 @@ public class UnstuckHelper : MonoBehaviour
             if (maxTry <= 0)
             {
                 player.transform.position = GM.Instance.pizzeriaPos.position;
+                player.cam.ForceUpdate();
                 break;
             }
 
@@ -76,6 +79,7 @@ public class UnstuckHelper : MonoBehaviour
             Vector3 otherPos = node + randDir;
 
             node = AstarPath.active.GetNearest(otherPos, Pathfinding.NNConstraint.Walkable).position;
+            node.y = 0f;
         }
     }
 }

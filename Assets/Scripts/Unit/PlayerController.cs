@@ -155,14 +155,15 @@ public class PlayerController : MonoBehaviour
 
     [Header("Custom")]
     public float impactPower = 3000f;
-    //public List<Zombie> contactingZombies = new List<Zombie>();
-    public List<Zombie2> contactingZombies = new List<Zombie2>();
+    public List<ZombieBase> contactingZombies = new List<ZombieBase>();
     public float crashDrag = 1000f;
     private float beforeCollisionSpeed;
     private bool isCollision;
 
     public MeshRenderer[] meshRenderers;
     private Coroutine hitCoroutine;
+
+    public GameObject[] pizzaBoxes;
 
     public CameraFollow2 cam;
 
@@ -200,8 +201,7 @@ public class PlayerController : MonoBehaviour
         {
             float speedPercent = Mathf.Abs(carSpeed) / MaxSpeed;
             ContactPoint cp = collision.GetContact(0);
-            Zombie2 zombie = collision.gameObject.GetComponent<Zombie2>();
-            //Zombie zombie = collision.gameObject.GetComponent<Zombie>();
+            ZombieBase zombie = collision.gameObject.GetComponent<ZombieBase>();
 
             if (speedPercent >= 0.15f)
             {
@@ -222,6 +222,9 @@ public class PlayerController : MonoBehaviour
                         //Debug.Log("속도 방향과 충돌 방향 일치 -> 힘 전달 " + carRigidbody.velocity.magnitude);
 
                         float playerDot = Vector3.Dot(carVel, transform.forward); // 차앞 방향과 속도 내적
+                        float crashDrag = this.crashDrag;
+                        if (zombie.isHeavy && !zombie.dead) crashDrag *= 100f * 2f * speedPercent;
+
                         if (playerDot >= 0)
                         {
                             carRigidbody.AddForce(-1f * crashDrag * transform.forward, ForceMode.Impulse);
@@ -246,7 +249,7 @@ public class PlayerController : MonoBehaviour
             }
         }
         //else if (!collision.gameObject.CompareTag("Plane") && collision.gameObject.layer == 6)
-        else if (collision.gameObject.layer == 6)
+        else if (collision.gameObject.layer == 6) // 패스파인딩 블럭 (일반적인 장애물)
         {
             beforeCollisionSpeed = carSpeed;
             isCollision = true;
@@ -258,6 +261,52 @@ public class PlayerController : MonoBehaviour
             //}
         }
     }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.layer == 12) // 빙판
+        {
+            FLwheelFriction.stiffness = 0f;
+            frontLeftCollider.sidewaysFriction = FLwheelFriction;
+
+            FRwheelFriction.stiffness = 0f;
+            frontRightCollider.sidewaysFriction = FRwheelFriction;
+
+            RLwheelFriction.stiffness = 0f;
+            rearLeftCollider.sidewaysFriction = RLwheelFriction;
+
+            RRwheelFriction.stiffness = 0f;
+            rearRightCollider.sidewaysFriction = RRwheelFriction;
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.layer == 12) // 빙판
+        {
+            FLwheelFriction.stiffness = 1f;
+            frontLeftCollider.sidewaysFriction = FLwheelFriction;
+
+            FRwheelFriction.stiffness = 1f;
+            frontRightCollider.sidewaysFriction = FRwheelFriction;
+
+            RLwheelFriction.stiffness = 1f;
+            rearLeftCollider.sidewaysFriction = RLwheelFriction;
+
+            RRwheelFriction.stiffness = 1f;
+            rearRightCollider.sidewaysFriction = RRwheelFriction;
+        }
+    }
+
+    public void UpdateBox(int box)
+    {
+        for (int i = 0; i < pizzaBoxes.Length; i++)
+        {
+            pizzaBoxes[i].SetActive(false);
+        }
+        for (int i = 0; i < box; i++)
+        {
+            pizzaBoxes[i].SetActive(true);
+        }
+    }
 
     public void StopPlayer(bool forceRotate = true)
     {
@@ -265,6 +314,13 @@ public class PlayerController : MonoBehaviour
 
         if (forceRotate)
             this.transform.DORotate(Vector3.zero, 1f).SetUpdate(true);
+        else
+        {
+            // 긴급 탈출의 경우 z 회전만 초기화
+            Vector3 angle = transform.localEulerAngles;
+            angle.z = 0f;
+            this.transform.DORotate(angle, 0.1f).SetUpdate(true);
+        }
 
         carRigidbody.velocity = Vector3.zero;
         carRigidbody.angularVelocity = Vector3.zero;

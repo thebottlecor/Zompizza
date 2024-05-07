@@ -180,4 +180,5 @@ public enum Sfx
     nextDay,
     chop,
     kitchenTimer,
+    close,
 }

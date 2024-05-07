@@ -73,7 +73,7 @@ public class GM : Singleton<GM>
     public Light globalLight;
     public Vector3 lightAngleX = new Vector3(140f, 120f, 160f);
     public Vector2 lightAngleY = new Vector2(-80f, 100f);
-    private bool endTime;
+    public bool EndTime { get; private set; }
 
     public CanvasGroup darkCanvas;
 
@@ -90,10 +90,13 @@ public class GM : Singleton<GM>
     public TextMeshProUGUI gameOverBtn_ToLobby_Text;
     public bool loading;
 
-    public GameObject gameOverWaringObj;
-    public TextMeshProUGUI gameOverWaringBtn_Text;
-    public TextMeshProUGUI gameOverWaring_Text;
-    public TextMeshProUGUI gameOverWaringDetail_Text;
+    public GameObject gameOverWarningObj;
+    public RectTransform gameOverWarningRect;
+    public TextMeshProUGUI gameOverWarningBtn_Text;
+    public TextMeshProUGUI gameOverWarning_Text;
+    public TextMeshProUGUI gameOverWarningDetail_Text;
+
+    public Queue<int> warningQueue;
 
     // 패배 트리거
     public bool warning_gameOver;
@@ -137,6 +140,7 @@ public class GM : Singleton<GM>
 
         dayOne_Gold = new SerializableDictionary<GetGoldSource, int>();
         dayOne_Rating = new SerializableDictionary<GetRatingSource, float>();
+        warningQueue = new Queue<int>();
 
         darkCanvas.alpha = 0f;
         darkCanvas.interactable = false;
@@ -151,6 +155,7 @@ public class GM : Singleton<GM>
         DayStringUpdate();
         ResearchManager.Instance.Init();
         UIManager.Instance.shopUI.Init();
+        TutorialManager.Instance.Init();
         OrderManager.Instance.Init();
     }
 
@@ -183,16 +188,17 @@ public class GM : Singleton<GM>
         nextDayBtn_Text.text = $"> {tm.GetCommons("NextDay")} <";
         gameOverBtn_ToLobby_Text.text = $"> {tm.GetCommons("Menu")} <";
 
-        gameOverWaringBtn_Text.text = tm.GetCommons("Close");
-        gameOverWaring_Text.text = tm.GetCommons("Warning");
-        gameOverWaringDetail_Text.text = string.Format(tm.GetCommons("GameoverWarning"), "<size=90%><sprite=1></size>");
+        gameOverWarningBtn_Text.text = tm.GetCommons("Close");
+        gameOverWarning_Text.text = tm.GetCommons("Warning");
+        gameOverWarningDetail_Text.text = string.Format(tm.GetCommons("GameoverWarning"), "<size=90%><sprite=1></size>");
     }
 
     private void Update()
     {
         if (loading) return;
 
-        timer += Time.deltaTime;
+        if (!TutorialManager.Instance.training)
+            timer += Time.deltaTime;
 
         if (timer >= Constant.dayTime)
         {
@@ -213,7 +219,7 @@ public class GM : Singleton<GM>
             //sec = 0;
 
             // 마감 시간 시간 정지
-            if (!endTime)
+            if (!EndTime)
             {
                 openImage.SetActive(false);
                 closeImage.SetActive(true);
@@ -223,10 +229,10 @@ public class GM : Singleton<GM>
 
                 timeText.text = dayStr[1];
             }
-            endTime = true;
+            EndTime = true;
         }
 
-        if (endTime)
+        if (EndTime)
         {
             //timeText.text = dayStr[1];
         }
@@ -272,6 +278,7 @@ public class GM : Singleton<GM>
         day++;
         DayStringUpdate();
         UIManager.Instance.shopUI.DayFirstReview();
+        ZombiePooler.Instance.ZombieReset();
 
         Sequence sequence = DOTween.Sequence().SetUpdate(true).SetAutoKill(true);
         sequence.AppendCallback(() =>
@@ -411,7 +418,7 @@ public class GM : Singleton<GM>
 
         if (EndTimeEvent != null)
             EndTimeEvent(null, false);
-        endTime = false;
+        EndTime = false;
 
         dayOne_Gold = new SerializableDictionary<GetGoldSource, int>();
         dayOne_Rating = new SerializableDictionary<GetRatingSource, float>();
@@ -431,7 +438,7 @@ public class GM : Singleton<GM>
 
             if (showWarning)
             {
-                ShowGameOverWaring(true);
+                warningQueue.Enqueue(0);
             }
         });
         sequence.Append(darkCanvas.DOFade(0f, 0.5f));
@@ -446,9 +453,38 @@ public class GM : Singleton<GM>
 
         gameOverObj.SetActive(true);
     }
-    public void ShowGameOverWaring(bool on)
+    public void ShowGameOverWarning(bool on)
     {
-        gameOverWaringObj.SetActive(on);
+        gameOverWarningObj.gameObject.SetActive(on);
+
+        if (!on)
+        {
+            ShowWarningQueue();
+        }
+        else
+        {
+            gameOverWarningRect.localScale = 0.01f * Vector3.one;
+            gameOverWarningRect.DOScale(new Vector3(1f, 1f, 1f), 0.5f).SetEase(Ease.OutElastic).SetUpdate(true);
+            // 관리탭 강조하기
+            UIManager.Instance.shopUI.SelectSubPanel(1);
+        }
+    }
+
+    public void ShowWarningQueue()
+    {
+        if (warningQueue.Count > 0)
+        {
+            int idx = warningQueue.Dequeue();
+
+            switch (idx)
+            {
+                case 0:
+                    ShowGameOverWarning(true);
+                    break;
+                case 1:
+                    break;
+            }
+        }
     }
 
 
