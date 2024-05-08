@@ -119,6 +119,11 @@ public class UIManager : Singleton<UIManager>
                 GM.Instance.ShowGameOverWarning(false);
                 return;
             }
+            if (LoanManager.Instance.loanWarningObj.activeSelf)
+            {
+                LoanManager.Instance.ShowLoanWarning(false);
+                return;
+            }
             if (shopUI.shopCloseWarningObj.activeSelf)
             {
                 shopUI.ShowShopCloseWarning(false);

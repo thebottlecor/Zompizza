@@ -223,7 +223,7 @@ public class PlayerController : MonoBehaviour
 
                         float playerDot = Vector3.Dot(carVel, transform.forward); // 차앞 방향과 속도 내적
                         float crashDrag = this.crashDrag;
-                        if (zombie.isHeavy && !zombie.dead) crashDrag *= 100f * 2f * speedPercent;
+                        if (zombie.isHeavy && !zombie.dead) crashDrag *= 200f * 2f * speedPercent;
 
                         if (playerDot >= 0)
                         {
@@ -603,12 +603,9 @@ public class PlayerController : MonoBehaviour
     {
         yield return CoroutineHelper.WaitForSeconds(0.1f);
 
-        if (GM.Instance.stop_control)
+        while (GM.Instance.stop_control)
         {
-            while (true)
-            {
-                yield return null;
-            }
+            yield return null;
         }
 
         if (carEngineSound != null)
@@ -618,7 +615,7 @@ public class PlayerController : MonoBehaviour
         }
         if ((isDrifting) || (isTractionLocked && Mathf.Abs(carSpeed) > 12f))
         {
-            if (!tireScreechSound.isPlaying)
+            if (!tireScreechSound.isPlaying && tireScreechSound.enabled)
             {
                 tireScreechSound.Play();
             }
@@ -629,7 +626,7 @@ public class PlayerController : MonoBehaviour
         }
         if (isGoBack && carSpeed < -0.1f)
         {
-            if (!backupSound.isPlaying)
+            if (!backupSound.isPlaying && backupSound.enabled)
                 backupSound.Play();
         }
         else

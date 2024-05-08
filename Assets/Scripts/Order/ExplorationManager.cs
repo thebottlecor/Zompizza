@@ -38,22 +38,19 @@ public class ExplorationManager : Singleton<ExplorationManager>
 
     public TextMeshProUGUI resultText_Detail;
 
+    private TextManager tm => TextManager.Instance;
+
     private void Start()
     {
-        SlideQuantity(5f);
+        quantity.Init(5f);
         SlideQuality(0f);
 
         HideUI_ResultPanel_Instant();
         UpdateText();
-
-        quantity.slider.maxValue = Constant.explorationQuantityMax;
-        quantity.slider.value = 5;
     }
 
     public void UpdateText()
     {
-        TextManager tm = TextManager.Instance;
-
         exploreText.text = tm.GetCommons("Explore");
 
         //meats.categoryText.text = tm.GetCommons("Meat");
@@ -87,15 +84,15 @@ public class ExplorationManager : Singleton<ExplorationManager>
 
         cost = (int)value;
 
-        costText.text = $"{TextManager.Instance.GetCommons("Costs")} : {cost}$";
+        costText.text = $"{tm.GetCommons("Costs")} : {cost}$";
 
         UpdateBtn();
     }
     public void UpdateBtn()
     {
         sendBtn.interactable = GM.Instance.gold >= cost;
-        if (sendBtn.interactable) sendBtnText.text = TextManager.Instance.GetCommons("SendExploration");
-        else sendBtnText.text = TextManager.Instance.GetCommons("SendDisable");
+        if (sendBtn.interactable) sendBtnText.text = tm.GetCommons("SendExploration");
+        else sendBtnText.text = tm.GetCommons("SendDisable");
     }
 
 
@@ -134,12 +131,13 @@ public class ExplorationManager : Singleton<ExplorationManager>
         int count = result_quantity;
         while (count > 0)
         {
-            Ingredient rand = (Ingredient)UnityEngine.Random.Range(0, GM.Instance.IngredientTypeCount);
+            int rand = UnityEngine.Random.Range(0, OrderManager.Instance.ingredients.Count);
+            Ingredient ingredient = OrderManager.Instance.ingredients[rand];
 
-            if (!resultDict.ContainsKey(rand))
-                resultDict.Add(rand, 1);
+            if (!resultDict.ContainsKey(ingredient))
+                resultDict.Add(ingredient, 1);
             else
-                resultDict[rand]++;
+                resultDict[ingredient]++;
 
             count--;
         }
@@ -164,12 +162,12 @@ public class ExplorationManager : Singleton<ExplorationManager>
             {
                 if (exceedRow > 0 && rowCount < exceedRow)
                 {
-                    st.AppendFormat("<sprite={0}><size=90%>{2}</size> +{1}  ", (int)temp.Key + Constant.ingredientSpriteOffset, temp.Value, TextManager.Instance.GetIngredient(temp.Key));
+                    st.AppendFormat("<sprite={0}><size=90%>{2}</size> +{1}  ", (int)temp.Key + Constant.ingredientSpriteOffset, temp.Value, tm.GetIngredient(temp.Key));
                     rowCount++;
                 }
                 else
                 {
-                    st.AppendFormat("<sprite={0}><size=90%>{2}</size> +{1}\n", (int)temp.Key + Constant.ingredientSpriteOffset, temp.Value, TextManager.Instance.GetIngredient(temp.Key));
+                    st.AppendFormat("<sprite={0}><size=90%>{2}</size> +{1}\n", (int)temp.Key + Constant.ingredientSpriteOffset, temp.Value, tm.GetIngredient(temp.Key));
                     rowCount = 0;
                 }
             }

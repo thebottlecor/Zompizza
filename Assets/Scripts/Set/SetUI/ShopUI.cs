@@ -72,6 +72,10 @@ public class ShopUI : EventListener
     public List<ReviewDayObject> reviewDayObjects;
     public List<Review> reviewObjects;
 
+    [Header("관리탭 - 대출")]
+    public TextMeshProUGUI loanText;
+    public RepaySilder repaySlider;
+
     [Header("업그레이드탭")]
     public TextMeshProUGUI upgradeText;
     public int currentSelectUpgrade;
@@ -123,6 +127,8 @@ public class ShopUI : EventListener
         shopCloseWarningDetail_Text.text = tm.GetCommons("ShopCloseWarning");
         shopCloseWarningBtn_Text[0].text = tm.GetCommons("Close");
         shopCloseWarningBtn_Text[1].text = tm.GetCommons("Cancel");
+
+        loanText.text = tm.GetCommons("Loan");
     }
 
     protected override void AddListeners()
@@ -488,12 +494,15 @@ public class ShopUI : EventListener
             return;
         }
 
+        bool canResearch = !rm.MaxResearched(idx);
+
         var info = DataManager.Instance.researches[idx];
 
         StringBuilder st = new StringBuilder();
         st.AppendFormat("<size=120%><b>{0}</b> ({1}/{2})</size>", tm.GetResearch(idx), rm.GetResearchCount(idx), info.max);
         st.AppendLine();
-        st.AppendFormat("{0} : {1}$", tm.GetCommons("Costs"), rm.GetCost(idx));
+        if (canResearch)
+            st.AppendFormat("{0} : {1}$", tm.GetCommons("Costs"), rm.GetCost(idx));
         st.AppendLine();
         st.AppendLine();
         st.AppendFormat("<b>{0}</b>", tm.GetCommons("Effect"));
@@ -548,8 +557,8 @@ public class ShopUI : EventListener
 
         upgradeDetailText.text = st.ToString();
 
-        upgrade_UnlockBtn.gameObject.SetActive(true);
-        upgrade_UnlockBtn.enabled = !rm.MaxResearched(idx);
+        upgrade_UnlockBtn.gameObject.SetActive(canResearch);
+        upgrade_UnlockBtn.enabled = canResearch;
     }
 
     public void ClickUpgrade()

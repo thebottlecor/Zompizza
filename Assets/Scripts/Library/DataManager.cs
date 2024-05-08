@@ -25,6 +25,8 @@ public class DataManager : Singleton<DataManager>
     {
         researches = researchLib.GetHashMap();
         DOTween.Init();
+
+        //ingredientLib.Debug2();
     }
 
     public override void CallAfterAwake()

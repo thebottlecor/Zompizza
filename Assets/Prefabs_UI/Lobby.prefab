@@ -4975,67 +4975,67 @@ MonoBehaviour:
       Value:
         clip: {fileID: 8300000, guid: d586816547fb1f5499ec1cbd62c2933a, type: 3}
         volumeOffset: 0
-        maxPlay: 0
+        maxPlay: 3
     - Key: 4
       Value:
         clip: {fileID: 8300000, guid: 884bff6936def424a8e5f532aaea14dc, type: 3}
         volumeOffset: 0
-        maxPlay: 0
+        maxPlay: 3
     - Key: 5
       Value:
         clip: {fileID: 8300000, guid: d23c9837f840ebd4dac55d324a6083b0, type: 3}
         volumeOffset: 0
-        maxPlay: 0
+        maxPlay: 3
     - Key: 6
       Value:
         clip: {fileID: 8300000, guid: ffa78d5975364484d8fc56eb033e0919, type: 3}
         volumeOffset: 0
-        maxPlay: 0
+        maxPlay: 3
     - Key: 7
       Value:
         clip: {fileID: 8300000, guid: a21e0a1e4281b634895068a52e2939fc, type: 3}
         volumeOffset: 0
-        maxPlay: 0
+        maxPlay: 3
     - Key: 8
       Value:
         clip: {fileID: 8300000, guid: 50c9fe2116016a24db33f1a8206a25f6, type: 3}
         volumeOffset: 0
-        maxPlay: 0
+        maxPlay: 3
     - Key: 9
       Value:
         clip: {fileID: 8300000, guid: 3d7f8bad609bc834d9cdd4d57c45aed9, type: 3}
         volumeOffset: 0
-        maxPlay: 0
+        maxPlay: 3
     - Key: 10
       Value:
         clip: {fileID: 8300000, guid: 12d9a77a8fba0f04b855850cdc6d2ed4, type: 3}
         volumeOffset: 0
-        maxPlay: 0
+        maxPlay: 3
     - Key: 11
       Value:
         clip: {fileID: 8300000, guid: 89e18edc2d9d3e7469dced4461184159, type: 3}
         volumeOffset: 0
-        maxPlay: 0
+        maxPlay: 3
     - Key: 12
       Value:
         clip: {fileID: 8300000, guid: 6fc0d91252ac21149a9da02663e95362, type: 3}
         volumeOffset: 0
-        maxPlay: 0
+        maxPlay: 3
     - Key: 13
       Value:
         clip: {fileID: 8300000, guid: f670eb081c145b74cb228e9e17994c7f, type: 3}
         volumeOffset: -0.3
-        maxPlay: 0
+        maxPlay: 3
     - Key: 14
       Value:
         clip: {fileID: 8300000, guid: d11e2cb66cf2a3649b1b4fa7a3dc76ea, type: 3}
         volumeOffset: 0
-        maxPlay: 0
+        maxPlay: 3
     - Key: 15
       Value:
         clip: {fileID: 8300000, guid: b4f5112bd8f235249acc8efb4250ce3c, type: 3}
         volumeOffset: 0
-        maxPlay: 0
+        maxPlay: 3
 --- !u!1 &3230877239920990169
 GameObject:
   m_ObjectHideFlags: 0

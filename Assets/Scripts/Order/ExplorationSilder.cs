@@ -11,8 +11,11 @@ public class ExplorationSilder : MonoBehaviour
     public TextMeshProUGUI percentText;
     public TextMeshProUGUI levelText;
 
-    private void Start()
+    public void Init(float initValue)
     {
+        slider.maxValue = Constant.explorationQuantityMax;
+        slider.value = initValue;
+        ValueChanged(slider.value);
         slider.onValueChanged.AddListener(ValueChanged);
     }
 
@@ -21,6 +24,8 @@ public class ExplorationSilder : MonoBehaviour
     private void ValueChanged(float a)
     {
         percentText.text = $"{a*10f:F0}%";
+
+        ExplorationManager.Instance.SlideQuantity(a);
     }
 
 }

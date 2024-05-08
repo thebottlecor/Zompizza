@@ -8,7 +8,9 @@ using UnityEngine;
 public class TutorialManager : Singleton<TutorialManager>
 {
     [Header("µð¹ö±ë")]
-    public bool debug1;
+    public bool debug_skipToShop;
+    public bool debug_skipToReturn;
+    public bool debug_TutorialDisable;
 
     [Space(20f)]
 
@@ -28,6 +30,7 @@ public class TutorialManager : Singleton<TutorialManager>
     public GameObject[] guideObjects;
     public TextMeshProUGUI[] guideTexts;
 
+    public ShopGate shopGate;
     public GameObject shopGoal;
     public GameObject returnGoal;
 
@@ -59,9 +62,24 @@ public class TutorialManager : Singleton<TutorialManager>
         shopGoal.SetActive(false);
         returnGoal.SetActive(false);
 
-        if (debug1)
+        if (debug_TutorialDisable)
+        {
+            TutorialSkip();
+            step = 100;
+            return;
+        }
+
+        if (debug_skipToShop)
         {
             Step2();
+            return;
+        }
+        if (debug_skipToReturn)
+        {
+            TutorialSkip();
+            training = true;
+            GM.Instance.timer = Constant.dayTime;
+            Step9();
             return;
         }
 
@@ -97,6 +115,7 @@ public class TutorialManager : Singleton<TutorialManager>
         guideTexts[4].text = string.Format(tm.GetCommons("Tutorial05"), tm.GetKeyMaps(KeyMap.worldMap), sm.keyMappings[KeyMap.worldMap].GetName());
         guideTexts[5].text = tm.GetCommons("Tutorial06");
         guideTexts[6].text = tm.GetCommons("Tutorial07");
+        guideTexts[7].text = tm.GetCommons("Tutorial08");
     }
 
     protected override void AddListeners()
@@ -192,6 +211,8 @@ public class TutorialManager : Singleton<TutorialManager>
         guideObjects[1].SetActive(true);
         shopGoal.SetActive(true);
         step = 2;
+
+        shopGate.alwaysClosed = true;
     }
 
     private void Step3()
@@ -225,6 +246,11 @@ public class TutorialManager : Singleton<TutorialManager>
             guideObjects[3].SetActive(false);
             step = 6;
         }
+        else if (step == 11)
+        {
+            guideObjects[7].SetActive(false);
+            step = 12;
+        }
     }
     public void ShopWindowHideComplete()
     {
@@ -232,6 +258,7 @@ public class TutorialManager : Singleton<TutorialManager>
         {
             guideObjects[4].SetActive(true);
             step = 7;
+            shopGate.alwaysClosed = false;
         }
     }
     public void OrderCompleted()
@@ -259,5 +286,28 @@ public class TutorialManager : Singleton<TutorialManager>
             training = false;
             step = 10;
         }
+    }
+    public void NextDay()
+    {
+        if (step == 10)
+        {
+            guideObjects[7].SetActive(true);
+            step = 11;
+        }
+    }
+
+    public void TutorialDisalbe()
+    {
+        step = 100;
+        shopGate.alwaysClosed = false;
+        UIManager.Instance.shopUI.shopCloseBtn.enabled = true;
+        TutorialSkip();
+
+        for (int i = 0; i < guideObjects.Length; i++)
+        {
+            guideObjects[i].SetActive(false);
+        }
+        shopGoal.SetActive(false);
+        returnGoal.SetActive(false);
     }
 }

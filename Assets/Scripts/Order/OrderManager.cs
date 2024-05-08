@@ -23,16 +23,25 @@ public class OrderManager : Singleton<OrderManager>
     public int currentAcceptance;
     public bool IsMaxDelivery => currentAcceptance >= MaxAccpetance;
 
+    // 탐색 유효성 검사에도 사용
     public List<Ingredient> ingredients;
 
     public void Init()
     {
         var list = Enum.GetValues(typeof(Ingredient));
         ingredients = new List<Ingredient>();
+        var ingLib = DataManager.Instance.ingredientLib;
         foreach (var temp in list)
         {
-            Ingredient ingredient = (Ingredient)temp;
-            ingredients.Add(ingredient);
+            var key = (Ingredient)temp;
+            // 임시유효성 검사
+            if (ingLib.meats.ContainsKey(key) && ingLib.meats[key] ||
+                ingLib.vegetables.ContainsKey(key) && ingLib.vegetables[key] ||
+                ingLib.herbs.ContainsKey(key) && ingLib.herbs[key])
+            {
+                Ingredient ingredient = (Ingredient)temp;
+                ingredients.Add(ingredient);
+            }
         }
 
         for (int i = 0; i < orderGoals.Count; i++)

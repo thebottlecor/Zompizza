@@ -19,7 +19,7 @@ public class Constant
     public const float distanceScale = 0.005f; // 게임상 거리 200 = 1km
     public const float distance_1km = 1 / distanceScale;
 
-    public const float delivery_timeLimit_1km = 40f;
+    public const float delivery_timeLimit_1km = 35f;
     public const int delivery_reward_1km = 100;
 
     public const float delivery_order_km = 10f;

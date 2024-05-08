@@ -115,7 +115,7 @@ public class ZombiePooler : Singleton<ZombiePooler>
         if (GM.Instance.day > 2)
         {
             timer3 += 1f * Time.deltaTime;
-            if (timer3 >= 15f)
+            if (timer3 >= 10f)
             {
                 timer3 = 0f;
                 SpawnHeavy(1);

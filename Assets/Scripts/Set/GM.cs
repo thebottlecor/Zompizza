@@ -62,6 +62,7 @@ public class GM : Singleton<GM>
         explore,
         zombie,
         upgrade,
+        loan,
     }
     public enum GetRatingSource
     {
@@ -77,6 +78,7 @@ public class GM : Singleton<GM>
 
     public CanvasGroup darkCanvas;
 
+    [Header("정산서")]
     public GameObject accountObj;
     public TextMeshProUGUI[] accountText;
     public TextMeshProUGUI[] profitText;
@@ -84,12 +86,19 @@ public class GM : Singleton<GM>
     public Button nextDayBtn;
     public TextMeshProUGUI nextDayBtn_Text;
 
+    [Header("게임 오버")]
     public GameObject gameOverObj;
     public Button gameOverBtn_ToLobby;
     public TextMeshProUGUI[] gameOverText;
     public TextMeshProUGUI gameOverBtn_ToLobby_Text;
     public bool loading;
 
+    [Header("빚 갚음 축하")]
+    public GameObject congratulationsObj;
+    public TextMeshProUGUI[] congratulationsText;
+    public TextMeshProUGUI congratulationsBtn_Text;
+
+    [Header("평점 게임 오버 경고")]
     public GameObject gameOverWarningObj;
     public RectTransform gameOverWarningRect;
     public TextMeshProUGUI gameOverWarningBtn_Text;
@@ -130,8 +139,18 @@ public class GM : Singleton<GM>
         foreach (var temp in list)
         {
             Ingredient key = (Ingredient)temp;
-            ingredients.Add(new SerializableDictionary<Ingredient, int>.Pair(key, 10));
+            ingredients.Add(new SerializableDictionary<Ingredient, int>.Pair(key, 0));
         }
+        int initAmount = 10;
+        ingredients[Ingredient.meat1] = initAmount;
+        ingredients[Ingredient.meat2] = initAmount;
+        ingredients[Ingredient.meat3] = initAmount;
+        ingredients[Ingredient.vegetable1] = initAmount;
+        ingredients[Ingredient.vegetable2] = initAmount;
+        ingredients[Ingredient.vegetable3] = initAmount;
+        ingredients[Ingredient.herb1] = initAmount;
+        ingredients[Ingredient.herb2] = initAmount;
+        ingredients[Ingredient.herb3] = initAmount;
 
         UIManager.Instance.Init();
 
@@ -154,6 +173,7 @@ public class GM : Singleton<GM>
         day = 0;
         DayStringUpdate();
         ResearchManager.Instance.Init();
+        LoanManager.Instance.Init();
         UIManager.Instance.shopUI.Init();
         TutorialManager.Instance.Init();
         OrderManager.Instance.Init();
@@ -169,6 +189,7 @@ public class GM : Singleton<GM>
         st.Append(tm.GetCommons("Explore")).AppendLine();
         st.Append(tm.GetCommons("Zombie")).AppendLine();
         st.Append(tm.GetCommons("Upgrade")).AppendLine();
+        st.Append(tm.GetCommons("Loan")).AppendLine();
 
         profitText[0].text = st.ToString();
 
@@ -183,7 +204,6 @@ public class GM : Singleton<GM>
         profit_totalText[2].text = tm.GetCommons("Total");
 
         gameOverText[0].text = tm.GetCommons("Gameover");
-        gameOverText[1].text = tm.GetCommons("Gameover2");
 
         nextDayBtn_Text.text = $"> {tm.GetCommons("NextDay")} <";
         gameOverBtn_ToLobby_Text.text = $"> {tm.GetCommons("Menu")} <";
@@ -191,6 +211,10 @@ public class GM : Singleton<GM>
         gameOverWarningBtn_Text.text = tm.GetCommons("Close");
         gameOverWarning_Text.text = tm.GetCommons("Warning");
         gameOverWarningDetail_Text.text = string.Format(tm.GetCommons("GameoverWarning"), "<size=90%><sprite=1></size>");
+
+        congratulationsText[0].text = tm.GetCommons("Congratulations");
+        congratulationsText[1].text = tm.GetCommons("CompleteLoan");
+        congratulationsBtn_Text.text = tm.GetCommons("Resume");
     }
 
     private void Update()
@@ -279,6 +303,7 @@ public class GM : Singleton<GM>
         DayStringUpdate();
         UIManager.Instance.shopUI.DayFirstReview();
         ZombiePooler.Instance.ZombieReset();
+        LoanManager.Instance.PayInterest();
 
         Sequence sequence = DOTween.Sequence().SetUpdate(true).SetAutoKill(true);
         sequence.AppendCallback(() =>
@@ -396,6 +421,8 @@ public class GM : Singleton<GM>
     {
         accountObj.SetActive(false);
 
+        int loanWarning = LoanManager.Instance.NextDayLate();
+
         bool showWarning = false;
         if (rating <= 0f)
         {
@@ -406,12 +433,20 @@ public class GM : Singleton<GM>
             }
             else
             {
+                gameOverText[1].text = tm.GetCommons("Gameover2");
                 GameOver();
                 return;
             }
         }
         else
             warning_gameOver = false;
+
+        if (loanWarning == 0)
+        {
+            gameOverText[1].text = tm.GetCommons("Gameover3");
+            GameOver();
+            return;
+        }
 
         openImage.SetActive(true);
         closeImage.SetActive(false);
@@ -440,6 +475,10 @@ public class GM : Singleton<GM>
             {
                 warningQueue.Enqueue(0);
             }
+            if (loanWarning == 1)
+            {
+                warningQueue.Enqueue(1);
+            }
         });
         sequence.Append(darkCanvas.DOFade(0f, 0.5f));
     }
@@ -453,9 +492,27 @@ public class GM : Singleton<GM>
 
         gameOverObj.SetActive(true);
     }
+    public void Congratulation(bool on)
+    {
+        if (on)
+        {
+            darkCanvas.alpha = 1f;
+            darkCanvas.blocksRaycasts = true;
+            darkCanvas.interactable = true;
+            loading = true;
+        }
+        else
+        {
+            darkCanvas.alpha = 0f;
+            darkCanvas.blocksRaycasts = false;
+            darkCanvas.interactable = false;
+            loading = false;
+        }
+        congratulationsObj.SetActive(on);
+    }
     public void ShowGameOverWarning(bool on)
     {
-        gameOverWarningObj.gameObject.SetActive(on);
+        gameOverWarningObj.SetActive(on);
 
         if (!on)
         {
@@ -478,10 +535,12 @@ public class GM : Singleton<GM>
 
             switch (idx)
             {
-                case 0:
+                case 0: // 평점 위험
                     ShowGameOverWarning(true);
                     break;
-                case 1:
+                case 1: // 대출 위험
+                    LoanManager.Instance.ShowLoanWarning(true);
+                    TutorialManager.Instance.NextDay();
                     break;
             }
         }
