@@ -391,6 +391,16 @@ public class SettingManager : Singleton<SettingManager>
     {
         AudioManager.Instance.PlaySFX(Sfx.buttons);
     }
+    public void ButtonHighlightSound() // 큰 탭 관련 (월드맵, 설정, 주문, 관리 등등)
+    {
+        if (loading || (UIManager.Instance != null && (UIManager.Instance.shopUI.loading || UIManager.Instance.utilUI.loading))) return;
+
+        AudioManager.Instance.PlaySFX(Sfx.btnHighlight2, volume: 0.75f);
+    }
+    public void ButtonHighlightSound2()
+    {
+        AudioManager.Instance.PlaySFX(Sfx.btnHighlight, volume: 0.75f);
+    }
 
     public void OpenSettings()
     {

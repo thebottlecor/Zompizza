@@ -181,4 +181,6 @@ public enum Sfx
     chop,
     kitchenTimer,
     close,
+    btnHighlight,
+    btnHighlight2,
 }

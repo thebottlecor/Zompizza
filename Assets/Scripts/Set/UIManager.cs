@@ -98,6 +98,10 @@ public class UIManager : Singleton<UIManager>
     {
         AudioManager.Instance.PlaySFX(Sfx.buttons);
     }
+    public void ButtonHighlightSound()
+    {
+        AudioManager.Instance.PlaySFX(Sfx.btnHighlight, volume: 0.75f);
+    }
 
     private void Update()
     {

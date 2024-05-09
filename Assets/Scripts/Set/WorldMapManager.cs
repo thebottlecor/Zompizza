@@ -202,6 +202,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
                 if (customerPin.ContainsKey(clickedMinimapItem))
                 {
                     UIManager.Instance.shopUI.ShowOrder(customerPin[clickedMinimapItem]);
+                    AudioManager.Instance.PlaySFX(Sfx.buttons);
                 }
             }
         }
@@ -218,6 +219,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
                 {
                     mouseOverPin = overMinimapItem;
                     overMinimapItem.sizeOnMinimap = customerPin_OverScale;
+                    AudioManager.Instance.PlaySFX(Sfx.btnHighlight);
                 }
             }
             else

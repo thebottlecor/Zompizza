@@ -69,6 +69,15 @@ public class PizzaDirection : MonoBehaviour
 
     }
 
+    private void OnDestroy()
+    {
+        if (sequence != null)
+        {
+            sequence.Kill();
+            sequence = null;
+        }
+    }
+
     public void Init()
     {
         // 해상도가 변경될 때 함수를 불러와서 시퀸스를 새로 만들어야 함

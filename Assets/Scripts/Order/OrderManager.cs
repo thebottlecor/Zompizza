@@ -13,7 +13,7 @@ public class OrderManager : Singleton<OrderManager>
     public List<OrderInfo> orderList;
 
     public PizzaDirection pizzaDirection;
-    public MoneyDirection moneyDirection;
+    //public MoneyDirection moneyDirection;
 
     public SerializableDictionary<OrderInfo, OrderMiniUI> orderMiniUIPair;
 

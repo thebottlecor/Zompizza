@@ -148,7 +148,7 @@ public class ExplorationManager : Singleton<ExplorationManager>
         }
     }
 
-    public void ShowResultPanel()
+    public bool ShowResultPanel()
     {
         if (resultDict.Count > 0)
         {
@@ -175,10 +175,13 @@ public class ExplorationManager : Singleton<ExplorationManager>
             resultText_Detail.text = st.ToString();
 
             OpenUI_ResultPanel();
+
+            return true;
         }
         else
         {
-            // 없으면 아무일도 없음
+            // 없으면 아무일도 없음 // 경고창은 정상적으로 뜸
+            return false;
         }
     }
 

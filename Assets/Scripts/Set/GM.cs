@@ -469,7 +469,7 @@ public class GM : Singleton<GM>
 
             loading = false;
             OrderManager.Instance.NewOrder();
-            ExplorationManager.Instance.ShowResultPanel();
+            bool hasResult = ExplorationManager.Instance.ShowResultPanel();
 
             if (showWarning)
             {
@@ -478,6 +478,11 @@ public class GM : Singleton<GM>
             if (loanWarning == 1)
             {
                 warningQueue.Enqueue(1);
+            }
+
+            if (!hasResult)
+            {
+                ShowWarningQueue();
             }
         });
         sequence.Append(darkCanvas.DOFade(0f, 0.5f));

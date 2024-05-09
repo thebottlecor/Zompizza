@@ -145,9 +145,9 @@ public class TutorialManager : Singleton<TutorialManager>
     public void TutorialSkip()
     {
         trainingCenter.SetActive(false);
-        GM.Instance.player.StopPlayer();
+        GM.Instance.player.StopPlayer(instance:true);
         GM.Instance.player.transform.position = GM.Instance.pizzeriaPos.position;
-        GM.Instance.player.cam.ForceUpdate();
+        GM.Instance.player.cam.ForceUpdate_WhenMoving();
         for (int i = 0; i < tutorialZombie.Length; i++)
         {
             tutorialZombie[i].gameObject.SetActive(false);

@@ -88,8 +88,18 @@ public class CameraFollow2 : MonoBehaviour {
         }
 	}
 
-	public void ForceUpdate()
+	public void ForceUpdate() // 초기화할 때 사용 - 운전 연습장에서 시작
     {
+		Vector3 _targetPos = absoluteInitCameraPosition + carTransform.transform.position;
+		transform.position = _targetPos;
+
+		Vector3 _lookDirection = (new Vector3(carTransform.position.x, carTransform.position.y, carTransform.position.z)) - transform.position;
+		Quaternion _rot = Quaternion.LookRotation(_lookDirection, Vector3.up);
+		transform.rotation = _rot;
+	}
+
+	public void ForceUpdate_WhenMoving() // 이동할 때 사용 - 운전 연습장 => 피자 가게 (회전 다음에 위치 이동 시키면 카메라가 이동하는 듯한 느낌을 줌)
+	{
 		Vector3 _lookDirection = (new Vector3(carTransform.position.x, carTransform.position.y, carTransform.position.z)) - transform.position;
 		Quaternion _rot = Quaternion.LookRotation(_lookDirection, Vector3.up);
 		transform.rotation = _rot;
@@ -97,6 +107,7 @@ public class CameraFollow2 : MonoBehaviour {
 		Vector3 _targetPos = absoluteInitCameraPosition + carTransform.transform.position;
 		transform.position = _targetPos;
 	}
+
 
 	public void Shake(float strength)
     {

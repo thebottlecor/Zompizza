@@ -24,4 +24,4 @@ MonoBehaviour:
     ratingGet: 0
     maxSpeed: 0
     damageReduce: 0.05
-  icon: {fileID: 976728236, guid: 3aa4e097f0107b14291c62f14a55a3b9, type: 3}
+  icon: {fileID: 977260030, guid: 3aa4e097f0107b14291c62f14a55a3b9, type: 3}

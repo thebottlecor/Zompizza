@@ -308,12 +308,18 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void StopPlayer(bool forceRotate = true)
+    public void StopPlayer(bool forceRotate = true, bool instance = false)
     {
         //this.transform.eulerAngles = Vector3.zero;
 
         if (forceRotate)
-            this.transform.DORotate(Vector3.zero, 1f).SetUpdate(true);
+        {
+            if (instance)
+                this.transform.localEulerAngles = Vector3.zero;
+            else
+                this.transform.DORotate(Vector3.zero, 1f).SetUpdate(true);
+
+        }
         else
         {
             // 긴급 탈출의 경우 z 회전만 초기화
