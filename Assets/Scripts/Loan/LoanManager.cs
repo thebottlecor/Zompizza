@@ -60,7 +60,10 @@ public class LoanManager : Singleton<LoanManager>
 
             int remainPay = interest - possiblePay; // ¸ø °±Àº ÀÌÀÚ
             if (remainPay > 0)
+            {
                 AddDebt(remainPay);
+                interestText.text = $"{tm.GetCommons("Interest")} : <color=#CF3838>{Interest}$</color>";
+            }
         }
     }
 
