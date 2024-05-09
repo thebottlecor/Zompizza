@@ -512,6 +512,7 @@ public class ShopUI : EventListener
         float ratingGet = info.effect.ratingGet;
         int maxSpeed = info.effect.maxSpeed;
         float defense = info.effect.damageReduce;
+        float accel = info.effect.acceleration;
 
         st.Append("<size=90%>");
         if (goldGet != 0f)
@@ -552,6 +553,16 @@ public class ShopUI : EventListener
             else
                 sub = string.Format(tm.defaultCultureInfo, "{0:P0}", defense);
             st.AppendFormat(tm.GetCommons("UpgradeEffect3"), sub);
+            st.AppendLine();
+        }
+        if (accel != 0)
+        {
+            string sub;
+            if (accel > 0f)
+                sub = string.Format(tm.defaultCultureInfo, "+{0:P0}", accel);
+            else
+                sub = string.Format(tm.defaultCultureInfo, "{0:P0}", accel);
+            st.AppendFormat(tm.GetCommons("UpgradeEffect4"), sub);
             st.AppendLine();
         }
 

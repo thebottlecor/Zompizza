@@ -9,6 +9,7 @@ public struct ResearchEffect
     public float ratingGet;
     public int maxSpeed;
     public float damageReduce;
+    public float acceleration;
 }
 //[System.Serializable]
 //public struct ResearchUnlockRecipe
@@ -60,6 +61,7 @@ public class ResearchInfo : ScriptableObject
             ratingGet = effect.ratingGet + global.ratingGet,
             maxSpeed = effect.maxSpeed + global.maxSpeed,
             damageReduce = effect.damageReduce + global.damageReduce,
+            acceleration = effect.acceleration + global.acceleration,
 
         };
         return temp;

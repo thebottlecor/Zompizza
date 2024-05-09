@@ -30,8 +30,10 @@ public class PlayerController : MonoBehaviour
 
     [Range(10, 120)]
     public int maxReverseSpeed = 45; //The maximum speed that the car can reach while going on reverse in km/h.
+
     [Range(1, 10)]
     public int accelerationMultiplier = 2; // How fast the car can accelerate. 1 is a slow acceleration and 10 is the fastest.
+    public float Accel => (ResearchManager.Instance.globalEffect.acceleration + 1f) * 50f * accelerationMultiplier;
     [Space(10)]
     [Range(10, 45)]
     public int maxSteeringAngle = 27; // The maximum angle that the tires can reach while rotating the steering wheel.
@@ -746,13 +748,13 @@ public class PlayerController : MonoBehaviour
         if(Mathf.RoundToInt(carSpeed) < MaxSpeed){
           //Apply positive torque in all wheels to go forward if maxSpeed has not been reached.
           frontLeftCollider.brakeTorque = 0;
-          frontLeftCollider.motorTorque = (accelerationMultiplier * 50f) * throttleAxis;
+          frontLeftCollider.motorTorque = Accel * throttleAxis;
           frontRightCollider.brakeTorque = 0;
-          frontRightCollider.motorTorque = (accelerationMultiplier * 50f) * throttleAxis;
+          frontRightCollider.motorTorque = Accel * throttleAxis;
           rearLeftCollider.brakeTorque = 0;
-          rearLeftCollider.motorTorque = (accelerationMultiplier * 50f) * throttleAxis;
+          rearLeftCollider.motorTorque = Accel * throttleAxis;
           rearRightCollider.brakeTorque = 0;
-          rearRightCollider.motorTorque = (accelerationMultiplier * 50f) * throttleAxis;
+          rearRightCollider.motorTorque = Accel * throttleAxis;
         }else {
           // If the maxSpeed has been reached, then stop applying torque to the wheels.
           // IMPORTANT: The maxSpeed variable should be considered as an approximation; the speed of the car
@@ -790,13 +792,13 @@ public class PlayerController : MonoBehaviour
         if(Mathf.Abs(Mathf.RoundToInt(carSpeed)) < maxReverseSpeed){
           //Apply negative torque in all wheels to go in reverse if maxReverseSpeed has not been reached.
           frontLeftCollider.brakeTorque = 0;
-          frontLeftCollider.motorTorque = (accelerationMultiplier * 50f) * throttleAxis;
+          frontLeftCollider.motorTorque = Accel * throttleAxis;
           frontRightCollider.brakeTorque = 0;
-          frontRightCollider.motorTorque = (accelerationMultiplier * 50f) * throttleAxis;
+          frontRightCollider.motorTorque = Accel * throttleAxis;
           rearLeftCollider.brakeTorque = 0;
-          rearLeftCollider.motorTorque = (accelerationMultiplier * 50f) * throttleAxis;
+          rearLeftCollider.motorTorque = Accel * throttleAxis;
           rearRightCollider.brakeTorque = 0;
-          rearRightCollider.motorTorque = (accelerationMultiplier * 50f) * throttleAxis;
+          rearRightCollider.motorTorque = Accel * throttleAxis;
         }else {
           //If the maxReverseSpeed has been reached, then stop applying torque to the wheels.
           // IMPORTANT: The maxReverseSpeed variable should be considered as an approximation; the speed of the car
