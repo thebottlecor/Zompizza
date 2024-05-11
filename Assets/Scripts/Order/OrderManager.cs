@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using System.Linq;
 
 public class OrderManager : Singleton<OrderManager>
 {
@@ -170,8 +171,22 @@ public class OrderManager : Singleton<OrderManager>
     [ContextMenu("货肺款 林巩")]
     public void NewOrder()
     {
+        // 单葛侩 2老:3俺 = 3老 : 4俺 ~~
         List<int> rand = new List<int> { 0, 1, 2, 3, 4, 5 };
         rand.Shuffle();
+        switch (GM.Instance.day)
+        {
+            case 0:
+            case 1:
+                rand = rand.Take(3).ToList();
+                break;
+            case 2:
+                rand = rand.Take(4).ToList();
+                break;
+            case 3:
+                rand = rand.Take(5).ToList();
+                break;
+        }
 
         //bool hasMinimumRes = GM.Instance.HasIngredient >= Constant.customer_max_ingredient;
 

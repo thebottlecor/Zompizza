@@ -116,6 +116,7 @@ public class TutorialManager : Singleton<TutorialManager>
         guideTexts[5].text = tm.GetCommons("Tutorial06");
         guideTexts[6].text = tm.GetCommons("Tutorial07");
         guideTexts[7].text = tm.GetCommons("Tutorial08");
+        guideTexts[8].text = tm.GetCommons("Tutorial09");
     }
 
     protected override void AddListeners()
@@ -248,7 +249,8 @@ public class TutorialManager : Singleton<TutorialManager>
         }
         else if (step == 11)
         {
-            guideObjects[7].SetActive(false);
+            //guideObjects[7].SetActive(false);
+            guideObjects[8].SetActive(false);
             step = 12;
         }
     }
@@ -291,7 +293,8 @@ public class TutorialManager : Singleton<TutorialManager>
     {
         if (step == 10)
         {
-            guideObjects[7].SetActive(true);
+            //guideObjects[7].SetActive(true);
+            guideObjects[8].SetActive(true);
             step = 11;
         }
     }

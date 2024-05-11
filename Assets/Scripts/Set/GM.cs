@@ -93,10 +93,11 @@ public class GM : Singleton<GM>
     public TextMeshProUGUI gameOverBtn_ToLobby_Text;
     public bool loading;
 
-    [Header("ºú °±À½ ÃàÇÏ")]
+    [Header("ÆòÁ¡ È¹µæ ÃàÇÏ")] // ¿ø·¡´Â ºú °±À½
     public GameObject congratulationsObj;
     public TextMeshProUGUI[] congratulationsText;
     public TextMeshProUGUI congratulationsBtn_Text;
+    public bool CongratulationTriggered { get; private set; }
 
     [Header("ÆòÁ¡ °ÔÀÓ ¿À¹ö °æ°í")]
     public GameObject gameOverWarningObj;
@@ -173,7 +174,7 @@ public class GM : Singleton<GM>
         day = 0;
         DayStringUpdate();
         ResearchManager.Instance.Init();
-        LoanManager.Instance.Init();
+        //LoanManager.Instance.Init();
         UIManager.Instance.shopUI.Init();
         TutorialManager.Instance.Init();
         OrderManager.Instance.Init();
@@ -213,7 +214,7 @@ public class GM : Singleton<GM>
         gameOverWarningDetail_Text.text = string.Format(tm.GetCommons("GameoverWarning"), "<size=90%><sprite=1></size>");
 
         congratulationsText[0].text = tm.GetCommons("Congratulations");
-        congratulationsText[1].text = tm.GetCommons("CompleteLoan");
+        congratulationsText[1].text = tm.GetCommons("CompleteRating");
         congratulationsBtn_Text.text = tm.GetCommons("Resume");
     }
 
@@ -303,7 +304,7 @@ public class GM : Singleton<GM>
         DayStringUpdate();
         UIManager.Instance.shopUI.DayFirstReview();
         ZombiePooler.Instance.ZombieReset();
-        LoanManager.Instance.PayInterest();
+        //LoanManager.Instance.PayInterest();
 
         Sequence sequence = DOTween.Sequence().SetUpdate(true).SetAutoKill(true);
         sequence.AppendCallback(() =>
@@ -421,7 +422,8 @@ public class GM : Singleton<GM>
     {
         accountObj.SetActive(false);
 
-        int loanWarning = LoanManager.Instance.NextDayLate();
+        //int loanWarning = LoanManager.Instance.NextDayLate();
+        int loanWarning = -1;
 
         bool showWarning = false;
         if (rating <= 0f)
@@ -484,6 +486,8 @@ public class GM : Singleton<GM>
             {
                 ShowWarningQueue();
             }
+
+            TutorialManager.Instance.NextDay();
         });
         sequence.Append(darkCanvas.DOFade(0f, 0.5f));
     }
@@ -501,6 +505,9 @@ public class GM : Singleton<GM>
     {
         if (on)
         {
+            if (CongratulationTriggered) return;
+            CongratulationTriggered = true;
+
             darkCanvas.alpha = 1f;
             darkCanvas.blocksRaycasts = true;
             darkCanvas.interactable = true;
@@ -544,8 +551,8 @@ public class GM : Singleton<GM>
                     ShowGameOverWarning(true);
                     break;
                 case 1: // ´ëÃâ À§Çè
-                    LoanManager.Instance.ShowLoanWarning(true);
-                    TutorialManager.Instance.NextDay();
+                    //LoanManager.Instance.ShowLoanWarning(true);
+                    //TutorialManager.Instance.NextDay();
                     break;
             }
         }

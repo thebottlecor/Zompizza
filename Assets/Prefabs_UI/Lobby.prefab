@@ -2209,7 +2209,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: 07c799c3efda1c04d9d54244676d5e00, type: 2}
   m_Color: {r: 0.6618014, g: 0.8301887, b: 0.20754717, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -2350,7 +2350,7 @@ MonoBehaviour:
       m_Calls: []
   others:
   - {fileID: 7117688616073941965}
-  clearOtherAction: 0
+  playHighlightSound: 0
 --- !u!1 &1424118927787209486
 GameObject:
   m_ObjectHideFlags: 0
@@ -4103,6 +4103,16 @@ MonoBehaviour:
     - Key: 17
       Value:
         clip: {fileID: 8300000, guid: 2a134809872a28f41a40f03d1792516f, type: 3}
+        volumeOffset: 0
+        maxPlay: 0
+    - Key: 18
+      Value:
+        clip: {fileID: 8300000, guid: c8e03390b4fbe3f46bca2a40277dc597, type: 3}
+        volumeOffset: 0
+        maxPlay: 0
+    - Key: 19
+      Value:
+        clip: {fileID: 8300000, guid: 46c27eb84d3dd71439261e7d97c2b368, type: 3}
         volumeOffset: 0
         maxPlay: 0
 --- !u!1 &3230877239920990169
@@ -6677,7 +6687,7 @@ MonoBehaviour:
         m_CallState: 2
   others:
   - {fileID: 8641201170058786156}
-  clearOtherAction: 0
+  playHighlightSound: 0
 --- !u!114 &98239970040108639
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7406,7 +7416,7 @@ MonoBehaviour:
         m_CallState: 2
   others:
   - {fileID: 1832552310885586679}
-  clearOtherAction: 0
+  playHighlightSound: 0
 --- !u!1 &5633130601363317075
 GameObject:
   m_ObjectHideFlags: 0

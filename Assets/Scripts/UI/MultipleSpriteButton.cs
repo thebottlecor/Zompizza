@@ -7,7 +7,7 @@ public class MultipleSpriteButton : Button
 {
     public List<Graphic> others = new List<Graphic>();
 
-    public bool clearOtherAction;
+    public bool playHighlightSound;
 
     protected override void DoStateTransition(SelectionState state, bool instant)
     {
@@ -23,6 +23,16 @@ public class MultipleSpriteButton : Button
         for (int i = 0; i < others.Count; i++)
         {
             others[i].CrossFadeColor(targetColor, instant ? 0f : colors.fadeDuration, true, true);
+        }
+
+        if (playHighlightSound)
+        {
+            switch (state)
+            {
+                case SelectionState.Highlighted:
+                    SettingManager.Instance.ButtonHighlightSound();
+                    break;
+            }
         }
     }
 }

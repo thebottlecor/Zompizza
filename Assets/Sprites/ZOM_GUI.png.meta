@@ -1608,6 +1608,48 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: button_10
+      rect:
+        serializedVersion: 2
+        x: 1744
+        y: 956
+        width: 130
+        height: 130
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 96528d1e589fcc84fa93d455ddfd8a7b
+      internalID: 1381418644
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: button_09
+      rect:
+        serializedVersion: 2
+        x: 1911
+        y: 956
+        width: 130
+        height: 130
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4cbc999aff1f0ea4988ce4bf20a9fd63
+      internalID: 226676424
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -1700,6 +1742,8 @@ TextureImporter:
       button_06: -302447942
       button_07: 338934223
       button_08: -1511401379
+      button_09: 226676424
+      button_10: 1381418644
       cancel: -532384255
       check: -1068914690
       clock: 2078011449

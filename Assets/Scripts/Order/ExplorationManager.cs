@@ -114,9 +114,12 @@ public class ExplorationManager : Singleton<ExplorationManager>
         // 받지 않았던 주문 패널티 
         OrderManager.Instance.RemoveAllOrders();
 
-        GM.Instance.AddGold(-1 * cost, GM.GetGoldSource.explore);
-
         ExplorationResult();
+        if (resultDict.Count > 0)
+        {
+            GM.Instance.AddGold(-1 * cost, GM.GetGoldSource.explore);
+            AudioManager.Instance.PlaySFX(Sfx.carStart);
+        }
 
         GM.Instance.NextDay();
     }

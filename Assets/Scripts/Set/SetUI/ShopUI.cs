@@ -151,6 +151,16 @@ public class ShopUI : EventListener
 
     private void OnPlayerArriveShop(object sender, EventArgs e)
     {
+        if (GM.Instance.rating >= Constant.winRating)
+        {
+            if (!GM.Instance.CongratulationTriggered)
+            {
+                GM.Instance.Congratulation(true);
+                AudioManager.Instance.PlaySFX(Sfx.complete);
+                upgradeDirection.Show();
+            }
+        }
+
         ShowOrder();
         playerStay = true;
     }

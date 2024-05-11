@@ -52,4 +52,7 @@ public class Constant
     public const float remainHpRating4 = -2.5f;
 
     public static float Point05(float x) => Mathf.Floor(x * 2f) / 2f;
+
+
+    public const float winRating = 30f;
 }

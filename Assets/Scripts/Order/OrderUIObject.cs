@@ -136,12 +136,11 @@ public class OrderUIObject : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         if (OrderManager.Instance.IsMaxDelivery) return;
 
         info.accepted = true;
-
         OrderManager.Instance.OrderAccepted(info);
-
         OrderReset();
-
         OrderManager.Instance.OrderGoalUpdate();
+
+        AudioManager.Instance.PlaySFX(Sfx.okay);
     }
 
     public void OrderReset()

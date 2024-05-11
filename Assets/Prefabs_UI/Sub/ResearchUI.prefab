@@ -213,7 +213,7 @@ MonoBehaviour:
   others:
   - {fileID: 986469701622926531}
   - {fileID: 7760565882838624614}
-  clearOtherAction: 0
+  playHighlightSound: 1
 --- !u!114 &206849093865636166
 MonoBehaviour:
   m_ObjectHideFlags: 0

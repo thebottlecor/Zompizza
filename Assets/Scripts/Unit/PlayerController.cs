@@ -196,6 +196,7 @@ public class PlayerController : MonoBehaviour
     private Coroutine soundCoroutine;
     private Coroutine decelerateCoroutine;
     private Coroutine recoverTractionCoroutine;
+    private Coroutine iceCoroutine;
 
     void OnCollisionEnter(Collision collision)
     {
@@ -267,35 +268,40 @@ public class PlayerController : MonoBehaviour
     {
         if (other.gameObject.layer == 12) // 빙판
         {
-            FLwheelFriction.stiffness = 0f;
-            frontLeftCollider.sidewaysFriction = FLwheelFriction;
-
-            FRwheelFriction.stiffness = 0f;
-            frontRightCollider.sidewaysFriction = FRwheelFriction;
-
-            RLwheelFriction.stiffness = 0f;
-            rearLeftCollider.sidewaysFriction = RLwheelFriction;
-
-            RRwheelFriction.stiffness = 0f;
-            rearRightCollider.sidewaysFriction = RRwheelFriction;
+            if (iceCoroutine != null)
+                StopCoroutine(iceCoroutine);
+            iceCoroutine = StartCoroutine(RecoverIce());
         }
     }
-    private void OnTriggerExit(Collider other)
+    private IEnumerator RecoverIce()
     {
-        if (other.gameObject.layer == 12) // 빙판
-        {
-            FLwheelFriction.stiffness = 1f;
-            frontLeftCollider.sidewaysFriction = FLwheelFriction;
+        FLwheelFriction.stiffness = 0f;
+        frontLeftCollider.sidewaysFriction = FLwheelFriction;
 
-            FRwheelFriction.stiffness = 1f;
-            frontRightCollider.sidewaysFriction = FRwheelFriction;
+        FRwheelFriction.stiffness = 0f;
+        frontRightCollider.sidewaysFriction = FRwheelFriction;
 
-            RLwheelFriction.stiffness = 1f;
-            rearLeftCollider.sidewaysFriction = RLwheelFriction;
+        RLwheelFriction.stiffness = 0f;
+        rearLeftCollider.sidewaysFriction = RLwheelFriction;
 
-            RRwheelFriction.stiffness = 1f;
-            rearRightCollider.sidewaysFriction = RRwheelFriction;
-        }
+        RRwheelFriction.stiffness = 0f;
+        rearRightCollider.sidewaysFriction = RRwheelFriction;
+
+        yield return CoroutineHelper.WaitForSeconds(0.5f);
+
+        FLwheelFriction.stiffness = 1f;
+        frontLeftCollider.sidewaysFriction = FLwheelFriction;
+
+        FRwheelFriction.stiffness = 1f;
+        frontRightCollider.sidewaysFriction = FRwheelFriction;
+
+        RLwheelFriction.stiffness = 1f;
+        rearLeftCollider.sidewaysFriction = RLwheelFriction;
+
+        RRwheelFriction.stiffness = 1f;
+        rearRightCollider.sidewaysFriction = RRwheelFriction;
+
+        iceCoroutine = null;
     }
 
     public void UpdateBox(int box)

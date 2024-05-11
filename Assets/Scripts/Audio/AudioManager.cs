@@ -183,4 +183,6 @@ public enum Sfx
     close,
     btnHighlight,
     btnHighlight2,
+    okay,
+    carStart,
 }
