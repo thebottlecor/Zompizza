@@ -34,6 +34,8 @@ public class TutorialManager : Singleton<TutorialManager>
     public GameObject shopGoal;
     public GameObject returnGoal;
 
+    public GameObject[] indicators;
+
     private TextManager tm => TextManager.Instance;
     private SettingManager sm => SettingManager.Instance;
 
@@ -58,6 +60,10 @@ public class TutorialManager : Singleton<TutorialManager>
         for (int i = 0; i < guideObjects.Length; i++)
         {
             guideObjects[i].SetActive(false);
+        }
+        for (int i = 0; i < indicators.Length; i++)
+        {
+            indicators[i].SetActive(false);
         }
         shopGoal.SetActive(false);
         returnGoal.SetActive(false);
@@ -220,6 +226,7 @@ public class TutorialManager : Singleton<TutorialManager>
     {
         guideObjects[1].SetActive(false);
         guideObjects[2].SetActive(true);
+        indicators[0].SetActive(true);
         UIManager.Instance.shopUI.shopCloseBtn.enabled = false;
         step = 3;
     }
@@ -229,6 +236,7 @@ public class TutorialManager : Singleton<TutorialManager>
         if (step == 3)
         {
             guideObjects[2].SetActive(false);
+            indicators[0].SetActive(false);
             step = 4;
         }
     }
@@ -237,6 +245,7 @@ public class TutorialManager : Singleton<TutorialManager>
         if (step == 4)
         {
             guideObjects[3].SetActive(true);
+            indicators[1].SetActive(true);
             step = 5;
         }
     }
@@ -245,6 +254,7 @@ public class TutorialManager : Singleton<TutorialManager>
         if (step == 5)
         {
             guideObjects[3].SetActive(false);
+            indicators[1].SetActive(false);
             step = 6;
         }
         else if (step == 11)
@@ -259,6 +269,7 @@ public class TutorialManager : Singleton<TutorialManager>
         if (step == 6)
         {
             guideObjects[4].SetActive(true);
+            indicators[2].SetActive(true);
             step = 7;
             shopGate.alwaysClosed = false;
         }
@@ -268,7 +279,9 @@ public class TutorialManager : Singleton<TutorialManager>
         if (step == 7)
         {
             guideObjects[4].SetActive(false);
+            indicators[2].SetActive(false);
             guideObjects[5].SetActive(true);
+            indicators[3].SetActive(true);
             returnGoal.SetActive(true);
             step = 8;
         }
@@ -276,7 +289,9 @@ public class TutorialManager : Singleton<TutorialManager>
     private void Step9()
     {
         guideObjects[5].SetActive(false);
+        indicators[3].SetActive(false);
         guideObjects[6].SetActive(true);
+        indicators[4].SetActive(true);
         step = 9;
     }
     public void SendExploration()
@@ -284,6 +299,7 @@ public class TutorialManager : Singleton<TutorialManager>
         if (step == 9)
         {
             guideObjects[6].SetActive(false);
+            indicators[4].SetActive(false);
             UIManager.Instance.shopUI.shopCloseBtn.enabled = true;
             training = false;
             step = 10;
@@ -309,6 +325,10 @@ public class TutorialManager : Singleton<TutorialManager>
         for (int i = 0; i < guideObjects.Length; i++)
         {
             guideObjects[i].SetActive(false);
+        }
+        for (int i =0; i < indicators.Length; i++)
+        {
+            indicators[i].SetActive(false);
         }
         shopGoal.SetActive(false);
         returnGoal.SetActive(false);

@@ -54,5 +54,5 @@ public class Constant
     public static float Point05(float x) => Mathf.Floor(x * 2f) / 2f;
 
 
-    public const float winRating = 30f;
+    public const float winRating = 20f;
 }

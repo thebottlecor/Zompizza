@@ -35,6 +35,10 @@ MonoBehaviour:
   - {r: 0.2901961, g: 0.21960786, b: 0.41960788, a: 1}
   - {r: 0.1764706, g: 0.3019608, b: 0.5803922, a: 1}
   - {r: 0.13725491, g: 0.45882356, b: 0.26666668, a: 1}
+  - {r: 0.13725491, g: 0.45882356, b: 0.26666668, a: 1}
+  - {r: 0.13725491, g: 0.45882356, b: 0.26666668, a: 1}
+  - {r: 0.13725491, g: 0.45882356, b: 0.26666668, a: 1}
+  - {r: 0.13725491, g: 0.45882356, b: 0.26666668, a: 1}
   pizaaHpGradient:
     serializedVersion: 2
     key0: {r: 1, g: 0.6, b: 0.6, a: 0.5019608}
@@ -102,6 +106,10 @@ MonoBehaviour:
   - {fileID: 21300000, guid: c2681aa7de9a57548ac906f9844e4e51, type: 3}
   - {fileID: 21300000, guid: c952e6a48425c984e9755e7b03570ac4, type: 3}
   - {fileID: 21300000, guid: d70719c915d54134590aaf5e311bca92, type: 3}
+  - {fileID: 21300000, guid: 1d51f408377429d4f98ef67ba750b0ad, type: 3}
+  - {fileID: 21300000, guid: d644255c0feb56f45b428c09410c0e06, type: 3}
+  - {fileID: 21300000, guid: 9562b3bb4638b0b4f9612ce5d7646f22, type: 3}
+  - {fileID: 21300000, guid: dce76c43d1e932745a647e879658332a, type: 3}
   - {fileID: 21300000, guid: 6f38de49bd9830b4ab1579b7e8346b2b, type: 3}
   - {fileID: 21300000, guid: 0ba73e4876f23574f9b54dde3ce28652, type: 3}
   - {fileID: 21300000, guid: f4075eb3553a2544da384c921a4287fe, type: 3}

@@ -618,9 +618,9 @@ public class GM : Singleton<GM>
             for (int i = 0; i < ratingText.Length; i++)
             {
                 if (displayRating <= 0)
-                    ratingText[i].text = $"<color=#A91111>{displayRating:0.#}</color>";
+                    ratingText[i].text = $"<color=#A91111>{displayRating:0.#}</color> / {Constant.winRating:F0}";
                 else
-                    ratingText[i].text = $"{displayRating:0.#}";
+                    ratingText[i].text = $"{displayRating:0.#} / {Constant.winRating:F0}";
             }
 
         }).SetEase(Ease.OutCirc).SetUpdate(true);
@@ -639,9 +639,9 @@ public class GM : Singleton<GM>
         for (int i = 0; i < ratingText.Length; i++)
         {
             if (displayRating <= 0)
-                ratingText[i].text = $"<color=#A91111>{displayRating:0.#}</color>";
+                ratingText[i].text = $"<color=#A91111>{displayRating:0.#}</color> / {Constant.winRating:F0}";
             else
-                ratingText[i].text = $"{displayRating:0.#}";
+                ratingText[i].text = $"{displayRating:0.#} / {Constant.winRating:F0}";
         }
     }
     #endregion

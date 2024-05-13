@@ -22,7 +22,7 @@ MonoBehaviour:
   effect:
     goldGet: 0
     ratingGet: 0
-    maxSpeed: 0
+    maxSpeed: 5
     damageReduce: 0
     acceleration: 0.05
   icon: {fileID: -772541953, guid: 3aa4e097f0107b14291c62f14a55a3b9, type: 3}

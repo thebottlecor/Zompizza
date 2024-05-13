@@ -47,6 +47,11 @@ public class LoadingSceneManager : Singleton<LoadingSceneManager>
 
     public void ToLobby()
     {
+        if (WorldMapManager.Instance != null)
+        {
+            WorldMapManager.Instance.CloseFullscreenMap();
+        }
+
         SettingManager.Instance.ReturnToParent();
         LoadScene("lobby");
         Time.timeScale = 1f;

@@ -1000,7 +1000,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ZOM_GUI_51
+      name: arrow
       rect:
         serializedVersion: 2
         x: 224
@@ -1617,7 +1617,7 @@ TextureImporter:
         width: 130
         height: 130
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1638,7 +1638,7 @@ TextureImporter:
         width: 130
         height: 130
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -1703,7 +1703,6 @@ TextureImporter:
       ZOM_GUI_49: -402926435
       ZOM_GUI_5: 1417096844
       ZOM_GUI_50: -772541953
-      ZOM_GUI_51: 1578708741
       ZOM_GUI_52: 1171680373
       ZOM_GUI_53: 17739959
       ZOM_GUI_54: 885986420
@@ -1734,6 +1733,7 @@ TextureImporter:
       ZOM_GUI_78: -1473313620
       ZOM_GUI_79: 2054952763
       ZOM_GUI_9: 1591077140
+      arrow: 1578708741
       button_01: 793004247
       button_02: 1118936077
       button_03: 748944128

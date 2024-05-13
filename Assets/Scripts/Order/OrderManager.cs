@@ -172,7 +172,7 @@ public class OrderManager : Singleton<OrderManager>
     public void NewOrder()
     {
         // 데모용 2일:3개 = 3일 : 4개 ~~
-        List<int> rand = new List<int> { 0, 1, 2, 3, 4, 5 };
+        List<int> rand = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
         rand.Shuffle();
         switch (GM.Instance.day)
         {
@@ -200,6 +200,11 @@ public class OrderManager : Singleton<OrderManager>
             totalDist += km;
 
             if (totalDist >= Constant.delivery_order_km) // 최대 주행거리 이상일 경우 주문 그만 받음
+            {
+                lastRand = i + 1;
+                break;
+            }
+            if (i == 5)
             {
                 lastRand = i + 1;
                 break;
