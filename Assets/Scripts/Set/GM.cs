@@ -37,6 +37,7 @@ public class GM : Singleton<GM>
     // 플레이어가 가진 자원
     public int gold;
     public float rating;
+    public float RatingDailyChange { get; private set; }
     public SerializableDictionary<Ingredient, int> ingredients;
     public int HasIngredient
     {
@@ -62,7 +63,7 @@ public class GM : Singleton<GM>
         explore,
         zombie,
         upgrade,
-        loan,
+        //loan,
     }
     public enum GetRatingSource
     {
@@ -190,7 +191,7 @@ public class GM : Singleton<GM>
         st.Append(tm.GetCommons("Explore")).AppendLine();
         st.Append(tm.GetCommons("Zombie")).AppendLine();
         st.Append(tm.GetCommons("Upgrade")).AppendLine();
-        st.Append(tm.GetCommons("Loan")).AppendLine();
+        //st.Append(tm.GetCommons("Loan")).AppendLine();
 
         profitText[0].text = st.ToString();
 
@@ -290,7 +291,7 @@ public class GM : Singleton<GM>
         CarSpeedUI(player.carSpeed, player.MaxSpeed);
     }
 
-    public void DayStringUpdate()
+    private void DayStringUpdate()
     {
         dayStr[0] = string.Format(tm.GetCommons("Day"), day + 1) + "  ";
         dayStr[1] = string.Format(tm.GetCommons("Day"), day + 1) + "  <color=#A91111>18:00</color>"; // 영업 종료시
@@ -324,7 +325,7 @@ public class GM : Singleton<GM>
             accountObj.SetActive(true);
         });
     }
-    public void UpdateAccountUI()
+    private void UpdateAccountUI()
     {
         // 머니
         {
@@ -408,6 +409,8 @@ public class GM : Singleton<GM>
             }
             else
                 profit_totalText[3].text = $"<color=#A91111>{total:0.#}</color>";
+
+            RatingDailyChange = total;
         }
 
         accountText[1].text = $"<sprite={2}> {tm.GetCommons("Money")} ({gold})";
@@ -418,7 +421,7 @@ public class GM : Singleton<GM>
 
     }
 
-    public void NextDay_Late()
+    private void NextDay_Late()
     {
         accountObj.SetActive(false);
 

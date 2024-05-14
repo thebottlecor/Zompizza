@@ -300,6 +300,7 @@ public class TutorialManager : Singleton<TutorialManager>
         {
             guideObjects[6].SetActive(false);
             indicators[4].SetActive(false);
+            indicators[5].SetActive(true);
             UIManager.Instance.shopUI.shopCloseBtn.enabled = true;
             training = false;
             step = 10;
@@ -311,6 +312,7 @@ public class TutorialManager : Singleton<TutorialManager>
         {
             //guideObjects[7].SetActive(true);
             guideObjects[8].SetActive(true);
+            indicators[5].SetActive(false);
             step = 11;
         }
     }

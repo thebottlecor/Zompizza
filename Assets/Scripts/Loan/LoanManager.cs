@@ -56,7 +56,7 @@ public class LoanManager : Singleton<LoanManager>
         {
             int possiblePay = Mathf.Min(GM.Instance.gold, interest);
 
-            GM.Instance.AddGold(-1 * possiblePay, GM.GetGoldSource.loan);
+            //GM.Instance.AddGold(-1 * possiblePay, GM.GetGoldSource.loan);
 
             int remainPay = interest - possiblePay; // ¸ø °±Àº ÀÌÀÚ
             if (remainPay > 0)
@@ -113,7 +113,7 @@ public class LoanManager : Singleton<LoanManager>
 
         if (realRepay > 0 && GM.Instance.gold >= realRepay)
         {
-            GM.Instance.AddGold(-1 * realRepay, GM.GetGoldSource.loan);
+            //GM.Instance.AddGold(-1 * realRepay, GM.GetGoldSource.loan);
             AddDebt(-1 * realRepay);
 
             interestText.text = $"{tm.GetCommons("Interest")} : <color=#CF3838>{Interest}$</color>";
