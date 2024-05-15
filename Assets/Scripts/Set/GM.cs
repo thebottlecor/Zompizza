@@ -190,7 +190,8 @@ public class GM : Singleton<GM>
         st.Append(tm.GetCommons("Delivery")).AppendLine();
         st.Append(tm.GetCommons("Explore")).AppendLine();
         st.Append(tm.GetCommons("Zombie")).AppendLine();
-        st.Append(tm.GetCommons("Upgrade")).AppendLine();
+        st.Append(tm.GetCommons("Upgrade"));
+        //.AppendLine();
         //st.Append(tm.GetCommons("Loan")).AppendLine();
 
         profitText[0].text = st.ToString();

@@ -334,4 +334,23 @@ public class PizzaDirection : MonoBehaviour
     //    }
     //}
 
+    //[Header("동영상 연출용")]
+    //[SerializeField] private GameObject[] upgradeObjects;
+    //[SerializeField] private int curretUpgrade;
+
+    //private void Update()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.H))
+    //    {
+    //        if (curretUpgrade >= upgradeObjects.Length)
+    //            curretUpgrade = 0;
+
+    //        for (int i = 0; i < upgradeObjects.Length;i ++)
+    //        {
+    //            upgradeObjects[i].SetActive(false);
+    //        }
+    //        upgradeObjects[curretUpgrade++].SetActive(true);
+    //    }
+    //}
+
 }

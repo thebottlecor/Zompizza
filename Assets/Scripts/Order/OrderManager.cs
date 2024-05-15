@@ -186,24 +186,24 @@ public class OrderManager : Singleton<OrderManager>
             case 3:
                 rand = rand.Take(5).ToList();
                 break;
-            default:
-                {
-                    // 이제부터 전날 평점에 영향받음
-                    float previousRating = GM.Instance.RatingDailyChange;
-                    int maxOrder = 1;
-                    if (previousRating >= 10f)
-                        maxOrder = 6;
-                    else if (previousRating >= 8f)
-                        maxOrder = 5;
-                    else if (previousRating >= 6f)
-                        maxOrder = 4;
-                    else if (previousRating >= 4f)
-                        maxOrder = 3;
-                    else if (previousRating >= 2f)
-                        maxOrder = 2;
-                    rand = rand.Take(maxOrder).ToList();
-                }
-                break;
+            //default:
+            //    {
+            //        // 이제부터 전날 평점에 영향받음
+            //        float previousRating = GM.Instance.RatingDailyChange;
+            //        int maxOrder = 1;
+            //        if (previousRating >= 10f)
+            //            maxOrder = 6;
+            //        else if (previousRating >= 8f)
+            //            maxOrder = 5;
+            //        else if (previousRating >= 6f)
+            //            maxOrder = 4;
+            //        else if (previousRating >= 4f)
+            //            maxOrder = 3;
+            //        else if (previousRating >= 2f)
+            //            maxOrder = 2;
+            //        rand = rand.Take(maxOrder).ToList();
+            //    }
+            //    break;
         }
 
         //bool hasMinimumRes = GM.Instance.HasIngredient >= Constant.customer_max_ingredient;

@@ -161,6 +161,9 @@ public class ZombiePooler : Singleton<ZombiePooler>
 
     public void Spawn(int count)
     {
+        if (count <= 0)
+            return;
+
         for (int i = 0; i < maxZombie; i++)
         {
             var zom = zombiesPool[i];

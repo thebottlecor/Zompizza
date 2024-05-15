@@ -76,6 +76,9 @@ public class ShopUI : EventListener
     public TextMeshProUGUI loanText;
     public RepaySilder repaySlider;
 
+    [Header("°ü¸®ÅÇ - ¶óÀÌ¹ú")]
+    public TextMeshProUGUI rivalText;
+
     [Header("¾÷±×·¹ÀÌµåÅÇ")]
     public TextMeshProUGUI upgradeText;
     public int currentSelectUpgrade;
@@ -129,6 +132,8 @@ public class ShopUI : EventListener
         shopCloseWarningBtn_Text[1].text = tm.GetCommons("Cancel");
 
         loanText.text = tm.GetCommons("Loan");
+
+        rivalText.text = tm.GetCommons("Rival");
     }
 
     protected override void AddListeners()
