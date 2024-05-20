@@ -31,6 +31,8 @@ public class Lobby : Singleton<Lobby>
     public LanguagePanel languagePanel;
     private LobbyCloseButton[] lobbyCloseButtons;
 
+    public EditorSettingLib settingLib;
+
     public bool SaveDataLoading { get; private set; }
 
     private SerializableDictionary<KeyMap, KeyMapping> HotKey => SettingManager.Instance.keyMappings;
@@ -138,7 +140,7 @@ public class Lobby : Singleton<Lobby>
         {
             saveName = saveName
         };
-        LoadingSceneManager.Instance.LobbyStart(gameStartInfo);
+        LoadingSceneManager.Instance.LobbyStart(gameStartInfo, settingLib.sceneName);
     }
 
     public void TEMP_GameSTART()
@@ -149,7 +151,7 @@ public class Lobby : Singleton<Lobby>
         {
             saveName = string.Empty,
         };
-        LoadingSceneManager.Instance.LobbyStart(gameStartInfo);
+        LoadingSceneManager.Instance.LobbyStart(gameStartInfo, settingLib.sceneName);
     }
 
     public void MenuButtonSound()
@@ -312,7 +314,7 @@ public class Lobby : Singleton<Lobby>
 
             saveName = string.Empty,
         };
-        LoadingSceneManager.Instance.LobbyStart(gameStartInfo);
+        LoadingSceneManager.Instance.LobbyStart(gameStartInfo, settingLib.sceneName);
     }
 
     public int newGameCount;

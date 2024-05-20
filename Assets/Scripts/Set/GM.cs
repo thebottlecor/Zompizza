@@ -224,8 +224,12 @@ public class GM : Singleton<GM>
     {
         if (loading) return;
 
-        if (!TutorialManager.Instance.training)
+        var tuto = TutorialManager.Instance;
+        if (!tuto.training && !tuto.debug_fixTime && !tuto.debug_fixTime_Noon)
             timer += Time.deltaTime;
+
+        if (tuto.debug_fixTime_Noon)
+            timer = Constant.oneHour * 6;
 
         if (timer >= Constant.dayTime)
         {

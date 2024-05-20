@@ -11,6 +11,8 @@ public class TutorialManager : Singleton<TutorialManager>
     public bool debug_skipToShop;
     public bool debug_skipToReturn;
     public bool debug_TutorialDisable;
+    public bool debug_fixTime;
+    public bool debug_fixTime_Noon;
 
     [Space(20f)]
 

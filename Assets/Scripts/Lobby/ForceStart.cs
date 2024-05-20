@@ -8,6 +8,8 @@ using UnityEngine.SceneManagement;
 public class ForceStart : MonoBehaviour
 {
 
+    public EditorSettingLib editorSettingLib;
+
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     static void FirstLoad()
     {
@@ -40,6 +42,7 @@ public class ForceStart : MonoBehaviour
 
             tutorial = false,
         };
-        LoadingSceneManager.Instance.LobbyStart(gameStartInfo);
+        Debug.Log("·ÎµùµÇ´Â ¾À : " + editorSettingLib.sceneName);
+        LoadingSceneManager.Instance.LobbyStart(gameStartInfo, editorSettingLib.sceneName);
     }
 }

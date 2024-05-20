@@ -24,9 +24,9 @@ public class LoadingSceneManager : Singleton<LoadingSceneManager>
         StartCoroutine(Co_LoadScene());
     }
 
-    public void LobbyStart(GameStartInfo startInfo)
+    public void LobbyStart(GameStartInfo startInfo, string sceneName = "asu")
     {
-        nextScene = "asu";
+        nextScene = sceneName;
         this.StartInfo = startInfo;
 
         if (StartInfo.tutorial)
@@ -94,8 +94,7 @@ public class LoadingSceneManager : Singleton<LoadingSceneManager>
 
         yield return SceneManager.LoadSceneAsync(LoadingSceneName);
 
-        // 정착지 시작
-        var asyncLoad = SceneManager.LoadSceneAsync(1);
+        var asyncLoad = SceneManager.LoadSceneAsync(nextScene);
         asyncLoad.allowSceneActivation = false;
         float timer = 0f;
         float t = 0f;

@@ -8,6 +8,7 @@ public class EditorSettingLib : ScriptableObject
 {
 
     public bool forceStart = true;
+    public string sceneName = "asu";
 
     public bool demoVersion;
 

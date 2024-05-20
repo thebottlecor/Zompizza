@@ -20,6 +20,11 @@ public class CameraFollow2 : MonoBehaviour {
 
 	int layerMask;
 
+	public bool checkBlocklay = true;
+
+	public bool aa;
+	public float aatimer;
+
     private void Awake()
     {
 		layerMask = 1 << LayerMask.NameToLayer("EnvironmentObject");
@@ -46,12 +51,23 @@ public class CameraFollow2 : MonoBehaviour {
 		Vector3 _targetPos = absoluteInitCameraPosition + carTransform.transform.position;
 		transform.position = Vector3.Lerp(transform.position, _targetPos, followSpeed * Time.deltaTime);
 
+		float dist = (_targetPos - transform.position).magnitude;
+		if (aa) aatimer += Time.fixedDeltaTime;
+		if (dist < 5f && aa)
+		{
+			Debug.Log(aatimer);
+			aatimer = 0f;
+			aa = false;
+		}
+
 	}
 
 	// Camera script
 
 	void LateUpdate()
 	{
+		if (!checkBlocklay) return;
+
 		Vector3 direction = (carTransform.position - transform.position).normalized;
 		//RaycastHit[] hits = Physics.RaycastAll(transform.position, direction, Mathf.Infinity, 1 << LayerMask.NameToLayer("EnvironmentObject"));
 

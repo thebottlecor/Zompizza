@@ -3159,6 +3159,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lobbyUIObjects: {fileID: 9204132725458187118}
   languagePanel: {fileID: 3487644754379006410}
+  settingLib: {fileID: 11400000, guid: 12ed51526fce93947bc91f862c386b70, type: 2}
   newGameTMP: {fileID: 907142864419567764}
   loadGameTMP: {fileID: 0}
   settingsTMP: {fileID: 2530644958541803875}
