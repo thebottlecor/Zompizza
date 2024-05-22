@@ -17,13 +17,4 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/editor_lobby.unity
     guid: 476ad4265a1fe8745a4b755f4323d831
-  - enabled: 1
-    path: Assets/Scenes/Trailer/asu 1.unity
-    guid: e03d288bce8eedd498ebdaf3c3a2af1d
-  - enabled: 1
-    path: Assets/Scenes/Trailer/asu 2.unity
-    guid: c8cffbb9b9d3e6f4c8fbcf9ac31fbbc0
-  - enabled: 1
-    path: Assets/Scenes/Trailer/asu 3.unity
-    guid: 89c14f8b55d4582469358ce19a20817a
   m_configObjects: {}

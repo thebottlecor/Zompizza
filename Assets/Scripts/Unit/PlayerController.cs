@@ -138,7 +138,7 @@ public class PlayerController : MonoBehaviour
     float throttleAxis; // Used to know whether the throttle has reached the maximum value. It goes from -1 to 1.
     float driftingAxis;
     float localVelocityZ;
-    float localVelocityX;
+    public float localVelocityX { get; private set; }
     bool deceleratingCar;
     bool touchControlsSetup = false;
     /*
@@ -198,6 +198,8 @@ public class PlayerController : MonoBehaviour
     private Coroutine recoverTractionCoroutine;
     private Coroutine iceCoroutine;
 
+    public float dirftContactBlockTimer; // 드리프트로 좀비들 떨쳐낸 후 몇초간 좀비 붙기 면역
+
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Zombie"))
@@ -246,9 +248,12 @@ public class PlayerController : MonoBehaviour
                 }
             }
 
-            if (contactingZombies.Count < 10 && zombie.CloseContact(cp.point)) // 최대 10명 부착
+            if (dirftContactBlockTimer <= 0f)
             {
-                contactingZombies.Add(zombie);
+                if (contactingZombies.Count < 10 && zombie.CloseContact(cp.point)) // 최대 10명 부착
+                {
+                    contactingZombies.Add(zombie);
+                }
             }
         }
         //else if (!collision.gameObject.CompareTag("Plane") && collision.gameObject.layer == 6)
@@ -595,17 +600,28 @@ public class PlayerController : MonoBehaviour
 
         if (isDrifting) // 드리프트할 경우 떼어내기 발동
         {
-            for (int i = contactingZombies.Count - 1; i >= 0; i--)
-            {
-                float speedPercent = Mathf.Abs(carSpeed) / MaxSpeed;
-                contactingZombies[i].DriftOffContact(localVelocityX, speedPercent);
-                contactingZombies.RemoveAt(i);
-            }
+            ShakeOffAllZombies();
+        }
+
+        if (dirftContactBlockTimer > 0f)
+        {
+            dirftContactBlockTimer -= Time.deltaTime;
         }
 
         // We call the method AnimateWheelMeshes() in order to match the wheel collider movements with the 3D meshes of the wheels.
         AnimateWheelMeshes();
 
+    }
+
+    public void ShakeOffAllZombies()
+    {
+        dirftContactBlockTimer = 0.5f;
+        for (int i = contactingZombies.Count - 1; i >= 0; i--)
+        {
+            float speedPercent = Mathf.Abs(carSpeed) / MaxSpeed;
+            contactingZombies[i].DriftOffContact(localVelocityX, speedPercent);
+            contactingZombies.RemoveAt(i);
+        }
     }
 
     // This method controls the car sounds. For example, the car engine will sound slow when the car speed is low because the

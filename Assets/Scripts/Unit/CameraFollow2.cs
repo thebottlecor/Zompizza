@@ -22,9 +22,6 @@ public class CameraFollow2 : MonoBehaviour {
 
 	public bool checkBlocklay = true;
 
-	public bool aa;
-	public float aatimer;
-
     private void Awake()
     {
 		layerMask = 1 << LayerMask.NameToLayer("EnvironmentObject");
@@ -50,16 +47,6 @@ public class CameraFollow2 : MonoBehaviour {
 		//Move to car
 		Vector3 _targetPos = absoluteInitCameraPosition + carTransform.transform.position;
 		transform.position = Vector3.Lerp(transform.position, _targetPos, followSpeed * Time.deltaTime);
-
-		float dist = (_targetPos - transform.position).magnitude;
-		if (aa) aatimer += Time.fixedDeltaTime;
-		if (dist < 5f && aa)
-		{
-			Debug.Log(aatimer);
-			aatimer = 0f;
-			aa = false;
-		}
-
 	}
 
 	// Camera script

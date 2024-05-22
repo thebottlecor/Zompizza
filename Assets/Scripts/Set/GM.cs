@@ -309,6 +309,7 @@ public class GM : Singleton<GM>
         day++;
         DayStringUpdate();
         UIManager.Instance.shopUI.DayFirstReview();
+        player.ShakeOffAllZombies();
         ZombiePooler.Instance.ZombieReset();
         //LoanManager.Instance.PayInterest();
 
