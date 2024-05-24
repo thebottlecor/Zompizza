@@ -213,7 +213,6 @@ public class GM : Singleton<GM>
 
         gameOverWarningBtn_Text.text = tm.GetCommons("Close");
         gameOverWarning_Text.text = tm.GetCommons("Warning");
-        gameOverWarningDetail_Text.text = string.Format(tm.GetCommons("GameoverWarning"), "<size=90%><sprite=1></size>");
 
         congratulationsText[0].text = tm.GetCommons("Congratulations");
         congratulationsText[1].text = tm.GetCommons("CompleteRating");
@@ -420,6 +419,7 @@ public class GM : Singleton<GM>
         }
 
         accountText[1].text = $"<sprite={2}> {tm.GetCommons("Money")} ({gold})";
+        //if (rating >= RivalManager.Instance.rating)
         if (rating > 0)
             accountText[2].text = $"<sprite={1}> {tm.GetCommons("Rating")} ({rating:0.#})";
         else
@@ -435,7 +435,8 @@ public class GM : Singleton<GM>
         int loanWarning = -1;
 
         bool showWarning = false;
-        if (rating <= 0f)
+        //if (rating < RivalManager.Instance.rating)
+        if (rating <= 0)
         {
             if (!warning_gameOver)
             {
@@ -497,6 +498,8 @@ public class GM : Singleton<GM>
             }
 
             TutorialManager.Instance.NextDay();
+            //RivalManager.Instance.NextDay();
+            //ShowRatingText();
         });
         sequence.Append(darkCanvas.DOFade(0f, 0.5f));
     }
@@ -533,6 +536,9 @@ public class GM : Singleton<GM>
     }
     public void ShowGameOverWarning(bool on)
     {
+        //gameOverWarningDetail_Text.text = string.Format(tm.GetCommons("GameoverWarning"), "<size=90%><sprite=1></size>", $"<color=#760048>{RivalManager.Instance.rating:0.#}</color>");
+        gameOverWarningDetail_Text.text = string.Format(tm.GetCommons("GameoverWarning"), "<size=90%><sprite=1></size>", $"<color=#760048>0</color>");
+
         gameOverWarningObj.SetActive(on);
 
         if (!on)
@@ -596,9 +602,7 @@ public class GM : Singleton<GM>
         DOVirtual.Int(gold, target, 0.75f, (x) =>
         {
             displayGold = x;
-
-            for (int i = 0; i < goldText.Length; i++)
-                goldText[i].text = $"{displayGold}$";
+            ShowGoldText();
 
         }).SetEase(Ease.OutCirc).SetUpdate(true);
         gold = target;
@@ -608,13 +612,18 @@ public class GM : Singleton<GM>
         else
             dayOne_Gold[source] += value;
     }
+
+    private void ShowGoldText()
+    {
+        for (int i = 0; i < goldText.Length; i++)
+            goldText[i].text = $"{displayGold}$";
+    }
+
     public void SetGold(int value)
     {
         displayGold = value;
         gold = value;
-
-        for (int i = 0; i < goldText.Length; i++)
-            goldText[i].text = $"{displayGold}$";
+        ShowGoldText();
     }
     public void AddRating(float value, GetRatingSource source)
     {
@@ -623,15 +632,7 @@ public class GM : Singleton<GM>
         DOVirtual.Float(rating, target, 0.75f, (x) =>
         {
             displayRating = x;
-
-            for (int i = 0; i < ratingText.Length; i++)
-            {
-                if (displayRating <= 0)
-                    ratingText[i].text = $"<color=#A91111>{displayRating:0.#}</color> / {Constant.winRating:F0}";
-                else
-                    ratingText[i].text = $"{displayRating:0.#} / {Constant.winRating:F0}";
-            }
-
+            ShowRatingText();
         }).SetEase(Ease.OutCirc).SetUpdate(true);
         rating = target;
 
@@ -640,10 +641,10 @@ public class GM : Singleton<GM>
         else
             dayOne_Rating[source] += value;
     }
-    public void SetRating(float value)
+
+    private void ShowRatingText()
     {
-        displayRating = value;
-        rating = value;
+        //float rivalRating = RivalManager.Instance.rating;
 
         for (int i = 0; i < ratingText.Length; i++)
         {
@@ -651,7 +652,24 @@ public class GM : Singleton<GM>
                 ratingText[i].text = $"<color=#A91111>{displayRating:0.#}</color> / {Constant.winRating:F0}";
             else
                 ratingText[i].text = $"{displayRating:0.#} / {Constant.winRating:F0}";
+
+            //if (displayRating >= rivalRating)
+            //    ratingText[i].text = $"{displayRating:0.#} / <sprite=6> {rivalRating:0.#}";
+            //else
+            //    ratingText[i].text = $"<color=#A91111>{displayRating:0.#}</color> / <sprite=6> {rivalRating:0.#}";
         }
+
+        //if (rating >= rivalRating)
+        //    UIManager.Instance.shopUI.rivalRatingText.text = $"<sprite=1> {rivalRating:0.#}";
+        //else
+        //    UIManager.Instance.shopUI.rivalRatingText.text = $"<sprite=1> <color=#A91111>{rivalRating:0.#}</color>";
+    }
+
+    public void SetRating(float value)
+    {
+        displayRating = value;
+        rating = value;
+        ShowRatingText();
     }
     #endregion
 

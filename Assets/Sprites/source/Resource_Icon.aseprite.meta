@@ -123,7 +123,7 @@ ScriptedImporter:
   animatedSpriteImportData:
   - name: Resource_Icon
     originalName: 
-    pivot: {x: 0.50745183, y: 0.16012725}
+    pivot: {x: 0.50745183, y: 0.15878023}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     rect:
@@ -131,7 +131,7 @@ ScriptedImporter:
       x: 4
       y: 4
       width: 2751
-      height: 943
+      height: 951
     spriteID: 49e81358b6c5dc446936be64ce76fff9
     spriteBone: []
     spriteOutline: []
@@ -156,7 +156,7 @@ ScriptedImporter:
         x: 4
         y: -151
         width: 2751
-        height: 943
+        height: 951
       spriteId: 49e81358b6c5dc446936be64ce76fff9
     linkedCells: []
     parentIndex: -1

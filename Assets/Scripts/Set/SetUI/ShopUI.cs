@@ -78,6 +78,7 @@ public class ShopUI : EventListener
 
     [Header("관리탭 - 라이벌")]
     public TextMeshProUGUI rivalText;
+    public TextMeshProUGUI rivalRatingText;
 
     [Header("업그레이드탭")]
     public TextMeshProUGUI upgradeText;

@@ -4003,7 +4003,7 @@ MonoBehaviour:
   - clip: {fileID: 8300000, guid: 5f31aec34738a26458a7c9cfc2811de7, type: 3}
     volumeOffset: 0
     maxPlay: 0
-  - clip: {fileID: 8300000, guid: bff326944f69a5847bd2f68459e846c6, type: 3}
+  - clip: {fileID: 8300000, guid: 96012949a0afe2441b7ad821339b1e37, type: 3}
     volumeOffset: 0
     maxPlay: 0
   - clip: {fileID: 8300000, guid: cc2cf7c242e89b740b69f7b3132becf6, type: 3}
@@ -4021,7 +4021,7 @@ MonoBehaviour:
   - clip: {fileID: 8300000, guid: b4f70eaf7b1cf6a45891c8e16b5a876d, type: 3}
     volumeOffset: 0
     maxPlay: 0
-  - clip: {fileID: 8300000, guid: c752c9032eddfba419bcc3e65246f4e6, type: 3}
+  - clip: {fileID: 8300000, guid: 7bc1694d7897fd843b773721d2005e17, type: 3}
     volumeOffset: 0
     maxPlay: 0
   - clip: {fileID: 8300000, guid: 00ccec4610f0c1440baff1c486eac2c2, type: 3}
@@ -4030,25 +4030,13 @@ MonoBehaviour:
   - clip: {fileID: 8300000, guid: f4a631f09250c5449a2945cf40bd3b86, type: 3}
     volumeOffset: 0
     maxPlay: 0
-  - clip: {fileID: 8300000, guid: 03fb22aab6943a2489e332849b53b9af, type: 3}
+  - clip: {fileID: 8300000, guid: 6d5bac0a4cc1be9488210caba321891e, type: 3}
     volumeOffset: 0
     maxPlay: 0
-  - clip: {fileID: 8300000, guid: 24a92f9fe63901e45b011f2294fdecd4, type: 3}
+  - clip: {fileID: 8300000, guid: 0a6d49526cba47140b10738817c13a77, type: 3}
     volumeOffset: 0
     maxPlay: 0
-  - clip: {fileID: 8300000, guid: 86f9358e943598544b1705952a308ff5, type: 3}
-    volumeOffset: 0
-    maxPlay: 0
-  - clip: {fileID: 8300000, guid: a6089d22732d34f41b74d3f09cfb6584, type: 3}
-    volumeOffset: 0
-    maxPlay: 0
-  - clip: {fileID: 8300000, guid: 9ff7a85ab4f1adc4d87fefb44b5c8dce, type: 3}
-    volumeOffset: 0
-    maxPlay: 0
-  - clip: {fileID: 8300000, guid: 8253c55e8521fd44c9ead6823bf57925, type: 3}
-    volumeOffset: 0
-    maxPlay: 0
-  - clip: {fileID: 8300000, guid: 8d020745c0abd154b824ad2d207b523a, type: 3}
+  - clip: {fileID: 8300000, guid: 5f9764d8d105bc04c86c7118d7a3e684, type: 3}
     volumeOffset: 0
     maxPlay: 0
   globalBGMVolumeOffset: 0
