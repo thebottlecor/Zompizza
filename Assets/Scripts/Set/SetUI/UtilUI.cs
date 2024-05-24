@@ -141,12 +141,15 @@ public class UtilUI : EventListener
             panelButtonPairs[i].button.Hide();
         }
 
+        TutorialManager.Instance.ShopWindowHide();
+
         canvasGroup.alpha = 1f;
         rectTransform.transform.localPosition = new Vector3(0f, 0f, 0f);
         rectTransform.DOAnchorPos(new Vector2(0f, -2000f), fadeTime, false).SetEase(Ease.InOutQuint).SetUpdate(true);
         canvasGroup.DOFade(0f, fadeTime).SetUpdate(true).OnComplete(() =>
         {
             loading = false;
+            TutorialManager.Instance.ShopWindowHideComplete();
         });
     }
 

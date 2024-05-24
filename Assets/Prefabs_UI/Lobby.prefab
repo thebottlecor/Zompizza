@@ -4027,9 +4027,6 @@ MonoBehaviour:
   - clip: {fileID: 8300000, guid: 00ccec4610f0c1440baff1c486eac2c2, type: 3}
     volumeOffset: 0
     maxPlay: 0
-  - clip: {fileID: 8300000, guid: 7013040ef6161804c961fab74d0d3d45, type: 3}
-    volumeOffset: 0
-    maxPlay: 0
   - clip: {fileID: 8300000, guid: f4a631f09250c5449a2945cf40bd3b86, type: 3}
     volumeOffset: 0
     maxPlay: 0
