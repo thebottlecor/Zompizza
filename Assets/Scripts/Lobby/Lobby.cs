@@ -44,7 +44,7 @@ public class Lobby : Singleton<Lobby>
         lobbyCloseButtons = FindObjectsOfType<LobbyCloseButton>(true);
 
         LobbyUISwitch(true);
-        //CallAfterAwake();
+        CallAfterAwake();
     }
 
     public override void CallAfterAwake()

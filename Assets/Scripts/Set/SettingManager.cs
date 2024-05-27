@@ -147,16 +147,17 @@ public class SettingManager : Singleton<SettingManager>
     protected override void Awake()
     {
         base.Awake();
-
-        InitResolutionUI();
+        CallAfterAwake();
     }
 
     public override void CallAfterAwake()
     {
-
+        InitResolutionUI();
     }
     public override void CallAfterStart(ConfigData config)
     {
+        InitScreenModeUI();
+        InitFramerateUI();
         KeyInit(true);
         SettingInit(config);
     }
@@ -482,7 +483,8 @@ public class SettingManager : Singleton<SettingManager>
         sfxSliderTMP.text = tm.GetCommons("SFXvolume");
         bgmSliderTMP.text = tm.GetCommons("BGMvolume");
         resolutionTMP.text = tm.GetCommons("Resoultion");
-        fullScreenTMP.text = tm.GetCommons("FullScreen");
+        fullScreenTMP.text = tm.GetCommons("Display");
+        framerateTMP.text = tm.GetCommons("LockFramerate");
         vsyncTMP.text = tm.GetCommons("VSync");
 
         subSettingPanelTMP[0].text = tm.GetCommons("Settings");
@@ -501,6 +503,8 @@ public class SettingManager : Singleton<SettingManager>
         settingPanelCloseTMP.text = tm.GetCommons("Back");
 
         KeySetting_TextUpdate();
+        UpdateScreenModeUI();
+        UpdateFramerateUI();
     }
     #endregion
 
@@ -564,16 +568,24 @@ public class SettingManager : Singleton<SettingManager>
     #endregion
 
     #region 해상도 설정
+    [Header("설정")]
     [SerializeField] private TMP_Dropdown resolutionDropdown;
-    public bool fullscreen { get; private set; }
+    public int fullscreen { get; private set; } // 드랍다운의 인덱스 값을 가짐
     public bool vsync { get; private set; }
-    [SerializeField] private Toggle fullScreenToggle;
+    [SerializeField] private TMP_Dropdown fullScreenDropdown;
+    [SerializeField] private TMP_Dropdown framerateDropdown;
     [SerializeField] private Toggle vsyncToggle;
     [SerializeField] private TextMeshProUGUI resolutionTMP;
     [SerializeField] private TextMeshProUGUI fullScreenTMP;
+    [SerializeField] private TextMeshProUGUI framerateTMP;
     [SerializeField] private TextMeshProUGUI vsyncTMP;
     private List<Resolution> possibleResolution;
     public Vector2Int settingResolution { get; private set; }
+
+    private List<FullScreenMode> fullScreenModesOptions;
+
+    public int framerateIdx { get; private set; } // 드랍다운의 인덱스 값을 가짐
+    private readonly List<int> framerateList = new List<int> { -1, 244, 240, 165, 120, 95, 90, 75, 60, 55, 45, 30, 24 };
 
     private void SettingInit(ConfigData config)
     {
@@ -584,8 +596,12 @@ public class SettingManager : Singleton<SettingManager>
             edgeScrollingToggle.isOn = config.edgeScrolling;
             autosaveToggle.isOn = config.autosave;
 
-            fullScreenToggle.isOn = config.fullScreen;
+            fullScreenDropdown.value = config.fullScreen;
             SetFullScreen(config.fullScreen);
+
+            framerateDropdown.value = config.framerate;
+            SetFramerate(config.framerate);
+
             vsyncToggle.isOn = config.vsync;
             SetVSync(config.vsync);
 
@@ -619,8 +635,12 @@ public class SettingManager : Singleton<SettingManager>
             edgeScrollingToggle.isOn = true;
             autosaveToggle.isOn = true;
 
-            fullScreenToggle.isOn = true;
-            SetFullScreen(true);
+            fullScreenDropdown.value = 0;
+            SetFullScreen(0);
+
+            framerateDropdown.value = 0;
+            SetFramerate(0);
+
             vsyncToggle.isOn = false;
             SetVSync(false);
 
@@ -660,12 +680,61 @@ public class SettingManager : Singleton<SettingManager>
             resolutionDropdown.options.Add(optionData);
         }
     }
-
-    public void SetFullScreen(bool on)
+    private void InitScreenModeUI()
     {
-        fullscreen = on;
-        Screen.SetResolution(settingResolution.x, settingResolution.y, fullscreen);
+        fullScreenDropdown.ClearOptions();
+
+#if UNITY_STANDALONE_WIN
+
+        fullScreenModesOptions = new List<FullScreenMode> { FullScreenMode.FullScreenWindow, FullScreenMode.ExclusiveFullScreen, FullScreenMode.Windowed };
+#else
+        fullScreenModesOptions = new List<FullScreenMode> { FullScreenMode.FullScreenWindow, FullScreenMode.Windowed };
+#endif
+
+        for (int i = 0; i < fullScreenModesOptions.Count; i++)
+        {
+            TMP_Dropdown.OptionData optionData = new TMP_Dropdown.OptionData();
+            optionData.text = tm.GetCommons($"FullScreen{(int)fullScreenModesOptions[i]}");
+            fullScreenDropdown.options.Add(optionData);
+        }
+    }
+    private void UpdateScreenModeUI()
+    {
+        for (int i = 0; i < fullScreenDropdown.options.Count; i++)
+        {
+            fullScreenDropdown.options[i].text = tm.GetCommons($"FullScreen{(int)fullScreenModesOptions[i]}");
+        }
+        fullScreenDropdown.RefreshShownValue();
+    }
+    private void InitFramerateUI()
+    {
+        framerateDropdown.ClearOptions();
+
+        for (int i = 0; i < framerateList.Count; i++)
+        {
+            TMP_Dropdown.OptionData optionData = new TMP_Dropdown.OptionData();
+            optionData.text = framerateList[i].ToString();
+            framerateDropdown.options.Add(optionData);
+        }
+        UpdateFramerateUI();
+    }
+    private void UpdateFramerateUI()
+    {
+        if (framerateDropdown.options.Count >= 1)
+        {
+            framerateDropdown.options[0].text = tm.GetCommons("Uncapped");
+            framerateDropdown.RefreshShownValue();
+        }
+    }
+
+    public void SetFullScreen(int mode)
+    {
+        if (mode >= fullScreenModesOptions.Count)
+            mode = 0;
+        fullscreen = mode;
+        Screen.SetResolution(settingResolution.x, settingResolution.y, fullScreenModesOptions[fullscreen]);
         SaveManager.Instance.SaveConfig();
+        fullScreenDropdown.RefreshShownValue();
     }
     public void SetVSync(bool on)
     {
@@ -676,8 +745,17 @@ public class SettingManager : Singleton<SettingManager>
     public void SetResolution(int idx)
     {
         settingResolution = new Vector2Int(possibleResolution[idx].width, possibleResolution[idx].height);
-        Screen.SetResolution(possibleResolution[idx].width, possibleResolution[idx].height, fullscreen);
+        Screen.SetResolution(possibleResolution[idx].width, possibleResolution[idx].height, fullScreenModesOptions[fullscreen]);
         SaveManager.Instance.SaveConfig();
+        resolutionDropdown.RefreshShownValue();
     }
-    #endregion
+
+    public void SetFramerate(int idx)
+    {
+        framerateIdx = idx;
+        Application.targetFrameRate = framerateList[idx];
+        SaveManager.Instance.SaveConfig();
+        framerateDropdown.RefreshShownValue();
+    }
+#endregion
 }

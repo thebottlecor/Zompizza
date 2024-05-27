@@ -228,7 +228,12 @@ public class PlayerController : MonoBehaviour
 
                         float playerDot = Vector3.Dot(carVel, transform.forward); // 차앞 방향과 속도 내적
                         float crashDrag = this.crashDrag;
-                        if (zombie.isHeavy && !zombie.dead) crashDrag *= 200f * 2f * speedPercent;
+                        if (zombie.isHeavy && !zombie.dead)
+                        {
+                            crashDrag *= 200f * 2f * speedPercent;
+                            beforeCollisionSpeed = MaxSpeed; // 헤비와 부딪히면 무조건 충돌 판정
+                            isCollision = true;
+                        }
 
                         if (playerDot >= 0)
                         {
@@ -548,6 +553,17 @@ public class PlayerController : MonoBehaviour
             bool right = HotKey[KeyMap.carRight].Getkey();
             bool pressBreak = HotKey[KeyMap.carBreak].Getkey();
             bool upBreak = HotKey[KeyMap.carBreak].GetkeyUp();
+
+            // 듀얼센스 테스트
+            //bool forward = Input.GetAxisRaw("Forward") > 0;
+            //bool backward = Input.GetAxisRaw("Backward") > 0;
+            //bool left = Input.GetAxis("Horizontal") < 0;
+            //bool right = Input.GetAxis("Horizontal") > 0;
+            //bool pressBreak = Input.GetAxis("SideBreak") > 0;
+            //bool upBreak = !pressBreak;
+
+            ////Debug.Log(Input.GetAxis("Vertical"));
+            ////Debug.Log(Input.GetAxis("Mouse X"));
 
             if (forward)
             {

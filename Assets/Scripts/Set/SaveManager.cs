@@ -197,6 +197,7 @@ public class SaveManager : Singleton<SaveManager>
         config.volumeSFX = sm.sfxSlider.value;
 
         config.fullScreen = sm.fullscreen;
+        config.framerate = sm.framerateIdx;
         config.vsync = sm.vsync;
         config.resolution_width = sm.settingResolution.x;
         config.resolution_height = sm.settingResolution.y;
@@ -465,7 +466,8 @@ public class ConfigData
     public float volumeBGM = 1f;
     public float volumeSFX = 1f;
 
-    public bool fullScreen = true;
+    public int fullScreen = 0;
+    public int framerate = 0;
     public bool vsync = true;
     public int resolution_width = 1920;
     public int resolution_height = 1080;
