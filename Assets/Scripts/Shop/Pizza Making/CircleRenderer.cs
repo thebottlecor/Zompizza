@@ -8,8 +8,11 @@ public class CircleRenderer : MonoBehaviour
     [SerializeField] private int steps = 100;
     [SerializeField] private float radius = 1f;
 
+    Material mat;
+
     private void Start()
     {
+        mat = circleRenderer.material;
         DrawCircle(steps, radius);
     }
 
@@ -19,6 +22,8 @@ public class CircleRenderer : MonoBehaviour
         {
             DrawCircle(steps, radius);
         }
+
+        mat.SetFloat("_UnscaledTime", Time.unscaledTime);
     }
 
     private void DrawCircle(int steps, float radius)

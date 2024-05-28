@@ -258,7 +258,7 @@ public class ShopUI : EventListener
 
     public void OpenUI()
     {
-        if (UIManager.Instance.isDirecting) return;
+        if (UIManager.Instance.isDirecting || UIManager.Instance.changingResolution) return;
         if (GM.Instance.loading) return;
 
         if (loading) return;
@@ -318,7 +318,7 @@ public class ShopUI : EventListener
     public void HideUI()
     {
         //if (UIManager.Instance.isDirecting) OrderManager.Instance.pizzaDirection.StopSequence();
-        if (UIManager.Instance.isDirecting) return;
+        if (UIManager.Instance.isDirecting || UIManager.Instance.changingResolution) return;
         if (GM.Instance.loading) return;
 
         if (!opened) return;

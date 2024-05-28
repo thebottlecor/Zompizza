@@ -330,7 +330,7 @@ public class SettingManager : Singleton<SettingManager>
     }
     #endregion
 
-    #region (통합) 설정
+    #region 설정 (통합)
     [Header("Settings")]
     [SerializeField] private TextMeshProUGUI[] subSettingPanelTMP;
     [SerializeField] private GameObject[] subSettingsPanels;
@@ -361,6 +361,7 @@ public class SettingManager : Singleton<SettingManager>
         ingameMovingPanel.SetSiblingIndex(1);
         ingameMovingPanel.offsetMin = new Vector2(0f, 0f);
         ingameMovingPanel.offsetMax = new Vector2(0f, 0f);
+        ingameMovingPanel.localScale = Vector3.one;
     }
 
     public void LobbySwitch(bool lobby)
@@ -587,6 +588,8 @@ public class SettingManager : Singleton<SettingManager>
     public int framerateIdx { get; private set; } // 드랍다운의 인덱스 값을 가짐
     private readonly List<int> framerateList = new List<int> { -1, 244, 240, 165, 120, 95, 90, 75, 60, 55, 45, 30, 24 };
 
+    public static EventHandler ResolutionChangedEvent;
+
     private void SettingInit(ConfigData config)
     {
         if (config != null)
@@ -748,6 +751,34 @@ public class SettingManager : Singleton<SettingManager>
         Screen.SetResolution(possibleResolution[idx].width, possibleResolution[idx].height, fullScreenModesOptions[fullscreen]);
         SaveManager.Instance.SaveConfig();
         resolutionDropdown.RefreshShownValue();
+
+        if (ResolutionChangedEvent != null)
+            ResolutionChangedEvent(null, null);
+
+
+        float ratio = (float)settingResolution.y / settingResolution.x;
+        float modify = (ratio > 0.5625f) ? 0f : 1f;
+
+        var canvasScaler = FindObjectsByType<CanvasScaler>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        for (int i = 0; i < canvasScaler.Length; i++)
+        {
+            canvasScaler[i].matchWidthOrHeight = modify;
+        }
+
+        //StartCoroutine(CanvasUpdate());
+    }
+    private IEnumerator CanvasUpdate()
+    {
+        yield return null;
+
+        float ratio = (float)settingResolution.y / settingResolution.x;
+        float modify = (ratio > 0.5625f) ? 0f : 1f;
+
+        var canvasScaler = FindObjectsByType<CanvasScaler>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        for (int i = 0; i < canvasScaler.Length; i++)
+        {
+            canvasScaler[i].matchWidthOrHeight = modify;
+        }
     }
 
     public void SetFramerate(int idx)

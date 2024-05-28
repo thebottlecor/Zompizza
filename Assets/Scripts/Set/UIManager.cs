@@ -14,6 +14,7 @@ public class UIManager : Singleton<UIManager>
     public RectTransform movingSettingsPanelParent;
 
     public bool isDirecting;
+    public bool changingResolution;
 
     public List<OrderUIObject> orderUIObjects;
 
@@ -35,6 +36,20 @@ public class UIManager : Singleton<UIManager>
 
     private SerializableDictionary<KeyMap, KeyMapping> HotKey => SettingManager.Instance.keyMappings;
 
+    private IEnumerator CanvasUpdate()
+    {
+        yield return null;
+
+        float ratio = (float)SettingManager.Instance.settingResolution.y / SettingManager.Instance.settingResolution.x;
+        float modify = (ratio > 0.5625f) ? 0f : 1f;
+
+        var canvasScaler = FindObjectsByType<CanvasScaler>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        for (int i = 0; i < canvasScaler.Length; i++)
+        {
+            canvasScaler[i].matchWidthOrHeight = modify;
+        }
+    }
+
     public void Init()
     {
         var panel = SettingManager.Instance.ingameMovingPanel;
@@ -43,6 +58,7 @@ public class UIManager : Singleton<UIManager>
 
         panel.offsetMin = new Vector2(0f, 0f);
         panel.offsetMax = new Vector2(0f, 0f);
+        panel.localScale = Vector3.one;
 
         shopUI.UpdateTexts();
         utilUI.UpdateTexts();
@@ -77,6 +93,17 @@ public class UIManager : Singleton<UIManager>
             ingredientUIPairs.Add(ingredient, ingredientUI);
             ingredientUIs.Add(ingredientUI);
         }
+
+        float ratio = (float)SettingManager.Instance.settingResolution.y / SettingManager.Instance.settingResolution.x;
+        float modify = (ratio > 0.5625f) ? 0f : 1f;
+
+        var canvasScaler = FindObjectsByType<CanvasScaler>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        for (int i = 0; i < canvasScaler.Length; i++)
+        {
+            canvasScaler[i].matchWidthOrHeight = modify;
+        }
+
+        //StartCoroutine(CanvasUpdate());
     }
 
     public void UpdateIngredients()
@@ -105,7 +132,7 @@ public class UIManager : Singleton<UIManager>
 
     private void Update()
     {
-        if (isDirecting) return;
+        if (isDirecting || changingResolution) return;
         if (GM.Instance.loading) return;
 
         if (HotKey[KeyMap.escape].GetkeyDown())

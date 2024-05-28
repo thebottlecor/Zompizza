@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 
-public class PizzaDirection : MonoBehaviour
+public class PizzaDirection : EventListener
 {
     public CanvasGroup parentPanel;
 
@@ -23,10 +23,8 @@ public class PizzaDirection : MonoBehaviour
     public Transform pizza;
     public Transform pizzaEffect;
 
-    public Transform stackTarget;
-    public Transform stackTarget2;
-
-    public float standard_Xpos_1920x1080 = 7.4f;
+    public Transform stackTarget11;
+    public Transform stackTarget22;
 
     private Sequence sequence;
     private OrderInfo info;
@@ -35,7 +33,28 @@ public class PizzaDirection : MonoBehaviour
     public GameObject ingredientsSource;
     public List<Transform> ingredientsRandomPos;
 
+    [SerializeField] private RectTransform shopPanel;
+    [SerializeField] private Vector2 initShopPanelPos;
+
     public static EventHandler<OrderInfo> PizzaCompleteEvent;
+
+    protected override void AddListeners()
+    {
+        SettingManager.ResolutionChangedEvent += OnResolutionChanged;
+    }
+
+    protected override void RemoveListeners()
+    {
+        SettingManager.ResolutionChangedEvent -= OnResolutionChanged;
+    }
+
+    private void Awake()
+    {
+        initShopPanelPos = new Vector2(shopPanel.offsetMin.y, shopPanel.offsetMax.y);
+        shopPanel.offsetMin = new Vector2(0, 0);
+        shopPanel.offsetMax = new Vector2(0, 0);
+        Canvas.ForceUpdateCanvases();
+    }
 
     void Start()
     {
@@ -67,6 +86,35 @@ public class PizzaDirection : MonoBehaviour
         pizza.gameObject.SetActive(false);
         pizzaEffect.gameObject.SetActive(false);
 
+        shopPanel.offsetMin = new Vector2(0, initShopPanelPos.x);
+        shopPanel.offsetMax = new Vector2(0, initShopPanelPos.y);
+    }
+
+    private void OnResolutionChanged(object sender, EventArgs e)
+    {
+        StartCoroutine(SequenceUpdate());
+    }
+    private IEnumerator SequenceUpdate()
+    {
+        UIManager.Instance.changingResolution = true;
+
+        yield return null;
+
+        shopPanel.gameObject.SetActive(false);
+        initShopPanelPos = new Vector2(shopPanel.offsetMin.y, shopPanel.offsetMax.y);
+        shopPanel.offsetMin = new Vector2(0, 0);
+        shopPanel.offsetMax = new Vector2(0, 0);
+        Canvas.ForceUpdateCanvases();
+
+        yield return null;
+
+        Init();
+
+        shopPanel.offsetMin = new Vector2(0, initShopPanelPos.x);
+        shopPanel.offsetMax = new Vector2(0, initShopPanelPos.y);
+        shopPanel.gameObject.SetActive(true);
+
+        UIManager.Instance.changingResolution = false;
     }
 
     private void OnDestroy()
@@ -80,29 +128,8 @@ public class PizzaDirection : MonoBehaviour
 
     public void Init()
     {
-        // 해상도가 변경될 때 함수를 불러와서 시퀸스를 새로 만들어야 함
-
-        // stackTarget 포지션 업데이트
-        float adjust_Xpos = standard_Xpos_1920x1080 * ((float)Screen.width / Screen.height) * (9f / 16f);
-
-        Vector3 pos1 = stackTarget.localPosition;
-        pos1.x = adjust_Xpos;
-        stackTarget.localPosition = pos1;
-
-        Vector3 pos2 = stackTarget2.localPosition;
-        pos2.x = adjust_Xpos;
-        stackTarget2.localPosition = pos2;
-
-        //gameObject.SetActive(false);
-        //gameObject.SetActive(true);
-
         // 연출 변경에 따른 추가
-        Vector3 tempPos2 = stackTarget.position;
-        tempPos2.z = 0.86f;
-        pizzaEffect.transform.position = tempPos2;
-        tempPos2.z = 0f;
-        pizzaBoxAnimator.transform.position = tempPos2;
-
+        ResetPos();
 
         sequence = DOTween.Sequence().SetAutoKill(false).SetUpdate(true);
         // 닫힌 상태로 초기화
@@ -137,9 +164,6 @@ public class PizzaDirection : MonoBehaviour
 
         // 재료들이 들어간다
         sequence.AppendInterval(0.75f); // 더미
-        //sequence.Append(ingredients[0].DOLocalMoveX(pizzaBoxAnimator.transform.localPosition.x, 0.75f).SetEase(Ease.OutQuad));
-        //sequence.Join(ingredients[0].DOLocalMoveY(pizzaBoxAnimator.transform.localPosition.y + 0.15f, 0.75f).SetEase(Ease.InQuad));
-        //sequence.Join(ingredients[0].DOScale(0.4f, 0.75f).SetEase(Ease.OutQuint));
 
         foreach (var temp in ingredients)
         {
@@ -201,8 +225,7 @@ public class PizzaDirection : MonoBehaviour
             pizza.gameObject.SetActive(false);
             pizzaEffect.gameObject.SetActive(false);
         });
-        //sequence.Append(pizzaBoxAnimator.transform.DOMove(stackTarget.position, 0.5f));
-        sequence.Append(pizzaBoxAnimator.transform.DOLocalMove(stackTarget2.localPosition, 0.5f).SetEase(Ease.OutQuad));
+        sequence.Append(pizzaBoxAnimator.transform.DOMove(stackTarget22.position, 0.5f).SetEase(Ease.OutQuad));
         sequence.Join(parentPanel.DOFade(1f, 0.5f));
         sequence.AppendCallback(() =>
         {
@@ -218,6 +241,15 @@ public class PizzaDirection : MonoBehaviour
         });
 
         sequence.Pause();
+    }
+
+    private void ResetPos()
+    {
+        Vector3 tempPos2 = stackTarget11.position;
+        tempPos2.z = 0.86f;
+        pizzaEffect.transform.position = tempPos2;
+        tempPos2.z = 0f;
+        pizzaBoxAnimator.transform.position = tempPos2;
     }
 
     [ContextMenu("재시작")]
