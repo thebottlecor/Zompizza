@@ -38,7 +38,7 @@ public class ShopUI : EventListener
     public TextManager tm => TextManager.Instance;
     public TextMeshProUGUI[] buttonTexts;
 
-    [Header("상점탭")]
+    [Header("주문탭")]
     public Image[] pizzaBoys;
     public Image[] pizzaBoxes;
 
@@ -52,7 +52,7 @@ public class ShopUI : EventListener
     public TextMeshProUGUI shopCloseWarning_Text;
     public TextMeshProUGUI shopCloseWarningDetail_Text;
 
-    [Header("야간 모드")]
+    [Header("야간 모드 - 탐험")]
     public GameObject orderPanel;
     public GameObject explorePanel;
     private bool endTime;

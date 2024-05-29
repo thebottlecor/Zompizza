@@ -46,8 +46,17 @@ public class UtilUI : EventListener
 
     public void OpenWorldMap()
     {
+        // 버그 해결법 - 세팅창과 월드맵을 번갈아 연다
         activeSubPanel = 0;
         OpenUI();
+        StartCoroutine(DelayOpenWorldMap());
+    }
+    private IEnumerator DelayOpenWorldMap()
+    {
+        yield return CoroutineHelper.WaitForSecondsRealtime(fadeTime);
+        SelectSubPanel(1);
+        SelectSubPanel(0);
+
     }
 
     public void OpenSettings()

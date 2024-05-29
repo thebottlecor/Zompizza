@@ -183,6 +183,8 @@ public class WorldMapManager : Singleton<WorldMapManager>
 
     public void OnDragInMinimapRendererArea(Vector3 onStartThisDragWorldPos, Vector3 onDraggingWorldPos)
     {
+        if (UIManager.Instance.utilUI.loading) return;
+
         //Use the position of drag start and current position of drag to move the Minimap Camera of fullscreen minimap
         Vector3 deltaPositionToMoveMap = (onDraggingWorldPos - onStartThisDragWorldPos) * -1.0f;
         worldMapCamera.transform.position += (deltaPositionToMoveMap * 10.0f * Time.unscaledDeltaTime);
@@ -194,6 +196,8 @@ public class WorldMapManager : Singleton<WorldMapManager>
 
     public void OnClickInMinimapRendererArea(Vector3 clickWorldPos, MinimapItem clickedMinimapItem)
     {
+        if (UIManager.Instance.utilUI.loading) return;
+
         //Show the Minimap Item Clicked
         if (clickedMinimapItem != null)
         {
@@ -210,6 +214,8 @@ public class WorldMapManager : Singleton<WorldMapManager>
 
     public void OnOverInMinimapRendererArea(bool isOverMinimapRendererArea, Vector3 mouseWorldPos, MinimapItem overMinimapItem)
     {
+        if (UIManager.Instance.utilUI.loading) return;
+
         if (isOverMinimapRendererArea)
         {
             //Increase size of the selected item (avoid increase size of same minimap item various times)

@@ -119,6 +119,10 @@ public class PizzaDirection : EventListener
 
     private void OnDestroy()
     {
+        SequenceKill();
+    }
+    private void SequenceKill()
+    {
         if (sequence != null)
         {
             sequence.Kill();
@@ -130,6 +134,8 @@ public class PizzaDirection : EventListener
     {
         // 연출 변경에 따른 추가
         ResetPos();
+
+        SequenceKill();
 
         sequence = DOTween.Sequence().SetAutoKill(false).SetUpdate(true);
         // 닫힌 상태로 초기화

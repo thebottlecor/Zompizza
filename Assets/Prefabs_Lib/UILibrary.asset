@@ -198,17 +198,5 @@ MonoBehaviour:
       Value: {fileID: -722897050, guid: 4e0f9f6a1ebab7c44b366155ffe54ecc, type: 3}
     - Key: 35
       Value: {fileID: 395826259, guid: 4e0f9f6a1ebab7c44b366155ffe54ecc, type: 3}
-    - Key: 36
-      Value: {fileID: 1894629111, guid: 4e0f9f6a1ebab7c44b366155ffe54ecc, type: 3}
-    - Key: 37
-      Value: {fileID: 1752722501, guid: 4e0f9f6a1ebab7c44b366155ffe54ecc, type: 3}
-    - Key: 38
-      Value: {fileID: -732777876, guid: 4e0f9f6a1ebab7c44b366155ffe54ecc, type: 3}
-    - Key: 39
-      Value: {fileID: -786492631, guid: 4e0f9f6a1ebab7c44b366155ffe54ecc, type: 3}
-    - Key: 40
-      Value: {fileID: -652334217, guid: 4e0f9f6a1ebab7c44b366155ffe54ecc, type: 3}
-    - Key: 41
-      Value: {fileID: 2117618602, guid: 4e0f9f6a1ebab7c44b366155ffe54ecc, type: 3}
   miniOrderUI_maskColor: {r: 1, g: 1, b: 1, a: 0.101960786}
   miniOrderUI_maskColor_angry: {r: 1, g: 0.6392157, b: 0.6392157, a: 0.101960786}

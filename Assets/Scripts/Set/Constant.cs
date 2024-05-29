@@ -13,7 +13,7 @@ public class Constant
     public const float oneSec = oneMinute / 60f;
 
     public const int npcNameOffset = 2;
-    public const int ingredientSpriteOffset = 7;
+    public const int ingredientSpriteOffset = 12;
 
     // 배달 관련
     public const float distanceScale = 0.005f; // 게임상 거리 200 = 1km

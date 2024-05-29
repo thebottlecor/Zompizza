@@ -54,8 +54,6 @@ public enum Ingredient
     meat10,
     meat11,
     meat12,
-    meat13,
-    meat14,
 
     vegetable1,
     vegetable2,
@@ -69,8 +67,6 @@ public enum Ingredient
     vegetable10,
     vegetable11,
     vegetable12,
-    vegetable13,
-    vegetable14,
 
     herb1,
     herb2,
@@ -84,6 +80,4 @@ public enum Ingredient
     herb10,
     herb11,
     herb12,
-    herb13,
-    herb14,
 }

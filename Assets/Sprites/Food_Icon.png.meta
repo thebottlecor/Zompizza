@@ -352,8 +352,8 @@ TextureImporter:
       name: Food_Icon_12
       rect:
         serializedVersion: 2
-        x: 2400
-        y: 400
+        x: 0
+        y: 200
         width: 200
         height: 200
       alignment: 0
@@ -373,8 +373,8 @@ TextureImporter:
       name: Food_Icon_13
       rect:
         serializedVersion: 2
-        x: 2600
-        y: 400
+        x: 200
+        y: 200
         width: 200
         height: 200
       alignment: 0
@@ -394,7 +394,7 @@ TextureImporter:
       name: Food_Icon_14
       rect:
         serializedVersion: 2
-        x: 0
+        x: 400
         y: 200
         width: 200
         height: 200
@@ -415,7 +415,7 @@ TextureImporter:
       name: Food_Icon_15
       rect:
         serializedVersion: 2
-        x: 200
+        x: 600
         y: 200
         width: 200
         height: 200
@@ -436,7 +436,7 @@ TextureImporter:
       name: Food_Icon_16
       rect:
         serializedVersion: 2
-        x: 400
+        x: 800
         y: 200
         width: 200
         height: 200
@@ -457,7 +457,7 @@ TextureImporter:
       name: Food_Icon_17
       rect:
         serializedVersion: 2
-        x: 600
+        x: 1000
         y: 200
         width: 200
         height: 200
@@ -478,7 +478,7 @@ TextureImporter:
       name: Food_Icon_18
       rect:
         serializedVersion: 2
-        x: 800
+        x: 1200
         y: 200
         width: 200
         height: 200
@@ -499,7 +499,7 @@ TextureImporter:
       name: Food_Icon_19
       rect:
         serializedVersion: 2
-        x: 1000
+        x: 1400
         y: 200
         width: 200
         height: 200
@@ -520,7 +520,7 @@ TextureImporter:
       name: Food_Icon_20
       rect:
         serializedVersion: 2
-        x: 1200
+        x: 1600
         y: 200
         width: 200
         height: 200
@@ -541,7 +541,7 @@ TextureImporter:
       name: Food_Icon_21
       rect:
         serializedVersion: 2
-        x: 1400
+        x: 1800
         y: 200
         width: 200
         height: 200
@@ -562,7 +562,7 @@ TextureImporter:
       name: Food_Icon_22
       rect:
         serializedVersion: 2
-        x: 1600
+        x: 2000
         y: 200
         width: 200
         height: 200
@@ -583,7 +583,7 @@ TextureImporter:
       name: Food_Icon_23
       rect:
         serializedVersion: 2
-        x: 1800
+        x: 2200
         y: 200
         width: 200
         height: 200
@@ -604,8 +604,8 @@ TextureImporter:
       name: Food_Icon_24
       rect:
         serializedVersion: 2
-        x: 2000
-        y: 200
+        x: 0
+        y: 0
         width: 200
         height: 200
       alignment: 0
@@ -625,8 +625,8 @@ TextureImporter:
       name: Food_Icon_25
       rect:
         serializedVersion: 2
-        x: 2200
-        y: 200
+        x: 200
+        y: 0
         width: 200
         height: 200
       alignment: 0
@@ -646,8 +646,8 @@ TextureImporter:
       name: Food_Icon_26
       rect:
         serializedVersion: 2
-        x: 2400
-        y: 200
+        x: 400
+        y: 0
         width: 200
         height: 200
       alignment: 0
@@ -667,8 +667,8 @@ TextureImporter:
       name: Food_Icon_27
       rect:
         serializedVersion: 2
-        x: 2600
-        y: 200
+        x: 600
+        y: 0
         width: 200
         height: 200
       alignment: 0
@@ -688,7 +688,7 @@ TextureImporter:
       name: Food_Icon_28
       rect:
         serializedVersion: 2
-        x: 0
+        x: 800
         y: 0
         width: 200
         height: 200
@@ -709,7 +709,7 @@ TextureImporter:
       name: Food_Icon_29
       rect:
         serializedVersion: 2
-        x: 200
+        x: 1000
         y: 0
         width: 200
         height: 200
@@ -730,90 +730,6 @@ TextureImporter:
       name: Food_Icon_30
       rect:
         serializedVersion: 2
-        x: 400
-        y: 0
-        width: 200
-        height: 200
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: e9bece55b7de34c4487369c8d0e1ba11
-      internalID: 583271220
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Food_Icon_31
-      rect:
-        serializedVersion: 2
-        x: 600
-        y: 0
-        width: 200
-        height: 200
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2afdef25d585241469b9c2412b9a5cdb
-      internalID: 673258107
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Food_Icon_32
-      rect:
-        serializedVersion: 2
-        x: 800
-        y: 0
-        width: 200
-        height: 200
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ed88740455592b14aac27b1e3ce4d671
-      internalID: -1251541382
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Food_Icon_33
-      rect:
-        serializedVersion: 2
-        x: 1000
-        y: 0
-        width: 200
-        height: 200
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 0b6cf1bbcb41d5e409880c63a96128cb
-      internalID: -286228922
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Food_Icon_34
-      rect:
-        serializedVersion: 2
         x: 1200
         y: 0
         width: 200
@@ -825,14 +741,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b786a68a52255954a9295b1aec8f0a7e
-      internalID: -722897050
+      spriteID: a5622cb04c3789e44a5987b2edc24fb5
+      internalID: 583271220
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Food_Icon_35
+      name: Food_Icon_31
       rect:
         serializedVersion: 2
         x: 1400
@@ -846,14 +762,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f422afd202c614147a2ecc793b6eff26
-      internalID: 395826259
+      spriteID: 3bbfce1011fdfa6429cd4ed04b6725f3
+      internalID: 673258107
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Food_Icon_36
+      name: Food_Icon_32
       rect:
         serializedVersion: 2
         x: 1600
@@ -867,14 +783,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 25c2e2ec7ebc6de4fa9efcfa97e1ae59
-      internalID: 1894629111
+      spriteID: 3bb10e5e55d01be4e8ff54afe739c9e8
+      internalID: -1251541382
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Food_Icon_37
+      name: Food_Icon_33
       rect:
         serializedVersion: 2
         x: 1800
@@ -888,14 +804,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 64c233006b1ef6f44899ad7c9e41767b
-      internalID: 1752722501
+      spriteID: 4b829f35f6c50d541a1b4f818eb98356
+      internalID: -286228922
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Food_Icon_38
+      name: Food_Icon_34
       rect:
         serializedVersion: 2
         x: 2000
@@ -909,14 +825,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: bd214259ffdc299478e6e0d17d3fbaab
-      internalID: -732777876
+      spriteID: 6f2c23e6edfbe5b458c7d3d050eeb974
+      internalID: -722897050
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Food_Icon_39
+      name: Food_Icon_35
       rect:
         serializedVersion: 2
         x: 2200
@@ -930,50 +846,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e542f570d877e80418772721f57ccb34
-      internalID: -786492631
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Food_Icon_40
-      rect:
-        serializedVersion: 2
-        x: 2400
-        y: 0
-        width: 200
-        height: 200
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: af88eb41fe242b54fa417df39eec1662
-      internalID: -652334217
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Food_Icon_41
-      rect:
-        serializedVersion: 2
-        x: 2600
-        y: 0
-        width: 200
-        height: 200
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: be94bdc32847cd647ad322a3cfbee90b
-      internalID: 2117618602
+      spriteID: 5999d7f231268644ca4fe4469b73ba1f
+      internalID: 395826259
       vertices: []
       indices: 
       edges: []
@@ -1019,13 +893,7 @@ TextureImporter:
       Food_Icon_33: -286228922
       Food_Icon_34: -722897050
       Food_Icon_35: 395826259
-      Food_Icon_36: 1894629111
-      Food_Icon_37: 1752722501
-      Food_Icon_38: -732777876
-      Food_Icon_39: -786492631
       Food_Icon_4: -870310167
-      Food_Icon_40: -652334217
-      Food_Icon_41: 2117618602
       Food_Icon_5: -933393449
       Food_Icon_6: -1499718772
       Food_Icon_7: -1451025748

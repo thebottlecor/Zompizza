@@ -146,13 +146,10 @@ public class GM : Singleton<GM>
         int initAmount = 10;
         ingredients[Ingredient.meat1] = initAmount;
         ingredients[Ingredient.meat2] = initAmount;
-        ingredients[Ingredient.meat3] = initAmount;
         ingredients[Ingredient.vegetable1] = initAmount;
         ingredients[Ingredient.vegetable2] = initAmount;
-        ingredients[Ingredient.vegetable3] = initAmount;
         ingredients[Ingredient.herb1] = initAmount;
         ingredients[Ingredient.herb2] = initAmount;
-        ingredients[Ingredient.herb3] = initAmount;
 
         UIManager.Instance.Init();
 

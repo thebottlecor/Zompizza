@@ -1,46 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!21 &-2141329001611380392
-Material:
-  serializedVersion: 8
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: TextMeshPro/Sprite
-  m_Shader: {fileID: 4800000, guid: cf81c85f95fe47e1a27f6ae460cf182c, type: 3}
-  m_Parent: {fileID: 0}
-  m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
-  m_InvalidKeywords: []
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_LockedProperties: 
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 3b99ac49f27b21c4b860682c6c0bdd2c, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Ints: []
-    m_Floats:
-    - _ColorMask: 15
-    - _CullMode: 0
-    - _Stencil: 0
-    - _StencilComp: 8
-    - _StencilOp: 0
-    - _StencilReadMask: 255
-    - _StencilWriteMask: 255
-    - _UseUIAlphaClip: 0
-    m_Colors:
-    - _ClipRect: {r: -32767, g: -32767, b: 32767, a: 32767}
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
-  m_BuildTextureStacks: []
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -54,7 +13,7 @@ MonoBehaviour:
   m_Name: Resource_Icon
   m_EditorClassIdentifier: 
   hashCode: 324496254
-  material: {fileID: -2141329001611380392}
+  material: {fileID: 7321636498173893613}
   materialHashCode: 0
   m_Version: 1.1.0
   m_FaceInfo:
@@ -369,12 +328,6 @@ MonoBehaviour:
     m_Scale: 1
     m_Name: Resource_Icon_47
     m_HashCode: 585711202
-  - m_ElementType: 2
-    m_Unicode: 65534
-    m_GlyphIndex: 48
-    m_Scale: 1
-    m_Name: Resource_Icon_48
-    m_HashCode: 585711213
   m_SpriteGlyphTable:
   - m_Index: 0
     m_Metrics:
@@ -496,8 +449,8 @@ MonoBehaviour:
       m_HorizontalBearingY: 150
       m_HorizontalAdvance: 150
     m_GlyphRect:
-      m_X: 0
-      m_Y: 400
+      m_X: 1400
+      m_Y: 600
       m_Width: 200
       m_Height: 200
     m_Scale: 1.25
@@ -512,8 +465,8 @@ MonoBehaviour:
       m_HorizontalBearingY: 150
       m_HorizontalAdvance: 150
     m_GlyphRect:
-      m_X: 200
-      m_Y: 400
+      m_X: 1600
+      m_Y: 600
       m_Width: 200
       m_Height: 200
     m_Scale: 1.25
@@ -528,8 +481,8 @@ MonoBehaviour:
       m_HorizontalBearingY: 150
       m_HorizontalAdvance: 150
     m_GlyphRect:
-      m_X: 400
-      m_Y: 400
+      m_X: 1800
+      m_Y: 600
       m_Width: 200
       m_Height: 200
     m_Scale: 1.25
@@ -544,8 +497,8 @@ MonoBehaviour:
       m_HorizontalBearingY: 150
       m_HorizontalAdvance: 150
     m_GlyphRect:
-      m_X: 600
-      m_Y: 400
+      m_X: 2000
+      m_Y: 600
       m_Width: 200
       m_Height: 200
     m_Scale: 1.25
@@ -560,8 +513,8 @@ MonoBehaviour:
       m_HorizontalBearingY: 150
       m_HorizontalAdvance: 150
     m_GlyphRect:
-      m_X: 800
-      m_Y: 400
+      m_X: 2200
+      m_Y: 600
       m_Width: 200
       m_Height: 200
     m_Scale: 1.25
@@ -576,7 +529,7 @@ MonoBehaviour:
       m_HorizontalBearingY: 150
       m_HorizontalAdvance: 150
     m_GlyphRect:
-      m_X: 1000
+      m_X: 0
       m_Y: 400
       m_Width: 200
       m_Height: 200
@@ -592,7 +545,7 @@ MonoBehaviour:
       m_HorizontalBearingY: 150
       m_HorizontalAdvance: 150
     m_GlyphRect:
-      m_X: 1200
+      m_X: 200
       m_Y: 400
       m_Width: 200
       m_Height: 200
@@ -608,7 +561,7 @@ MonoBehaviour:
       m_HorizontalBearingY: 150
       m_HorizontalAdvance: 150
     m_GlyphRect:
-      m_X: 1400
+      m_X: 400
       m_Y: 400
       m_Width: 200
       m_Height: 200
@@ -624,7 +577,7 @@ MonoBehaviour:
       m_HorizontalBearingY: 150
       m_HorizontalAdvance: 150
     m_GlyphRect:
-      m_X: 1600
+      m_X: 600
       m_Y: 400
       m_Width: 200
       m_Height: 200
@@ -640,7 +593,7 @@ MonoBehaviour:
       m_HorizontalBearingY: 150
       m_HorizontalAdvance: 150
     m_GlyphRect:
-      m_X: 1800
+      m_X: 800
       m_Y: 400
       m_Width: 200
       m_Height: 200
@@ -656,7 +609,7 @@ MonoBehaviour:
       m_HorizontalBearingY: 150
       m_HorizontalAdvance: 150
     m_GlyphRect:
-      m_X: 2000
+      m_X: 1000
       m_Y: 400
       m_Width: 200
       m_Height: 200
@@ -672,7 +625,7 @@ MonoBehaviour:
       m_HorizontalBearingY: 150
       m_HorizontalAdvance: 150
     m_GlyphRect:
-      m_X: 2200
+      m_X: 1200
       m_Y: 400
       m_Width: 200
       m_Height: 200
@@ -688,7 +641,7 @@ MonoBehaviour:
       m_HorizontalBearingY: 150
       m_HorizontalAdvance: 150
     m_GlyphRect:
-      m_X: 2400
+      m_X: 1400
       m_Y: 400
       m_Width: 200
       m_Height: 200
@@ -704,7 +657,7 @@ MonoBehaviour:
       m_HorizontalBearingY: 150
       m_HorizontalAdvance: 150
     m_GlyphRect:
-      m_X: 2600
+      m_X: 1600
       m_Y: 400
       m_Width: 200
       m_Height: 200
@@ -720,8 +673,8 @@ MonoBehaviour:
       m_HorizontalBearingY: 150
       m_HorizontalAdvance: 150
     m_GlyphRect:
-      m_X: 0
-      m_Y: 200
+      m_X: 1800
+      m_Y: 400
       m_Width: 200
       m_Height: 200
     m_Scale: 1.25
@@ -736,8 +689,8 @@ MonoBehaviour:
       m_HorizontalBearingY: 150
       m_HorizontalAdvance: 150
     m_GlyphRect:
-      m_X: 200
-      m_Y: 200
+      m_X: 2000
+      m_Y: 400
       m_Width: 200
       m_Height: 200
     m_Scale: 1.25
@@ -752,8 +705,8 @@ MonoBehaviour:
       m_HorizontalBearingY: 150
       m_HorizontalAdvance: 150
     m_GlyphRect:
-      m_X: 400
-      m_Y: 200
+      m_X: 2200
+      m_Y: 400
       m_Width: 200
       m_Height: 200
     m_Scale: 1.25
@@ -768,7 +721,7 @@ MonoBehaviour:
       m_HorizontalBearingY: 150
       m_HorizontalAdvance: 150
     m_GlyphRect:
-      m_X: 600
+      m_X: 0
       m_Y: 200
       m_Width: 200
       m_Height: 200
@@ -784,7 +737,7 @@ MonoBehaviour:
       m_HorizontalBearingY: 150
       m_HorizontalAdvance: 150
     m_GlyphRect:
-      m_X: 800
+      m_X: 200
       m_Y: 200
       m_Width: 200
       m_Height: 200
@@ -800,7 +753,7 @@ MonoBehaviour:
       m_HorizontalBearingY: 150
       m_HorizontalAdvance: 150
     m_GlyphRect:
-      m_X: 1000
+      m_X: 400
       m_Y: 200
       m_Width: 200
       m_Height: 200
@@ -816,7 +769,7 @@ MonoBehaviour:
       m_HorizontalBearingY: 150
       m_HorizontalAdvance: 150
     m_GlyphRect:
-      m_X: 1200
+      m_X: 600
       m_Y: 200
       m_Width: 200
       m_Height: 200
@@ -832,7 +785,7 @@ MonoBehaviour:
       m_HorizontalBearingY: 150
       m_HorizontalAdvance: 150
     m_GlyphRect:
-      m_X: 1400
+      m_X: 800
       m_Y: 200
       m_Width: 200
       m_Height: 200
@@ -848,7 +801,7 @@ MonoBehaviour:
       m_HorizontalBearingY: 150
       m_HorizontalAdvance: 150
     m_GlyphRect:
-      m_X: 1600
+      m_X: 1000
       m_Y: 200
       m_Width: 200
       m_Height: 200
@@ -864,7 +817,7 @@ MonoBehaviour:
       m_HorizontalBearingY: 150
       m_HorizontalAdvance: 150
     m_GlyphRect:
-      m_X: 1800
+      m_X: 1200
       m_Y: 200
       m_Width: 200
       m_Height: 200
@@ -880,7 +833,7 @@ MonoBehaviour:
       m_HorizontalBearingY: 150
       m_HorizontalAdvance: 150
     m_GlyphRect:
-      m_X: 2000
+      m_X: 1400
       m_Y: 200
       m_Width: 200
       m_Height: 200
@@ -896,7 +849,7 @@ MonoBehaviour:
       m_HorizontalBearingY: 150
       m_HorizontalAdvance: 150
     m_GlyphRect:
-      m_X: 2200
+      m_X: 1600
       m_Y: 200
       m_Width: 200
       m_Height: 200
@@ -912,7 +865,7 @@ MonoBehaviour:
       m_HorizontalBearingY: 150
       m_HorizontalAdvance: 150
     m_GlyphRect:
-      m_X: 2400
+      m_X: 1800
       m_Y: 200
       m_Width: 200
       m_Height: 200
@@ -928,7 +881,7 @@ MonoBehaviour:
       m_HorizontalBearingY: 150
       m_HorizontalAdvance: 150
     m_GlyphRect:
-      m_X: 2600
+      m_X: 2000
       m_Y: 200
       m_Width: 200
       m_Height: 200
@@ -944,8 +897,8 @@ MonoBehaviour:
       m_HorizontalBearingY: 150
       m_HorizontalAdvance: 150
     m_GlyphRect:
-      m_X: 0
-      m_Y: 0
+      m_X: 2200
+      m_Y: 200
       m_Width: 200
       m_Height: 200
     m_Scale: 1.25
@@ -960,7 +913,7 @@ MonoBehaviour:
       m_HorizontalBearingY: 150
       m_HorizontalAdvance: 150
     m_GlyphRect:
-      m_X: 200
+      m_X: 0
       m_Y: 0
       m_Width: 200
       m_Height: 200
@@ -976,7 +929,7 @@ MonoBehaviour:
       m_HorizontalBearingY: 150
       m_HorizontalAdvance: 150
     m_GlyphRect:
-      m_X: 400
+      m_X: 200
       m_Y: 0
       m_Width: 200
       m_Height: 200
@@ -992,7 +945,7 @@ MonoBehaviour:
       m_HorizontalBearingY: 150
       m_HorizontalAdvance: 150
     m_GlyphRect:
-      m_X: 600
+      m_X: 400
       m_Y: 0
       m_Width: 200
       m_Height: 200
@@ -1008,7 +961,7 @@ MonoBehaviour:
       m_HorizontalBearingY: 150
       m_HorizontalAdvance: 150
     m_GlyphRect:
-      m_X: 800
+      m_X: 600
       m_Y: 0
       m_Width: 200
       m_Height: 200
@@ -1024,7 +977,7 @@ MonoBehaviour:
       m_HorizontalBearingY: 150
       m_HorizontalAdvance: 150
     m_GlyphRect:
-      m_X: 1000
+      m_X: 800
       m_Y: 0
       m_Width: 200
       m_Height: 200
@@ -1040,7 +993,7 @@ MonoBehaviour:
       m_HorizontalBearingY: 150
       m_HorizontalAdvance: 150
     m_GlyphRect:
-      m_X: 1200
+      m_X: 1000
       m_Y: 0
       m_Width: 200
       m_Height: 200
@@ -1056,7 +1009,7 @@ MonoBehaviour:
       m_HorizontalBearingY: 150
       m_HorizontalAdvance: 150
     m_GlyphRect:
-      m_X: 1400
+      m_X: 1200
       m_Y: 0
       m_Width: 200
       m_Height: 200
@@ -1072,7 +1025,7 @@ MonoBehaviour:
       m_HorizontalBearingY: 150
       m_HorizontalAdvance: 150
     m_GlyphRect:
-      m_X: 1600
+      m_X: 1400
       m_Y: 0
       m_Width: 200
       m_Height: 200
@@ -1088,7 +1041,7 @@ MonoBehaviour:
       m_HorizontalBearingY: 150
       m_HorizontalAdvance: 150
     m_GlyphRect:
-      m_X: 1800
+      m_X: 1600
       m_Y: 0
       m_Width: 200
       m_Height: 200
@@ -1104,7 +1057,7 @@ MonoBehaviour:
       m_HorizontalBearingY: 150
       m_HorizontalAdvance: 150
     m_GlyphRect:
-      m_X: 2000
+      m_X: 1800
       m_Y: 0
       m_Width: 200
       m_Height: 200
@@ -1120,7 +1073,7 @@ MonoBehaviour:
       m_HorizontalBearingY: 150
       m_HorizontalAdvance: 150
     m_GlyphRect:
-      m_X: 2200
+      m_X: 2000
       m_Y: 0
       m_Width: 200
       m_Height: 200
@@ -1136,7 +1089,7 @@ MonoBehaviour:
       m_HorizontalBearingY: 150
       m_HorizontalAdvance: 150
     m_GlyphRect:
-      m_X: 2400
+      m_X: 2200
       m_Y: 0
       m_Width: 200
       m_Height: 200
@@ -1144,21 +1097,46 @@ MonoBehaviour:
     m_AtlasIndex: 0
     m_ClassDefinitionType: 0
     sprite: {fileID: -1904232834, guid: 3b99ac49f27b21c4b860682c6c0bdd2c, type: 3}
-  - m_Index: 48
-    m_Metrics:
-      m_Width: 200
-      m_Height: 200
-      m_HorizontalBearingX: -25
-      m_HorizontalBearingY: 150
-      m_HorizontalAdvance: 150
-    m_GlyphRect:
-      m_X: 2600
-      m_Y: 0
-      m_Width: 200
-      m_Height: 200
-    m_Scale: 1.25
-    m_AtlasIndex: 0
-    m_ClassDefinitionType: 0
-    sprite: {fileID: 628509582, guid: 3b99ac49f27b21c4b860682c6c0bdd2c, type: 3}
   spriteInfoList: []
   fallbackSpriteAssets: []
+--- !u!21 &7321636498173893613
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: TextMeshPro/Sprite
+  m_Shader: {fileID: 4800000, guid: cf81c85f95fe47e1a27f6ae460cf182c, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 3b99ac49f27b21c4b860682c6c0bdd2c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _ColorMask: 15
+    - _CullMode: 0
+    - _Stencil: 0
+    - _StencilComp: 8
+    - _StencilOp: 0
+    - _StencilReadMask: 255
+    - _StencilWriteMask: 255
+    - _UseUIAlphaClip: 0
+    m_Colors:
+    - _ClipRect: {r: -32767, g: -32767, b: 32767, a: 32767}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+  m_BuildTextureStacks: []

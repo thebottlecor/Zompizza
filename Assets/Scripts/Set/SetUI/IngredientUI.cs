@@ -45,7 +45,6 @@ public class IngredientUI : MonoBehaviour
             detail.text = $"{TextManager.Instance.GetIngredient(info)}\nx{GM.Instance.ingredients[info]}";
         else
             detail.text = string.Empty;
-
     }
 
     public void ToggleHighlight(bool on)

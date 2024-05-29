@@ -75,15 +75,16 @@ public class UIManager : Singleton<UIManager>
         // ¿Á∑·√¢
         var ingredients = Enum.GetValues(typeof(Ingredient));
         ingredientUIPairs = new Dictionary<Ingredient, IngredientUI>();
-        foreach(var temp in ingredients)
+        var ingredientLib = DataManager.Instance.ingredientLib;
+        foreach (var temp in ingredients)
         {
             Ingredient ingredient = (Ingredient)temp;
             int parentIdx = 0;
-            if (DataManager.Instance.ingredientLib.vegetables.ContainsKey(ingredient))
+            if (ingredientLib.vegetables.ContainsKey(ingredient))
             {
                 parentIdx = 1;
             }
-            else if (DataManager.Instance.ingredientLib.herbs.ContainsKey(ingredient))
+            else if (ingredientLib.herbs.ContainsKey(ingredient))
             {
                 parentIdx = 2;
             }
