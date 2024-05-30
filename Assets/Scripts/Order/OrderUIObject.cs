@@ -10,6 +10,7 @@ public class OrderUIObject : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 {
 
     public Image customer_profile;
+    public Image customer_profile_bg;
     public TextMeshProUGUI customer_name;
 
     public TextMeshProUGUI order_detail;
@@ -170,6 +171,7 @@ public class OrderUIObject : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             foreach (var item in info.pizzas[i].ingredients)
             {
                 UIManager.Instance.ingredientUIPairs[item.Key].ToggleHighlight(true);
+                customer_profile_bg.color = DataManager.Instance.uiLib.order_select_Color;
             }
         }
     }
@@ -183,6 +185,7 @@ public class OrderUIObject : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             foreach (var item in info.pizzas[i].ingredients)
             {
                 UIManager.Instance.ingredientUIPairs[item.Key].ToggleHighlight(false);
+                customer_profile_bg.color = DataManager.Instance.uiLib.order_unselect_Color;
             }
         }
     }

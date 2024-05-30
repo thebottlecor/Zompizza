@@ -1650,6 +1650,111 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: oven_ui_1
+      rect:
+        serializedVersion: 2
+        x: 2345
+        y: 3001
+        width: 349
+        height: 176
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d76e9a143656cb94eac03978d1c56570
+      internalID: -1913751759
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oven_ui_2
+      rect:
+        serializedVersion: 2
+        x: 2717
+        y: 3003
+        width: 26
+        height: 174
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0c0b6772c43e68046884cec79b513310
+      internalID: -661241749
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: oven_ui_3
+      rect:
+        serializedVersion: 2
+        x: 3065
+        y: 3123
+        width: 37
+        height: 54
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f51ede2558daab540bc37cbd0233f76f
+      internalID: 882737590
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: worldmap
+      rect:
+        serializedVersion: 2
+        x: 245
+        y: 1810
+        width: 174
+        height: 169
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bab261b4260f29d40a9996c5dd285a03
+      internalID: -41777304
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ZOM_GUI_15
+      rect:
+        serializedVersion: 2
+        x: 1744
+        y: 1117
+        width: 130
+        height: 130
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 123e5a169fffacf448795c65e392fcae
+      internalID: 90537806
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -1754,6 +1859,9 @@ TextureImporter:
       line_01: -1077415394
       line_02: 1388350798
       open: -294951090
+      oven_ui_1: -1913751759
+      oven_ui_2: -661241749
+      oven_ui_3: 882737590
       panel_01: 1496360435
       panel_02: -1911093180
       panel_03: -1377739310
@@ -1772,6 +1880,7 @@ TextureImporter:
       speed: 1336644462
       speed_niddle: -1761030070
       timer: 1513074758
+      worldmap: -41777304
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

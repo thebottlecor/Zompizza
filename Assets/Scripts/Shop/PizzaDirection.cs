@@ -27,7 +27,8 @@ public class PizzaDirection : EventListener
     public Transform stackTarget22;
 
     private Sequence sequence;
-    private OrderInfo info;
+    private Sequence sequence2; // 재료가 빨려들어가는 연출
+    //private OrderInfo info;
 
     public SerializableDictionary<Ingredient, Transform> ingredients;
     public GameObject ingredientsSource;
@@ -37,6 +38,7 @@ public class PizzaDirection : EventListener
     [SerializeField] private Vector2 initShopPanelPos;
 
     public static EventHandler<OrderInfo> PizzaCompleteEvent;
+    public static EventHandler IngredientEnterEvent;
 
     protected override void AddListeners()
     {
@@ -128,6 +130,11 @@ public class PizzaDirection : EventListener
             sequence.Kill();
             sequence = null;
         }
+        if (sequence2 != null)
+        {
+            sequence2.Kill();
+            sequence2 = null;
+        }
     }
 
     public void Init()
@@ -148,29 +155,19 @@ public class PizzaDirection : EventListener
             parentPanel.alpha = 1f;
             parentPanel.interactable = false;
 
-            pizzaBoxAnimator.gameObject.SetActive(true);
+            pizzaBoxAnimator.gameObject.SetActive(false);
             pizzaBoxAnimator.transform.localEulerAngles = new Vector3(45f, 180f, 0f);
-            pizzaBoxAnimator.Play("Closed");
+            //pizzaBoxAnimator.Play("Closed");
             pizza.gameObject.SetActive(false);
             pizzaEffect.gameObject.SetActive(false);
             pizzaEffect.localScale = Vector3.one;
-        });
-        // 열린다
-        sequence.Append(parentPanel.DOFade(0.1f, 0.25f));
-        //sequence.AppendInterval(0.5f);
-        sequence.AppendCallback(() =>
-        {
-            pizzaBoxAnimator.Play("Opening");
         });
         sequence.AppendInterval(0.25f);
         sequence.AppendCallback(() =>
         {
             AudioManager.Instance.PlaySFX(Sfx.chop, true);
         });
-
-        // 재료들이 들어간다
         sequence.AppendInterval(0.75f); // 더미
-
         foreach (var temp in ingredients)
         {
             sequence.Join(temp.Value.DOLocalMoveX(pizzaBoxAnimator.transform.localPosition.x, 0.75f).SetEase(Ease.OutQuad));
@@ -183,57 +180,60 @@ public class PizzaDirection : EventListener
             AudioManager.Instance.StopSFX(true);
             foreach (var temp in ingredients)
             {
-                temp.Value.SetParent(pizzaBoxAnimator.transform);
+                temp.Value.gameObject.SetActive(false);
             }
-            pizzaBoxAnimator.Play("Closing");
-            AudioManager.Instance.PlaySFX(Sfx.kitchenTimer);
+
+            if (IngredientEnterEvent != null)
+                IngredientEnterEvent(null, null);
+        });
+
+        sequence2 = DOTween.Sequence().SetAutoKill(false).SetUpdate(true);
+        // 닫힌 상태로 초기화
+        sequence2.AppendCallback(() =>
+        {
+            pizzaBoxAnimator.gameObject.SetActive(true);
+            pizzaBoxAnimator.Play("Closed");
+            AudioManager.Instance.PlaySFX(Sfx.pizzaSpin);
         });
 
         // 4번 돈다
-        sequence.Append(pizzaBoxAnimator.transform.DOLocalRotate(new Vector3(0, 360, 0), 0.25f, RotateMode.FastBeyond360).SetRelative(true).SetEase(Ease.Linear));
-        sequence.AppendCallback(() =>
+        sequence2.Append(pizzaBoxAnimator.transform.DOLocalRotate(new Vector3(0, 360, 0), 0.25f, RotateMode.FastBeyond360).SetRelative(true).SetEase(Ease.Linear));
+        sequence2.Append(pizzaBoxAnimator.transform.DOLocalRotate(new Vector3(0, 360, 0), 0.25f, RotateMode.FastBeyond360).SetRelative(true).SetEase(Ease.Linear));
+        sequence2.Append(pizzaBoxAnimator.transform.DOLocalRotate(new Vector3(0, 360, 0), 0.25f, RotateMode.FastBeyond360).SetRelative(true).SetEase(Ease.Linear));
+        sequence2.AppendCallback(() =>
         {
-            foreach (var temp in ingredients)
-            {
-                temp.Value.gameObject.SetActive(false);
-            }
-        });
-        sequence.Append(pizzaBoxAnimator.transform.DOLocalRotate(new Vector3(0, 360, 0), 0.25f, RotateMode.FastBeyond360).SetRelative(true).SetEase(Ease.Linear));
-        sequence.Append(pizzaBoxAnimator.transform.DOLocalRotate(new Vector3(0, 360, 0), 0.25f, RotateMode.FastBeyond360).SetRelative(true).SetEase(Ease.Linear));
-        sequence.AppendCallback(() =>
-        {
-            AudioManager.Instance.PlaySFX(Sfx.complete);
+            //AudioManager.Instance.PlaySFX(Sfx.complete);
             pizzaBoxAnimator.Play("Opening");
             pizzaEffect.localScale = Vector3.one;
             pizzaEffect.gameObject.SetActive(true);
         });
-        sequence.Append(pizzaBoxAnimator.transform.DOLocalRotate(new Vector3(0, 360, 0), 0.25f, RotateMode.FastBeyond360).SetRelative(true).SetEase(Ease.Linear));
-        sequence.Join(pizzaEffect.DOScale(5f, 0.25f).SetEase(Ease.InBack));
+        sequence2.Append(pizzaBoxAnimator.transform.DOLocalRotate(new Vector3(0, 360, 0), 0.25f, RotateMode.FastBeyond360).SetRelative(true).SetEase(Ease.Linear));
+        sequence2.Join(pizzaEffect.DOScale(5f, 0.25f).SetEase(Ease.InBack));
 
         // 빵빠레 효과 - 완성
-        sequence.AppendCallback(() =>
+        sequence2.AppendCallback(() =>
         {
+            AudioManager.Instance.PlaySFX(Sfx.pizzaComplete);
             pizza.gameObject.SetActive(true);
         });
-
-        sequence.Append(pizzaBoxAnimator.transform.DOPunchScale(new Vector3(1f, 0.05f, 0.05f), 0.25f));
-        sequence.Join(pizzaEffect.DOPunchScale(new Vector3(1f, 0.05f, 0.05f), 0.25f));
+        sequence2.Append(pizzaBoxAnimator.transform.DOPunchScale(new Vector3(1f, 0.05f, 0.05f), 0.25f));
+        sequence2.Join(pizzaEffect.DOPunchScale(new Vector3(1f, 0.05f, 0.05f), 0.25f));
 
         // 오른쪽으로 옮기기
-        sequence.AppendInterval(0.5f);
-        sequence.AppendCallback(() =>
+        sequence2.AppendInterval(0.5f);
+        sequence2.AppendCallback(() =>
         {
             pizzaBoxAnimator.Play("Closing");
         });
-        sequence.AppendInterval(0.25f);
-        sequence.AppendCallback(() =>
+        sequence2.AppendInterval(0.25f);
+        sequence2.AppendCallback(() =>
         {
             pizza.gameObject.SetActive(false);
             pizzaEffect.gameObject.SetActive(false);
         });
-        sequence.Append(pizzaBoxAnimator.transform.DOMove(stackTarget22.position, 0.5f).SetEase(Ease.OutQuad));
-        sequence.Join(parentPanel.DOFade(1f, 0.5f));
-        sequence.AppendCallback(() =>
+        sequence2.Append(pizzaBoxAnimator.transform.DOMove(stackTarget22.position, 0.5f).SetEase(Ease.OutQuad));
+        sequence2.Join(parentPanel.DOFade(1f, 0.5f));
+        sequence2.AppendCallback(() =>
         {
             pizzaBoxAnimator.gameObject.SetActive(false);
 
@@ -243,10 +243,101 @@ public class PizzaDirection : EventListener
 
             if (PizzaCompleteEvent != null)
                 PizzaCompleteEvent(this, null);
-            info = null;
         });
 
+        // 열린다
+        //sequence.Append(parentPanel.DOFade(0.1f, 0.25f));
+        //sequence.AppendInterval(0.5f);
+        //sequence.AppendCallback(() =>
+        //{
+        //    pizzaBoxAnimator.Play("Opening");
+        //});
+        //sequence.AppendInterval(0.25f);
+        //sequence.AppendCallback(() =>
+        //{
+        //    AudioManager.Instance.PlaySFX(Sfx.chop, true);
+        //});
+
+        //// 재료들이 들어간다
+        //sequence.AppendInterval(0.75f); // 더미
+
+        //foreach (var temp in ingredients)
+        //{
+        //    sequence.Join(temp.Value.DOLocalMoveX(pizzaBoxAnimator.transform.localPosition.x, 0.75f).SetEase(Ease.OutQuad));
+        //    sequence.Join(temp.Value.DOLocalMoveY(pizzaBoxAnimator.transform.localPosition.y + 0.15f, 0.75f).SetEase(Ease.InQuad));
+        //    sequence.Join(temp.Value.DOScale(0.4f, 0.75f).SetEase(Ease.OutQuint));
+        //}
+
+        //sequence.AppendCallback(() =>
+        //{
+        //    AudioManager.Instance.StopSFX(true);
+        //    foreach (var temp in ingredients)
+        //    {
+        //        temp.Value.SetParent(pizzaBoxAnimator.transform);
+        //    }
+        //    pizzaBoxAnimator.Play("Closing");
+        //    AudioManager.Instance.PlaySFX(Sfx.kitchenTimer);
+        //});
+
+        //// 4번 돈다
+        //sequence.Append(pizzaBoxAnimator.transform.DOLocalRotate(new Vector3(0, 360, 0), 0.25f, RotateMode.FastBeyond360).SetRelative(true).SetEase(Ease.Linear));
+        //sequence.AppendCallback(() =>
+        //{
+        //    foreach (var temp in ingredients)
+        //    {
+        //        temp.Value.gameObject.SetActive(false);
+        //    }
+        //});
+        //sequence.Append(pizzaBoxAnimator.transform.DOLocalRotate(new Vector3(0, 360, 0), 0.25f, RotateMode.FastBeyond360).SetRelative(true).SetEase(Ease.Linear));
+        //sequence.Append(pizzaBoxAnimator.transform.DOLocalRotate(new Vector3(0, 360, 0), 0.25f, RotateMode.FastBeyond360).SetRelative(true).SetEase(Ease.Linear));
+        //sequence.AppendCallback(() =>
+        //{
+        //    AudioManager.Instance.PlaySFX(Sfx.complete);
+        //    pizzaBoxAnimator.Play("Opening");
+        //    pizzaEffect.localScale = Vector3.one;
+        //    pizzaEffect.gameObject.SetActive(true);
+        //});
+        //sequence.Append(pizzaBoxAnimator.transform.DOLocalRotate(new Vector3(0, 360, 0), 0.25f, RotateMode.FastBeyond360).SetRelative(true).SetEase(Ease.Linear));
+        //sequence.Join(pizzaEffect.DOScale(5f, 0.25f).SetEase(Ease.InBack));
+
+        //// 빵빠레 효과 - 완성
+        //sequence.AppendCallback(() =>
+        //{
+        //    pizza.gameObject.SetActive(true);
+        //});
+
+        //sequence.Append(pizzaBoxAnimator.transform.DOPunchScale(new Vector3(1f, 0.05f, 0.05f), 0.25f));
+        //sequence.Join(pizzaEffect.DOPunchScale(new Vector3(1f, 0.05f, 0.05f), 0.25f));
+
+        //// 오른쪽으로 옮기기
+        //sequence.AppendInterval(0.5f);
+        //sequence.AppendCallback(() =>
+        //{
+        //    pizzaBoxAnimator.Play("Closing");
+        //});
+        //sequence.AppendInterval(0.25f);
+        //sequence.AppendCallback(() =>
+        //{
+        //    pizza.gameObject.SetActive(false);
+        //    pizzaEffect.gameObject.SetActive(false);
+        //});
+        //sequence.Append(pizzaBoxAnimator.transform.DOMove(stackTarget22.position, 0.5f).SetEase(Ease.OutQuad));
+        //sequence.Join(parentPanel.DOFade(1f, 0.5f));
+        //sequence.AppendCallback(() =>
+        //{
+        //    pizzaBoxAnimator.gameObject.SetActive(false);
+
+        //    parentPanel.alpha = 1f;
+        //    parentPanel.interactable = true;
+        //    UIManager.Instance.isDirecting = false;
+
+        //    if (PizzaCompleteEvent != null)
+        //        PizzaCompleteEvent(this, null);
+        //    info = null;
+        //});
+
         sequence.Pause();
+        sequence2.Pause();
     }
 
     private void ResetPos()
@@ -261,34 +352,34 @@ public class PizzaDirection : EventListener
     [ContextMenu("재시작")]
     public void RestartSequence_Debug()
     {
-        if (info != null)
-        {
-            HashSet<Ingredient> ingredientList = new HashSet<Ingredient>();
-            for (int i = 0; i < info.pizzas.Count; i++)
-            {
-                foreach (var temp in info.pizzas[i].ingredients)
-                {
-                    if (!ingredientList.Contains(temp.Key))
-                        ingredientList.Add(temp.Key);
-                }
-            }
-            int count = 0;
-            foreach (var temp in ingredients)
-            {
-                temp.Value.position = ingredientsRandomPos[count].position;
-                count++;
-                if (count >= ingredientsRandomPos.Count)
-                    count = 0;
-                temp.Value.localScale = Vector3.one;
+        //if (info != null)
+        //{
+        //    HashSet<Ingredient> ingredientList = new HashSet<Ingredient>();
+        //    for (int i = 0; i < info.pizzas.Count; i++)
+        //    {
+        //        foreach (var temp in info.pizzas[i].ingredients)
+        //        {
+        //            if (!ingredientList.Contains(temp.Key))
+        //                ingredientList.Add(temp.Key);
+        //        }
+        //    }
+        //    int count = 0;
+        //    foreach (var temp in ingredients)
+        //    {
+        //        temp.Value.position = ingredientsRandomPos[count].position;
+        //        count++;
+        //        if (count >= ingredientsRandomPos.Count)
+        //            count = 0;
+        //        temp.Value.localScale = Vector3.one;
 
-                temp.Value.SetParent(initParent);
-                if (ingredientList.Contains(temp.Key))
-                    temp.Value.gameObject.SetActive(true);
-                else
-                    temp.Value.gameObject.SetActive(false);
-            }
-        }
-        else
+        //        temp.Value.SetParent(initParent);
+        //        if (ingredientList.Contains(temp.Key))
+        //            temp.Value.gameObject.SetActive(true);
+        //        else
+        //            temp.Value.gameObject.SetActive(false);
+        //    }
+        //}
+        //else
         {
             int count = 0;
             foreach (var temp in ingredients)
@@ -329,8 +420,6 @@ public class PizzaDirection : EventListener
                 PizzaCompleteEvent(this, info);
         }
 
-        this.info = info;
-
         HashSet<Ingredient> ingredientList = new HashSet<Ingredient>();
         for (int i = 0; i < info.pizzas.Count; i++)
         {
@@ -362,6 +451,11 @@ public class PizzaDirection : EventListener
         pizza.GetComponent<MeshRenderer>().material = pizzaModels[random].material;
 
         sequence.Restart();
+    }
+
+    public void PizzaCompleteDirection()
+    {
+        sequence2.Restart();
     }
 
     //private void Update()

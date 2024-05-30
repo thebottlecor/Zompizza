@@ -77,12 +77,22 @@ public class AudioManager : Singleton<AudioManager>
     public void SetBGMVolume(float value)
     {
         // 0.001f ~ 1f
-        masterMixer.SetFloat("volumeBGM", Mathf.Log(value) * 20f);
+        //masterMixer.SetFloat("volumeBGM", Mathf.Log(value) * 20f);
+        // 0 ~ 10
+        float modify = value * 0.1f;
+        if (value <= 0)
+            modify = 0.001f;
+        masterMixer.SetFloat("volumeBGM", Mathf.Log(modify) * 20f);
     }
     public void SetSFXVolume(float value)
     {
         // 0.001f ~ 1f
-        masterMixer.SetFloat("volumeSFX", Mathf.Log(value) * 20f);
+        //masterMixer.SetFloat("volumeSFX", Mathf.Log(value) * 20f);
+        // 0 ~ 10
+        float modify = value * 0.1f;
+        if (value <= 0)
+            modify = 0.001f;
+        masterMixer.SetFloat("volumeSFX", Mathf.Log(modify) * 20f);
     }
 
     private void Update()
@@ -185,4 +195,6 @@ public enum Sfx
     btnHighlight2,
     okay,
     carStart,
+    pizzaSpin,
+    pizzaComplete,
 }

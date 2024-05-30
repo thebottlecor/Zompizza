@@ -193,8 +193,8 @@ public class SaveManager : Singleton<SaveManager>
         config.language = TextManager.Instance.language.ToString();
 
         var sm = SettingManager.Instance;
-        config.volumeBGM = sm.bgmSlider.value;
-        config.volumeSFX = sm.sfxSlider.value;
+        config.volumeBGM = (int)sm.bgmSlider.value;
+        config.volumeSFX = (int)sm.sfxSlider.value;
 
         config.fullScreen = sm.fullscreen;
         config.framerate = sm.framerateIdx;
@@ -463,12 +463,12 @@ public class ConfigData
 {
     public string language;
 
-    public float volumeBGM = 1f;
-    public float volumeSFX = 1f;
+    public int volumeBGM = 5;
+    public int volumeSFX = 5;
 
     public int fullScreen = 0;
     public int framerate = 0;
-    public bool vsync = true;
+    public bool vsync = false;
     public int resolution_width = 1920;
     public int resolution_height = 1080;
 

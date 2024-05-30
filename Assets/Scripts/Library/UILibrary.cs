@@ -25,4 +25,7 @@ public class UILibrary : ScriptableObject
     public Color miniOrderUI_maskColor;
     public Color miniOrderUI_maskColor_angry;
 
+    public Color order_unselect_Color = Color.white;
+    public Color order_select_Color;
+
 }

@@ -628,8 +628,10 @@ public class SettingManager : Singleton<SettingManager>
                 SetResolution(possibleResolution.Count - 1);
             }
 
-            bgmSlider.value = Mathf.Clamp(config.volumeBGM, 0.001f, 1f);
-            sfxSlider.value = Mathf.Clamp(config.volumeSFX, 0.001f, 1f);
+            bgmSlider.value = Mathf.Clamp(config.volumeBGM, 0, 10);
+            sfxSlider.value = Mathf.Clamp(config.volumeSFX, 0, 10);
+            AudioManager.Instance.SetBGMVolume(bgmSlider.value);
+            AudioManager.Instance.SetSFXVolume(sfxSlider.value);
         }
         else
         {
@@ -650,8 +652,10 @@ public class SettingManager : Singleton<SettingManager>
             resolutionDropdown.value = possibleResolution.Count - 1;
             SetResolution(possibleResolution.Count - 1);
 
-            bgmSlider.value = 0.5f;
-            sfxSlider.value = 0.5f;
+            bgmSlider.value = 5;
+            sfxSlider.value = 5;
+            AudioManager.Instance.SetBGMVolume(bgmSlider.value);
+            AudioManager.Instance.SetSFXVolume(sfxSlider.value);
         }
     }
 

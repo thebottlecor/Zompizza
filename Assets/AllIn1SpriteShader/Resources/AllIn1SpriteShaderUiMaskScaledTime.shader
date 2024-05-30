@@ -1050,8 +1050,10 @@
 
 				#if OVERLAY_ON
             	half2 overlayUvs = i.uv;
-            	overlayUvs.x += ((_Time.y + randomSeed) * _OverlayTextureScrollXSpeed) % 1;
-				overlayUvs.y += ((_Time.y + randomSeed) * _OverlayTextureScrollYSpeed) % 1;
+            	//overlayUvs.x += ((_Time.y + randomSeed) * _OverlayTextureScrollXSpeed) % 1;
+				//overlayUvs.y += ((_Time.y + randomSeed) * _OverlayTextureScrollYSpeed) % 1;
+            	overlayUvs.x += ((globalUnscaledTime + randomSeed) * _OverlayTextureScrollXSpeed) % 1;
+				overlayUvs.y += ((globalUnscaledTime + randomSeed) * _OverlayTextureScrollYSpeed) % 1;
 				half4 overlayCol = tex2D(_OverlayTex, TRANSFORM_TEX(overlayUvs, _OverlayTex));
 				overlayCol.rgb *= _OverlayColor.rgb * _OverlayGlow;
 				#if !OVERLAYMULT_ON

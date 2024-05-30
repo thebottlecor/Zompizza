@@ -828,6 +828,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   customer_profile: {fileID: 7909077436026561410}
+  customer_profile_bg: {fileID: 5335131249677431624}
   customer_name: {fileID: 8946915096084010007}
   order_detail: {fileID: 7293247317761227038}
   acceptButton: {fileID: 1598710293424618825}

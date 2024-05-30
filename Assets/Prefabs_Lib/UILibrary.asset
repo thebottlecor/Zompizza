@@ -200,3 +200,5 @@ MonoBehaviour:
       Value: {fileID: 395826259, guid: 4e0f9f6a1ebab7c44b366155ffe54ecc, type: 3}
   miniOrderUI_maskColor: {r: 1, g: 1, b: 1, a: 0.101960786}
   miniOrderUI_maskColor_angry: {r: 1, g: 0.6392157, b: 0.6392157, a: 0.101960786}
+  order_unselect_Color: {r: 1, g: 1, b: 1, a: 1}
+  order_select_Color: {r: 0.89411765, g: 1, b: 0.3764706, a: 1}

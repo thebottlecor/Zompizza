@@ -14,6 +14,7 @@ public class OrderManager : Singleton<OrderManager>
     public List<OrderInfo> orderList;
 
     public PizzaDirection pizzaDirection;
+    public OvenMiniGame ovenMiniGame;
     //public MoneyDirection moneyDirection;
 
     public SerializableDictionary<OrderInfo, OrderMiniUI> orderMiniUIPair;
@@ -523,7 +524,12 @@ public class OrderManager : Singleton<OrderManager>
 
         TutorialManager.Instance.OrderAccpeted();
 
+        ovenMiniGame.StartOven(info);
         pizzaDirection.RestartSequence(info);
+    }
+    public void PizzaMakingComplete(OrderInfo info)
+    {
+        pizzaDirection.PizzaCompleteDirection();
     }
 
     public bool IsDelivering()
