@@ -6,6 +6,7 @@ using TMPro;
 using DG.Tweening;
 using System;
 using System.Text;
+using UnityEngine.InputSystem;
 
 public class OvenMiniGame : EventListener
 {
@@ -68,12 +69,16 @@ public class OvenMiniGame : EventListener
     {
         PizzaDirection.IngredientEnterEvent += OnIngredientEnter;
         PizzaDirection.PizzaCompleteEvent += OnPizzaComplete;
+
+        InputHelper.SideBreakEvent += OnButtonPressed;
     }
 
     protected override void RemoveListeners()
     {
         PizzaDirection.IngredientEnterEvent -= OnIngredientEnter;
         PizzaDirection.PizzaCompleteEvent -= OnPizzaComplete;
+
+        InputHelper.SideBreakEvent -= OnButtonPressed;
     }
 
     private void OnIngredientEnter(object sender, EventArgs e)
@@ -110,6 +115,8 @@ public class OvenMiniGame : EventListener
         gaugeIndicator.material = null;
         gaugeIndicator.rectTransform.rotation = Quaternion.Euler(0, 0, angle_progress);
         oven_operatingMat.SetFloat("_ColorSwapBlend", 0);
+
+        buttonPressed = false;
     }
 
     public void StartOven(OrderInfo orderInfo)
@@ -156,12 +163,21 @@ public class OvenMiniGame : EventListener
             StopOven();
             return;
         }
-        if (HotKey[KeyMap.carBreak].GetkeyDown())
+        if (buttonPressed)
         {
             AudioManager.Instance.PlaySFX(Sfx.buttons);
             StopOven();
             return;
         }
+    }
+
+    bool buttonPressed;
+
+    public void OnButtonPressed(object sender, InputAction.CallbackContext e)
+    {
+        if (!operating) return;
+
+        buttonPressed = e.performed;
     }
 
     public void StopOven()

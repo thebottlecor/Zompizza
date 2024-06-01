@@ -47,6 +47,10 @@ public class TextManager : Singleton<TextManager>
     public string GetKeyCodes(KeyCode idx) => keycodes[idx]["all"].ToString();
     public bool HasKeyCode(KeyCode idx) => keycodes.ContainsKey(idx);
 
+    Dictionary<KeyCode, Dictionary<string, object>> inputSystems;
+    public string GetInputSystems(KeyCode idx) => inputSystems[idx]["all"].ToString();
+    public bool HasInputSystems(KeyCode idx) => inputSystems.ContainsKey(idx);
+
     Dictionary<int, Dictionary<string, object>> characters;
     public string GetNames(int idx) => characters[idx][language.ToString()].ToString();
 
@@ -117,6 +121,7 @@ public class TextManager : Singleton<TextManager>
         commons = CSVReader.ReadCSV<string>("TextManager - common.csv");
         keymaps = CSVReader.ReadCSV<KeyMap>("TextManager - keymap.csv");
         keycodes = CSVReader.ReadCSV<KeyCode>("TextManager - keycode.csv");
+        inputSystems = CSVReader.ReadCSV<KeyCode>("TextManager - inputSystem.csv");
         characters = CSVReader.ReadCSV<int>("TextManager - character.csv");
 
         Lobby.Instance.UpdateTexts();

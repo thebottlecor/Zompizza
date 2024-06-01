@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 
@@ -23,6 +24,8 @@ public enum KeyMap
     worldMap,
     worldMapZoomIn,
     worldMapZoomOut,
+
+    enterStore,
 
     LAST,
 }
@@ -43,6 +46,8 @@ public class KeySaveData
         new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.worldMap, Value = KeyCode.M },
         new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.worldMapZoomIn, Value = KeyCode.PageDown },
         new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.worldMapZoomOut, Value = KeyCode.PageUp },
+
+        new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.enterStore, Value = KeyCode.Return },
     };
 }
 [Serializable]
@@ -106,7 +111,7 @@ public class SettingManager : Singleton<SettingManager>
     [SerializeField] private GameObject keyObject_Reset_Prefab;
     [SerializeField] private Transform keyObject_Parent;
     private SerializableDictionary<KeyMap, KeyObject> keyObjects;
-    private Dictionary<KeyCode, byte> bannedSettingKey;
+    private Dictionary<KeyCode, byte> bannedSettingKey_ForKeyboard;
     private TextMeshProUGUI restoreDefaultsTMP;
 
     // Keysetting에서 prefab 생성 순서
@@ -123,7 +128,11 @@ public class SettingManager : Singleton<SettingManager>
         KeyMap.worldMap,
         KeyMap.worldMapZoomIn,
         KeyMap.worldMapZoomOut,
+
+        KeyMap.enterStore,
     };
+    // keyOrder 순서에 맞춰서 InputSystemKeymappingBase 데이터 넣기
+    [SerializeField] private List<InputSystemKeymappingBase> inputSystemKeymappings;
 
     public bool DisableControl => WindowOutOfFocus || currentActiveKeyNum != KeyMap.LAST;
 
@@ -169,6 +178,8 @@ public class SettingManager : Singleton<SettingManager>
         {
             keySave.keyCodes[item.Key] = item.Value.key;
         }
+
+        UpdateKeyMapWithInputSystem();
 
         string jsonData = JsonHelper.ObjectToJson(keySave);
         JsonHelper.CreateJsonFile(Application.persistentDataPath, "keys", "Config", jsonData, false);
@@ -240,6 +251,7 @@ public class SettingManager : Singleton<SettingManager>
         {
             KeyObject keyObject = Instantiate(keyObject_Prefab, keyObject_Parent).GetComponent<KeyObject>();
             keyObject.Init(keyOrder[i]);
+            keyObject.newInput.CopyData(inputSystemKeymappings[i]);
             keyObjects.Add(new SerializableDictionary<KeyMap, KeyObject>.Pair { Key = keyOrder[i], Value = keyObject });
         }
 
@@ -266,7 +278,7 @@ public class SettingManager : Singleton<SettingManager>
         {
             foreach (KeyCode kcode in Enum.GetValues(typeof(KeyCode)))
             {
-                if (!bannedSettingKey.ContainsKey(kcode))
+                if (!bannedSettingKey_ForKeyboard.ContainsKey(kcode) && (int)kcode < 323) // 323부터는 Mouse와 Joystick
                 {
                     if (Input.GetKeyUp(kcode))
                     {
@@ -302,7 +314,25 @@ public class SettingManager : Singleton<SettingManager>
         }
     }
 
-    private void KeyInit_SetOrder()
+    public void UpdateKeyMapWithInputSystem()
+    {
+        foreach (var keyobj in keyObjects)
+        {
+            var obj = keyobj.Value;
+            if (obj.newInput.ResolveActionAndBinding(out var action, out var bindingIndex))
+            {
+                InputBinding inputBinding = action.bindings[bindingIndex];
+                var keyCode = keyMappings[keyobj.Key].key;
+                if (tm.HasInputSystems(keyCode))
+                    inputBinding.overridePath = $"<Keyboard>/{tm.GetInputSystems(keyCode)}";
+                else
+                    inputBinding.overridePath = $"<Keyboard>/{keyCode}";
+                action.ApplyBindingOverride(bindingIndex, inputBinding);
+            }
+        }
+    }
+
+private void KeyInit_SetOrder()
     {
         keyMappings = new SerializableDictionary<KeyMap, KeyMapping>();
 
@@ -317,16 +347,16 @@ public class SettingManager : Singleton<SettingManager>
             keyMappings.Add(new SerializableDictionary<KeyMap, KeyMapping>.Pair { Key = keyMap, Value = keyMapping });
         }
 
-        bannedSettingKey = new Dictionary<KeyCode, byte>();
-        bannedSettingKey.Add(KeyCode.LeftShift, 0);
-        bannedSettingKey.Add(KeyCode.LeftControl, 0);
-        bannedSettingKey.Add(KeyCode.Mouse0, 0);
-        bannedSettingKey.Add(KeyCode.Mouse1, 0);
-        bannedSettingKey.Add(KeyCode.Mouse2, 0);
-        bannedSettingKey.Add(KeyCode.Mouse3, 0);
-        bannedSettingKey.Add(KeyCode.Mouse4, 0);
-        bannedSettingKey.Add(KeyCode.Mouse5, 0);
-        bannedSettingKey.Add(KeyCode.Mouse6, 0);
+        bannedSettingKey_ForKeyboard = new Dictionary<KeyCode, byte>();
+        //bannedSettingKey.Add(KeyCode.LeftShift, 0);
+        //bannedSettingKey.Add(KeyCode.LeftControl, 0);
+        //bannedSettingKey_ForKeyboard.Add(KeyCode.Mouse0, 0);
+        //bannedSettingKey_ForKeyboard.Add(KeyCode.Mouse1, 0);
+        //bannedSettingKey_ForKeyboard.Add(KeyCode.Mouse2, 0);
+        //bannedSettingKey_ForKeyboard.Add(KeyCode.Mouse3, 0);
+        //bannedSettingKey_ForKeyboard.Add(KeyCode.Mouse4, 0);
+        //bannedSettingKey_ForKeyboard.Add(KeyCode.Mouse5, 0);
+        //bannedSettingKey_ForKeyboard.Add(KeyCode.Mouse6, 0);
     }
     #endregion
 

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4617671634600607462}
   - component: {fileID: 5332619933294055431}
+  - component: {fileID: 4773870229463986506}
   - component: {fileID: 344671002963716354}
   - component: {fileID: 4065156498356572590}
   - component: {fileID: 5819183829596440703}
@@ -58,6 +59,21 @@ MonoBehaviour:
   currentKeyShow: {fileID: 1696034083372887261}
   button: {fileID: 4065156498356572590}
   highlight: {fileID: 9185642006500535708}
+  newInput: {fileID: 4773870229463986506}
+--- !u!114 &4773870229463986506
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4108913432043436357}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 620b541fef87d394ba7576494f0733d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Action: {fileID: 0}
+  m_BindingId: d540edf6-bfaa-4b08-b8d5-925398a2debe
 --- !u!114 &344671002963716354
 MonoBehaviour:
   m_ObjectHideFlags: 0

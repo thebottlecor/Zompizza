@@ -30,4 +30,9 @@ public class FeedbackHelper : MonoBehaviour
 
         Application.OpenURL(tempUrl);
     }
+
+    public void WishlistNow()
+    {
+        Application.OpenURL("https://store.steampowered.com/app/2937920/");
+    }
 }

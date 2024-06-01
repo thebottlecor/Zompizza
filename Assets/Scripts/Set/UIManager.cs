@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 public class UIManager : Singleton<UIManager>
 {
@@ -35,20 +36,6 @@ public class UIManager : Singleton<UIManager>
     public Dictionary<Ingredient, IngredientUI> ingredientUIPairs;
 
     private SerializableDictionary<KeyMap, KeyMapping> HotKey => SettingManager.Instance.keyMappings;
-
-    private IEnumerator CanvasUpdate()
-    {
-        yield return null;
-
-        float ratio = (float)SettingManager.Instance.settingResolution.y / SettingManager.Instance.settingResolution.x;
-        float modify = (ratio > 0.5625f) ? 0f : 1f;
-
-        var canvasScaler = FindObjectsByType<CanvasScaler>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-        for (int i = 0; i < canvasScaler.Length; i++)
-        {
-            canvasScaler[i].matchWidthOrHeight = modify;
-        }
-    }
 
     public void Init()
     {
@@ -131,56 +118,88 @@ public class UIManager : Singleton<UIManager>
         AudioManager.Instance.PlaySFX(Sfx.btnHighlight, volume: 0.75f);
     }
 
-    private void Update()
+    protected override void AddListeners()
     {
-        if (isDirecting || changingResolution) return;
-        if (GM.Instance.loading) return;
+        InputHelper.EscapeEvent += OnESC;
+        InputHelper.WorldmapEvent += OnWorldmap;
+        InputHelper.EnterStoreEvent += OnShopEnter;
+    }
+    protected override void RemoveListeners()
+    {
+        InputHelper.EscapeEvent -= OnESC;
+        InputHelper.WorldmapEvent -= OnWorldmap;
+        InputHelper.EnterStoreEvent -= OnShopEnter;
+    }
 
-        if (HotKey[KeyMap.escape].GetkeyDown())
-        {
-            if (ExplorationManager.Instance.canvasGroupLoading)
-                return;
-            else if (ExplorationManager.Instance.canvasGroup_resultPanel.alpha >= 0.99f)
-            {
-                ExplorationManager.Instance.HideUI_ResultPanel();
-                return;
-            }
+    private bool Interacting()
+    {
+        if (isDirecting || changingResolution) return false;
+        if (GM.Instance.loading) return false;
+        return true;
+    }
 
-            if (GM.Instance.gameOverWarningObj.activeSelf)
-            {
-                GM.Instance.ShowGameOverWarning(false);
-                return;
-            }
-            //if (LoanManager.Instance.loanWarningObj.activeSelf)
-            //{
-            //    LoanManager.Instance.ShowLoanWarning(false);
-            //    return;
-            //}
-            if (shopUI.shopCloseWarningObj.activeSelf)
-            {
-                shopUI.ShowShopCloseWarning(false);
-                return;
-            }
+    private void OnShopEnter(object sender, InputAction.CallbackContext e)
+    {
+        if (!Interacting()) return;
 
-            if (utilUI.IsActive)
-            {
-                utilUI.HideUI();
-            }
-            else if (shopUI.IsActive)
-            {
-                shopUI.HideUI();
-            }
-            else
-            {
-                utilUI.OpenSettings();
-            }
-        }
-        else if (HotKey[KeyMap.worldMap].GetkeyDown())
+        if (shopUI.shopUIOpenButton.activeSelf)
         {
             if (!shopUI.IsActive && !utilUI.IsActive)
             {
-                utilUI.OpenWorldMap();
+                shopUI.ShowOrder();
             }
+        }
+    }
+
+    private void OnWorldmap(object sender, InputAction.CallbackContext e)
+    {
+        if (!Interacting()) return;
+
+        if (!shopUI.IsActive && !utilUI.IsActive)
+        {
+            utilUI.OpenWorldMap();
+        }
+    }
+
+    private void OnESC(object sender, InputAction.CallbackContext e)
+    {
+        if (!Interacting()) return;
+
+        if (ExplorationManager.Instance.canvasGroupLoading)
+            return;
+        else if (ExplorationManager.Instance.canvasGroup_resultPanel.alpha >= 0.99f)
+        {
+            ExplorationManager.Instance.HideUI_ResultPanel();
+            return;
+        }
+
+        if (GM.Instance.gameOverWarningObj.activeSelf)
+        {
+            GM.Instance.ShowGameOverWarning(false);
+            return;
+        }
+        //if (LoanManager.Instance.loanWarningObj.activeSelf)
+        //{
+        //    LoanManager.Instance.ShowLoanWarning(false);
+        //    return;
+        //}
+        if (shopUI.shopCloseWarningObj.activeSelf)
+        {
+            shopUI.ShowShopCloseWarning(false);
+            return;
+        }
+
+        if (utilUI.IsActive)
+        {
+            utilUI.HideUI();
+        }
+        else if (shopUI.IsActive)
+        {
+            shopUI.HideUI();
+        }
+        else
+        {
+            utilUI.OpenSettings();
         }
     }
 

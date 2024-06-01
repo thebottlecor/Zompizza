@@ -15,8 +15,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using UnityEngine.InputSystem;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : EventListener
 {
     //CAR SETUP
 
@@ -443,6 +444,46 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+
+    bool forward;
+    bool backward;
+    bool left;
+    bool right;
+    bool pressBreak;
+    bool upBreak;
+
+    protected override void AddListeners()
+    {
+        InputHelper.MoveEvent += OnMove;
+        InputHelper.SideBreakEvent += OnSideBreak;
+    }
+    protected override void RemoveListeners()
+    {
+        InputHelper.MoveEvent -= OnMove;
+        InputHelper.SideBreakEvent -= OnSideBreak;
+    }
+
+    public void OnMove(object sender, InputAction.CallbackContext e)
+    {
+        if (GM.Instance.stop_control) return;
+
+        Vector2 input = e.ReadValue<Vector2>();
+        if (input != null)
+        {
+            forward = input.y > 0;
+            backward = input.y < 0;
+            left = input.x < 0;
+            right = input.x > 0;
+        }
+    }
+    public void OnSideBreak(object sender, InputAction.CallbackContext e)
+    {
+        if (GM.Instance.stop_control) return;
+
+        pressBreak = e.performed;
+        upBreak = !pressBreak;
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -547,12 +588,12 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            bool forward = HotKey[KeyMap.carForward].Getkey();
-            bool backward = HotKey[KeyMap.carBackward].Getkey();
-            bool left = HotKey[KeyMap.carLeft].Getkey();
-            bool right = HotKey[KeyMap.carRight].Getkey();
-            bool pressBreak = HotKey[KeyMap.carBreak].Getkey();
-            bool upBreak = HotKey[KeyMap.carBreak].GetkeyUp();
+            //bool forward = HotKey[KeyMap.carForward].Getkey();
+            //bool backward = HotKey[KeyMap.carBackward].Getkey();
+            //bool left = HotKey[KeyMap.carLeft].Getkey();
+            //bool right = HotKey[KeyMap.carRight].Getkey();
+            //bool pressBreak = HotKey[KeyMap.carBreak].Getkey();
+            //bool upBreak = HotKey[KeyMap.carBreak].GetkeyUp();
 
             //if (!connected && controllers.Length > 0)
             //{
@@ -1094,5 +1135,4 @@ public class PlayerController : MonoBehaviour
             recoverTractionCoroutine = null;
         }
     }
-
 }

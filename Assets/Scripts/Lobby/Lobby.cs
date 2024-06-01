@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -84,10 +85,14 @@ public class Lobby : Singleton<Lobby>
     protected override void AddListeners()
     {
         LoadingSceneManager.SceneLoadCompletedEvent += OnLoadingComplete;
+
+        InputHelper.EscapeEvent += OnESC;
     }
     protected override void RemoveListeners()
     {
         LoadingSceneManager.SceneLoadCompletedEvent -= OnLoadingComplete;
+
+        InputHelper.EscapeEvent -= OnESC;
     }
 
     private void OnLoadingComplete(object sender, string e)
@@ -104,13 +109,18 @@ public class Lobby : Singleton<Lobby>
         SettingManager.Instance.LobbySwitch(on);
     }
 
-    private void Update()
+    private void OnESC(object sender, InputAction.CallbackContext e)
     {
         if (GM.Instance != null) return; // 인게임 씬에서는 단축키 막음
 
-        if (HotKey[KeyMap.escape].GetkeyDown())
+        if (e.performed)
         {
-            CloseAllPanel();
+            if (!SettingManager.Instance.IsActive)
+            {
+                SettingManager.Instance.OpenPanel(0);
+            }
+            else
+                CloseAllPanel();
         }
     }
 
@@ -176,6 +186,7 @@ public class Lobby : Singleton<Lobby>
     //[SerializeField] private TextMeshProUGUI disasterIntensityTMP;
     //[SerializeField] private TextMeshProUGUI initialPopulationTMP;
     //[SerializeField] private TextMeshProUGUI initialResourceTMP;
+    [SerializeField] private TextMeshProUGUI wishlistNowTMP;
 
     public void UpdateTexts()
     {
@@ -212,6 +223,8 @@ public class Lobby : Singleton<Lobby>
         //initialResourceTMP.text = tm.GetCommons("InitialResources");
 
         //tutorialTMP.text = tm.GetCommons("Tutorial");
+
+        wishlistNowTMP.text = tm.GetCommons("WishlistNow");
     }
 
     #region NewGame
