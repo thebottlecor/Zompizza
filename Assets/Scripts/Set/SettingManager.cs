@@ -495,6 +495,7 @@ public class SettingManager : Singleton<SettingManager>
         subSettingPanelTMP[4].text = tm.GetCommons("Main Menu");
         subSettingPanelTMP[5].text = tm.GetCommons("Quit");
         subSettingPanelTMP[6].text = tm.GetCommons("Unstuck");
+        subSettingPanelTMP[7].text = tm.GetCommons("SendFeedback");
 
         cameraSpeedTMP.text = string.Format(tm.defaultCultureInfo, tm.GetCommons("CameraSpeed"), cameraSpeed);
         invertZoomTMP.text = tm.GetCommons("InvertZoom");
