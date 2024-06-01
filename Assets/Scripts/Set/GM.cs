@@ -37,6 +37,9 @@ public class GM : Singleton<GM>
     // 플레이어가 가진 자원
     public int gold;
     public float rating;
+
+    public int combo;
+
     public float RatingDailyChange { get; private set; }
     public SerializableDictionary<Ingredient, int> ingredients;
     public int HasIngredient
@@ -495,6 +498,7 @@ public class GM : Singleton<GM>
             }
 
             TutorialManager.Instance.NextDay();
+            StatManager.Instance.NextDay();
             //RivalManager.Instance.NextDay();
             //ShowRatingText();
         });
@@ -608,6 +612,9 @@ public class GM : Singleton<GM>
             dayOne_Gold.Add(new SerializableDictionary<GetGoldSource, int>.Pair { Key = source, Value = value });
         else
             dayOne_Gold[source] += value;
+
+        if (value > 0)
+            StatManager.Instance.totalEarn += value;
     }
 
     private void ShowGoldText()
@@ -637,6 +644,8 @@ public class GM : Singleton<GM>
             dayOne_Rating.Add(new SerializableDictionary<GetRatingSource, float>.Pair { Key = source, Value = value });
         else
             dayOne_Rating[source] += value;
+
+        StatManager.Instance.totalRating += value;
     }
 
     private void ShowRatingText()

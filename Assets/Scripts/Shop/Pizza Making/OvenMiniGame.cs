@@ -139,7 +139,8 @@ public class OvenMiniGame : EventListener
         gaugeIndicator.rectTransform.rotation = Quaternion.Euler(0, 0, angle_progress);
 
         float sin = Mathf.Sin(angle_progress * Mathf.Deg2Rad);
-        if (sin <= Mathf.Sin(17f * Mathf.Deg2Rad) && sin > Mathf.Sin(-18f * Mathf.Deg2Rad))
+        //if (sin <= Mathf.Sin(17f * Mathf.Deg2Rad) && sin > Mathf.Sin(-18f * Mathf.Deg2Rad))
+        if (sin <= Mathf.Sin(4.4f * Mathf.Deg2Rad) && sin > Mathf.Sin(-4.9f * Mathf.Deg2Rad))
         {
             gaugeIndicator.material = gaugeIndicatorHighlightMat;
         }
@@ -183,15 +184,24 @@ public class OvenMiniGame : EventListener
         }
         else if (sin > Mathf.Sin(17f * Mathf.Deg2Rad))
         {
+            //grade = 1;
+        }
+        else if (sin > Mathf.Sin(4.4f * Mathf.Deg2Rad))
+        {
             grade = 1;
         }
-        else if (sin > Mathf.Sin(-18f * Mathf.Deg2Rad))
+        else if (sin > Mathf.Sin(-4.9f * Mathf.Deg2Rad))
         {
             grade = 2;
         }
+        else if (sin > Mathf.Sin(-18f * Mathf.Deg2Rad))
+        {
+            //grade = 2;
+            grade = 1;
+        }
         else if (sin > Mathf.Sin(-53.5f * Mathf.Deg2Rad))
         {
-            grade = 1;
+            //grade = 1;
         }
 
         float pizzaHp = 0;

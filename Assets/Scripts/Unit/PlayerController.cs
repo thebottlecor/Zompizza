@@ -554,6 +554,18 @@ public class PlayerController : MonoBehaviour
             bool pressBreak = HotKey[KeyMap.carBreak].Getkey();
             bool upBreak = HotKey[KeyMap.carBreak].GetkeyUp();
 
+            //if (!connected && controllers.Length > 0)
+            //{
+            //    connected = true;
+            //    Debug.Log("Connected");
+
+            //}
+            //else if (connected && controllers.Length == 0)
+            //{
+            //    connected = false;
+            //    Debug.Log("Disconnected");
+            //}
+
             // 듀얼센스 테스트
             //bool forward = Input.GetAxisRaw("Forward") > 0;
             //bool backward = Input.GetAxisRaw("Backward") > 0;
@@ -561,6 +573,8 @@ public class PlayerController : MonoBehaviour
             //bool right = Input.GetAxis("Horizontal") > 0;
             //bool pressBreak = Input.GetAxis("SideBreak") > 0;
             //bool upBreak = !pressBreak;
+
+            //Debug.Log(Input.GetAxis("SideBreak"));
 
             ////Debug.Log(Input.GetAxis("Vertical"));
             ////Debug.Log(Input.GetAxis("Mouse X"));
@@ -627,6 +641,7 @@ public class PlayerController : MonoBehaviour
         // We call the method AnimateWheelMeshes() in order to match the wheel collider movements with the 3D meshes of the wheels.
         AnimateWheelMeshes();
 
+        StatManager.Instance.carMileage += Mathf.Abs(carSpeed) * 0.00001f;
     }
 
     public void ShakeOffAllZombies()

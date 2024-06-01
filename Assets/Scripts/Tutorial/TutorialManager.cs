@@ -179,7 +179,10 @@ public class TutorialManager : Singleton<TutorialManager>
                 break;
             case 1:
                 if (step == 1)
+                {
+                    AudioManager.Instance.PlaySFX(Sfx.complete);
                     Step2();
+                }
                 break;
             case 2:
                 if (step == 2)

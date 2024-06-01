@@ -108,7 +108,8 @@ public class ShopUI : EventListener
         buttonTexts[2].text = tm.GetCommons("Upgrade");
         buttonTexts[3].text = tm.GetCommons("News");
 
-        buttonTexts[4].text = tm.GetCommons("Back");
+        //buttonTexts[4].text = tm.GetCommons("Back");
+        buttonTexts[4].text = tm.GetCommons("Close");
 
         orderText.text = tm.GetCommons("Order");
         ingredientText.text = tm.GetCommons("Ingredient");
@@ -360,6 +361,8 @@ public class ShopUI : EventListener
         {
             UpdatePizzaBox(null);
             ExplorationManager.Instance.UpdateBtn();
+
+            shopCloseBtn.gameObject.SetActive(!endTime);
         }
         else
         {
@@ -367,10 +370,17 @@ public class ShopUI : EventListener
                 OrderManager.Instance.pizzaDirection.StopSequence();
             ExplorationManager.Instance.HideUI_ResultPanel_Instant();
 
-            if (idx == 2)
+            switch (idx)
             {
-                SelectUpgrade(-1);
+                case 1:
+                    StatManager.Instance.UpdateText();
+                    break;
+                case 2:
+                    SelectUpgrade(-1);
+                    break;
             }
+
+            shopCloseBtn.gameObject.SetActive(false);
         }
 
         for (int i = 0; i < panelButtonPairs.Count; i++)

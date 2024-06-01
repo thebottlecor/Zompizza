@@ -175,7 +175,7 @@ Material:
     - _OutlineTexYSpeed: 0
     - _OutlineWidth: 0.004
     - _OverlayBlend: 1
-    - _OverlayGlow: 8
+    - _OverlayGlow: 9
     - _OverlayTextureScrollXSpeed: 5
     - _OverlayTextureScrollYSpeed: 5
     - _PinchUvAmount: 0

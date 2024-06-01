@@ -102,15 +102,6 @@ public class ExplorationManager : Singleton<ExplorationManager>
 
         TutorialManager.Instance.SendExploration();
 
-        int notCompletedOrder = OrderManager.Instance.GetAcceptedOrderCount();
-        if (notCompletedOrder > 0)
-        {
-            // 아직 완료되지 않은 주문이 있는데 다음날로 갈 것인가? 경고
-
-            // 미완료 패널티
-            GM.Instance.AddRating(Constant.delivery_Not_completed_rating * notCompletedOrder, GM.GetRatingSource.notComplete);
-        }
-
         // 받지 않았던 주문 패널티 
         OrderManager.Instance.RemoveAllOrders();
 

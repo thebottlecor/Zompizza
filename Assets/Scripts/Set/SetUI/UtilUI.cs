@@ -30,8 +30,8 @@ public class UtilUI : EventListener
         buttonTexts[0].text = tm.GetCommons("Worldmap");
         buttonTexts[1].text = tm.GetCommons("Menu");
 
-        buttonTexts[2].text = tm.GetCommons("Back");
-
+        //buttonTexts[2].text = tm.GetCommons("Back");
+        buttonTexts[2].text = tm.GetCommons("Close");
     }
 
     protected override void AddListeners()
