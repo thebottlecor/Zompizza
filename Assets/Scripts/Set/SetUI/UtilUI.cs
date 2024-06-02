@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class UtilUI : EventListener
 {
@@ -36,12 +37,37 @@ public class UtilUI : EventListener
 
     protected override void AddListeners()
     {
-
+        InputHelper.TabMoveEvent += OnTabMove;
     }
 
     protected override void RemoveListeners()
     {
+        InputHelper.TabMoveEvent -= OnTabMove;
+    }
 
+    private void OnTabMove(object sender, InputAction.CallbackContext e)
+    {
+        if (!opened || loading) return;
+
+        float value = e.ReadValue<float>();
+
+        if (e.performed)
+        {
+            if (value > 0)
+            {
+                activeSubPanel++;
+                if (activeSubPanel >= panelButtonPairs.Count)
+                    activeSubPanel = 0;
+                SelectSubPanel(activeSubPanel);
+            }
+            else if (value < 0)
+            {
+                activeSubPanel--;
+                if (activeSubPanel < 0)
+                    activeSubPanel = panelButtonPairs.Count - 1;
+                SelectSubPanel(activeSubPanel);
+            }
+        }
     }
 
     public void OpenWorldMap()

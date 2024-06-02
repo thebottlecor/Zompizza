@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class WorldMapManager : Singleton<WorldMapManager>
@@ -102,15 +103,6 @@ public class WorldMapManager : Singleton<WorldMapManager>
             customerBtnText.text = TextManager.Instance.GetCommons("WorldmapMode1");
         }
     }
-
-    //void Update()
-    //{
-    //    if (Input.GetKeyDown(KeyCode.M) == true && fullScreenMapObj.activeSelf == false)
-    //        OpenFullscreenMap();
-    //    if (Input.GetKeyDown(KeyCode.Escape) == true)
-    //        if (fullScreenMapObj.activeSelf == true)
-    //            CloseFullscreenMap();
-    //}
 
     public void OpenFullscreenMap()
     {
@@ -235,5 +227,44 @@ public class WorldMapManager : Singleton<WorldMapManager>
                 mouseOverPin = null;
             }
         }
+    }
+
+    protected override void AddListeners()
+    {
+        InputHelper.WorldmapMoveEvent += OnWorldmapMove;
+    }
+
+    protected override void RemoveListeners()
+    {
+        InputHelper.WorldmapMoveEvent -= OnWorldmapMove;
+    }
+
+    private void OnWorldmapMove(object sender, InputAction.CallbackContext e)
+    {
+        if (UIManager.Instance.utilUI.loading) return;
+
+        Vector2 input = e.ReadValue<Vector2>();
+
+        if (input != null && e.performed)
+        {
+            worldmapMoveDir = new Vector3(input.x, 0f, input.y).normalized;
+        }
+        else
+        {
+            worldmapMoveDir = Vector3.zero;
+        }
+    }
+
+    Vector3 worldmapMoveDir;
+
+    private void Update()
+    {
+        if (UIManager.Instance.utilUI.loading) return;
+
+        worldMapCamera.transform.position += -1000.0f * Time.unscaledDeltaTime * worldmapMoveDir;
+
+        worldMapCamera.transform.position = new Vector3(
+            Mathf.Clamp(worldMapCamera.transform.position.x, worldmapLimitX.x, worldmapLimitX.y), 0f,
+            Mathf.Clamp(worldMapCamera.transform.position.z, worldmapLimitZ.x, worldmapLimitZ.y));
     }
 }

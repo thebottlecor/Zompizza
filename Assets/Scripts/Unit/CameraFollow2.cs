@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.InputSystem;
 
 public class CameraFollow2 : MonoBehaviour {
 
@@ -115,5 +116,30 @@ public class CameraFollow2 : MonoBehaviour {
 	public void Shake(float strength)
     {
 		camTransform.DOShakePosition(strength * 0.02f, strength * 0.1f);
+
+		GamePadRumble(strength * 0.05f, strength * 0.2f, strength * 0.03f);
+	}
+
+	private Coroutine motorCoroutine;
+	public void GamePadRumble(float low, float high, float duration)
+    {
+		var pad = Gamepad.current;
+
+		if (pad != null)
+		{
+			pad.SetMotorSpeeds(low, high);
+
+			if (motorCoroutine != null)
+            {
+				StopCoroutine(motorCoroutine);
+				motorCoroutine = null;
+            }
+			motorCoroutine = StartCoroutine(StopMoter(pad, duration));
+		}
+	}
+	private IEnumerator StopMoter(Gamepad pad, float duration)
+    {
+		yield return CoroutineHelper.WaitForSecondsRealtime(duration);
+		pad.SetMotorSpeeds(0f, 0f);
     }
 }

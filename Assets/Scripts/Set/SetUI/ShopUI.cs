@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 [Serializable]
@@ -145,6 +146,7 @@ public class ShopUI : EventListener
         PizzaDirection.PizzaCompleteEvent += OnPizzaCompleted;
         OrderManager.OrderRemovedEvent += OnOrderRemoved;
         GM.EndTimeEvent += OnEndtime;
+        InputHelper.TabMoveEvent += OnTabMove;
     }
 
     protected override void RemoveListeners()
@@ -154,6 +156,32 @@ public class ShopUI : EventListener
         PizzaDirection.PizzaCompleteEvent -= OnPizzaCompleted;
         OrderManager.OrderRemovedEvent -= OnOrderRemoved;
         GM.EndTimeEvent -= OnEndtime;
+        InputHelper.TabMoveEvent -= OnTabMove;
+    }
+
+    private void OnTabMove(object sender, InputAction.CallbackContext e)
+    {
+        if (!opened || loading) return;
+
+        float value = e.ReadValue<float>();
+
+        if (e.performed)
+        {
+            if (value > 0)
+            {
+                activeSubPanel++;
+                if (activeSubPanel >= panelButtonPairs.Count)
+                    activeSubPanel = 0;
+                SelectSubPanel(activeSubPanel);
+            }
+            else if (value < 0)
+            {
+                activeSubPanel--;
+                if (activeSubPanel < 0)
+                    activeSubPanel = panelButtonPairs.Count - 1;
+                SelectSubPanel(activeSubPanel);
+            }
+        }
     }
 
     private void OnPlayerArriveShop(object sender, EventArgs e)

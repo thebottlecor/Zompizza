@@ -87,12 +87,14 @@ public class Lobby : Singleton<Lobby>
         LoadingSceneManager.SceneLoadCompletedEvent += OnLoadingComplete;
 
         InputHelper.EscapeEvent += OnESC;
+        InputHelper.BackEvent += OnBack;
     }
     protected override void RemoveListeners()
     {
         LoadingSceneManager.SceneLoadCompletedEvent -= OnLoadingComplete;
 
         InputHelper.EscapeEvent -= OnESC;
+        InputHelper.BackEvent -= OnBack;
     }
 
     private void OnLoadingComplete(object sender, string e)
@@ -121,6 +123,15 @@ public class Lobby : Singleton<Lobby>
             }
             else
                 CloseAllPanel();
+        }
+    }
+    private void OnBack(object sender, InputAction.CallbackContext e)
+    {
+        if (GM.Instance != null) return; // 인게임 씬에서는 단축키 막음
+
+        if (e.performed)
+        {
+
         }
     }
 

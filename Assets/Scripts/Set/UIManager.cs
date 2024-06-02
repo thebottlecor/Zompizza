@@ -131,8 +131,9 @@ public class UIManager : Singleton<UIManager>
         InputHelper.EnterStoreEvent -= OnShopEnter;
     }
 
-    private bool Interacting()
+    private bool Interacting(InputAction.CallbackContext e)
     {
+        if (!e.performed) return false;
         if (isDirecting || changingResolution) return false;
         if (GM.Instance.loading) return false;
         return true;
@@ -140,7 +141,7 @@ public class UIManager : Singleton<UIManager>
 
     private void OnShopEnter(object sender, InputAction.CallbackContext e)
     {
-        if (!Interacting()) return;
+        if (!Interacting(e)) return;
 
         if (shopUI.shopUIOpenButton.activeSelf)
         {
@@ -153,7 +154,7 @@ public class UIManager : Singleton<UIManager>
 
     private void OnWorldmap(object sender, InputAction.CallbackContext e)
     {
-        if (!Interacting()) return;
+        if (!Interacting(e)) return;
 
         if (!shopUI.IsActive && !utilUI.IsActive)
         {
@@ -163,7 +164,7 @@ public class UIManager : Singleton<UIManager>
 
     private void OnESC(object sender, InputAction.CallbackContext e)
     {
-        if (!Interacting()) return;
+        if (!Interacting(e)) return;
 
         if (ExplorationManager.Instance.canvasGroupLoading)
             return;

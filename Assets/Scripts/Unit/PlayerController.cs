@@ -465,7 +465,14 @@ public class PlayerController : EventListener
 
     public void OnMove(object sender, InputAction.CallbackContext e)
     {
-        if (GM.Instance.stop_control) return;
+        if (GM.Instance.stop_control)
+        {
+            forward = false;
+            backward = false;
+            left = false;
+            right = false;
+            return;
+        }
 
         Vector2 input = e.ReadValue<Vector2>();
         if (input != null)
