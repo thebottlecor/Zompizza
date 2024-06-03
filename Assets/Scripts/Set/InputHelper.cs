@@ -23,6 +23,9 @@ public class InputHelper : MonoBehaviour
     public static EventHandler<InputAction.CallbackContext> OkayEvent;
     public static EventHandler<InputAction.CallbackContext> BackEvent;
 
+    public GameObject disconnectedPanel;
+    public UINaviHelper uiNaviHelper;
+
     public void OnMove(InputAction.CallbackContext context)
     {
         MoveEvent?.Invoke(null, context);
@@ -76,4 +79,88 @@ public class InputHelper : MonoBehaviour
         BackEvent?.Invoke(null, context);
     }
 
+    public void PadDisconnected()
+    {
+        var uimanager = UIManager.Instance;
+        if (uimanager != null)
+        {
+            if (!uimanager.shopUI.IsActive && !uimanager.utilUI.IsActive)
+            {
+                uimanager.utilUI.OpenSettings();
+            }
+        }
+        disconnectedPanel.SetActive(true);
+
+        // 패드 없음 - 비활성화
+        uiNaviHelper.PadDisconnected();
+    }
+    public void PadConnected()
+    {
+        disconnectedPanel.SetActive(false);
+
+        var pad = Gamepad.current;
+        if (pad != null)
+        {
+            if (pad is UnityEngine.InputSystem.DualShock.DualShockGamepad)
+            {
+                uiNaviHelper.UIUpdate(0);
+                uiNaviHelper.SetFirstSelect();
+                return;
+            }
+            else
+            {
+                // 나머지는 Xbox UI로 통일
+                uiNaviHelper.UIUpdate(1);
+                uiNaviHelper.SetFirstSelect();
+                return;
+            }
+        }
+
+        // 패드 없음 - 비활성화
+        uiNaviHelper.PadDisconnected();
+    }
+    public void InputChanged()
+    {
+        var pad = Gamepad.current;
+        if (pad != null)
+        {
+            if (pad is UnityEngine.InputSystem.DualShock.DualShockGamepad)
+            {
+                uiNaviHelper.UIUpdate(0);
+                uiNaviHelper.SetFirstSelect();
+                return;
+            }
+            else
+            {
+                // 나머지는 Xbox UI로 통일
+                uiNaviHelper.UIUpdate(1);
+                uiNaviHelper.SetFirstSelect();
+                return;
+            }
+        }
+
+        // 패드 없음 - 비활성화
+        uiNaviHelper.PadDisconnected();
+    }
+}
+
+public enum PadKeyCode
+{
+    None,
+    L1,
+    L2,
+    R1,
+    R2,
+    Start,
+    Select,
+    D_Up,
+    D_Down,
+    D_Left,
+    D_Right,
+    B_Up,
+    B_Down,
+    B_Left,
+    B_Right,
+    LeftStick,
+    RightStick,
 }

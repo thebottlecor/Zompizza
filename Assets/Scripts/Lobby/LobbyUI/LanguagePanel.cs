@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -39,8 +40,12 @@ public class LanguagePanel : MonoBehaviour
                 break;
         }
 
+        List<UINavi> tempList = new List<UINavi>();
+
         LanguageObject languageObject = Instantiate(languageObject_Source, objectParent).GetComponent<LanguageObject>();
         languageObject.Init(firstLanguage, this);
+        UINavi firstNavi = languageObject.GetComponent<UINavi>();
+        tempList.Add(firstNavi);
 
         for (int i = 0; i < (int)Language.LAST; i++)
         {
@@ -48,8 +53,25 @@ public class LanguagePanel : MonoBehaviour
             {
                 languageObject = Instantiate(languageObject_Source, objectParent).GetComponent<LanguageObject>();
                 languageObject.Init((Language)i, this);
+                tempList.Add(languageObject.GetComponent<UINavi>());
             }
         }
+        for (int i = 0; i < tempList.Count; i++)
+        {
+            if (i > 0)
+                tempList[i].left = tempList[i - 1];
+            else
+                tempList[i].left = tempList[tempList.Count - 1];
+
+            if (i < tempList.Count - 1)
+                tempList[i].right = tempList[i + 1];
+            else
+                tempList[i].right = tempList[0];
+
+            tempList[i].down = UINaviHelper.Instance.title_settings_close;
+        }
+        UINaviHelper.Instance.title_language_first = firstNavi;
+
         languagePanelOpenButtonTmp.text = tm.GetCommons("Language2", tm.language);
         languageSettingsTMP.text = tm.GetCommons("Language");
     }

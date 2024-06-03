@@ -8,6 +8,7 @@ public class Button2 : Button
 
     protected override void DoStateTransition(SelectionState state, bool instant)
     {
+
         base.DoStateTransition(state, instant);
 
         switch (state)

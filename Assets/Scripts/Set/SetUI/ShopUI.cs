@@ -173,6 +173,7 @@ public class ShopUI : EventListener
                 if (activeSubPanel >= panelButtonPairs.Count)
                     activeSubPanel = 0;
                 SelectSubPanel(activeSubPanel);
+                SettingManager.Instance.ButtonSound();
             }
             else if (value < 0)
             {
@@ -180,6 +181,7 @@ public class ShopUI : EventListener
                 if (activeSubPanel < 0)
                     activeSubPanel = panelButtonPairs.Count - 1;
                 SelectSubPanel(activeSubPanel);
+                SettingManager.Instance.ButtonSound();
             }
         }
     }

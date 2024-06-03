@@ -28,4 +28,9 @@ public class UILibrary : ScriptableObject
     public Color order_unselect_Color = Color.white;
     public Color order_select_Color;
 
+
+    //public SerializableDictionary<PadKeyCode, Sprite> padKeyUIs;
+    public SerializableDictionary<PadKeyCode, Sprite> padKeyUIsXbox;
+    public SerializableDictionary<PadKeyCode, Sprite> padKeyUIsPS;
+
 }

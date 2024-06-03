@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class Button4 : Button
 {
-
     protected override void DoStateTransition(SelectionState state, bool instant)
     {
         base.DoStateTransition(state, instant);

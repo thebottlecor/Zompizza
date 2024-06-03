@@ -202,3 +202,75 @@ MonoBehaviour:
   miniOrderUI_maskColor_angry: {r: 1, g: 0.6392157, b: 0.6392157, a: 0.101960786}
   order_unselect_Color: {r: 1, g: 1, b: 1, a: 1}
   order_select_Color: {r: 0.89411765, g: 1, b: 0.3764706, a: 1}
+  padKeyUIsXbox:
+    array:
+    - Key: 0
+      Value: {fileID: 0}
+    - Key: 1
+      Value: {fileID: 21300000, guid: 29e0d5335a316804896450aa04c7df5e, type: 3}
+    - Key: 2
+      Value: {fileID: 21300000, guid: 73cfd70628a9a6c46a3d49afe0f45b70, type: 3}
+    - Key: 3
+      Value: {fileID: 21300000, guid: f0aa11c3221d6114dbcc9a72894391d9, type: 3}
+    - Key: 4
+      Value: {fileID: 21300000, guid: 9cc93a399d9fa7b4fbce577fced38aac, type: 3}
+    - Key: 5
+      Value: {fileID: 21300000, guid: 55edcd98e7dd6d04cb0252a4628d6c20, type: 3}
+    - Key: 6
+      Value: {fileID: 21300000, guid: 11cc87a3aadd2be448ffdb0d2f6b44e3, type: 3}
+    - Key: 7
+      Value: {fileID: 21300000, guid: f1ede88edb3916c47b30fb8a33e450dd, type: 3}
+    - Key: 8
+      Value: {fileID: 21300000, guid: 9ec1f66b3be17e84eb2a7fb054680879, type: 3}
+    - Key: 9
+      Value: {fileID: 21300000, guid: e6fa10061f683a944ab630f3d9bc30e2, type: 3}
+    - Key: 10
+      Value: {fileID: 21300000, guid: ae594c1ed59f4f2418f27bc3206cd84b, type: 3}
+    - Key: 11
+      Value: {fileID: 21300000, guid: fdcbf4e76c7682e42b9f9c40aca15b3d, type: 3}
+    - Key: 12
+      Value: {fileID: 21300000, guid: 25f76038b782e8243a0019e2b949c3ee, type: 3}
+    - Key: 13
+      Value: {fileID: 21300000, guid: ec98d76f394c0904fabf61639d8689d6, type: 3}
+    - Key: 14
+      Value: {fileID: 21300000, guid: 2e90468b2a1c74c4d950eaacdf15ddc6, type: 3}
+    - Key: 15
+      Value: {fileID: 21300000, guid: 086480d570ebeb044bbfe9b6b1a4d0db, type: 3}
+    - Key: 16
+      Value: {fileID: 21300000, guid: 23cbfb7161ad0d94786c5b923c05141f, type: 3}
+  padKeyUIsPS:
+    array:
+    - Key: 0
+      Value: {fileID: 0}
+    - Key: 1
+      Value: {fileID: 21300000, guid: 4ea7b5585734f064090ba5bc8d0e3c14, type: 3}
+    - Key: 2
+      Value: {fileID: 21300000, guid: b2aff973076f086468518ada54580cd3, type: 3}
+    - Key: 3
+      Value: {fileID: 21300000, guid: cdd4cc5aaa7672b469bb768502f49f3e, type: 3}
+    - Key: 4
+      Value: {fileID: 21300000, guid: 283b7b88abcddb04d9a96139c93c44d0, type: 3}
+    - Key: 5
+      Value: {fileID: 21300000, guid: a52defdb58eaed348b4a05ae23a9d054, type: 3}
+    - Key: 6
+      Value: {fileID: 21300000, guid: c675b47ce4237ab41a76189461143bed, type: 3}
+    - Key: 7
+      Value: {fileID: 21300000, guid: 2931a8d7147c83c4883ab22e63edf160, type: 3}
+    - Key: 8
+      Value: {fileID: 21300000, guid: bc019a5625e712740999b481bc1b0205, type: 3}
+    - Key: 9
+      Value: {fileID: 21300000, guid: a5b5a72280325c94d85eaee399ed2d08, type: 3}
+    - Key: 10
+      Value: {fileID: 21300000, guid: 410bf085ca664fc4fab6da1c259e9d07, type: 3}
+    - Key: 11
+      Value: {fileID: 21300000, guid: a79b7827413145b46b32a6ee86a7d404, type: 3}
+    - Key: 12
+      Value: {fileID: 21300000, guid: 6e1e54ea423ccfe4f8e1ac4b4d7fe87d, type: 3}
+    - Key: 13
+      Value: {fileID: 21300000, guid: e8185a06b67703e47ba61d2d416e0716, type: 3}
+    - Key: 14
+      Value: {fileID: 21300000, guid: 57d3835ba9f16b14f99235fc72c5d54d, type: 3}
+    - Key: 15
+      Value: {fileID: 21300000, guid: 29c8603624e9d314d88849f6fd27d896, type: 3}
+    - Key: 16
+      Value: {fileID: 21300000, guid: 30fbbdf6afaacaf41a5d64457b72b22e, type: 3}

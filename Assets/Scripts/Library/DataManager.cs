@@ -19,6 +19,15 @@ public class DataManager : Singleton<DataManager>
     {
         base.Awake();
 
+        //uiLib.padKeyUIsXbox = new SerializableDictionary<PadKeyCode, Sprite>();
+        //uiLib.padKeyUIsPS = new SerializableDictionary<PadKeyCode, Sprite>();
+        //foreach (var tt in uiLib.padKeyUIs)
+        //{
+        //    SerializableDictionary<PadKeyCode, Sprite>.Pair tqq = new SerializableDictionary<PadKeyCode, Sprite>.Pair(tt.Key, tt.Value);
+
+        //    uiLib.padKeyUIsXbox.Add(tqq);
+        //    uiLib.padKeyUIsPS.Add(tqq);
+        //}
     }
 
     private void Start()

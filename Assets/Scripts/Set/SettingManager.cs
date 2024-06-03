@@ -434,6 +434,44 @@ private void KeyInit_SetOrder()
         AudioManager.Instance.PlaySFX(Sfx.btnHighlight, volume: 0.75f);
     }
 
+
+    protected override void AddListeners()
+    {
+        InputHelper.TabMoveEvent += OnTabMove;
+    }
+
+    protected override void RemoveListeners()
+    {
+        InputHelper.TabMoveEvent -= OnTabMove;
+    }
+
+    private void OnTabMove(object sender, InputAction.CallbackContext e)
+    {
+        if (!opened || loading) return;
+
+        float value = e.ReadValue<float>();
+
+        if (e.performed)
+        {
+            if (value > 0)
+            {
+                activeSubPanel++;
+                if (activeSubPanel >= panelButtonPairs.Count)
+                    activeSubPanel = 0;
+                SelectSubPanel(activeSubPanel);
+                ButtonSound();
+            }
+            else if (value < 0)
+            {
+                activeSubPanel--;
+                if (activeSubPanel < 0)
+                    activeSubPanel = panelButtonPairs.Count - 1;
+                SelectSubPanel(activeSubPanel);
+                ButtonSound();
+            }
+        }
+    }
+
     public void OpenSettings()
     {
         if (loading) return;
@@ -479,6 +517,7 @@ private void KeyInit_SetOrder()
         settingCanvasGroup.DOFade(0f, fadeTime).SetUpdate(true).OnComplete(() =>
         {
             loading = false;
+            UINaviHelper.Instance.SetFirstSelect();
         });
     }
 
@@ -490,6 +529,8 @@ private void KeyInit_SetOrder()
         }
 
         subSettingsPanels[idx].SetActive(true);
+
+        UINaviHelper.Instance.SetClose_TitleSettings_SubPanels(idx);
     }
 
     public void SelectSubPanel(int idx)
@@ -504,6 +545,8 @@ private void KeyInit_SetOrder()
         panelButtonPairs[idx].button.SetHighlight(true);
 
         activeSubPanel = idx;
+
+        UINaviHelper.Instance.SetFirstSelect();
     }
 
     public void UpdateTexts()
@@ -790,21 +833,6 @@ private void KeyInit_SetOrder()
         if (ResolutionChangedEvent != null)
             ResolutionChangedEvent(null, null);
 
-
-        float ratio = (float)settingResolution.y / settingResolution.x;
-        float modify = (ratio > 0.5625f) ? 0f : 1f;
-
-        var canvasScaler = FindObjectsByType<CanvasScaler>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-        for (int i = 0; i < canvasScaler.Length; i++)
-        {
-            canvasScaler[i].matchWidthOrHeight = modify;
-        }
-
-        //StartCoroutine(CanvasUpdate());
-    }
-    private IEnumerator CanvasUpdate()
-    {
-        yield return null;
 
         float ratio = (float)settingResolution.y / settingResolution.x;
         float modify = (ratio > 0.5625f) ? 0f : 1f;

@@ -90,8 +90,6 @@ public class UIManager : Singleton<UIManager>
         {
             canvasScaler[i].matchWidthOrHeight = modify;
         }
-
-        //StartCoroutine(CanvasUpdate());
     }
 
     public void UpdateIngredients()
