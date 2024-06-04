@@ -22,6 +22,9 @@ public class OrderUIObject : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     private OrderInfo info;
 
+    public UINavi navi;
+    public UINavi navi_ViewPos;
+
     private TextManager tm => TextManager.Instance;
 
     private void Start()
@@ -135,6 +138,7 @@ public class OrderUIObject : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public void OrderAccept()
     {
         if (OrderManager.Instance.IsMaxDelivery) return;
+        if (!OrderManager.Instance.CheckIngredient(info)) return;
 
         info.accepted = true;
         OrderManager.Instance.OrderAccepted(info);
@@ -142,6 +146,13 @@ public class OrderUIObject : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         OrderManager.Instance.OrderGoalUpdate();
 
         AudioManager.Instance.PlaySFX(Sfx.okay);
+
+        UIManager.Instance.shopUI.SnapTo(null);
+        UINaviHelper.Instance.SetFirstSelect();
+    }
+    public bool OrderAcceptable()
+    {
+        return info != null && !info.accepted;
     }
 
     public void OrderReset()

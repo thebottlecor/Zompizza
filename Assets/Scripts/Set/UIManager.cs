@@ -28,6 +28,7 @@ public class UIManager : Singleton<UIManager>
 
     public GameObject speedInfo;
     public GameObject timeInfo;
+    public GameObject padUIs;
 
     [Header("재료창")]
     public GameObject ingredient_Source;
@@ -160,15 +161,22 @@ public class UIManager : Singleton<UIManager>
         }
     }
 
-    private void OnESC(object sender, InputAction.CallbackContext e)
+    public void OnESC(object sender, InputAction.CallbackContext e)
     {
         if (!Interacting(e)) return;
 
-        if (ExplorationManager.Instance.canvasGroupLoading)
+        // ShopUI => TabMove 쪽도 동기화시키기!
+        /// <summary>
+        /// <see cref="ShopUI.OnTabMove"/>
+        /// <ser cref="UINaviHelper.SetFirstSelect"/>
+        /// </summary>
+
+        var exploration = ExplorationManager.Instance;
+        if (exploration.canvasGroupLoading)
             return;
-        else if (ExplorationManager.Instance.canvasGroup_resultPanel.alpha >= 0.99f)
+        else if (exploration.canvasGroup_resultPanel.alpha >= 0.99f)
         {
-            ExplorationManager.Instance.HideUI_ResultPanel();
+            exploration.HideUI_ResultPanel();
             return;
         }
 
@@ -217,6 +225,7 @@ public class UIManager : Singleton<UIManager>
             }
         }
     }
+
     public void OrderUIBtnUpdate()
     {
         var list = OrderManager.Instance.orderList;
@@ -234,6 +243,17 @@ public class UIManager : Singleton<UIManager>
         {
             orderUIObjects[i].OrderReset();
         }
+    }
+    public UINavi GetFirstOrder()
+    {
+        for (int i = 0; i < orderUIObjects.Count; i++)
+        {
+            if (orderUIObjects[i].gameObject.activeSelf && orderUIObjects[i].OrderAcceptable())
+            {
+                return orderUIObjects[i].navi;
+            }
+        }
+        return null;
     }
     #endregion
 }

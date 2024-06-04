@@ -64,7 +64,7 @@ namespace MTAssets.EasyMinimapSystem
 
             pressed = e.performed;
 
-            float scroll = keyScrollSpeed * value;
+            float scroll = -1f * keyScrollSpeed * value;
 
             scroll = Mathf.Clamp(scroll, -0.12f, 0.12f);
 

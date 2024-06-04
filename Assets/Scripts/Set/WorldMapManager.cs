@@ -102,6 +102,8 @@ public class WorldMapManager : Singleton<WorldMapManager>
             toShopBtn.gameObject.SetActive(false);
             customerBtnText.text = TextManager.Instance.GetCommons("WorldmapMode1");
         }
+
+        UINaviHelper.Instance.ingame.Utils_Map_Reconnection();
     }
 
     public void OpenFullscreenMap()

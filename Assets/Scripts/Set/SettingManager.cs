@@ -304,13 +304,20 @@ public class SettingManager : Singleton<SettingManager>
                 {
                     if (Input.GetKey(KeyCode.Mouse0) || Input.GetKey(KeyCode.Mouse1))
                     {
-                        keyObjects[currentActiveKeyNum].UpdateName();
-                        currentActiveKeyNum = KeyMap.LAST;
+                        EndKeyBinding();
                         //AudioManager.Instance.PlaySFX(Sfx.smallButtons);
                         break;
                     }
                 }
             }
+        }
+    }
+    public void EndKeyBinding() // 패드를 사용해서 뭔가 변할 때, 마우스로만 대응한 것들은 반영이 안 됨 => 강제 반영/리셋 시키기
+    {
+        if (currentActiveKeyNum != KeyMap.LAST)
+        {
+            keyObjects[currentActiveKeyNum].UpdateName();
+            currentActiveKeyNum = KeyMap.LAST;
         }
     }
 
@@ -510,6 +517,7 @@ private void KeyInit_SetOrder()
         {
             panelButtonPairs[i].button.Hide();
         }
+        EndKeyBinding();
 
         settingCanvasGroup.alpha = 1f;
         settingRectTransform.transform.localPosition = new Vector3(0f, 0f, 0f);
@@ -523,6 +531,8 @@ private void KeyInit_SetOrder()
 
     public void ShowSubSettingPanel(int idx)
     {
+        EndKeyBinding();
+
         for (int i = 0; i < subSettingsPanels.Length; i++)
         {
             subSettingsPanels[i].SetActive(false);
@@ -530,11 +540,18 @@ private void KeyInit_SetOrder()
 
         subSettingsPanels[idx].SetActive(true);
 
-        UINaviHelper.Instance.SetClose_TitleSettings_SubPanels(idx);
+        UINaviHelper.Instance.SetClose_SubPanels(idx);
     }
 
     public void SelectSubPanel(int idx)
     {
+        EndKeyBinding();
+
+        if (idx == 0)
+        {
+            ShowSubSettingPanel(0);
+        }
+
         for (int i = 0; i < panelButtonPairs.Count; i++)
         {
             panelButtonPairs[i].panel.SetActive(false);

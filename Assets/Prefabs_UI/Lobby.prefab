@@ -2855,10 +2855,6 @@ MonoBehaviour:
   edgeScrollingTMP: {fileID: 1753119516379427523}
   autosaveTMP: {fileID: 2081732525020063432}
   resolutionDropdown: {fileID: 2188763860376585486}
-  autoScrolls:
-  - {fileID: 8384882047858145960}
-  - {fileID: 1917146428639831430}
-  - {fileID: 7571674194813730080}
   fullScreenDropdown: {fileID: 6903868615874585874}
   framerateDropdown: {fileID: 7378159436666708617}
   vsyncToggle: {fileID: 7999065396801241963}
@@ -9368,9 +9364,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   current: {fileID: 5510971402671949031}
+  inputHelper: {fileID: 5929983520039378918}
   dataManager: {fileID: 7810986877639796193}
   title_first: {fileID: 5510971402671949031}
-  title_option_first: {fileID: 5479211837891446589}
+  title_option_first: {fileID: 3723490293287634350}
   title_language_first: {fileID: 0}
   title_option_left_buttons:
   - {fileID: 5479211837891446589}
@@ -9390,6 +9387,7 @@ MonoBehaviour:
   - {fileID: 4526865887661233280}
   - {fileID: 4101850956664649864}
   title_settings_close: {fileID: 1567273192655820825}
+  ingame: {fileID: 0}
 --- !u!1 &4838910214229019353
 GameObject:
   m_ObjectHideFlags: 0

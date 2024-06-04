@@ -18,6 +18,8 @@ public class UINavi : MonoBehaviour
     public Image padUI;
     public Animator anim;
 
+    public RectTransform focusRect;
+
     public void Highlight(int padType, DataManager data)
     {
         if (anim != null && this.gameObject.activeInHierarchy)

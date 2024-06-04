@@ -119,6 +119,10 @@ public class CameraFollow2 : MonoBehaviour {
 
 		GamePadRumble(strength * 0.05f, strength * 0.2f, strength * 0.03f);
 	}
+	public void GamePadRumble(float strength)
+    {
+		GamePadRumble(strength * 0.05f, strength * 0.2f, strength * 0.03f);
+	}
 
 	private Coroutine motorCoroutine;
 	public void GamePadRumble(float low, float high, float duration)

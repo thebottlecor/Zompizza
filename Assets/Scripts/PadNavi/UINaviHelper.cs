@@ -12,12 +12,13 @@ public class UINaviHelper : Singleton<UINaviHelper>
     public UINavi current;
     public int PadType { get; private set; }
 
+    public InputHelper inputHelper;
     public DataManager dataManager;
 
     [Header("UI 변환시 최우선 선택")]
     public UINavi title_first;
     public UINavi title_option_first;
-    public UINavi title_language_first;
+    [HideInInspector] public UINavi title_language_first;
     public Func<bool> uiMoveCheckFunc;
 
     [Header("타이틀 - 옵션 저장값")]
@@ -27,12 +28,16 @@ public class UINaviHelper : Singleton<UINaviHelper>
     public UINavi title_settings_close;
     private int currentDropdownItem;
 
+    [Header("인게임 - 옵션 저장값")]
+    [HideInInspector] public UINaviHelper_Ingame ingame;
+
     protected override void AddListeners()
     {
         InputHelper.UIMoveEvent += OnUIMove;
         InputHelper.OkayEvent += OnOkay;
         InputHelper.BackEvent += OnBack;
 
+        InputHelper.WorldmapMoveEvent += OnScrollMove;
         InputHelper.WorldmapZoomEvent += OnSliderMove;
     }
 
@@ -42,16 +47,24 @@ public class UINaviHelper : Singleton<UINaviHelper>
         InputHelper.OkayEvent -= OnOkay;
         InputHelper.BackEvent -= OnBack;
 
+        InputHelper.WorldmapMoveEvent -= OnScrollMove;
         InputHelper.WorldmapZoomEvent -= OnSliderMove;
     }
 
     public void SetFirstSelect()
     {
         // 현재 활성화된 UI에 따라서 current를 능동적으로 골라야 함
+        /// <see cref = "UIManager.OnESC"/>
+        /// <see cref="ShopUI.OnTabMove"/>
 
         PadDisconnected();
 
-        if (GM.Instance == null)
+        var pad = Gamepad.current;
+        if (pad == null) return;
+
+        var gm = GM.Instance;
+
+        if (gm == null)
         {
             if (SettingManager.Instance != null && SettingManager.Instance.IsActive)
             {
@@ -66,6 +79,10 @@ public class UINaviHelper : Singleton<UINaviHelper>
                         title_settings_close.up = title_language_first;
                         title_settings_close.down = title_language_first;
                         break;
+                    case 2:
+                        current = title_settings_close;
+                        title_settings_close.ResetConnection();
+                        break;
                 }
                 uiMoveCheckFunc = Check_Title_Setting;
             }
@@ -75,24 +92,114 @@ public class UINaviHelper : Singleton<UINaviHelper>
                 uiMoveCheckFunc = Check_Title;
             }
         }
+        else if (ingame != null)
+        {
+            var util = UIManager.Instance.utilUI;
+            var shop = UIManager.Instance.shopUI;
+            var exploration = ExplorationManager.Instance;
+
+            if (UIManager.Instance != null)
+            {
+                if (util.IsActive)
+                {
+                    switch (util.activeSubPanel)
+                    {
+                        case 0:
+                            current = ingame.Utils_Map_Reconnection();
+                            break;
+                        case 1:
+                            current = title_option_first;
+                            break;
+                    }
+                    uiMoveCheckFunc = Check_Ingame_Utils;
+                }
+                else if (shop.IsActive)
+                {
+                    switch (shop.activeSubPanel)
+                    {
+                        case 0:
+                            if (gm.darkCanvas.blocksRaycasts)
+                            {
+                                if (gm.gameOverObj.activeSelf)
+                                {
+                                    current = ingame.gameOver_first;
+                                }
+                                else if (gm.congratulationsObj.activeSelf)
+                                {
+                                    current = ingame.gameWin_first;
+                                }
+                                else if (gm.accountObj.activeSelf)
+                                {
+                                    current = ingame.nextDay_first;
+                                }
+                                else
+                                {
+                                    // null
+                                }
+                            }
+                            else if (exploration.canvasGroupLoading)
+                            {
+                                // null
+                            }
+                            else if (exploration.canvasGroup_resultPanel.alpha >= 0.99f)
+                            {
+                                current = ingame.explore_first;
+                            }
+                            else if (shop.shopCloseWarningObj.activeSelf)
+                                current = ingame.shopCloseWarning_first;
+                            else
+                                current = ingame.Shop_Orders_Reconnection();
+                            break;
+                        case 1:
+                            if (gm.gameOverWarningObj.activeSelf)
+                                current = ingame.gameOverWarning_first;
+                            else
+                            {
+                                current = ingame.Shop_Management_Reconnection();
+                            }
+                            break;
+                        case 2:
+                            current = ingame.shops_first[2];
+                            ingame.shops_close.ResetConnection();
+                            break;
+                        case 3:
+                            current = ingame.shops_first[3];
+                            ingame.shops_close.ResetConnection();
+                            break;
+                    }
+                    uiMoveCheckFunc = Check_Ingame_Shops;
+                }
+                else
+                {
+
+                }
+            }
+        }
 
         if (current != null)
             current.Highlight(PadType, dataManager);
     }
-    public void SetClose_TitleSettings_SubPanels(int idx)
+    public void SetClose_SubPanels(int idx)
     {
-        title_settings_close.ResetConnection();
+        var close = title_settings_close;
+
+        if (UIManager.Instance != null && UIManager.Instance.utilUI.IsActive)
+        {
+            close = ingame.utils_close;
+        }
+
+        close.ResetConnection();
 
         switch (idx)
         {
             case 0: // 설정
                 for (int i = 0; i < title_option_left_buttons.Length; i++)
                 {
-                    title_option_left_buttons[i].left = title_settings_close;
+                    title_option_left_buttons[i].left = close;
                     title_option_left_buttons[i].right = title_options_left[0]; // 좌측최상단 옵션에 연결
                 }
-                title_settings_close.left = title_options_right[0]; // 우측최상단 옵션에 연결
-                title_settings_close.right = title_option_first;
+                close.left = title_options_right[0]; // 우측최상단 옵션에 연결
+                close.right = title_option_first;
 
                 for (int i = 0; i < title_options_left.Length; i++)
                 {
@@ -100,29 +207,43 @@ public class UINaviHelper : Singleton<UINaviHelper>
                 }
                 for (int i = 0; i < title_options_right.Length; i++)
                 {
-                    title_options_right[i].right = title_settings_close;
+                    title_options_right[i].right = close;
                 }
                 break;
             case 1: // 키
                 for (int i = 0; i < title_option_left_buttons.Length; i++)
                 {
-                    title_option_left_buttons[i].left = title_settings_close;
-                    title_option_left_buttons[i].right = title_settings_close;
+                    title_option_left_buttons[i].left = close;
+                    title_option_left_buttons[i].right = close;
                 }
-                title_settings_close.left = title_option_first;
-                title_settings_close.right = title_option_first;
+                close.left = title_option_first;
+                close.right = title_option_first;
                 break;
         }
     }
     private bool Check_Title()
     {
+        if (inputHelper.disconnectedPanel.activeSelf) return false;
         var set = SettingManager.Instance;
         return (GM.Instance == null) && (set != null && !set.opened && !set.loading);
     }
     private bool Check_Title_Setting()
     {
+        if (inputHelper.disconnectedPanel.activeSelf) return false;
         var set = SettingManager.Instance;
         return (GM.Instance == null) && (set != null && set.opened && !set.loading);
+    }
+    private bool Check_Ingame_Utils()
+    {
+        if (inputHelper.disconnectedPanel.activeSelf) return false;
+        var set = UIManager.Instance;
+        return (ingame != null) && (set != null && set.utilUI.opened && !set.utilUI.loading);
+    }
+    private bool Check_Ingame_Shops()
+    {
+        if (inputHelper.disconnectedPanel.activeSelf) return false;
+        var set = UIManager.Instance;
+        return (ingame != null) && (set != null && set.shopUI.opened && !set.shopUI.loading);
     }
     private bool CheckFail()
     {
@@ -183,6 +304,12 @@ public class UINaviHelper : Singleton<UINaviHelper>
 
     private void OnBack(object sender, InputAction.CallbackContext e)
     {
+        if (inputHelper.disconnectedPanel.activeSelf)
+        {
+            inputHelper.PadConnected();
+            return;
+        }
+
         if (!uiMoveCheckFunc()) return;
         if (current == null || !e.performed) return;
 
@@ -196,6 +323,9 @@ public class UINaviHelper : Singleton<UINaviHelper>
                 }
                 break;
         }
+
+        if (UIManager.Instance != null)
+            UIManager.Instance.OnESC(null, e);
 
         SettingManager.Instance.HideSettings();
         if (SettingManager.Instance != null)
@@ -269,6 +399,8 @@ public class UINaviHelper : Singleton<UINaviHelper>
                         navi = navi.right;
                         break;
                 }
+                if (navi == current)
+                    break;
                 if (navi == null)
                 {
                     Debug.LogWarning(current + " >> " + dir + " 패드 UI 이동 오류");
@@ -279,9 +411,44 @@ public class UINaviHelper : Singleton<UINaviHelper>
 
             current = navi;
             current.Highlight(PadType, dataManager);
+
+            if (current != null && current.focusRect != null)
+            {
+                UIManager.Instance.shopUI.SnapTo(current.focusRect);
+            }
         }
     }
 
+    private void OnScrollMove(object sender, InputAction.CallbackContext e)
+    {
+        scrollMoveDir = Vector3.zero;
+
+        if (!uiMoveCheckFunc()) return;
+        if (current == null || !e.performed) return;
+
+        Vector2 input = e.ReadValue<Vector2>();
+
+        if (input != null && e.performed)
+        {
+            //scrollMoveDir = new Vector3(input.x, 0f, input.y).normalized;
+            scrollMoveDir = new Vector3(0f, 0f, input.y).normalized;
+        }
+    }
+
+    Vector3 scrollMoveDir;
+
+    private void Update()
+    {
+        if (current != null)
+        {
+            if (current.self is Scrollbar)
+            {
+                Scrollbar scrollbar = current.self as Scrollbar;
+
+                scrollbar.value += 2f * scrollMoveDir.z * Time.unscaledDeltaTime;
+            }
+        }
+    }
 
     private void OnSliderMove(object sender, InputAction.CallbackContext e)
     {

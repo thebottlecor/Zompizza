@@ -80,6 +80,8 @@ public class Lobby : Singleton<Lobby>
         SaveDataLoading = false;
         // 초기화 완료 후 설정 저장
         SaveManager.Instance.SaveConfig();
+
+        StartCoroutine(UINaviStart());
     }
 
     protected override void AddListeners()
@@ -109,6 +111,13 @@ public class Lobby : Singleton<Lobby>
     {
         lobbyUIObjects.SetActive(on);
         SettingManager.Instance.LobbySwitch(on);
+        StartCoroutine(UINaviStart());
+    }
+    private IEnumerator UINaviStart()
+    {
+        yield return null;
+        yield return null;
+        UINaviHelper.Instance.SetFirstSelect();
     }
 
     private void OnESC(object sender, InputAction.CallbackContext e)

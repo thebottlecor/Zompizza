@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class TutorialManager : Singleton<TutorialManager>
 {
@@ -27,7 +28,9 @@ public class TutorialManager : Singleton<TutorialManager>
     public Transform trainingCenterPos;
 
     public TextMeshProUGUI controlText;
+    public GameObject controlPadObj;
     public TextMeshProUGUI driftText;
+    public GameObject driftPadObj;
 
     public GameObject[] guideObjects;
     public TextMeshProUGUI[] guideTexts;
@@ -58,7 +61,9 @@ public class TutorialManager : Singleton<TutorialManager>
             tutorialZombie[i].gameObject.SetActive(false);
         }
         controlText.gameObject.SetActive(false);
+        controlPadObj.SetActive(false);
         driftText.gameObject.SetActive(false);
+        driftPadObj.SetActive(false);
         for (int i = 0; i < guideObjects.Length; i++)
         {
             guideObjects[i].SetActive(false);
@@ -109,13 +114,6 @@ public class TutorialManager : Singleton<TutorialManager>
 
         controlText.text = st.ToString();
 
-        StringBuilder st2 = new StringBuilder();
-        st2.AppendFormat("{0} - {1}", tm.GetKeyMaps(KeyMap.carBreak), sm.keyMappings[KeyMap.carBreak].GetName());
-        st2.AppendLine();
-        st2.AppendFormat(tm.GetCommons("Tutorial00"), tm.GetKeyMaps(KeyMap.carBreak));
-
-        driftText.text = st2.ToString();
-
         guideTexts[0].text = tm.GetCommons("Tutorial01");
         guideTexts[1].text = tm.GetCommons("Tutorial02");
         guideTexts[2].text = tm.GetCommons("Tutorial03");
@@ -125,6 +123,24 @@ public class TutorialManager : Singleton<TutorialManager>
         guideTexts[6].text = tm.GetCommons("Tutorial07");
         guideTexts[7].text = tm.GetCommons("Tutorial08");
         guideTexts[8].text = tm.GetCommons("Tutorial09");
+    }
+
+    private void DriftTextUpdate(bool pad)
+    {
+        StringBuilder st2 = new StringBuilder();
+        if (pad)
+        {
+            st2.Append(" ");
+            st2.AppendLine();
+            st2.AppendFormat(tm.GetCommons("Tutorial00"), tm.GetKeyMaps(KeyMap.carBreak));
+        }
+        else
+        {
+            st2.AppendFormat("{0} - {1}", tm.GetKeyMaps(KeyMap.carBreak), sm.keyMappings[KeyMap.carBreak].GetName());
+            st2.AppendLine();
+            st2.AppendFormat(tm.GetCommons("Tutorial00"), tm.GetKeyMaps(KeyMap.carBreak));
+        }
+        driftText.text = st2.ToString();
     }
 
     protected override void AddListeners()
@@ -148,7 +164,10 @@ public class TutorialManager : Singleton<TutorialManager>
         training = true;
 
         guideObjects[0].SetActive(true);
-        controlText.gameObject.SetActive(true);
+
+        var pad = Gamepad.current;
+        controlPadObj.SetActive(pad != null);
+        controlText.gameObject.SetActive(pad == null);
     }
 
     public void TutorialSkip()
@@ -166,7 +185,9 @@ public class TutorialManager : Singleton<TutorialManager>
         training = false;
 
         controlText.gameObject.SetActive(false);
+        controlPadObj.SetActive(false);
         driftText.gameObject.SetActive(false);
+        driftPadObj.SetActive(false);
     }
 
     private void OnPlayerEnter(object sender, int e)
@@ -202,7 +223,11 @@ public class TutorialManager : Singleton<TutorialManager>
         ZombiePooler.Instance.astarPath.Scan(scanGraph);
         StartCoroutine(SpawnDelay());
 
+        var pad = Gamepad.current;
+        driftPadObj.SetActive(pad != null);
+        DriftTextUpdate(pad != null);
         driftText.gameObject.SetActive(true);
+
         step = 1;
     }
     private IEnumerator SpawnDelay()

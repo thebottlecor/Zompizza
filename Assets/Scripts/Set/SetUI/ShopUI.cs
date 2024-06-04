@@ -43,7 +43,7 @@ public class ShopUI : EventListener
     public Image[] pizzaBoys;
     public Image[] pizzaBoxes;
 
-    public ScrollRect scrollRect;
+    public ScrollRect orderScroll;
     public RectTransform contentPanel;
 
     public Button shopCloseBtn;
@@ -55,6 +55,7 @@ public class ShopUI : EventListener
 
     [Header("야간 모드 - 탐험")]
     public GameObject orderPanel;
+    public GameObject makingPanel;
     public GameObject explorePanel;
     private bool endTime;
 
@@ -70,6 +71,7 @@ public class ShopUI : EventListener
     public GameObject reviewObject_Day_Source;
     public GameObject reviewObject_Source;
     public Transform reviewObject_Parent;
+    public ScrollRect reviewScroll;
     public List<ReviewDayObject> reviewDayObjects;
     public List<Review> reviewObjects;
 
@@ -161,7 +163,18 @@ public class ShopUI : EventListener
 
     private void OnTabMove(object sender, InputAction.CallbackContext e)
     {
+        /// <summary>
+        /// <see cref="UIManager.OnESC"/>
+        /// <ser cref="UINaviHelper.SetFirstSelect"/>
+        /// </summary>
+
         if (!opened || loading) return;
+
+        var exploration = ExplorationManager.Instance;
+        if (exploration.canvasGroupLoading) return;
+        if (exploration.canvasGroup_resultPanel.alpha >= 0.99f) return;
+        if (GM.Instance.gameOverWarningObj.activeSelf) return;
+        if (shopCloseWarningObj.activeSelf) return;
 
         float value = e.ReadValue<float>();
 
@@ -314,6 +327,7 @@ public class ShopUI : EventListener
         UIManager.Instance.orderMiniUIParent.SetActive(false);
         UIManager.Instance.speedInfo.SetActive(false);
         UIManager.Instance.timeInfo.SetActive(false);
+        UIManager.Instance.padUIs.SetActive(false);
         ExplorationManager.Instance.HideUI_ResultPanel_Instant();
         WorldMapManager.Instance.CloseMinimap();
 
@@ -344,6 +358,8 @@ public class ShopUI : EventListener
 
         rectTransform.anchoredPosition = new Vector2(0f, -2000f);
         canvasGroup.alpha = 0f;
+
+        UINaviHelper.Instance.SetFirstSelect();
     }
 
     public void HideUI()
@@ -364,6 +380,7 @@ public class ShopUI : EventListener
         UIManager.Instance.orderMiniUIParent.SetActive(true);
         UIManager.Instance.speedInfo.SetActive(true);
         UIManager.Instance.timeInfo.SetActive(true);
+        UIManager.Instance.padUIs.SetActive(true);
         ExplorationManager.Instance.HideUI_ResultPanel_Instant();
         WorldMapManager.Instance.OpenMinimap();
 
@@ -382,6 +399,7 @@ public class ShopUI : EventListener
         {
             loading = false;
             TutorialManager.Instance.ShopWindowHideComplete();
+            UINaviHelper.Instance.SetFirstSelect();
         });
     }
 
@@ -389,7 +407,9 @@ public class ShopUI : EventListener
     {
         if (idx == 0)
         {
+            orderScroll.verticalNormalizedPosition = 1f;
             UpdatePizzaBox(null);
+            UIManager.Instance.OrderUIBtnUpdate();
             ExplorationManager.Instance.UpdateBtn();
 
             shopCloseBtn.gameObject.SetActive(!endTime);
@@ -404,6 +424,7 @@ public class ShopUI : EventListener
             {
                 case 1:
                     StatManager.Instance.UpdateText();
+                    reviewScroll.verticalNormalizedPosition = 1f;
                     break;
                 case 2:
                     SelectUpgrade(-1);
@@ -423,14 +444,20 @@ public class ShopUI : EventListener
         panelButtonPairs[idx].button.SetHighlight(true);
 
         activeSubPanel = idx;
+
+        UINaviHelper.Instance.SetFirstSelect();
     }
 
     //연출
     public void SnapTo(RectTransform target)
     {
-        float value = Mathf.Abs(target.anchoredPosition.y) / scrollRect.content.rect.height;
-
-        scrollRect.verticalNormalizedPosition = 1f - value;
+        if (target != null)
+        {
+            float value = Mathf.Abs(target.anchoredPosition.y) / (orderScroll.content.rect.height - target.sizeDelta.y);
+            orderScroll.verticalNormalizedPosition = 1f - value;
+        }
+        else
+            orderScroll.verticalNormalizedPosition = 1f;
     }
 
     private void UpdatePizzaBox(OrderInfo info)
@@ -513,12 +540,14 @@ public class ShopUI : EventListener
     public void ShowShopCloseWarning(bool on)
     {
         shopCloseWarningObj.SetActive(on);
+        UINaviHelper.Instance.SetFirstSelect();
     }
     public void Force_CloseShop()
     {
         ShowShopCloseWarning(false);
         AudioManager.Instance.PlaySFX(Sfx.close);
         OrderManager.Instance.RemoveAllOrders();
+        UINaviHelper.Instance.SetFirstSelect();
     }
 
     #endregion

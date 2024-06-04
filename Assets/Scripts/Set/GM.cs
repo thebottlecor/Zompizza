@@ -320,6 +320,7 @@ public class GM : Singleton<GM>
             darkCanvas.interactable = false;
             darkCanvas.blocksRaycasts = true;
             loading = true;
+            UINaviHelper.Instance.SetFirstSelect();
         });
         sequence.Append(darkCanvas.DOFade(1f, 0.5f));
         sequence.AppendInterval(0.5f);
@@ -328,6 +329,7 @@ public class GM : Singleton<GM>
             darkCanvas.interactable = true;
             UpdateAccountUI();
             accountObj.SetActive(true);
+            UINaviHelper.Instance.SetFirstSelect();
         });
     }
     private void UpdateAccountUI()
@@ -430,6 +432,7 @@ public class GM : Singleton<GM>
     private void NextDay_Late()
     {
         accountObj.SetActive(false);
+        UINaviHelper.Instance.SetFirstSelect();
 
         //int loanWarning = LoanManager.Instance.NextDayLate();
         int loanWarning = -1;
@@ -513,6 +516,7 @@ public class GM : Singleton<GM>
         loading = true;
 
         gameOverObj.SetActive(true);
+        UINaviHelper.Instance.SetFirstSelect();
     }
     public void Congratulation(bool on)
     {
@@ -534,6 +538,7 @@ public class GM : Singleton<GM>
             loading = false;
         }
         congratulationsObj.SetActive(on);
+        UINaviHelper.Instance.SetFirstSelect();
     }
     public void ShowGameOverWarning(bool on)
     {
@@ -553,6 +558,7 @@ public class GM : Singleton<GM>
             // 관리탭 강조하기
             UIManager.Instance.shopUI.SelectSubPanel(1);
         }
+        UINaviHelper.Instance.SetFirstSelect();
     }
 
     public void ShowWarningQueue()

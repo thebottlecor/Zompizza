@@ -184,6 +184,7 @@ public class ExplorationManager : Singleton<ExplorationManager>
     public void OpenUI_ResultPanel()
     {
         canvasGroupLoading = true;
+        UINaviHelper.Instance.SetFirstSelect();
         canvasGroup_resultPanel.alpha = 0f;
         canvasGroup_resultPanel.blocksRaycasts = true;
         canvasGroup_resultPanel.interactable = true;
@@ -192,6 +193,7 @@ public class ExplorationManager : Singleton<ExplorationManager>
         canvasGroup_resultPanel.DOFade(1f, fadeTime).SetUpdate(true).OnComplete(() =>
         {
             canvasGroupLoading = false;
+            UINaviHelper.Instance.SetFirstSelect();
         });
     }
 
@@ -200,6 +202,7 @@ public class ExplorationManager : Singleton<ExplorationManager>
         UIManager.Instance.UpdateIngredients();
 
         canvasGroupLoading = true;
+        UINaviHelper.Instance.SetFirstSelect();
         canvasGroup_resultPanel.alpha = 1f;
         canvasGroup_resultPanel.blocksRaycasts = false;
         canvasGroup_resultPanel.interactable = false;
@@ -210,6 +213,7 @@ public class ExplorationManager : Singleton<ExplorationManager>
         {
             canvasGroupLoading = false;
             GM.Instance.ShowWarningQueue();
+            UINaviHelper.Instance.SetFirstSelect();
         });
     }
 
@@ -218,5 +222,6 @@ public class ExplorationManager : Singleton<ExplorationManager>
         canvasGroup_resultPanel.alpha = 0f;
         canvasGroup_resultPanel.blocksRaycasts = false;
         canvasGroup_resultPanel.interactable = false;
+        UINaviHelper.Instance.SetFirstSelect();
     }
 }

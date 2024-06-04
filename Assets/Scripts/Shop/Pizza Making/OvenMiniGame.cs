@@ -16,10 +16,6 @@ public class OvenMiniGame : EventListener
 
     public Material oven_operatingMat;
 
-    public GameObject orderUI;
-    public GameObject makingUI;
-
-
     private float maxTimer;
     private float timer;
     public Image gaugeIndicator;
@@ -30,6 +26,7 @@ public class OvenMiniGame : EventListener
     private OrderInfo orderInfo;
 
     public TextMeshProUGUI keyText;
+    public GameObject keyPadObj;
     public TextMeshProUGUI[] gradeTexts;
 
     private SerializableDictionary<KeyMap, KeyMapping> HotKey => SettingManager.Instance.keyMappings;
@@ -71,6 +68,7 @@ public class OvenMiniGame : EventListener
         PizzaDirection.PizzaCompleteEvent += OnPizzaComplete;
 
         InputHelper.SideBreakEvent += OnButtonPressed;
+        InputHelper.OkayEvent += OnButtonPressed;
     }
 
     protected override void RemoveListeners()
@@ -79,6 +77,7 @@ public class OvenMiniGame : EventListener
         PizzaDirection.PizzaCompleteEvent -= OnPizzaComplete;
 
         InputHelper.SideBreakEvent -= OnButtonPressed;
+        InputHelper.OkayEvent -= OnButtonPressed;
     }
 
     private void OnIngredientEnter(object sender, EventArgs e)
@@ -92,8 +91,9 @@ public class OvenMiniGame : EventListener
     }
     private void OnPizzaComplete(object sender, OrderInfo e)
     {
-        orderUI.SetActive(true);
-        makingUI.SetActive(false);
+        UIManager.Instance.shopUI.orderPanel.SetActive(true);
+        UIManager.Instance.shopUI.makingPanel.SetActive(false);
+        UINaviHelper.Instance.SetFirstSelect();
     }
 
     public void Init()
@@ -103,7 +103,12 @@ public class OvenMiniGame : EventListener
             gradeTexts[i].gameObject.SetActive(false);
         }
 
-        keyText.text = $">> {tm.GetCommons("Stop")} ({HotKey[KeyMap.carBreak].GetName()}) <<";
+        var pad = Gamepad.current;
+        if (pad == null)
+            keyText.text = $">> {tm.GetCommons("Stop")} ({HotKey[KeyMap.carBreak].GetName()}) <<";
+        else
+            keyText.text = $">> {tm.GetCommons("Stop")} <<";
+        keyPadObj.SetActive(pad != null);
 
         operating = false;
 
@@ -123,8 +128,9 @@ public class OvenMiniGame : EventListener
     {
         Init();
         this.orderInfo = orderInfo;
-        orderUI.SetActive(false);
-        makingUI.SetActive(true);
+        UIManager.Instance.shopUI.orderPanel.SetActive(false);
+        UIManager.Instance.shopUI.makingPanel.SetActive(true);
+        UINaviHelper.Instance.SetFirstSelect();
     }
 
     void Update()
@@ -205,15 +211,18 @@ public class OvenMiniGame : EventListener
         else if (sin > Mathf.Sin(4.4f * Mathf.Deg2Rad))
         {
             grade = 1;
+            GM.Instance.player.cam.GamePadRumble(2f);
         }
         else if (sin > Mathf.Sin(-4.9f * Mathf.Deg2Rad))
         {
             grade = 2;
+            GM.Instance.player.cam.GamePadRumble(5f);
         }
         else if (sin > Mathf.Sin(-18f * Mathf.Deg2Rad))
         {
             //grade = 2;
             grade = 1;
+            GM.Instance.player.cam.GamePadRumble(2f);
         }
         else if (sin > Mathf.Sin(-53.5f * Mathf.Deg2Rad))
         {

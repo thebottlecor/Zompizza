@@ -119,6 +119,7 @@ public class UtilUI : EventListener
         UIManager.Instance.orderMiniUIParent.SetActive(false);
         UIManager.Instance.speedInfo.SetActive(false);
         UIManager.Instance.timeInfo.SetActive(false);
+        UIManager.Instance.padUIs.SetActive(false);
         WorldMapManager.Instance.CloseMinimap();
         WorldMapManager.Instance.OpenFullscreenMap();
 
@@ -147,9 +148,12 @@ public class UtilUI : EventListener
         loading = false;
         opened = false;
         WorldMapManager.Instance.CloseFullscreenMap();
+        SettingManager.Instance.EndKeyBinding();
 
         rectTransform.anchoredPosition = new Vector2(0f, -2000f);
         canvasGroup.alpha = 0f;
+
+        UINaviHelper.Instance.SetFirstSelect();
     }
 
     public void HideUI()
@@ -170,8 +174,10 @@ public class UtilUI : EventListener
         UIManager.Instance.orderMiniUIParent.SetActive(true);
         UIManager.Instance.speedInfo.SetActive(true);
         UIManager.Instance.timeInfo.SetActive(true);
+        UIManager.Instance.padUIs.SetActive(true);
         WorldMapManager.Instance.CloseFullscreenMap();
         WorldMapManager.Instance.OpenMinimap();
+        SettingManager.Instance.EndKeyBinding();
 
         for (int i = 0; i < panelButtonPairs.Count; i++)
         {
@@ -187,11 +193,14 @@ public class UtilUI : EventListener
         {
             loading = false;
             TutorialManager.Instance.ShopWindowHideComplete();
+            UINaviHelper.Instance.SetFirstSelect();
         });
     }
 
     public void SelectSubPanel(int idx)
     {
+        SettingManager.Instance.EndKeyBinding();
+
         if (idx == 0) // ¿ùµå¸Ê
         {
             //WorldMapManager.Instance.OpenFullscreenMap();
@@ -201,6 +210,8 @@ public class UtilUI : EventListener
         else
         {
             //WorldMapManager.Instance.CloseFullscreenMap();
+
+            SettingManager.Instance.ShowSubSettingPanel(0);
         }
 
         for (int i = 0; i < panelButtonPairs.Count; i++)
@@ -210,17 +221,10 @@ public class UtilUI : EventListener
         }
 
         panelButtonPairs[idx].panel.SetActive(true);
-        //if (idx != 0)
-        //    panelButtonPairs[idx].panel.SetActive(true);
-        //else
-        //    StartCoroutine(DelayShow(idx));
         panelButtonPairs[idx].button.SetHighlight(true);
 
         activeSubPanel = idx;
-    }
-    private IEnumerator DelayShow(int idx)
-    {
-        yield return CoroutineHelper.WaitForSecondsRealtime(0.01f);
-        panelButtonPairs[idx].panel.SetActive(true);
+
+        UINaviHelper.Instance.SetFirstSelect();
     }
 }
