@@ -40,6 +40,9 @@ public class PizzaDirection : EventListener
     public static EventHandler<OrderInfo> PizzaCompleteEvent;
     public static EventHandler IngredientEnterEvent;
 
+    [Header("업그레이드 디렉션")]
+    public UpgradeDirection upgradeDirection;
+
     protected override void AddListeners()
     {
         SettingManager.ResolutionChangedEvent += OnResolutionChanged;
@@ -62,9 +65,8 @@ public class PizzaDirection : EventListener
     {
         // 이건 별도의 맨처음 초기화
         ingredients = new SerializableDictionary<Ingredient, Transform>();
-        var list = Enum.GetValues(typeof(Ingredient));
         int count = 0;
-        foreach (var temp in list)
+        foreach (var temp in DataManager.Instance.ingredientLib.ingredientTypes)
         {
             Ingredient key = (Ingredient)temp;
             var obj = Instantiate(ingredientsSource);
@@ -79,6 +81,7 @@ public class PizzaDirection : EventListener
         }
 
         Init();
+        upgradeDirection.effect.transform.position = upgradeDirection.stackTarget11.position;
 
         foreach (var temp in ingredients)
         {
@@ -111,6 +114,7 @@ public class PizzaDirection : EventListener
         yield return null;
 
         Init();
+        upgradeDirection.effect.transform.position = upgradeDirection.stackTarget11.position;
 
         shopPanel.offsetMin = new Vector2(0, initShopPanelPos.x);
         shopPanel.offsetMax = new Vector2(0, initShopPanelPos.y);

@@ -28,6 +28,7 @@ public class OrderInfo
 
     // 배달 제한 시간
     public float timeLimit;
+
     // 배달 수락후 지나간 시간
     public float timer;
 

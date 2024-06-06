@@ -140,8 +140,7 @@ public class GM : Singleton<GM>
     private void Start()
     {
         ingredients = new SerializableDictionary<Ingredient, int>();
-        var list = System.Enum.GetValues(typeof(Ingredient));
-        foreach (var temp in list)
+        foreach (var temp in DataManager.Instance.ingredientLib.ingredientTypes)
         {
             Ingredient key = (Ingredient)temp;
             ingredients.Add(new SerializableDictionary<Ingredient, int>.Pair(key, 0));

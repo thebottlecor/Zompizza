@@ -46,7 +46,7 @@ public class OrderUIObject : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         st.AppendFormat("{0} : {1:0.#}km", tm.GetCommons("Distance"), info.km);
         //st.AppendFormat("{0:0.##}", info.distance);
         st.AppendLine();
-        st.AppendFormat("{0} : {1}$", tm.GetCommons("Rewards"), info.rewards);
+        st.AppendFormat("{0} : {1:F0}$", tm.GetCommons("Rewards"), info.rewards);
         st.AppendLine();
 
         // 글자로 풀어서 표시

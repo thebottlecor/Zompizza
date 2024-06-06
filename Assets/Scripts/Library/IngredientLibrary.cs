@@ -9,28 +9,42 @@ using System.Text.RegularExpressions;
 public class IngredientLibrary : ScriptableObject
 {
 
-    [Header("자원 분류")]
-    public SerializableDictionary<Ingredient, bool> meats;
-    public SerializableDictionary<Ingredient, bool> vegetables;
-    public SerializableDictionary<Ingredient, bool> herbs;
-
-    public void Debug2()
+    [Serializable]
+    public struct Info
     {
-        meats = new SerializableDictionary<Ingredient, bool>();
-        vegetables = new SerializableDictionary<Ingredient, bool>();
-        herbs = new SerializableDictionary<Ingredient, bool>();
-        for (int i = 0; i < 14; i++)
-        {
-            meats.Add(new SerializableDictionary<Ingredient, bool>.Pair { Key = (Ingredient)i, Value = false });
-        }
-        for (int i = 14; i < 28; i++)
-        {
-            vegetables.Add(new SerializableDictionary<Ingredient, bool>.Pair { Key = (Ingredient)i, Value = false });
-        }
-        for (int i = 28; i < 42; i++)
-        {
-            herbs.Add(new SerializableDictionary<Ingredient, bool>.Pair { Key = (Ingredient)i, Value = false });
-        }
+        public bool valid;
+        public int tier;
     }
+
+    [Header("자원 분류")]
+    public SerializableDictionary<Ingredient, Info> meats;
+    public SerializableDictionary<Ingredient, Info> vegetables;
+    public SerializableDictionary<Ingredient, Info> herbs;
+
+    public Array ingredientTypes;
+
+    public void SetArray()
+    {
+        ingredientTypes = Enum.GetValues(typeof(Ingredient));
+    }
+
+    //public void Debug2()
+    //{
+    //    meats = new SerializableDictionary<Ingredient, Info>();
+    //    vegetables = new SerializableDictionary<Ingredient, Info>();
+    //    herbs = new SerializableDictionary<Ingredient, Info>();
+    //    for (int i = 0; i < 12; i++)
+    //    {
+    //        meats.Add(new SerializableDictionary<Ingredient, Info>.Pair { Key = (Ingredient)i, Value = new Info { tier = i / 2, valid = false } });
+    //    }
+    //    for (int i = 12; i < 24; i++)
+    //    {
+    //        vegetables.Add(new SerializableDictionary<Ingredient, Info>.Pair { Key = (Ingredient)i, Value = new Info { tier = (i-12) / 2, valid = false } });
+    //    }
+    //    for (int i = 24; i < 36; i++)
+    //    {
+    //        herbs.Add(new SerializableDictionary<Ingredient, Info>.Pair { Key = (Ingredient)i, Value = new Info { tier = (i-24) / 2, valid = false } });
+    //    }
+    //}
 
 }

@@ -23,7 +23,7 @@ public class ExplorationManager : Singleton<ExplorationManager>
     private int cost;
 
     private float quantityValue;
-    private float qualityValue;
+    private int qualityValue;
 
     [Header("결과창")]
     public float fadeTime = 0.5f;
@@ -42,8 +42,8 @@ public class ExplorationManager : Singleton<ExplorationManager>
 
     private void Start()
     {
-        quantity.Init(5f);
-        SlideQuality(0f);
+        quantity.Init(5f, Constant.explorationQuantityMax, SlideQuantity);
+        quality.Init(0, 0, SlideQuality);
 
         HideUI_ResultPanel_Instant();
         UpdateText();
@@ -57,7 +57,7 @@ public class ExplorationManager : Singleton<ExplorationManager>
         //vegetables.categoryText.text = tm.GetCommons("Vegetable");
         //herbs.categoryText.text = tm.GetCommons("Herb");
         quantity.categoryText.text = tm.GetCommons("Quantity");
-        //quality.categoryText.text = tm.GetCommons("Quality");
+        quality.categoryText.text = tm.GetCommons("Tier");
 
         resultText.text = tm.GetCommons("Result");
         resultOkayText.text = tm.GetCommons("Okay");
@@ -71,24 +71,33 @@ public class ExplorationManager : Singleton<ExplorationManager>
     }
     public void SlideQuality(float value)
     {
-        qualityValue = value;
+        qualityValue = (int)value;
 
         SetCost();
     }
 
+    private void UpgradeUpdate()
+    {
+        quantity.slider.maxValue = Constant.explorationQuantityMax + ResearchManager.Instance.globalEffect.explore_max_pay;
+        quality.slider.maxValue = ResearchManager.Instance.globalEffect.tier;
+    }
+
     public void SetCost()
     {
+        UpgradeUpdate();
+
         float value = quantityValue * 100f;
 
-        value += qualityValue * 100f;
+        value *= (qualityValue + 1);
 
-        cost = (int)value;
+        float temp = value * (1f + ResearchManager.Instance.globalEffect.explore_cost);
+        cost = (int)temp;
 
         costText.text = $"{tm.GetCommons("Costs")} : {cost}$";
 
         UpdateBtn();
     }
-    public void UpdateBtn()
+    private void UpdateBtn()
     {
         sendBtn.interactable = GM.Instance.gold >= cost;
         if (sendBtn.interactable) sendBtnText.text = tm.GetCommons("SendExploration");
@@ -117,16 +126,37 @@ public class ExplorationManager : Singleton<ExplorationManager>
 
     private void ExplorationResult()
     {
-        int maxQuantity = Constant.explorationQuantityMax;
+        int maxQuantity = (int)quantity.slider.maxValue;
 
         int result_quantity = (int)(maxQuantity * quantity.Percent);
+        float temp_bonus = result_quantity * (1f + ResearchManager.Instance.globalEffect.explore_get_bonus);
+        float remain = temp_bonus - (int)temp_bonus;
+        if (remain > 0f && UnityEngine.Random.Range(0f, 1f) < remain)
+            result_quantity = (int)temp_bonus + 1;
+        else
+            result_quantity = (int)temp_bonus;
+
+        List<Ingredient> ingredients = new List<Ingredient>();
+        var ingLib = DataManager.Instance.ingredientLib;
+        foreach (var temp in ingLib.ingredientTypes)
+        {
+            var key = (Ingredient)temp;
+            // 임시유효성 검사
+            if (ingLib.meats.ContainsKey(key) && ingLib.meats[key].valid && ingLib.meats[key].tier == qualityValue ||
+                ingLib.vegetables.ContainsKey(key) && ingLib.vegetables[key].valid && ingLib.vegetables[key].tier == qualityValue ||
+                ingLib.herbs.ContainsKey(key) && ingLib.herbs[key].valid && ingLib.herbs[key].tier == qualityValue)
+            {
+                Ingredient ingredient = (Ingredient)temp;
+                ingredients.Add(ingredient);
+            }
+        }
 
         resultDict = new Dictionary<Ingredient, int>();
         int count = result_quantity;
         while (count > 0)
         {
-            int rand = UnityEngine.Random.Range(0, OrderManager.Instance.ingredients.Count);
-            Ingredient ingredient = OrderManager.Instance.ingredients[rand];
+            int rand = UnityEngine.Random.Range(0, ingredients.Count);
+            Ingredient ingredient = ingredients[rand];
 
             if (!resultDict.ContainsKey(ingredient))
                 resultDict.Add(ingredient, 1);

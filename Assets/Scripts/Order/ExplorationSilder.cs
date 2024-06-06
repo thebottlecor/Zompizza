@@ -3,18 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class ExplorationSilder : MonoBehaviour
 {
     public TextMeshProUGUI categoryText;
     public Slider slider;
     public TextMeshProUGUI percentText;
-    public TextMeshProUGUI levelText;
 
-    public void Init(float initValue)
+    [SerializeField] private bool intValue;
+
+    private Action<float> changedAction;
+
+    public void Init(float initValue, float initMax, Action<float> changedAction)
     {
-        slider.maxValue = Constant.explorationQuantityMax;
+        slider.maxValue = initMax;
         slider.value = initValue;
+        this.changedAction = changedAction;
         ValueChanged(slider.value);
         slider.onValueChanged.AddListener(ValueChanged);
     }
@@ -23,9 +28,12 @@ public class ExplorationSilder : MonoBehaviour
 
     private void ValueChanged(float a)
     {
-        percentText.text = $"{a*10f:F0}%";
+        if (intValue)
+            percentText.text = $"{a+1:F0}";
+        else
+            percentText.text = $"{a*10f:F0}%";
 
-        ExplorationManager.Instance.SlideQuantity(a);
+        changedAction(a);
     }
 
 }

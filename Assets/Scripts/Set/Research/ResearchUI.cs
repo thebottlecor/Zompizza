@@ -11,6 +11,8 @@ public class ResearchUI : MonoBehaviour
     public Image icon;
     public Image level_highlight;
 
+    private Vector2 initSizeDelta;
+
     public void Init(int idx)
     {
         GetComponent<Button>().onClick.AddListener(() => UIManager.Instance.ButtonSound());
@@ -19,12 +21,26 @@ public class ResearchUI : MonoBehaviour
 
         icon.sprite = DataManager.Instance.researches[idx].icon;
 
+        initSizeDelta = (transform as RectTransform).sizeDelta;
+
         UpdateUI();
     }
 
     public void UpdateUI()
     {
-        level_highlight.fillAmount = ResearchManager.Instance.GetResearchedPercent(idx);
+        float value = ResearchManager.Instance.GetResearchedPercent(idx);
+        level_highlight.fillAmount = value;
+        if (value > 0f)
+            gameObject.SetActive(true);
+
+        if (UIManager.Instance.shopUI.currentSelectUpgrade == idx)
+        {
+            (transform as RectTransform).sizeDelta = 1.25f * initSizeDelta;
+        }
+        else
+        {
+            (transform as RectTransform).sizeDelta = initSizeDelta;
+        }
     }
 
     public void BtnClick()

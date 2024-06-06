@@ -93,6 +93,14 @@ public class UIManager : Singleton<UIManager>
         }
     }
 
+    public void UpdateIngredientsTier()
+    {
+        for (int i = 0; i < ingredientUIs.Count; i++)
+        {
+            ingredientUIs[i].CheckValid();
+        }
+    }
+
     public void UpdateIngredients()
     {
         for (int i = 0; i < ingredientUIs.Count; i++)

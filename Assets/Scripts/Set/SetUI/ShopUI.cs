@@ -89,11 +89,14 @@ public class ShopUI : EventListener
     public GameObject upgradeUI_Source;
     public TextMeshProUGUI[] upgradeUI_GroupText;
     public Transform[] upgradeUI_Parent;
+    public TextMeshProUGUI upgradeDetailNameText;
     public TextMeshProUGUI upgradeDetailText;
     public Dictionary<int, ResearchUI> researchUIs;
     public Button upgrade_UnlockBtn;
     public TextMeshProUGUI upgrade_UnlockBtnText;
     public UpgradeDirection upgradeDirection;
+    public SerializableDictionary<ResearchInfo, RectTransform> upgradePositions;
+    public List<MaskedUIHelper> maskedUIHelders;
 
     public void Init()
     {
@@ -407,10 +410,16 @@ public class ShopUI : EventListener
     {
         if (idx == 0)
         {
-            orderScroll.verticalNormalizedPosition = 1f;
+            SnapTo(null);
             UpdatePizzaBox(null);
-            UIManager.Instance.OrderUIBtnUpdate();
-            ExplorationManager.Instance.UpdateBtn();
+            if (orderPanel.activeSelf)
+            {
+                UIManager.Instance.OrderUIBtnUpdate();
+            }
+            if (explorePanel.activeSelf)
+            {
+                ExplorationManager.Instance.SetCost();
+            }
 
             shopCloseBtn.gameObject.SetActive(!endTime);
         }
@@ -548,6 +557,7 @@ public class ShopUI : EventListener
         AudioManager.Instance.PlaySFX(Sfx.close);
         OrderManager.Instance.RemoveAllOrders();
         UINaviHelper.Instance.SetFirstSelect();
+        ExplorationManager.Instance.SetCost();
     }
 
     #endregion
@@ -562,30 +572,46 @@ public class ShopUI : EventListener
         foreach (var temp in infos)
         {
             var obj = Instantiate(upgradeUI_Source, upgradeUI_Parent[temp.Value.group]);
+            (obj.transform as RectTransform).anchoredPosition = upgradePositions[temp.Value].anchoredPosition;
+            (obj.transform as RectTransform).sizeDelta = upgradePositions[temp.Value].sizeDelta;
             ResearchUI researchUI = obj.GetComponent<ResearchUI>();
             researchUI.Init(temp.Key);
             researchUIs.Add(temp.Key, researchUI);
+
+            if (temp.Value.hidden && !rm.Researched(temp.Key))
+                researchUI.gameObject.SetActive(false);
         }
     }
 
     public void SelectUpgrade(int idx)
     {
+        int prev = currentSelectUpgrade;
         currentSelectUpgrade = idx;
+        if (prev != -1)
+            researchUIs[prev].UpdateUI();
 
         if (idx == -1)
         {
+            upgradeDetailNameText.text = string.Empty;
             upgradeDetailText.text = string.Empty;
             upgrade_UnlockBtn.gameObject.SetActive(false);
             return;
         }
 
+        researchUIs[currentSelectUpgrade].UpdateUI();
+
         bool canResearch = !rm.MaxResearched(idx);
 
         var info = DataManager.Instance.researches[idx];
 
+        StringBuilder st2 = new StringBuilder();
+        if (info.max > 1)
+            st2.AppendFormat("<b>{0}</b> ({1}/{2})", tm.GetResearch(idx), rm.GetResearchCount(idx), info.max);
+        else
+            st2.AppendFormat("<b>{0}</b>", tm.GetResearch(idx));
+        upgradeDetailNameText.text = st2.ToString();
+
         StringBuilder st = new StringBuilder();
-        st.AppendFormat("<size=120%><b>{0}</b> ({1}/{2})</size>", tm.GetResearch(idx), rm.GetResearchCount(idx), info.max);
-        st.AppendLine();
         if (canResearch)
             st.AppendFormat("{0} : {1}$", tm.GetCommons("Costs"), rm.GetCost(idx));
         st.AppendLine();
@@ -593,63 +619,35 @@ public class ShopUI : EventListener
         st.AppendFormat("<b>{0}</b>", tm.GetCommons("Effect"));
         st.AppendLine();
 
-        float goldGet = info.effect.goldGet;
-        float ratingGet = info.effect.ratingGet;
-        int maxSpeed = info.effect.maxSpeed;
-        float defense = info.effect.damageReduce;
-        float accel = info.effect.acceleration;
-
         st.Append("<size=90%>");
-        if (goldGet != 0f)
-        {
-            string sub;
-            if (goldGet > 0f)
-                sub = string.Format(tm.defaultCultureInfo, "+{0:P0}", goldGet);
-            else
-                sub = string.Format(tm.defaultCultureInfo, "{0:P0}", goldGet);
-            st.AppendFormat(tm.GetCommons("UpgradeEffect0"), "<sprite=2>", sub);
-            st.AppendLine();
-        }
-        if (ratingGet != 0f)
-        {
-            string sub;
-            if (ratingGet > 0f)
-                sub = string.Format(tm.defaultCultureInfo, "+{0:P0}", ratingGet);
-            else
-                sub = string.Format(tm.defaultCultureInfo, "{0:P0}", ratingGet);
-            st.AppendFormat(tm.GetCommons("UpgradeEffect1"), "<sprite=1>", sub);
-            st.AppendLine();
-        }
-        if (maxSpeed != 0)
-        {
-            string sub;
-            if (maxSpeed > 0f)
-                sub = string.Format("+{0}km/h", maxSpeed);
-            else
-                sub = string.Format("{0}km/h", maxSpeed);
-            st.AppendFormat(tm.GetCommons("UpgradeEffect2"), sub);
-            st.AppendLine();
-        }
-        if (defense != 0)
-        {
-            string sub;
-            if (defense > 0f)
-                sub = string.Format(tm.defaultCultureInfo, "+{0:P0}", defense);
-            else
-                sub = string.Format(tm.defaultCultureInfo, "{0:P0}", defense);
-            st.AppendFormat(tm.GetCommons("UpgradeEffect3"), sub);
-            st.AppendLine();
-        }
-        if (accel != 0)
-        {
-            string sub;
-            if (accel > 0f)
-                sub = string.Format(tm.defaultCultureInfo, "+{0:P0}", accel);
-            else
-                sub = string.Format(tm.defaultCultureInfo, "{0:P0}", accel);
-            st.AppendFormat(tm.GetCommons("UpgradeEffect4"), sub);
-            st.AppendLine();
-        }
+
+        info.effect.ShowgoldGet(st);
+        info.effect.ShowratingGet(st);
+
+        info.effect.Showexplore_max_pay(st);
+        info.effect.Showexplore_cost(st);
+        info.effect.Showexplore_get_bonus(st);
+
+        info.effect.Showtier(st);
+
+        info.effect.Showmeat_tier(st);
+        info.effect.Showvegetable_tier(st);
+        info.effect.Showherb_tier(st);
+        info.effect.Showproduction_tier(st);
+        info.effect.Showproduction_bonus(st);
+
+        info.effect.ShowpizzeriaExpand(st);
+
+        info.effect.ShowraidDefense(st);
+
+        info.effect.Showcustomer_timelimit(st);
+        info.effect.Showcustomer_max_tier(st);
+        info.effect.Showcustomer_max_amount(st);
+        info.effect.Showcustomer_max_type(st);
+
+        info.effect.ShowmaxSpeed(st);
+        info.effect.ShowdamageReduce(st);
+        info.effect.Showacceleration(st);
 
         upgradeDetailText.text = st.ToString();
 

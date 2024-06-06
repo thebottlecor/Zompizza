@@ -35,6 +35,13 @@ public class ResearchManager : Singleton<ResearchManager>
                 globalEffect = ResearchInfo[research.Key].AddEffect(globalEffect);
             }
         }
+
+        for (int i = 0; i < researchLines.Count; i++)
+        {
+            researchLines[i].InitVisual();
+        }
+        UpdatePizzeria();
+        UIManager.Instance.UpdateIngredientsTier();
     }
 
     public ResearchEffect globalEffect;
@@ -131,6 +138,17 @@ public class ResearchManager : Singleton<ResearchManager>
 
     public static EventHandler<int> researchCompleteEvent;
 
+    [Space(20f)]
+    [SerializeField] private List<ResearchLine> researchLines;
+
+    [Space(10f)]
+    [SerializeField] private List<GameObject> tier_Add;
+    [SerializeField] private List<GameObject> tier_Remove;
+    [SerializeField] private List<GameObject> pizzeriaExpands_Add;
+    [SerializeField] private List<GameObject> pizzeriaExpands_Remove;
+    [SerializeField] private List<GameObject> raidDefenses_Add;
+    [SerializeField] private List<GameObject> raidDefenses_Remove;
+
     public void Init()
     {
         globalEffect = new ResearchEffect();
@@ -139,6 +157,13 @@ public class ResearchManager : Singleton<ResearchManager>
         {
             researchedCount.Add(new SerializableDictionary<int, int>.Pair { Key = info.Key, Value = 0 });
         }
+
+        for (int i = 0; i < researchLines.Count; i++)
+        {
+            researchLines[i].InitVisual();
+        }
+        UpdatePizzeria(); 
+        UIManager.Instance.UpdateIngredientsTier();
     }
 
     //public override void CallAfterStart(GameSaveData gameSaveData)
@@ -228,15 +253,65 @@ public class ResearchManager : Singleton<ResearchManager>
     //}
     #endregion
 
+    public void UpdatePizzeria()
+    {
+        int tier = globalEffect.tier;
+
+        if (tier >= 1)
+        {
+            tier_Add[0].SetActive(true);
+            tier_Remove[0].SetActive(false);
+        }
+
+        int expand = globalEffect.pizzeriaExpand;
+        
+        if (expand >= 1)
+        {
+            pizzeriaExpands_Add[0].SetActive(true);
+            pizzeriaExpands_Remove[0].SetActive(false);
+        }
+        if (expand >= 2)
+        {
+            pizzeriaExpands_Add[1].SetActive(true);
+            pizzeriaExpands_Remove[1].SetActive(false);
+        }
+        if (expand >= 3)
+        {
+            pizzeriaExpands_Add[2].SetActive(true);
+            pizzeriaExpands_Remove[2].SetActive(false);
+        }
+
+        int raidDefense = globalEffect.raidDefense;
+
+        if (raidDefense >= 1)
+        {
+            raidDefenses_Add[0].SetActive(true);
+            raidDefenses_Remove[0].SetActive(false);
+        }
+    }
+
+    public bool CanResearced(int idx)
+    {
+        return ResearchInfo[idx].max > researchedCount[idx] && CheckneedResearch(idx);
+    }
+
     public bool ResearchUnlock(int idx)
     {
-        if (ResearchInfo[idx].max > researchedCount[idx] && CheckneedResearch(idx) && PayCost(idx))
+        if (CanResearced(idx) && PayCost(idx))
         {
             globalEffect = ResearchInfo[idx].AddEffect(globalEffect);
             researchedCount[idx]++;
 
             if (researchCompleteEvent != null)
                 researchCompleteEvent(null, idx);
+
+            for (int i = 0; i < researchLines.Count; i++)
+            {
+                researchLines[i].InitVisual();
+            }
+            UpdatePizzeria();
+            UIManager.Instance.UpdateIngredientsTier();
+
             return true;
         }
         return false;
@@ -244,12 +319,15 @@ public class ResearchManager : Singleton<ResearchManager>
 
     private bool CheckneedResearch(int idx)
     {
-        if (ResearchInfo[idx].invalid) return false;
+        var info = ResearchInfo[idx];
+        if (info.invalid) return false;
         //if (GM.Instance.TEST_Free_Research) return true;
 
-        for (int i = 0; i < ResearchInfo[idx].needResearch.Count; i++)
+        if (info.tier > 0 && !Researched(DataManager.Instance.researchLib.pizzaRecipeUpgrades[info.tier - 1].idx)) return false;
+
+        for (int i = 0; i < info.needResearch.Count; i++)
         {
-            if (!Researched(ResearchInfo[idx].needResearch[i]))
+            if (!Researched(info.needResearch[i].idx))
                 return false;
         }
         return true;
@@ -265,7 +343,6 @@ public class ResearchManager : Singleton<ResearchManager>
         //if (GM.Instance.TEST_Free_Research) return true;
 
         int gold = GM.Instance.gold;
-        var info = ResearchInfo[idx];
 
         int needCost = GetCost(idx);
 

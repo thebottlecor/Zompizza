@@ -22,13 +22,21 @@ public class IngredientUI : MonoBehaviour
         icon.sprite = DataManager.Instance.uiLib.ingredients[info];
         highlight.SetActive(false);
 
+        CheckValid();
+    }
+
+    public void CheckValid()
+    {
         var ingLib = DataManager.Instance.ingredientLib;
-        // 임시유효성 검사
-        if (ingLib.meats.ContainsKey(info) && ingLib.meats[info] ||
-            ingLib.vegetables.ContainsKey(info) && ingLib.vegetables[info] ||
-            ingLib.herbs.ContainsKey(info) && ingLib.herbs[info])
+
+        int tier = ResearchManager.Instance.globalEffect.tier;
+
+        if (ingLib.meats.ContainsKey(info) && ingLib.meats[info].valid && ingLib.meats[info].tier <= tier ||
+            ingLib.vegetables.ContainsKey(info) && ingLib.vegetables[info].valid && ingLib.vegetables[info].tier <= tier ||
+            ingLib.herbs.ContainsKey(info) && ingLib.herbs[info].valid && ingLib.herbs[info].tier <= tier)
         {
             valid = true;
+            icon.color = Color.white;
         }
         else
         {

@@ -62,9 +62,8 @@ public class PizzaDirection2 : EventListener
     {
         // 이건 별도의 맨처음 초기화
         ingredients = new SerializableDictionary<Ingredient, Transform>();
-        var list = Enum.GetValues(typeof(Ingredient));
         int count = 0;
-        foreach (var temp in list)
+        foreach (var temp in DataManager.Instance.ingredientLib.ingredientTypes)
         {
             Ingredient key = (Ingredient)temp;
             var obj = Instantiate(ingredientsSource);

@@ -33,4 +33,12 @@ public class UILibrary : ScriptableObject
     public SerializableDictionary<PadKeyCode, Sprite> padKeyUIsXbox;
     public SerializableDictionary<PadKeyCode, Sprite> padKeyUIsPS;
 
+
+    [Serializable]
+    public struct ResearchLineInfo
+    {
+        public float thickness;
+        public Sprite sprite;
+    }
+    public List<ResearchLineInfo> researchLineInfos;
 }

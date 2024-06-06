@@ -35,6 +35,8 @@ public class DataManager : Singleton<DataManager>
         researches = researchLib.GetHashMap();
         DOTween.Init();
 
+        ingredientLib.SetArray();
+
         //ingredientLib.Debug2();
     }
 
