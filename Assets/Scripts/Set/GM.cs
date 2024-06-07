@@ -257,6 +257,8 @@ public class GM : Singleton<GM>
                     EndTimeEvent(null, true);
 
                 timeText.text = dayStr[1];
+
+                ResearchManager.Instance.ToggleAllHiddenRecipe(true);
             }
             EndTime = true;
         }
@@ -501,6 +503,7 @@ public class GM : Singleton<GM>
 
             TutorialManager.Instance.NextDay();
             StatManager.Instance.NextDay();
+            ResearchManager.Instance.ToggleAllHiddenRecipe(false);
             //RivalManager.Instance.NextDay();
             //ShowRatingText();
         });

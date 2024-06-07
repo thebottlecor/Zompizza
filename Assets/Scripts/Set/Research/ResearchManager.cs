@@ -42,6 +42,7 @@ public class ResearchManager : Singleton<ResearchManager>
         }
         UpdatePizzeria();
         UIManager.Instance.UpdateIngredientsTier();
+        UIManager.Instance.shopUI.UpdateHiddenUpgrade();
     }
 
     public ResearchEffect globalEffect;
@@ -140,6 +141,10 @@ public class ResearchManager : Singleton<ResearchManager>
 
     [Space(20f)]
     [SerializeField] private List<ResearchLine> researchLines;
+
+    [Space(10f)]
+    [SerializeField] private List<HiddenRecipeGoal> hiddenRecipeGoals;
+    public int HiddenRecipeCount => hiddenRecipeGoals.Count;
 
     [Space(10f)]
     [SerializeField] private List<GameObject> tier_Add;
@@ -290,6 +295,24 @@ public class ResearchManager : Singleton<ResearchManager>
         }
     }
 
+    public void ToggleAllHiddenRecipe(bool on)
+    {
+        if (on)
+        {
+            for (int i = 0; i < hiddenRecipeGoals.Count; i++)
+            {
+                hiddenRecipeGoals[i].Show();
+            }
+        }
+        else
+        {
+            for (int i = 0; i < hiddenRecipeGoals.Count; i++)
+            {
+                hiddenRecipeGoals[i].Hide();
+            }
+        }
+    }
+
     public bool CanResearced(int idx)
     {
         return ResearchInfo[idx].max > researchedCount[idx] && CheckneedResearch(idx);
@@ -315,6 +338,16 @@ public class ResearchManager : Singleton<ResearchManager>
             return true;
         }
         return false;
+    }
+    public void ResearchUnlock_Force(int idx)
+    {
+        globalEffect = ResearchInfo[idx].AddEffect(globalEffect);
+        researchedCount[idx]++;
+
+        if (researchCompleteEvent != null)
+            researchCompleteEvent(null, idx);
+
+        UIManager.Instance.shopUI.UpdateHiddenUpgrade();
     }
 
     private bool CheckneedResearch(int idx)

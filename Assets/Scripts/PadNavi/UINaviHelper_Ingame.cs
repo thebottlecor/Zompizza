@@ -18,8 +18,12 @@ public class UINaviHelper_Ingame : MonoBehaviour
     public UINavi[] shops_first;
     public UINavi[] shops_orders_explores;
     public UINavi[] shops_managements;
+    public UINavi[] shops_upgrades;
     public UINavi shops_closeStore; // 영업 종료전 직접 닫는 버튼
     public UINavi shops_close;
+
+    public RectTransform virtualCursor;
+    public TextMeshProUGUI[] virtualCursorTMP;
 
     [Header("인게임 - 특별")]
     public UINavi explore_first;
@@ -40,6 +44,8 @@ public class UINaviHelper_Ingame : MonoBehaviour
             UINaviHelper.Instance.ingame = this;
             UINaviHelper.Instance.inputHelper.PadCheck();
         }
+        virtualCursorTMP[0].text = TextManager.Instance.GetCommons("VirtualCursor");
+        virtualCursorTMP[1].text = TextManager.Instance.GetCommons("VirtualCursor2");
     }
 
     public UINavi Utils_Map_Reconnection()
@@ -225,6 +231,43 @@ public class UINaviHelper_Ingame : MonoBehaviour
         shops_close.left = shops_managements[0];
 
         return shops_managements[0];
+    }
+
+
+    public UINavi Shop_Upgrade_Reconnection()
+    {
+        virtualCursor.gameObject.SetActive(true);
+        var ui = UIManager.Instance.shopUI.GetCurrentResearchUI();
+        virtualCursor.position = ui.icon.rectTransform.position;
+        return Shop_UpgradeSelect(ui);
+    }
+    private UINavi Shop_UpgradeSelect(ResearchUI research)
+    {
+        UINavi first = research.GetComponent<UINavi>();
+
+        first.ResetConnection();
+        first.down = shops_close;
+
+        shops_upgrades[0].ResetConnection();
+        shops_upgrades[0].down = shops_close;
+        shops_upgrades[0].right = first;
+        shops_upgrades[0].left = first;
+
+        shops_close.ResetConnection();
+        shops_close.up = first;
+
+        if (shops_upgrades[0].gameObject.activeSelf)
+        {
+            first.left = shops_upgrades[0];
+            first.right = shops_upgrades[0];
+            shops_close.left = shops_upgrades[0];
+            shops_close.right = shops_upgrades[0];
+        }
+        else
+        {
+
+        }
+        return first;
     }
 
     public void Toggle_AlwaysShow_PadUIs(bool on, int padType)

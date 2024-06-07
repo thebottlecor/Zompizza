@@ -31,6 +31,9 @@ public class StatManager : Singleton<StatManager>
     public int highestRatingDay;
     public float highestRatingValue;
 
+    public int carCrash;
+    public int hitZombies;
+
     public TextMeshProUGUI[] statTexts;
     private TextManager tm => TextManager.Instance;
 
@@ -53,7 +56,10 @@ public class StatManager : Singleton<StatManager>
         statTexts[idx++].text = $"{tm.GetCommons("AveragePizzaHealth")} : {averageDeliveryHp * 100f:F0}%";
 
         statTexts[idx++].text = $"{tm.GetCommons("Mileage")} : {carMileage:0.#}km";
-        statTexts[idx++].text = $"{tm.GetCommons("FoundVisionRecipes")} : {foundVisionRecipes} / {2}";
+        statTexts[idx++].text = $"{tm.GetCommons("FoundVisionRecipes")} : {foundVisionRecipes} / {ResearchManager.Instance.HiddenRecipeCount}";
+
+        statTexts[idx++].text = $"{tm.GetCommons("CarCrash")} : {carCrash}";
+        statTexts[idx++].text = $"{tm.GetCommons("HitZombies")} : {hitZombies}";
     }
 
 

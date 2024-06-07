@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using UnityEngine.InputSystem;
+using TMPro;
 
 public class InputHelper : MonoBehaviour
 {
@@ -24,6 +25,8 @@ public class InputHelper : MonoBehaviour
     public static EventHandler<InputAction.CallbackContext> BackEvent;
 
     public GameObject disconnectedPanel;
+    public TextMeshProUGUI panelTMP;
+    public TextMeshProUGUI panelBtnTMP;
     public UINaviHelper uiNaviHelper;
 
     public void OnMove(InputAction.CallbackContext context)
@@ -88,6 +91,12 @@ public class InputHelper : MonoBehaviour
             {
                 uimanager.utilUI.OpenSettings();
             }
+        }
+        var tm = TextManager.Instance;
+        if (tm != null)
+        {
+            panelTMP.text = tm.GetCommons("ControllerDisconnected");
+            panelBtnTMP.text = tm.GetCommons("ControllerDisconnected2");
         }
         disconnectedPanel.SetActive(true);
 

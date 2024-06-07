@@ -179,6 +179,12 @@ public class UIManager : Singleton<UIManager>
         /// <ser cref="UINaviHelper.SetFirstSelect"/>
         /// </summary>
 
+        if (UINaviHelper.Instance.inputHelper.disconnectedPanel.activeSelf)
+        {
+            UINaviHelper.Instance.inputHelper.PadConnected();
+            return;
+        }
+
         var exploration = ExplorationManager.Instance;
         if (exploration.canvasGroupLoading)
             return;

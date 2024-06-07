@@ -436,7 +436,8 @@ public class ShopUI : EventListener
                     reviewScroll.verticalNormalizedPosition = 1f;
                     break;
                 case 2:
-                    SelectUpgrade(-1);
+                    //SelectUpgrade(-1);
+                    SelectUpgrade(GetMainResearch().idx);
                     break;
             }
 
@@ -582,6 +583,37 @@ public class ShopUI : EventListener
                 researchUI.gameObject.SetActive(false);
         }
     }
+    public void UpdateHiddenUpgrade()
+    {
+        var infos = DataManager.Instance.researches;
+        foreach (var temp in researchUIs)
+        {
+            if (infos[temp.Key].hidden)
+            {
+                temp.Value.gameObject.SetActive(rm.Researched(temp.Key));
+            }
+            temp.Value.UpdateUI();
+        }
+    }
+    public ResearchUI GetMainResearch()
+    {
+        ResearchUI first = null;
+        var infos = DataManager.Instance.researches;
+        foreach (var ui in researchUIs)
+        {
+            if (infos[ui.Key].main && ui.Value.gameObject.activeSelf)
+            {
+                first = ui.Value;
+                break;
+            }    
+        }
+        //SelectUpgrade(first.idx);
+        return first;
+    }
+    public ResearchUI GetCurrentResearchUI()
+    {
+        return researchUIs[currentSelectUpgrade];
+    }
 
     public void SelectUpgrade(int idx)
     {
@@ -652,7 +684,9 @@ public class ShopUI : EventListener
         upgradeDetailText.text = st.ToString();
 
         upgrade_UnlockBtn.gameObject.SetActive(canResearch);
-        upgrade_UnlockBtn.enabled = canResearch;
+        //upgrade_UnlockBtn.enabled = canResearch;
+
+        UINaviHelper.Instance.SetFirstSelect();
     }
 
     public void ClickUpgrade()

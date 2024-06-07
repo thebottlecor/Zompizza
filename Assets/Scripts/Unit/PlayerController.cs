@@ -247,6 +247,7 @@ public class PlayerController : EventListener
 
                         AudioManager.Instance.PlaySFX(Sfx.zombieCrash);
                         zombie.Hit(cp.point, speedPercent, targetDirection);
+                        StatManager.Instance.hitZombies++;
                         cam.Shake(2f);
 
                         return;
@@ -525,6 +526,8 @@ public class PlayerController : EventListener
                     if (DamageEvent != null)
                         DamageEvent(null, Constant.crash_damage * UnityEngine.Random.Range(0.75f, 1.25f));
 
+                    StatManager.Instance.carCrash++;
+
                     cam.Shake(5f);
                 }
             }
@@ -695,6 +698,7 @@ public class PlayerController : EventListener
     public void ShakeOffAllZombies()
     {
         dirftContactBlockTimer = 0.5f;
+        StatManager.Instance.hitZombies += contactingZombies.Count;
         for (int i = contactingZombies.Count - 1; i >= 0; i--)
         {
             float speedPercent = Mathf.Abs(carSpeed) / MaxSpeed;

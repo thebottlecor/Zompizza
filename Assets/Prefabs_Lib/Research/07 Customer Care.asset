@@ -13,22 +13,25 @@ MonoBehaviour:
   m_Name: 07 Customer Care
   m_EditorClassIdentifier: 
   idx: 7
+  tier: 0
   group: 0
   max: 1
-  cost: 4000
+  cost: 2000
   increaseCost: 4000
-  needResearch: 
+  needResearch: []
+  hidden: 0
   invalid: 0
   effect:
     goldGet: 0
     ratingGet: 0
     explore_max_pay: 0
-    explore_cost_reduct: 0
+    explore_cost: 0
     explore_get_bonus: 0
     tier: 0
     meat_tier: 0
     vegetable_tier: 0
     herb_tier: 0
+    production_tier: 0
     production_bonus: 0
     pizzeriaExpand: 0
     raidDefense: 0

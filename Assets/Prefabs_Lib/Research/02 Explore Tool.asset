@@ -43,4 +43,4 @@ MonoBehaviour:
     maxSpeed: 0
     damageReduce: 0
     acceleration: 0
-  icon: {fileID: -2019972016, guid: 70a332bb4041ce447b99d72b8d122cda, type: 3}
+  icon: {fileID: 292885200, guid: 70a332bb4041ce447b99d72b8d122cda, type: 3}

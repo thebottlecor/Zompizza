@@ -16,7 +16,7 @@ MonoBehaviour:
   tier: 1
   group: 0
   max: 1
-  cost: 4000
+  cost: 6000
   increaseCost: 4000
   needResearch:
   - {fileID: 11400000, guid: 056f3917cf101da4281964d7da1a2743, type: 2}

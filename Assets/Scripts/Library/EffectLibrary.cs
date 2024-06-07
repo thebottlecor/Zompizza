@@ -11,4 +11,6 @@ public class EffectLibrary : ScriptableObject
 
     public GameObject dollarBoomEffect;
 
+    public GameObject goldCoinBlastEffect;
+
 }

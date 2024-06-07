@@ -16,7 +16,7 @@ MonoBehaviour:
   tier: 0
   group: 0
   max: 1
-  cost: 4000
+  cost: 2000
   increaseCost: 4000
   needResearch: []
   hidden: 0
@@ -42,4 +42,4 @@ MonoBehaviour:
     maxSpeed: 0
     damageReduce: 0
     acceleration: 0
-  icon: {fileID: 1112661140, guid: 70a332bb4041ce447b99d72b8d122cda, type: 3}
+  icon: {fileID: -1440027661, guid: 70a332bb4041ce447b99d72b8d122cda, type: 3}

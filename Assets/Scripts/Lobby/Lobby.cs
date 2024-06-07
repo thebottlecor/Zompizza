@@ -126,6 +126,12 @@ public class Lobby : Singleton<Lobby>
 
         if (e.performed)
         {
+            if (UINaviHelper.Instance.inputHelper.disconnectedPanel.activeSelf)
+            {
+                UINaviHelper.Instance.inputHelper.PadConnected();
+                return;
+            }
+
             if (!SettingManager.Instance.IsActive)
             {
                 SettingManager.Instance.OpenPanel(0);

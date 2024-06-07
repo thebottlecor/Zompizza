@@ -13,10 +13,12 @@ MonoBehaviour:
   m_Name: 00 Recipe Research
   m_EditorClassIdentifier: 
   idx: 0
+  main: 1
   tier: 0
+  romanNum: 1
   group: 0
   max: 1
-  cost: 4000
+  cost: 6000
   increaseCost: 4000
   needResearch: []
   hidden: 0

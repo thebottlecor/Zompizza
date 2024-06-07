@@ -45,9 +45,9 @@ public struct ResearchEffect
         {
             string sub;
             if (value > 0f)
-                sub = string.Format(tm.defaultCultureInfo, "+{0:P0}", value);
+                sub = string.Format(tm.defaultCultureInfo, "+{0:0.#}%", value * 100f);
             else
-                sub = string.Format(tm.defaultCultureInfo, "{0:P0}", value);
+                sub = string.Format(tm.defaultCultureInfo, "{0:0.#}%", value * 100f);
             st.AppendFormat(tm.GetCommons("UpgradeEffect0"), "<sprite=2>", sub);
             st.AppendLine();
         }
@@ -60,9 +60,9 @@ public struct ResearchEffect
         {
             string sub;
             if (value > 0f)
-                sub = string.Format(tm.defaultCultureInfo, "+{0:P0}", value);
+                sub = string.Format(tm.defaultCultureInfo, "+{0:0.#}%", value * 100f);
             else
-                sub = string.Format(tm.defaultCultureInfo, "{0:P0}", value);
+                sub = string.Format(tm.defaultCultureInfo, "{0:0.#}%", value * 100f);
             st.AppendFormat(tm.GetCommons("UpgradeEffect1"), "<sprite=1>", sub);
             st.AppendLine();
         }
@@ -91,9 +91,9 @@ public struct ResearchEffect
         {
             string sub;
             if (value > 0f)
-                sub = string.Format(tm.defaultCultureInfo, "+{0:P0}", value);
+                sub = string.Format(tm.defaultCultureInfo, "+{0:0.#}%", value * 100f);
             else
-                sub = string.Format(tm.defaultCultureInfo, "{0:P0}", value);
+                sub = string.Format(tm.defaultCultureInfo, "{0:0.#}%", value * 100f);
             st.AppendFormat(tm.GetCommons("UpgradeEffect3"), sub);
             st.AppendLine();
         }
@@ -106,9 +106,9 @@ public struct ResearchEffect
         {
             string sub;
             if (value > 0f)
-                sub = string.Format(tm.defaultCultureInfo, "+{0:P0}", value);
+                sub = string.Format(tm.defaultCultureInfo, "+{0:0.#}%", value * 100f);
             else
-                sub = string.Format(tm.defaultCultureInfo, "{0:P0}", value);
+                sub = string.Format(tm.defaultCultureInfo, "{0:0.#}%", value * 100f);
             st.AppendFormat(tm.GetCommons("UpgradeEffect4"), sub);
             st.AppendLine();
         }
@@ -173,9 +173,9 @@ public struct ResearchEffect
         {
             string sub;
             if (value > 0f)
-                sub = string.Format(tm.defaultCultureInfo, "+{0:P0}", value);
+                sub = string.Format(tm.defaultCultureInfo, "+{0:0.#}%", value * 100f);
             else
-                sub = string.Format(tm.defaultCultureInfo, "{0:P0}", value);
+                sub = string.Format(tm.defaultCultureInfo, "{0:0.#}%", value * 100f);
             st.AppendFormat(tm.GetCommons("UpgradeEffect10"), sub);
             st.AppendLine();
         }
@@ -211,9 +211,9 @@ public struct ResearchEffect
         {
             string sub;
             if (value > 0f)
-                sub = string.Format(tm.defaultCultureInfo, "+{0:P0}", value);
+                sub = string.Format(tm.defaultCultureInfo, "+{0:0.#}%", value * 100f);
             else
-                sub = string.Format(tm.defaultCultureInfo, "{0:P0}", value);
+                sub = string.Format(tm.defaultCultureInfo, "{0:0.#}%", value * 100f);
             st.AppendFormat(tm.GetCommons("UpgradeEffect13"), sub);
             st.AppendLine();
         }
@@ -283,9 +283,9 @@ public struct ResearchEffect
         {
             string sub;
             if (value > 0f)
-                sub = string.Format(tm.defaultCultureInfo, "+{0:P0}", value);
+                sub = string.Format(tm.defaultCultureInfo, "+{0:0.#}%", value * 100f);
             else
-                sub = string.Format(tm.defaultCultureInfo, "{0:P0}", value);
+                sub = string.Format(tm.defaultCultureInfo, "{0:0.#}%", value * 100f);
             st.AppendFormat(tm.GetCommons("UpgradeEffect18"), sub);
             st.AppendLine();
         }
@@ -298,9 +298,9 @@ public struct ResearchEffect
         {
             string sub;
             if (value > 0f)
-                sub = string.Format(tm.defaultCultureInfo, "+{0:P0}", value);
+                sub = string.Format(tm.defaultCultureInfo, "+{0:0.#}%", value * 100f);
             else
-                sub = string.Format(tm.defaultCultureInfo, "{0:P0}", value);
+                sub = string.Format(tm.defaultCultureInfo, "{0:0.#}%", value * 100f);
             st.AppendFormat(tm.GetCommons("UpgradeEffect19"), sub);
             st.AppendLine();
         }
@@ -319,7 +319,9 @@ public class ResearchInfo : ScriptableObject
 
     public int idx;
 
+    public bool main;
     public int tier; // 레시피 연구를 얼마나 해야 하는지
+    public int romanNum; // 중복되는 컨셉의 강화된 연구의 경우, 로마 숫자로 표시 (1부터 II로 표시됨)
 
     //public int height;
     public int group;

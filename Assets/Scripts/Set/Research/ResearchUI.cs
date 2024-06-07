@@ -11,7 +11,10 @@ public class ResearchUI : MonoBehaviour
     public Image icon;
     public Image level_highlight;
 
+    public TextMeshProUGUI romanNumText;
+
     private Vector2 initSizeDelta;
+    private Vector3 initRomanScale;
 
     public void Init(int idx)
     {
@@ -21,7 +24,36 @@ public class ResearchUI : MonoBehaviour
 
         icon.sprite = DataManager.Instance.researches[idx].icon;
 
+        int roman = DataManager.Instance.researches[idx].romanNum;
+        if (roman > 0)
+        {
+            switch (roman)
+            {
+                case 1:
+                    romanNumText.text = "II";
+                    break;
+                case 2:
+                    romanNumText.text = "III";
+                    break;
+                case 3:
+                    romanNumText.text = "IV";
+                    break;
+                case 4:
+                    romanNumText.text = "V";
+                    break;
+            }
+
+            romanNumText.gameObject.SetActive(true);
+        }
+        else
+            romanNumText.gameObject.SetActive(false);
+
         initSizeDelta = (transform as RectTransform).sizeDelta;
+
+        if (initSizeDelta.x >= 96f)
+            romanNumText.rectTransform.localScale = Vector3.one * 1.25f;
+
+        initRomanScale = romanNumText.rectTransform.localScale;
 
         UpdateUI();
     }
@@ -36,10 +68,12 @@ public class ResearchUI : MonoBehaviour
         if (UIManager.Instance.shopUI.currentSelectUpgrade == idx)
         {
             (transform as RectTransform).sizeDelta = 1.25f * initSizeDelta;
+            romanNumText.rectTransform.localScale = initRomanScale * 1.25f;
         }
         else
         {
             (transform as RectTransform).sizeDelta = initSizeDelta;
+            romanNumText.rectTransform.localScale = initRomanScale;
         }
     }
 

@@ -434,18 +434,22 @@ public class OrderManager : Singleton<OrderManager>
             case 0:
                 break;
             case 1: // 2티어 개발시 1,2 등급 재료가 랜덤으로 등장
-                if (UnityEngine.Random.Range(0, 2) == 1)
-                {
-                    selectedTier = 1;
-                    selectedTierGroup = ingredients_Tier2;
-                }
-                else
-                {
-                    selectedTier = 0;
-                    selectedTierGroup = ingredients_Tier1;
-                }
+                //if (UnityEngine.Random.Range(0, 2) == 1)
+                //{
+                //    selectedTier = 1;
+                //    selectedTierGroup = ingredients_Tier2;
+                //}
+                //else
+                //{
+                //    selectedTier = 0;
+                //    selectedTierGroup = ingredients_Tier1;
+                //}
+
+                // 그냥 2티어 개발시, 랜덤은 모두 2티어 주문만
+                selectedTier = 1;
+                selectedTierGroup = ingredients_Tier2;
                 break;
-            case 2: // 3티어 개발시 2,3 등급 재료가 랜덤으로 등장
+            case 2:
 
                 break;
         }

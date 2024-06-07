@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.InputSystem;
 using TMPro;
 using System;
+using UnityEngine.EventSystems;
 
 public class UINaviHelper : Singleton<UINaviHelper>
 {
@@ -94,6 +95,7 @@ public class UINaviHelper : Singleton<UINaviHelper>
         }
         else if (ingame != null)
         {
+            ingame.virtualCursor.gameObject.SetActive(false);
             var util = UIManager.Instance.utilUI;
             var shop = UIManager.Instance.shopUI;
             var exploration = ExplorationManager.Instance;
@@ -159,8 +161,7 @@ public class UINaviHelper : Singleton<UINaviHelper>
                             }
                             break;
                         case 2:
-                            current = ingame.shops_first[2];
-                            ingame.shops_close.ResetConnection();
+                            current = ingame.Shop_Upgrade_Reconnection();
                             break;
                         case 3:
                             current = ingame.shops_first[3];
@@ -274,8 +275,37 @@ public class UINaviHelper : Singleton<UINaviHelper>
 
     private void OnOkay(object sender, InputAction.CallbackContext e)
     {
+        if (inputHelper.disconnectedPanel.activeSelf)
+        {
+            inputHelper.PadConnected();
+            return;
+        }
+
         if (!uiMoveCheckFunc()) return;
         if (current == null || !e.performed) return;
+
+        if (ingame != null && ingame.virtualCursor.gameObject.activeSelf)
+        {
+            var uis = UIManager.Instance.shopUI.researchUIs;
+            ResearchUI selected = null;
+            foreach (var temp in uis)
+            {
+                if (!temp.Value.gameObject.activeSelf) continue;
+
+                float dist = (ingame.virtualCursor.transform.position - temp.Value.icon.rectTransform.position).magnitude;
+
+                if (dist <= 0.375f)
+                {
+                    selected = temp.Value;
+                    break;
+                }
+            }
+            if (selected != null && selected.idx != UIManager.Instance.shopUI.currentSelectUpgrade)
+            {
+                UIManager.Instance.shopUI.SelectUpgrade(selected.idx);
+                return;
+            }
+        }
 
         //current.self.Select();
 
@@ -422,6 +452,7 @@ public class UINaviHelper : Singleton<UINaviHelper>
     private void OnScrollMove(object sender, InputAction.CallbackContext e)
     {
         scrollMoveDir = Vector3.zero;
+        virtualCursorDir = Vector2.zero;
 
         if (!uiMoveCheckFunc()) return;
         if (current == null || !e.performed) return;
@@ -432,10 +463,12 @@ public class UINaviHelper : Singleton<UINaviHelper>
         {
             //scrollMoveDir = new Vector3(input.x, 0f, input.y).normalized;
             scrollMoveDir = new Vector3(0f, 0f, input.y).normalized;
+            virtualCursorDir = new Vector3(input.x, input.y).normalized;
         }
     }
 
     Vector3 scrollMoveDir;
+    Vector2 virtualCursorDir;
 
     private void Update()
     {
@@ -445,7 +478,14 @@ public class UINaviHelper : Singleton<UINaviHelper>
             {
                 Scrollbar scrollbar = current.self as Scrollbar;
 
-                scrollbar.value += 2f * scrollMoveDir.z * Time.unscaledDeltaTime;
+                scrollbar.value += 2f * Time.unscaledDeltaTime * scrollMoveDir.z;
+            }
+        }
+        if (ingame != null)
+        {
+            if (ingame.virtualCursor.gameObject.activeSelf)
+            {
+                ingame.virtualCursor.anchoredPosition += 200f * Time.unscaledDeltaTime * virtualCursorDir;
             }
         }
     }
