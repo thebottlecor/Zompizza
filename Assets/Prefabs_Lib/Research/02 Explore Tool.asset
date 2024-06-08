@@ -13,10 +13,12 @@ MonoBehaviour:
   m_Name: 02 Explore Tool
   m_EditorClassIdentifier: 
   idx: 2
+  main: 0
   tier: 1
+  romanNum: 0
   group: 0
   max: 1
-  cost: 4000
+  cost: 2000
   increaseCost: 4000
   needResearch:
   - {fileID: 11400000, guid: 1cf06c4009d7e2d4595dd00232f68dcd, type: 2}

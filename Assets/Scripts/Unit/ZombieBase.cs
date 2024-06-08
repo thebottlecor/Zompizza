@@ -22,6 +22,8 @@ public abstract class ZombieBase : MonoBehaviour
 
     public abstract void DriftOffContact(float localXvel, float speed); // localXvel < 0 오른쪽 , > 0 왼쪽 (로컬 기준)
 
+    public abstract void Init(Transform target);
+
 
     [ContextMenu("부활")]
     public virtual void StateReset()

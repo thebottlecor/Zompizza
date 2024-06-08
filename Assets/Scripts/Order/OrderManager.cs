@@ -92,6 +92,7 @@ public class OrderManager : Singleton<OrderManager>
     {
         OrderGoal.PlayerArriveEvent += OnPlayerArrive;
         Zombie2.DamageEvent += OnPlayerDamaged;
+        ZombieSanta.StealEvent += OnPizzeStolen;
         PlayerController.DamageEvent += OnPlayerDamaged;
     }
 
@@ -99,6 +100,7 @@ public class OrderManager : Singleton<OrderManager>
     {
         OrderGoal.PlayerArriveEvent -= OnPlayerArrive;
         Zombie2.DamageEvent -= OnPlayerDamaged;
+        ZombieSanta.StealEvent -= OnPizzeStolen;
         PlayerController.DamageEvent -= OnPlayerDamaged;
     }
 
@@ -106,14 +108,15 @@ public class OrderManager : Singleton<OrderManager>
     {
         for (int i = orderList.Count - 1; i >= 0; i--)
         {
-            int gIndex = orderList[i].goal;
-            if (gIndex == e)
+            var info = orderList[i];
+            int gIndex = info.goal;
+            if (!info.stolen && gIndex == e)
             {
                 // 배달 성공
 
                 float timeRating;
-                float timeLimit = orderList[i].timeLimit;
-                float overTime = orderList[i].timer - timeLimit;
+                float timeLimit = info.timeLimit;
+                float overTime = info.timer - timeLimit;
                 if (overTime <= 0f)
                 {
                     float remainPercent = Mathf.Abs(overTime) / timeLimit;
@@ -131,7 +134,7 @@ public class OrderManager : Singleton<OrderManager>
                 }
 
                 float hpRating;
-                float hpPercent = orderList[i].hp;
+                float hpPercent = info.hp;
                 if (hpPercent == 1f)
                 {
                     hpRating = Constant.remainHpRating1;
@@ -151,17 +154,17 @@ public class OrderManager : Singleton<OrderManager>
                 resultRating = Mathf.Min(Constant.remainHpRating1 + Constant.remainTimeRating1, resultRating);
                 GM.Instance.AddRating(resultRating, GM.GetRatingSource.delivery);
 
-                int rewards = orderList[i].rewards;
+                int rewards = info.rewards;
 
                 GM.Instance.AddGold(rewards, GM.GetGoldSource.delivery);
-                UIManager.Instance.shopUI.AddReview(orderList[i], timeRating, hpRating);
+                UIManager.Instance.shopUI.AddReview(info, timeRating, hpRating);
 
                 orderGoals[gIndex].SuccessEffect(rewards, resultRating);
 
                 //moneyDirection.RestartSequence_Debug();
                 
-                orderMiniUIPair[orderList[i]].Hide();
-                orderMiniUIPair.Remove(orderList[i]);
+                orderMiniUIPair[info].Hide();
+                orderMiniUIPair.Remove(info);
                 orderList.RemoveAt(i);
 
                 ComboCalc(resultRating);
@@ -169,6 +172,7 @@ public class OrderManager : Singleton<OrderManager>
                 StatManager.Instance.CalcAverageDeliveryStat(overTime, hpPercent, rewards, resultRating);
 
                 TutorialManager.Instance.OrderCompleted();
+                break;
             }
         }
 
@@ -198,15 +202,44 @@ public class OrderManager : Singleton<OrderManager>
     {
         for (int i = 0; i < orderList.Count; i++)
         {
-            if (orderList[i].accepted)
+            var info = orderList[i];
+            if (info.accepted && !info.stolen)
             {
                 float damage = Mathf.Max(Constant.min_damage, GM.Instance.player.DamageReduction * e);
-                orderList[i].hp -= damage;
-                if (orderList[i].hp < 0f) orderList[i].hp = 0f;
+                info.hp -= damage;
+                if (info.hp < 0f) info.hp = 0f;
 
-                orderMiniUIPair[orderList[i]].UpdateHpGauge(orderList[i].hp);
+                orderMiniUIPair[info].UpdateHpGauge(info.hp);
 
                 GM.Instance.player.HitBlink();
+            }
+        }
+    }
+    private void OnPizzeStolen(object sender, ZombieSanta e)
+    {
+        for (int i = 0; i < orderList.Count; i++)
+        {
+            var info = orderList[i];
+            if (info.accepted && !info.stolen)
+            {
+                AudioManager.Instance.PlaySFX(Sfx.deny);
+                info.stolen = true;
+                e.StealPizza();
+                GM.Instance.player.HitBlink();
+                return;
+            }
+        }
+    }
+    public void ReturnStolenPizza()
+    {
+        for (int i = 0; i < orderList.Count; i++)
+        {
+            var info = orderList[i];
+            if (info.accepted && info.stolen)
+            {
+                AudioManager.Instance.PlaySFX(Sfx.newInfo);
+                info.stolen = false;
+                return;
             }
         }
     }

@@ -13,10 +13,12 @@ MonoBehaviour:
   m_Name: 07 Customer Care
   m_EditorClassIdentifier: 
   idx: 7
+  main: 0
   tier: 0
+  romanNum: 0
   group: 0
   max: 1
-  cost: 2000
+  cost: 1500
   increaseCost: 4000
   needResearch: []
   hidden: 0

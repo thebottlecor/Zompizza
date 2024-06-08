@@ -20,7 +20,7 @@ public struct ResearchEffect
     public int vegetable_tier;
     public int herb_tier;
     public int production_tier;
-    public int production_bonus;
+    public float production_bonus;
     // ¹Ì¿Ï **
 
     public int pizzeriaExpand;

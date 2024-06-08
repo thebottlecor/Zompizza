@@ -32,6 +32,9 @@ public class OrderInfo
     // 배달 수락후 지나간 시간
     public float timer;
 
+    // 산타가 훔쳐갔어요!
+    public bool stolen;
+
 }
 
 [System.Serializable]

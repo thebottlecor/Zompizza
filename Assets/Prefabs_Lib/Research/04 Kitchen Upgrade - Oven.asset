@@ -13,10 +13,12 @@ MonoBehaviour:
   m_Name: 04 Kitchen Upgrade - Oven
   m_EditorClassIdentifier: 
   idx: 4
+  main: 0
   tier: 0
+  romanNum: 0
   group: 0
   max: 1
-  cost: 2000
+  cost: 1500
   increaseCost: 4000
   needResearch:
   - {fileID: 11400000, guid: 08bc49b9074d0664e8c056c9c1eee62f, type: 2}

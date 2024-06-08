@@ -22,6 +22,8 @@ public class OrderMiniUI : MonoBehaviour
     public Image emoji;
     public Image profileBg;
 
+    public TextMeshProUGUI stolenText;
+
     UILibrary uiLib => DataManager.Instance.uiLib;
 
     public void Init(OrderInfo info)
@@ -41,6 +43,8 @@ public class OrderMiniUI : MonoBehaviour
 
         emoji.gameObject.SetActive(false);
         profileBg.color = uiLib.miniOrderUI_maskColor;
+
+        stolenText.text = TextManager.Instance.GetCommons("Stolen");
 
         gameObject.SetActive(false);
     }
@@ -73,11 +77,15 @@ public class OrderMiniUI : MonoBehaviour
             timerTMP.text = $"{hour:00}:{minute:00}";
 
         bool angry = CalcAngry(overLimit, info.hp);
-        emoji.gameObject.SetActive(angry);
+        if (emoji.gameObject.activeSelf != angry)
+            emoji.gameObject.SetActive(angry);
         if (angry)
             profileBg.color = uiLib.miniOrderUI_maskColor_angry;
         else
             profileBg.color = uiLib.miniOrderUI_maskColor;
+
+        if (stolenText.gameObject.activeSelf != info.stolen)
+            stolenText.gameObject.SetActive(info.stolen);
     }
 
     private bool CalcAngry(bool overLimit, float hpPercent)

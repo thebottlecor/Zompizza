@@ -13,10 +13,12 @@ MonoBehaviour:
   m_Name: 05 Kitchen Upgrade - WaterTower
   m_EditorClassIdentifier: 
   idx: 5
+  main: 0
   tier: 1
+  romanNum: 0
   group: 0
   max: 1
-  cost: 6000
+  cost: 3000
   increaseCost: 4000
   needResearch:
   - {fileID: 11400000, guid: 056f3917cf101da4281964d7da1a2743, type: 2}

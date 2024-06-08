@@ -13,10 +13,12 @@ MonoBehaviour:
   m_Name: 06 BaseDefense - WatchTower
   m_EditorClassIdentifier: 
   idx: 6
+  main: 0
   tier: 1
+  romanNum: 0
   group: 0
   max: 1
-  cost: 4000
+  cost: 2500
   increaseCost: 4000
   needResearch:
   - {fileID: 11400000, guid: 08bc49b9074d0664e8c056c9c1eee62f, type: 2}

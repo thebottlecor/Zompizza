@@ -83,15 +83,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   coll: {fileID: 7608486549936029157}
   animator: {fileID: 9090047537539905066}
+  dead: 0
+  isHeavy: 0
+  meshRenderer: {fileID: 7066969436891953704}
+  shadow: {fileID: 5551583242430911235}
   contactingPlayer: 0
   contact: 0
   range: 8
   isInstall: 1
-  isHeavy: 0
   isRun: 0
-  dead: 0
-  meshRenderer: {fileID: 7066969436891953704}
-  shadow: {fileID: 5551583242430911235}
   seeker: {fileID: 8468248722716590919}
 --- !u!54 &4240378934813003587
 Rigidbody:
@@ -774,7 +774,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a4e0e781815064b4db59980b78af2175, type: 2}
+  - {fileID: 2100000, guid: 8f6155e0307365142b86ab4eaacce47d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -799,7 +799,7 @@ SkinnedMeshRenderer:
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
   m_SkinnedMotionVectors: 0
-  m_Mesh: {fileID: 4300010, guid: dbbc53a6bc8f5c64bb234194ce1380aa, type: 3}
+  m_Mesh: {fileID: 4300032, guid: dbbc53a6bc8f5c64bb234194ce1380aa, type: 3}
   m_Bones:
   - {fileID: 7066969436895030122}
   - {fileID: 7066969436895029986}
@@ -1112,7 +1112,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 0.55, y: 0.55, z: 0.55}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7066969436895030122}

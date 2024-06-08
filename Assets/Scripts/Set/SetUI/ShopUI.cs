@@ -573,11 +573,15 @@ public class ShopUI : EventListener
         foreach (var temp in infos)
         {
             var obj = Instantiate(upgradeUI_Source, upgradeUI_Parent[temp.Value.group]);
+            obj.name = infos[temp.Key].name;
             (obj.transform as RectTransform).anchoredPosition = upgradePositions[temp.Value].anchoredPosition;
             (obj.transform as RectTransform).sizeDelta = upgradePositions[temp.Value].sizeDelta;
             ResearchUI researchUI = obj.GetComponent<ResearchUI>();
             researchUI.Init(temp.Key);
             researchUIs.Add(temp.Key, researchUI);
+
+            if (temp.Value.invalid)
+                researchUI.gameObject.SetActive(false);
 
             if (temp.Value.hidden && !rm.Researched(temp.Key))
                 researchUI.gameObject.SetActive(false);
@@ -588,7 +592,7 @@ public class ShopUI : EventListener
         var infos = DataManager.Instance.researches;
         foreach (var temp in researchUIs)
         {
-            if (infos[temp.Key].hidden)
+            if (infos[temp.Key].hidden && !infos[temp.Key].invalid)
             {
                 temp.Value.gameObject.SetActive(rm.Researched(temp.Key));
             }

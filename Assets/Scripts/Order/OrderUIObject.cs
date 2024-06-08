@@ -158,6 +158,7 @@ public class OrderUIObject : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public void OrderReset()
     {
         gameObject.SetActive(false);
+        ToggleHighlight(false);
         info = null;
     }
 
@@ -182,9 +183,9 @@ public class OrderUIObject : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             foreach (var item in info.pizzas[i].ingredients)
             {
                 UIManager.Instance.ingredientUIPairs[item.Key].ToggleHighlight(true);
-                customer_profile_bg.color = DataManager.Instance.uiLib.order_select_Color;
             }
         }
+        ToggleHighlight(true);
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -196,8 +197,20 @@ public class OrderUIObject : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             foreach (var item in info.pizzas[i].ingredients)
             {
                 UIManager.Instance.ingredientUIPairs[item.Key].ToggleHighlight(false);
-                customer_profile_bg.color = DataManager.Instance.uiLib.order_unselect_Color;
             }
+        }
+        ToggleHighlight(false);
+    }
+
+    public void ToggleHighlight(bool on)
+    {
+        if (on)
+        {
+            customer_profile_bg.color = DataManager.Instance.uiLib.order_select_Color;
+        }
+        else
+        {
+            customer_profile_bg.color = DataManager.Instance.uiLib.order_unselect_Color;
         }
     }
 }

@@ -23,7 +23,7 @@ public class Zombie4 : ZombieBase
 
     public static EventHandler<float> DamageEvent;
 
-    public void Init(Transform target)
+    public override void Init(Transform target)
     {
         rigid = GetComponent<Rigidbody>();
 

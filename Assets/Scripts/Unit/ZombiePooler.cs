@@ -12,22 +12,27 @@ public class ZombiePooler : Singleton<ZombiePooler>
     public GameObject zombieSourceFast;
     public GameObject zombieSourceRange;
     public GameObject ZombieSubSourceRange;
+    public GameObject zombieSourceSanta;
 
     public int maxZombie = 500;
-    public List<Zombie2> zombiesPool;
+    public List<ZombieBase> zombiesPool;
 
     public int maxZombieHeavy = 10;
-    public List<Zombie2> zombiesPoolHeavy;
+    public List<ZombieBase> zombiesPoolHeavy;
 
     public int maxZombieFast = 10;
-    public List<Zombie2> zombiesPoolFast;
+    public List<ZombieBase> zombiesPoolFast;
 
     public int maxZombieRange = 5;
-    public List<Zombie2> zombiesPoolRange;
+    public List<ZombieBase> zombiesPoolRange;
     public List<GameObject> zombiesSubPoolRange;
+
+    public int maxZombieSanta = 1;
+    public List<ZombieBase> zombiesPoolSanta;
 
     [Header("전역 설정")]
     public Transform target;
+    public Transform fleeTarget;
     public float knockbackPower;
     public float power;
     public float radius;
@@ -41,6 +46,7 @@ public class ZombiePooler : Singleton<ZombiePooler>
     private float timer2;
     private float timer3;
     private float timer4;
+    private float timer5;
     public AstarPath astarPath;
 
     [Header("좀비 모델")]
@@ -60,14 +66,15 @@ public class ZombiePooler : Singleton<ZombiePooler>
         Pool_Init(ref zombiesPoolFast, maxZombieFast, zombieSourceFast);
         Pool_Init(ref zombiesPoolRange, maxZombieRange, zombieSourceRange);
         Pool_Init(ref zombiesSubPoolRange, maxZombieRange, ZombieSubSourceRange);
+        Pool_Init(ref zombiesPoolSanta, maxZombieSanta, zombieSourceSanta);
     }
 
-    private void Pool_Init(ref List<Zombie2> list, int max, GameObject source)
+    private void Pool_Init(ref List<ZombieBase> list, int max, GameObject source)
     {
-        list = new List<Zombie2>(max);
+        list = new List<ZombieBase>(max);
         for (int i = 0; i < max; i++)
         {
-            var newZombie = Instantiate(source, zombieSpawnParent).GetComponent<Zombie2>();
+            var newZombie = Instantiate(source, zombieSpawnParent).GetComponent<ZombieBase>();
             newZombie.Init(target);
             newZombie.gameObject.SetActive(false);
             list.Add(newZombie);
@@ -94,7 +101,9 @@ public class ZombiePooler : Singleton<ZombiePooler>
             Spawn(spawnCount);
         }
 
-        if (GM.Instance.day > 0)
+        int day = GM.Instance.day;
+
+        if (day > 0)
         {
             timer2 += 1f * Time.deltaTime;
             if (timer2 >= 10f)
@@ -103,7 +112,7 @@ public class ZombiePooler : Singleton<ZombiePooler>
                 SpawnFast(1);
             }
         }
-        if (GM.Instance.day > 1)
+        if (day > 1)
         {
             timer4 += 1f * Time.deltaTime;
             if (timer4 >= 10f)
@@ -112,13 +121,22 @@ public class ZombiePooler : Singleton<ZombiePooler>
                 SpawnRange(1);
             }
         }
-        if (GM.Instance.day > 2)
+        if (day > 2)
         {
             timer3 += 1f * Time.deltaTime;
             if (timer3 >= 10f)
             {
                 timer3 = 0f;
                 SpawnHeavy(1);
+            }
+        }
+        if (day > 3)
+        {
+            timer5 += 1f * Time.deltaTime;
+            if (timer5 >= 1f)
+            {
+                timer5 = 0f;
+                SpawnSanta(1);
             }
         }
     }
@@ -198,6 +216,37 @@ public class ZombiePooler : Singleton<ZombiePooler>
         }
     }
 
+    private void SpawnSanta(int count)
+    {
+        for (int i = 0; i < maxZombieSanta; i++)
+        {
+            var zom = zombiesPoolSanta[i];
+            if (!zom.gameObject.activeSelf)
+            {
+                Vector3 node = GetRandomPos(10f);
+
+                float dist = (target.position - node).magnitude;
+
+                if (dist < spawnDist * 0.75f)
+                {
+                    count--;
+                    if (count <= 0)
+                        break;
+
+                    continue;
+                }
+
+                zom.transform.position = node;
+                zom.StateReset();
+
+                zom.gameObject.SetActive(true);
+
+                count--;
+                if (count <= 0)
+                    break;
+            }
+        }
+    }
 
     private void SpawnFast(int count)
     {

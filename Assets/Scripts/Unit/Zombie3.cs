@@ -13,6 +13,10 @@ public class Zombie3 : ZombieBase
     {
         rigid = GetComponent<Rigidbody>();
     }
+    public override void Init(Transform target)
+    {
+
+    }
 
     public override void Hit(Vector3 hitPos, float speed, Vector3 knockbackDir)
     {

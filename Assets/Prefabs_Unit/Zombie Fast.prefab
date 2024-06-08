@@ -83,13 +83,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   coll: {fileID: 7608486549936029157}
   animator: {fileID: 9090047537539905066}
-  contactingPlayer: 0
-  contact: 0
-  isHeavy: 0
-  isRun: 1
   dead: 0
+  isHeavy: 0
   meshRenderer: {fileID: 7066969436891953704}
   shadow: {fileID: 5551583242430911235}
+  contactingPlayer: 0
+  contact: 0
+  range: 3.5
+  isInstall: 0
+  isRun: 1
   seeker: {fileID: 8468248722716590919}
 --- !u!54 &4240378934813003587
 Rigidbody:
@@ -168,7 +170,7 @@ MonoBehaviour:
       speed: 8
       maxRotationSpeed: 1080
       maxOnSpotRotationSpeed: 1080
-      slowdownTime: 0.5
+      slowdownTime: 0.25
       slowdownTimeWhenTurningOnSpot: 0
       desiredWallDistance: 0.5
       leadInRadiusWhenApproachingDestination: 1

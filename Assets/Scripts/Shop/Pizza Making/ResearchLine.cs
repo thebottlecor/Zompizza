@@ -18,6 +18,8 @@ public class ResearchLine : MonoBehaviour
     private void Start()
     {
         InitPos();
+
+        this.gameObject.SetActive(ResearchManager.Instance.CheckValid(targetResearch.idx));
     }
 
     public void InitPos()
