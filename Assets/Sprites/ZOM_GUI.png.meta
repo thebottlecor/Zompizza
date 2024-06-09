@@ -1755,6 +1755,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: arrow_left
+      rect:
+        serializedVersion: 2
+        x: 977
+        y: 1484
+        width: 128
+        height: 116
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cbef936757a5bb24b9b043beac4602b8
+      internalID: -229649300
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -1839,6 +1860,7 @@ TextureImporter:
       ZOM_GUI_79: 2054952763
       ZOM_GUI_9: 1591077140
       arrow: 1578708741
+      arrow_left: -229649300
       button_01: 793004247
       button_02: 1118936077
       button_03: 748944128

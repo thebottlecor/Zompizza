@@ -114,6 +114,8 @@ public class ExplorationManager : Singleton<ExplorationManager>
         // 받지 않았던 주문 패널티 
         OrderManager.Instance.RemoveAllOrders();
 
+        GM.Instance.CheckRaid_BeforeExploration();
+
         ExplorationResult();
         if (resultDict.Count > 0)
         {

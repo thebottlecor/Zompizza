@@ -40,7 +40,7 @@ public class HiddenRecipeGoal : MonoBehaviour
     private void FindEffect()
     {
         goalEffectObj.SetActive(false);
-        AudioManager.Instance.PlaySFX(Sfx.pizzaComplete);
+        AudioManager.Instance.PlaySFX(Sfx.visionRecipeFound);
         var source = DataManager.Instance.effectLib.goldCoinBlastEffect;
         Vector3 pos = this.transform.position;
         pos.y = 4f;

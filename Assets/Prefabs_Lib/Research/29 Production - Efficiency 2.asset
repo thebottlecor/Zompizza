@@ -20,10 +20,12 @@ MonoBehaviour:
   max: 1
   cost: 6000
   increaseCost: 4000
+  rating: 0
+  increaseRating: 0
   needResearch:
   - {fileID: 11400000, guid: 4da664cb2c2a65a49b69e088bc3cc01d, type: 2}
   hidden: 0
-  invalid: 1
+  invalid: 0
   effect:
     goldGet: 0
     ratingGet: 0

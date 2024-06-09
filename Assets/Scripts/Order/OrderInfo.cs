@@ -22,6 +22,8 @@ public class OrderInfo
 
     // 배달 성공시 받는 금액
     public int rewards;
+    // 호감도에 따른 보너스로 받은 금액 표시용 (실제 받는 돈은 rewards에 이미 포함됨)
+    public int bouns_friendship;
 
     // 현재 피자 Hp 퍼센트 (최소 0 최대 1)
     public float hp;

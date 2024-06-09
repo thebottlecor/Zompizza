@@ -20,6 +20,8 @@ public class OrderUIObject : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public TextMeshProUGUI viewLocationTmp;
 
+    public GameObject[] friendshipIcons;
+
     private OrderInfo info;
 
     public UINavi navi;
@@ -44,9 +46,38 @@ public class OrderUIObject : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
         StringBuilder st = new StringBuilder();
         st.AppendFormat("{0} : {1:0.#}km", tm.GetCommons("Distance"), info.km);
-        //st.AppendFormat("{0:0.##}", info.distance);
         st.AppendLine();
-        st.AppendFormat("{0} : {1:F0}$", tm.GetCommons("Rewards"), info.rewards);
+
+        float averageRating = OrderManager.Instance.customersInfos[info.goal].AverageRating();
+        if (averageRating >= Constant.friendShip3)
+        {
+            friendshipIcons[0].SetActive(true);
+            friendshipIcons[1].SetActive(true);
+            friendshipIcons[2].SetActive(true);
+        }
+        else if (averageRating >= Constant.friendShip2)
+        {
+            friendshipIcons[0].SetActive(true);
+            friendshipIcons[1].SetActive(true);
+            friendshipIcons[2].SetActive(false);
+        }
+        else if (averageRating >= Constant.friendShip1)
+        {
+            friendshipIcons[0].SetActive(true);
+            friendshipIcons[1].SetActive(false);
+            friendshipIcons[2].SetActive(false);
+        }
+        else
+        {
+            friendshipIcons[0].SetActive(false);
+            friendshipIcons[1].SetActive(false);
+            friendshipIcons[2].SetActive(false);
+        }
+
+        if (info.bouns_friendship > 0)
+            st.AppendFormat("{0} : {1}<size=90%><color=#550742>(+{2})</color></size>$", tm.GetCommons("Rewards"), info.rewards - info.bouns_friendship, info.bouns_friendship);
+        else
+            st.AppendFormat("{0} : {1}$", tm.GetCommons("Rewards"), info.rewards);
         st.AppendLine();
 
         // 글자로 풀어서 표시

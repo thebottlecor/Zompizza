@@ -19,6 +19,7 @@ public class UINaviHelper_Ingame : MonoBehaviour
     public UINavi[] shops_orders_explores;
     public UINavi[] shops_managements;
     public UINavi[] shops_upgrades;
+    public UINavi[] shops_vehicles;
     public UINavi shops_closeStore; // 영업 종료전 직접 닫는 버튼
     public UINavi shops_close;
 
@@ -27,6 +28,7 @@ public class UINaviHelper_Ingame : MonoBehaviour
 
     [Header("인게임 - 특별")]
     public UINavi explore_first;
+    public UINavi raid_first;
     public UINavi nextDay_first;
     public UINavi shopCloseWarning_first;
     public UINavi gameOverWarning_first;
@@ -262,6 +264,39 @@ public class UINaviHelper_Ingame : MonoBehaviour
             first.right = shops_upgrades[0];
             shops_close.left = shops_upgrades[0];
             shops_close.right = shops_upgrades[0];
+        }
+        else
+        {
+
+        }
+        return first;
+    }
+    public UINavi Shop_Vehicle_Reconnection()
+    {
+        var ui = UIManager.Instance.shopUI.GetCurrentResearchUI();
+        return Shop_VehicleSelect(ui);
+    }
+    private UINavi Shop_VehicleSelect(ResearchUI research)
+    {
+        UINavi first = research.GetComponent<UINavi>();
+
+        first.ResetConnection();
+        first.down = shops_close;
+
+        shops_vehicles[0].ResetConnection();
+        shops_vehicles[0].down = shops_close;
+        shops_vehicles[0].right = first;
+        shops_vehicles[0].left = first;
+
+        shops_close.ResetConnection();
+        shops_close.up = first;
+
+        if (shops_vehicles[0].gameObject.activeSelf)
+        {
+            first.left = shops_vehicles[0];
+            first.right = shops_vehicles[0];
+            shops_close.left = shops_vehicles[0];
+            shops_close.right = shops_vehicles[0];
         }
         else
         {

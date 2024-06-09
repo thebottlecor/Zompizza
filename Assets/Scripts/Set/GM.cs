@@ -110,6 +110,14 @@ public class GM : Singleton<GM>
     public TextMeshProUGUI gameOverWarning_Text;
     public TextMeshProUGUI gameOverWarningDetail_Text;
 
+    [Header("습격받은 결과")]
+    public GameObject raidObj;
+    public RectTransform raidRect;
+    public TextMeshProUGUI raidBtn_Text;
+    public TextMeshProUGUI raid_Text;
+    public TextMeshProUGUI raidDetail_Text;
+    public List<int> tenDays_RaidRecords;
+
     public Queue<int> warningQueue;
 
     // 패배 트리거
@@ -169,6 +177,8 @@ public class GM : Singleton<GM>
         nextDayBtn.onClick.AddListener(() => { NextDay_Late(); });
         gameOverBtn_ToLobby.onClick.AddListener(() => { LoadingSceneManager.Instance.ToLobby(); });
 
+        tenDays_RaidRecords = new List<int>();
+
         TextUpdate();
 
         day = 0;
@@ -212,6 +222,9 @@ public class GM : Singleton<GM>
 
         gameOverWarningBtn_Text.text = tm.GetCommons("Close");
         gameOverWarning_Text.text = tm.GetCommons("Warning");
+
+        raid_Text.text = tm.GetCommons("Raid");
+        raidBtn_Text.text = tm.GetCommons("RaidClose");
 
         congratulationsText[0].text = tm.GetCommons("Congratulations");
         congratulationsText[1].text = tm.GetCommons("CompleteRating");
@@ -484,6 +497,7 @@ public class GM : Singleton<GM>
             darkCanvas.alpha = 0f;
 
             loading = false;
+
             OrderManager.Instance.NewOrder();
             bool hasResult = ExplorationManager.Instance.ShowResultPanel();
 
@@ -577,6 +591,9 @@ public class GM : Singleton<GM>
                 case 1: // 대출 위험
                     //LoanManager.Instance.ShowLoanWarning(true);
                     //TutorialManager.Instance.NextDay();
+                    break;
+                case 2: // 습격
+                    ShowRaidPanel();
                     break;
             }
         }
@@ -684,6 +701,124 @@ public class GM : Singleton<GM>
         displayRating = value;
         rating = value;
         ShowRatingText();
+    }
+    #endregion
+
+    #region 습격
+    public void CheckRaid_BeforeExploration() 
+    {
+        if (day % 10 == 0)
+        {
+            tenDays_RaidRecords = new List<int>();
+        }
+
+        // 10일 간격으로, 최대 5번의 습격만 발생할 수 있음
+        int tenDays_RaidCount = 0;
+        for (int i = 0; i < tenDays_RaidRecords.Count; i++)
+        {
+            tenDays_RaidCount += tenDays_RaidRecords[i];
+        }
+        if (tenDays_RaidCount >= 5)
+            return;
+
+        if (CheckRaid())
+        {
+            warningQueue.Enqueue(2);
+            tenDays_RaidRecords.Add(1);
+        }
+    }
+    private bool CheckRaid()
+    {
+        int hasRes = HasIngredient;
+
+        // 가진 자원수가 60 넘을 때, 50% 확률로 습격 발생, 습격 관련 업그레이드에 따라서 30%~0% 만큼 자원을 빼앗김
+        if (hasRes > 60 && UnityEngine.Random.Range(0, 2) == 1)
+        {
+            float percent = 0.3f;
+            switch (ResearchManager.Instance.globalEffect.raidDefense)
+            {
+                case 1:
+                    percent = 0.2f;
+                    break;
+                case 2:
+                    percent = 0.1f;
+                    break;
+                case 3:
+                    percent = 0f;
+                    break;
+            }
+
+            int count = Mathf.CeilToInt(hasRes * percent);
+            if (count >= hasRes) count = hasRes - 1;
+            if (count <= 0)
+                return false;
+
+            var resultDict = new Dictionary<Ingredient, int>();
+            List<Ingredient> tempIngredients = new List<Ingredient>();
+            foreach (var temp in ingredients)
+            {
+                if (temp.Value > 0)
+                {
+                    tempIngredients.Add(temp.Key);
+                }
+            }
+
+            while (count > 0)
+            {
+                int rand = UnityEngine.Random.Range(0, tempIngredients.Count);
+                Ingredient ingredient = tempIngredients[rand];
+
+                if (ingredients[ingredient] > 0)
+                {
+                    ingredients[ingredient]--;
+
+                    if (!resultDict.ContainsKey(ingredient))
+                        resultDict.Add(ingredient, 1);
+                    else
+                        resultDict[ingredient]++;
+
+                    count--;
+                }
+            }
+
+            int rowCount = 0;
+
+            StringBuilder st = new StringBuilder();
+
+            foreach (var temp in resultDict)
+            {
+                if (rowCount < 2)
+                {
+                    st.AppendFormat("<sprite={0}><size=90%>{2}</size> -{1} ", (int)temp.Key + Constant.ingredientSpriteOffset, temp.Value, tm.GetIngredient(temp.Key));
+                    rowCount++;
+                }
+                else
+                {
+                    st.AppendFormat("<sprite={0}><size=90%>{2}</size> -{1}\n", (int)temp.Key + Constant.ingredientSpriteOffset, temp.Value, tm.GetIngredient(temp.Key));
+                    rowCount = 0;
+                }
+            }
+
+            raidDetail_Text.text = st.ToString();
+
+            return true;
+        }
+
+        return false;
+    }
+    public void ShowRaidPanel()
+    {
+        raidObj.SetActive(true);
+
+        raidRect.localScale = 0.01f * Vector3.one;
+        raidRect.DOScale(new Vector3(1f, 1f, 1f), 0.5f).SetEase(Ease.OutElastic).SetUpdate(true);
+
+        UINaviHelper.Instance.SetFirstSelect();
+    }
+    public void HideRaidPanel()
+    {
+        raidObj.SetActive(false);
+        ShowWarningQueue();
     }
     #endregion
 

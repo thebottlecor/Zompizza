@@ -22,9 +22,10 @@ public class ResearchUI : MonoBehaviour
 
         this.idx = idx;
 
-        icon.sprite = DataManager.Instance.researches[idx].icon;
+        var info = DataManager.Instance.researches[idx];
+        icon.sprite = info.icon;
 
-        int roman = DataManager.Instance.researches[idx].romanNum;
+        int roman = info.romanNum;
         if (roman > 0)
         {
             switch (roman)

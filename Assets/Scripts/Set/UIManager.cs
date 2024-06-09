@@ -194,6 +194,12 @@ public class UIManager : Singleton<UIManager>
             return;
         }
 
+        if (GM.Instance.raidObj.activeSelf)
+        {
+            GM.Instance.HideRaidPanel();
+            return;
+        }
+
         if (GM.Instance.gameOverWarningObj.activeSelf)
         {
             GM.Instance.ShowGameOverWarning(false);

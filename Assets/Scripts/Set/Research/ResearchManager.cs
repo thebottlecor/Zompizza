@@ -320,7 +320,8 @@ public class ResearchManager : Singleton<ResearchManager>
 
     public bool ResearchUnlock(int idx)
     {
-        if (CanResearced(idx) && PayCost(idx))
+        // 실제 돈 지불이 들어가는 PayCost는 맨 마지막 조건므로
+        if (CanResearced(idx) && CheckRating(idx) && PayCost(idx))
         {
             globalEffect = ResearchInfo[idx].AddEffect(globalEffect);
             researchedCount[idx]++;
@@ -388,8 +389,22 @@ public class ResearchManager : Singleton<ResearchManager>
     }
     public int GetCost(int idx)
     {
-        var info = ResearchInfo[idx];
-        return info.Cost(researchedCount[idx]);
+        return ResearchInfo[idx].Cost(researchedCount[idx]);
+    }
+    private bool CheckRating(int idx)
+    {
+        float rating = GM.Instance.rating;
+
+        float needRating = GetRating(idx);
+
+        if (needRating > 0f && rating < needRating)
+            return false;
+
+        return true;
+    }
+    public float GetRating(int idx)
+    {
+        return ResearchInfo[idx].Rating(researchedCount[idx]);
     }
     public bool AllResearched()
     {

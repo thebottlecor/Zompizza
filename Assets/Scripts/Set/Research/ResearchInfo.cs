@@ -324,12 +324,20 @@ public class ResearchInfo : ScriptableObject
     public int romanNum; // 중복되는 컨셉의 강화된 연구의 경우, 로마 숫자로 표시 (1부터 II로 표시됨)
 
     //public int height;
-    public int group;
+    public enum ResearchGroup
+    {
+        upgrade = 0,
+        vehicle = 1,
+    }
+
+    public ResearchGroup group;
 
     // 최대 연구 가능 횟수
     public int max = 1;
     public int cost; // 기본 비용
     public float increaseCost; // 연구한 횟수마다 증가하는 비용
+    public float rating; // 필요한 평점 (소비되진 않음)
+    public float increaseRating; // 연구한 횟수마다 증가하는 필요한 평점
     public List<ResearchInfo> needResearch;
 
     public bool hidden; // 비밀 레시피 - 연구되기 전까지 (발견전까지) 공개되지 않음
@@ -348,6 +356,15 @@ public class ResearchInfo : ScriptableObject
 
         if (level >= 1)
             value += (int)(level * increaseCost);
+
+        return value;
+    }
+    public float Rating(int level = 0)
+    {
+        float value = rating;
+
+        if (level >= 1)
+            value += level * increaseRating;
 
         return value;
     }

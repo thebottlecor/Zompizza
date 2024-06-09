@@ -13,6 +13,20 @@ public class OrderManager : Singleton<OrderManager>
 
     public List<OrderInfo> orderList;
 
+    // 호감도 관련, 손님 개별 평점 평균을 위한 정보
+    [Serializable]
+    public struct CustomerInfo
+    {
+        public float totalRating;
+        public int totalOrder;
+
+        public float AverageRating()
+        {
+            return totalOrder > 0 ? totalRating / totalOrder : 0f;
+        }
+    }
+    public SerializableDictionary<int, CustomerInfo> customersInfos;
+
     public PizzaDirection pizzaDirection;
     public OvenMiniGame ovenMiniGame;
     //public MoneyDirection moneyDirection;
@@ -71,12 +85,13 @@ public class OrderManager : Singleton<OrderManager>
             }
         }
 
+        customersInfos = new SerializableDictionary<int, CustomerInfo>();
         for (int i = 0; i < orderGoals.Count; i++)
         {
             orderGoals[i].index = i;
             orderGoals[i].minimapItem.spriteColor = DataManager.Instance.uiLib.customerPinColor[i];
 
-            // orderGoals[i].minimapItem_customer.itemSprite = ?
+            customersInfos.Add(new SerializableDictionary<int, CustomerInfo>.Pair { Key = i, Value = new CustomerInfo() }); 
         }
 
         orderMiniUIPair = new SerializableDictionary<OrderInfo, OrderMiniUI>();
@@ -222,7 +237,7 @@ public class OrderManager : Singleton<OrderManager>
             var info = orderList[i];
             if (info.accepted && !info.stolen)
             {
-                AudioManager.Instance.PlaySFX(Sfx.deny);
+                AudioManager.Instance.PlaySFX(Sfx.santaTake);
                 info.stolen = true;
                 e.StealPizza();
                 GM.Instance.player.HitBlink();
@@ -237,7 +252,7 @@ public class OrderManager : Singleton<OrderManager>
             var info = orderList[i];
             if (info.accepted && info.stolen)
             {
-                AudioManager.Instance.PlaySFX(Sfx.newInfo);
+                AudioManager.Instance.PlaySFX(Sfx.santaReturn);
                 info.stolen = false;
                 return;
             }
@@ -543,6 +558,14 @@ public class OrderManager : Singleton<OrderManager>
         // 티어별 보상 // 2티어면 2배 보상
         rewards = (int)((tier + 1f) * (1f + ResearchManager.Instance.globalEffect.goldGet) * rewards);
 
+        // 호감도에 따른 보너스
+        int friendshipBonus = 0;
+        float averageRating = customersInfos[goal].AverageRating();
+        if (averageRating >= Constant.friendShip3) friendshipBonus = (int)(0.3f * rewards);
+        else if (averageRating >= Constant.friendShip2) friendshipBonus = (int)(0.2f * rewards);
+        else if (averageRating >= Constant.friendShip1) friendshipBonus = (int)(0.1f * rewards);
+        rewards += friendshipBonus;
+
         float timeLimit = (Constant.delivery_timeLimit_1km * km) * (1f + ResearchManager.Instance.globalEffect.customer_timelimit);
 
         OrderInfo newOrder = new OrderInfo
@@ -553,6 +576,7 @@ public class OrderManager : Singleton<OrderManager>
             pizzas = randPizzas,
             km = km,
             rewards = rewards,
+            bouns_friendship = friendshipBonus,
             hp = 1f,
             timeLimit = timeLimit,
             timer = 0f,

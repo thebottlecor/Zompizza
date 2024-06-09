@@ -147,6 +147,10 @@ public class UINaviHelper : Singleton<UINaviHelper>
                             {
                                 current = ingame.explore_first;
                             }
+                            else if (gm.raidObj.activeSelf)
+                            {
+                                current = ingame.raid_first;
+                            }
                             else if (shop.shopCloseWarningObj.activeSelf)
                                 current = ingame.shopCloseWarning_first;
                             else
@@ -164,8 +168,7 @@ public class UINaviHelper : Singleton<UINaviHelper>
                             current = ingame.Shop_Upgrade_Reconnection();
                             break;
                         case 3:
-                            current = ingame.shops_first[3];
-                            ingame.shops_close.ResetConnection();
+                            current = ingame.Shop_Vehicle_Reconnection();
                             break;
                     }
                     uiMoveCheckFunc = Check_Ingame_Shops;

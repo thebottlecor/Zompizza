@@ -84,10 +84,8 @@ public class ShopUI : EventListener
     public TextMeshProUGUI rivalRatingText;
 
     [Header("업그레이드탭")]
-    public TextMeshProUGUI upgradeText;
     public int currentSelectUpgrade;
     public GameObject upgradeUI_Source;
-    public TextMeshProUGUI[] upgradeUI_GroupText;
     public Transform[] upgradeUI_Parent;
     public TextMeshProUGUI upgradeDetailNameText;
     public TextMeshProUGUI upgradeDetailText;
@@ -97,6 +95,11 @@ public class ShopUI : EventListener
     public UpgradeDirection upgradeDirection;
     public SerializableDictionary<ResearchInfo, RectTransform> upgradePositions;
     public List<MaskedUIHelper> maskedUIHelders;
+
+    public TextMeshProUGUI upgradeDetailNameText_Vehicle;
+    public TextMeshProUGUI upgradeDetailText_Vehicle;
+    public Button upgrade_UnlockBtn_Vehicle;
+    public TextMeshProUGUI upgrade_UnlockBtnText_Vehicle;
 
     public void Init()
     {
@@ -112,7 +115,8 @@ public class ShopUI : EventListener
         buttonTexts[0].text = tm.GetCommons("Order");
         buttonTexts[1].text = tm.GetCommons("Management");
         buttonTexts[2].text = tm.GetCommons("Upgrade");
-        buttonTexts[3].text = tm.GetCommons("News");
+        //buttonTexts[3].text = tm.GetCommons("News");
+        buttonTexts[3].text = tm.GetCommons("Vehicle");
 
         //buttonTexts[4].text = tm.GetCommons("Back");
         buttonTexts[4].text = tm.GetCommons("Close");
@@ -127,11 +131,8 @@ public class ShopUI : EventListener
         achievementText.text = tm.GetCommons("Achievement");
         statsText.text = tm.GetCommons("Stats");
 
-        upgradeText.text = tm.GetCommons("Upgrade");
         upgrade_UnlockBtnText.text = tm.GetCommons("Upgrade");
-
-        upgradeUI_GroupText[0].text = tm.GetCommons("Shop");
-        upgradeUI_GroupText[1].text = tm.GetCommons("Vehicle");
+        upgrade_UnlockBtnText_Vehicle.text = tm.GetCommons("Upgrade");
 
         shopCloseBtn_Text.text = tm.GetCommons("ShopClose");
         shopCloseWarning_Text.text = tm.GetCommons("Warning");
@@ -177,6 +178,7 @@ public class ShopUI : EventListener
         if (exploration.canvasGroupLoading) return;
         if (exploration.canvasGroup_resultPanel.alpha >= 0.99f) return;
         if (GM.Instance.gameOverWarningObj.activeSelf) return;
+        if (GM.Instance.raidObj.activeSelf) return;
         if (shopCloseWarningObj.activeSelf) return;
 
         float value = e.ReadValue<float>();
@@ -439,6 +441,9 @@ public class ShopUI : EventListener
                     //SelectUpgrade(-1);
                     SelectUpgrade(GetMainResearch().idx);
                     break;
+                case 3:
+                    SelectUpgrade(GetMainResearch_Vehicle().idx);
+                    break;
             }
 
             shopCloseBtn.gameObject.SetActive(false);
@@ -525,12 +530,17 @@ public class ShopUI : EventListener
 
         var obj = Instantiate(reviewObject_Source, reviewObject_Parent);
         ReviewObject reviewObj = obj.GetComponent<ReviewObject>();
-        reviewObj.Init(day, info.customerIdx, time, hp);
+        float rating = reviewObj.Init(day, info.customerIdx, time, hp);
 
         reviewObjects.Add(reviewObj);
 
         reviewObj.transform.SetAsFirstSibling();
         reviewDayObjects[day].transform.SetAsFirstSibling();
+
+        var cInfo = OrderManager.Instance.customersInfos[info.goal];
+        cInfo.totalOrder++;
+        cInfo.totalRating += rating;
+        OrderManager.Instance.customersInfos[info.goal] = cInfo;
     }
 
     public void OrderTextUpdate()
@@ -572,7 +582,7 @@ public class ShopUI : EventListener
 
         foreach (var temp in infos)
         {
-            var obj = Instantiate(upgradeUI_Source, upgradeUI_Parent[temp.Value.group]);
+            var obj = Instantiate(upgradeUI_Source, upgradeUI_Parent[(int)temp.Value.group]);
             obj.name = infos[temp.Key].name;
             (obj.transform as RectTransform).anchoredPosition = upgradePositions[temp.Value].anchoredPosition;
             (obj.transform as RectTransform).sizeDelta = upgradePositions[temp.Value].sizeDelta;
@@ -605,13 +615,27 @@ public class ShopUI : EventListener
         var infos = DataManager.Instance.researches;
         foreach (var ui in researchUIs)
         {
-            if (infos[ui.Key].main && ui.Value.gameObject.activeSelf)
+            if (infos[ui.Key].main && infos[ui.Key].group == ResearchInfo.ResearchGroup.upgrade && ui.Value.gameObject.activeSelf)
             {
                 first = ui.Value;
                 break;
             }    
         }
         //SelectUpgrade(first.idx);
+        return first;
+    }
+    public ResearchUI GetMainResearch_Vehicle()
+    {
+        ResearchUI first = null;
+        var infos = DataManager.Instance.researches;
+        foreach (var ui in researchUIs)
+        {
+            if (infos[ui.Key].main && infos[ui.Key].group == ResearchInfo.ResearchGroup.vehicle && ui.Value.gameObject.activeSelf)
+            {
+                first = ui.Value;
+                break;
+            }
+        }
         return first;
     }
     public ResearchUI GetCurrentResearchUI()
@@ -626,11 +650,25 @@ public class ShopUI : EventListener
         if (prev != -1)
             researchUIs[prev].UpdateUI();
 
+        var info = DataManager.Instance.researches[idx];
+
+        TextMeshProUGUI nameText = upgradeDetailNameText;
+        TextMeshProUGUI detailText = upgradeDetailText;
+        Button unlockBtn = upgrade_UnlockBtn;
+
+        bool vehicle = info.group == ResearchInfo.ResearchGroup.vehicle;
+        if (vehicle)
+        {
+            nameText = upgradeDetailNameText_Vehicle;
+            detailText = upgradeDetailText_Vehicle;
+            unlockBtn = upgrade_UnlockBtn_Vehicle;
+        }
+
         if (idx == -1)
         {
-            upgradeDetailNameText.text = string.Empty;
-            upgradeDetailText.text = string.Empty;
-            upgrade_UnlockBtn.gameObject.SetActive(false);
+            nameText.text = string.Empty;
+            detailText.text = string.Empty;
+            unlockBtn.gameObject.SetActive(false);
             return;
         }
 
@@ -638,18 +676,58 @@ public class ShopUI : EventListener
 
         bool canResearch = !rm.MaxResearched(idx);
 
-        var info = DataManager.Instance.researches[idx];
-
         StringBuilder st2 = new StringBuilder();
+        if (info.hidden)
+            st2.Append("<color=#320D5C>");
         if (info.max > 1)
             st2.AppendFormat("<b>{0}</b> ({1}/{2})", tm.GetResearch(idx), rm.GetResearchCount(idx), info.max);
         else
             st2.AppendFormat("<b>{0}</b>", tm.GetResearch(idx));
-        upgradeDetailNameText.text = st2.ToString();
+        if (info.hidden)
+            st2.Append("</color>");
+        nameText.text = st2.ToString();
 
         StringBuilder st = new StringBuilder();
+        if (!info.hidden && !vehicle)
+        {
+            switch (info.tier)
+            {
+                case 1:
+                    st.Append("<color=#950F14>");
+                    st.AppendFormat(tm.GetCommons("Tier2"), info.tier + 1);
+                    break;
+                case 2:
+                    st.Append("<color=#2E0E07>");
+                    st.AppendFormat(tm.GetCommons("Tier2"), info.tier + 1);
+                    break;
+                case 3:
+                    //st.Append("<color=#140A06>");
+                    st.Append("<color=#1A3141>");
+                    st.AppendFormat(tm.GetCommons("Tier2"), info.tier + 1);
+                    break;
+                case 4:
+                    st.Append("<color=#573100>");
+                    st.AppendFormat(tm.GetCommons("Tier2"), info.tier + 1);
+                    break;
+                default:
+                    st.Append("<color=#092214>");
+                    st.AppendFormat(tm.GetCommons("Tier2"), info.tier + 1);
+                    break;
+            }
+            st.Append("</color>");
+            st.AppendLine();
+        }
         if (canResearch)
+        {
+            float rating = rm.GetRating(idx);
+            if (rating > 0)
+            {
+                st.AppendFormat(tm.GetCommons("RatingNeed"), "<sprite=1>", rating);
+                st.AppendLine();
+            }
+
             st.AppendFormat("{0} : {1}$", tm.GetCommons("Costs"), rm.GetCost(idx));
+        }
         st.AppendLine();
         st.AppendLine();
         st.AppendFormat("<b>{0}</b>", tm.GetCommons("Effect"));
@@ -685,9 +763,9 @@ public class ShopUI : EventListener
         info.effect.ShowdamageReduce(st);
         info.effect.Showacceleration(st);
 
-        upgradeDetailText.text = st.ToString();
+        detailText.text = st.ToString();
 
-        upgrade_UnlockBtn.gameObject.SetActive(canResearch);
+        unlockBtn.gameObject.SetActive(canResearch);
         //upgrade_UnlockBtn.enabled = canResearch;
 
         UINaviHelper.Instance.SetFirstSelect();

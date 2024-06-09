@@ -17,7 +17,7 @@ public class ReviewObject : Review
     private float timeRating; // -5 ~ 5 사이
     private float hpRating; // -5 ~ 5 사이
 
-    public void Init(int day, int idx, float time, float hp)
+    public float Init(int day, int idx, float time, float hp)
     {
         this.day = day;
         customerIdx = idx;
@@ -126,6 +126,8 @@ public class ReviewObject : Review
         }
 
         context.text = st.ToString();
+
+        return rating;
     }
 
 }

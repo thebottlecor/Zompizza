@@ -197,4 +197,7 @@ public enum Sfx
     carStart,
     pizzaSpin,
     pizzaComplete,
+    santaTake,
+    santaReturn,
+    visionRecipeFound,
 }

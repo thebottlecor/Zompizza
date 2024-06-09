@@ -20,6 +20,8 @@ MonoBehaviour:
   max: 1
   cost: 4000
   increaseCost: 4000
+  rating: 20
+  increaseRating: 0
   needResearch: []
   hidden: 0
   invalid: 0
