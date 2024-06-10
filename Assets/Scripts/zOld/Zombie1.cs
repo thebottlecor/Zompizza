@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using MoreMountains.Feedbacks;
 using Pathfinding;
 using System;
 
@@ -11,7 +10,6 @@ public class Zombie1 : MonoBehaviour
 
     protected Rigidbody rigid;
 
-    protected MMFeedbacks hitFeedback;
     [SerializeField] protected Collider coll;
     [SerializeField] protected Animator animator;
 
@@ -27,7 +25,6 @@ public class Zombie1 : MonoBehaviour
     void Start()
     {
         rigid = GetComponent<Rigidbody>();
-        hitFeedback = GetComponent<MMFeedbacks>();
 
         ai = GetComponent<IAstarAI>();
         ai.canSearch = false;

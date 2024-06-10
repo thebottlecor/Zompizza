@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using MoreMountains.Feedbacks;
 
 public class Zombie : MonoBehaviour
 {
@@ -10,7 +9,6 @@ public class Zombie : MonoBehaviour
     protected NavMeshAgent navMeshAgent;
     protected Rigidbody rigid;
 
-    protected MMFeedbacks hitFeedback;
     [SerializeField] protected Collider coll;
     [SerializeField] protected Animator animator;
 
@@ -23,7 +21,6 @@ public class Zombie : MonoBehaviour
     {
         rigid = GetComponent<Rigidbody>();
         navMeshAgent = GetComponent<NavMeshAgent>();
-        hitFeedback = GetComponent<MMFeedbacks>();
     }
 
     void Update()
