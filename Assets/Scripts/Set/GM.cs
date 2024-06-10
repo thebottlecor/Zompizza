@@ -109,6 +109,8 @@ public class GM : Singleton<GM>
     public TextMeshProUGUI gameOverWarningBtn_Text;
     public TextMeshProUGUI gameOverWarning_Text;
     public TextMeshProUGUI gameOverWarningDetail_Text;
+    // 패배 트리거
+    public bool warning_gameOver;
 
     [Header("습격받은 결과")]
     public GameObject raidObj;
@@ -120,8 +122,13 @@ public class GM : Singleton<GM>
 
     public Queue<int> warningQueue;
 
-    // 패배 트리거
-    public bool warning_gameOver;
+    [Header("차량 변경")]
+    public int currentVehicle;
+    public PlayerControllerData[] controllerData;
+    public bool[] unlockedVehicles;
+    public int[] costVehicles;
+
+    [Space(10f)]
 
     public static EventHandler<bool> EndTimeEvent; // true일시 마감
     private TextManager tm => TextManager.Instance;
@@ -179,6 +186,8 @@ public class GM : Singleton<GM>
 
         tenDays_RaidRecords = new List<int>();
 
+        unlockedVehicles = new bool[controllerData.Length];
+
         TextUpdate();
 
         day = 0;
@@ -188,6 +197,8 @@ public class GM : Singleton<GM>
         UIManager.Instance.shopUI.Init();
         TutorialManager.Instance.Init();
         OrderManager.Instance.Init();
+
+        InitPlayer();
     }
 
     public void TextUpdate()
@@ -731,8 +742,8 @@ public class GM : Singleton<GM>
     {
         int hasRes = HasIngredient;
 
-        // 가진 자원수가 60 넘을 때, 50% 확률로 습격 발생, 습격 관련 업그레이드에 따라서 30%~0% 만큼 자원을 빼앗김
-        if (hasRes > 60 && UnityEngine.Random.Range(0, 2) == 1)
+        // 가진 자원수가 30 넘을 때, 50% 확률로 습격 발생, 습격 관련 업그레이드에 따라서 30%~0% 만큼 자원을 빼앗김, 2 티어부터 발생
+        if (hasRes > 30 && ResearchManager.Instance.globalEffect.tier >= 1 && UnityEngine.Random.Range(0, 2) == 1)
         {
             float percent = 0.3f;
             switch (ResearchManager.Instance.globalEffect.raidDefense)
@@ -822,4 +833,37 @@ public class GM : Singleton<GM>
     }
     #endregion
 
+    #region 차량 변경
+    public void InitPlayer()
+    {
+        currentVehicle = 0;
+        controllerData[0].SetData(player);
+        unlockedVehicles[0] = true;
+    }
+
+    public void ChangeVehicle(int idx)
+    {
+        if (currentVehicle >= 0)
+            controllerData[currentVehicle].gameObject.SetActive(false);
+        currentVehicle = idx;
+        controllerData[idx].SetData(player);
+    }
+    
+    public bool BuyVehicle(int idx)
+    {
+        if (!unlockedVehicles[idx] && gold >= costVehicles[idx])
+        {
+            // 성공 연출
+            AudioManager.Instance.PlaySFX(Sfx.complete);
+            AddGold(-1 * costVehicles[idx], GetGoldSource.upgrade);
+            unlockedVehicles[idx] = true;
+            return true;
+        }
+        else
+        {
+            AudioManager.Instance.PlaySFX(Sfx.deny);
+            return false;
+        }
+    }
+    #endregion
 }

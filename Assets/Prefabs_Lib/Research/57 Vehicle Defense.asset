@@ -17,9 +17,9 @@ MonoBehaviour:
   tier: 0
   romanNum: 0
   group: 1
-  max: 10
-  cost: 4000
-  increaseCost: 4000
+  max: 4
+  cost: 2000
+  increaseCost: 2000
   rating: 0
   increaseRating: 0
   needResearch: []

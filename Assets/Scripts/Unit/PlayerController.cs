@@ -17,131 +17,38 @@ using UnityEngine.UI;
 using DG.Tweening;
 using UnityEngine.InputSystem;
 
-public class PlayerController : EventListener
+public class PlayerController : PlayerControllerData
 {
-    //CAR SETUP
 
-    [Space(20)]
-    //[Header("CAR SETUP")]
-    [Space(10)]
-    [Range(20, 190)]
-    public int maxSpeed = 90; //The maximum speed that the car can reach in km/h.
-    public int MaxSpeed => ResearchManager.Instance.globalEffect.maxSpeed + maxSpeed;
-    public float DamageReduction => 1f - ResearchManager.Instance.globalEffect.damageReduce;
-
-    [Range(10, 120)]
-    public int maxReverseSpeed = 45; //The maximum speed that the car can reach while going on reverse in km/h.
-
-    [Range(1, 20)]
-    public int accelerationMultiplier = 2; // How fast the car can accelerate. 1 is a slow acceleration and 10 is the fastest.
-    public float Accel => (ResearchManager.Instance.globalEffect.acceleration + 1f) * 50f * accelerationMultiplier;
-    [Space(10)]
-    [Range(10, 45)]
-    public int maxSteeringAngle = 27; // The maximum angle that the tires can reach while rotating the steering wheel.
-    [Range(0.1f, 1f)]
-    public float steeringSpeed = 0.5f; // How fast the steering wheel turns.
-    [Space(10)]
-    [Range(100, 600)]
-    public int brakeForce = 350; // The strength of the wheel brakes.
-    [Range(1, 10)]
-    public int decelerationMultiplier = 2; // How fast the car decelerates when the user is not using the throttle.
-    [Range(1, 10)]
-    public int handbrakeDriftMultiplier = 5; // How much grip the car loses when the user hit the handbrake.
-    [Space(10)]
-    public Vector3 bodyMassCenter; // This is a vector that contains the center of mass of the car. I recommend to set this value
-                                   // in the points x = 0 and z = 0 of your car. You can select the value that you want in the y axis,
-                                   // however, you must notice that the higher this value is, the more unstable the car becomes.
-                                   // Usually the y value goes from 0 to 1.5.
-
-    //WHEELS
-
-    //[Header("WHEELS")]
-
-    /*
-    The following variables are used to store the wheels' data of the car. We need both the mesh-only game objects and wheel
-    collider components of the wheels. The wheel collider components and 3D meshes of the wheels cannot come from the same
-    game object; they must be separate game objects.
-    */
-    public GameObject frontLeftMesh;
-    public WheelCollider frontLeftCollider;
-    [Space(10)]
-    public GameObject frontRightMesh;
-    public WheelCollider frontRightCollider;
-    [Space(10)]
-    public GameObject rearLeftMesh;
-    public WheelCollider rearLeftCollider;
-    [Space(10)]
-    public GameObject rearRightMesh;
-    public WheelCollider rearRightCollider;
+    protected float initialCarEngineSoundPitch; // Used to store the initial pitch of the car engine sound.
 
     //PARTICLE SYSTEMS
-
     [Space(20)]
-    //[Header("EFFECTS")]
-    [Space(10)]
-    //The following variable lets you to set up particle systems in your car
-    public bool useEffects = false;
-
     // The following particle systems are used as tire smoke when the car drifts.
     public ParticleSystem RLWParticleSystem;
     public ParticleSystem RRWParticleSystem;
-
     [Space(10)]
     // The following trail renderers are used as tire skids when the car loses traction.
     public TrailRenderer RLWTireSkid;
     public TrailRenderer RRWTireSkid;
 
-    [Space(20)]
-    //[Header("Sounds")]
-    [Space(10)]
-    public AudioSource carEngineSound; // This variable stores the sound of the car engine.
-    public AudioSource tireScreechSound; // This variable stores the sound of the tire screech (when the car is drifting).
-    public AudioSource backupSound; // 후진 사운드
-    float initialCarEngineSoundPitch; // Used to store the initial pitch of the car engine sound.
-
-    //CONTROLS
-
-    [Space(20)]
-    //[Header("CONTROLS")]
-    [Space(10)]
-    //The following variables lets you to set up touch controls for mobile devices.
-    public bool useTouchControls = false;
-    public GameObject throttleButton;
-    PrometeoTouchInput throttlePTI;
-    public GameObject reverseButton;
-    PrometeoTouchInput reversePTI;
-    public GameObject turnRightButton;
-    PrometeoTouchInput turnRightPTI;
-    public GameObject turnLeftButton;
-    PrometeoTouchInput turnLeftPTI;
-    public GameObject handbrakeButton;
-    PrometeoTouchInput handbrakePTI;
-
     //CAR DATA
-
-    [HideInInspector]
-    public float carSpeed; // Used to store the speed of the car.
-    [HideInInspector]
-    public bool isDrifting; // Used to know whether the car is drifting or not.
-    [HideInInspector]
-    public bool isTractionLocked; // Used to know whether the traction of the car is locked or not.
-    [HideInInspector]
-    public bool isGoBack; // 후진중?
+    [HideInInspector] public float carSpeed; // Used to store the speed of the car.
+    [HideInInspector] public bool isDrifting; // Used to know whether the car is drifting or not.
+    [HideInInspector] public bool isTractionLocked; // Used to know whether the traction of the car is locked or not.
+    [HideInInspector] public bool isGoBack; // 후진중?
 
     //PRIVATE VARIABLES
-
     /*
     IMPORTANT: The following variables should not be modified manually since their values are automatically given via script.
     */
     Rigidbody carRigidbody; // Stores the car's rigidbody.
-    public CapsuleCollider coll;
     float steeringAxis; // Used to know whether the steering wheel has reached the maximum value. It goes from -1 to 1.
     float throttleAxis; // Used to know whether the throttle has reached the maximum value. It goes from -1 to 1.
     float driftingAxis;
     float localVelocityZ;
     public float localVelocityX { get; private set; }
     bool deceleratingCar;
-    bool touchControlsSetup = false;
     /*
     The following variables are used to store information about sideways friction of the wheels (such as
     extremumSlip,extremumValue, asymptoteSlip, asymptoteValue and stiffness). We change this values to
@@ -163,43 +70,104 @@ public class PlayerController : EventListener
     private float beforeCollisionSpeed;
     private bool isCollision;
 
-    public MeshRenderer[] meshRenderers;
-    private Coroutine hitCoroutine;
-
-    public GameObject[] pizzaBoxes;
-
     public CameraFollow2 cam;
-
-    public void HitBlink()
-    {
-        if (hitCoroutine != null)
-            StopCoroutine(hitCoroutine);
-        hitCoroutine = StartCoroutine(HitBlinkSequence());
-    }
-    private IEnumerator HitBlinkSequence()
-    {
-        for (int i = 0; i < meshRenderers.Length; i++)
-        {
-            meshRenderers[i].material = DataManager.Instance.materialLib.hitMaterial;
-        }
-        yield return CoroutineHelper.WaitForSeconds(0.1f);
-        for (int i = 0; i < meshRenderers.Length; i++)
-        {
-            meshRenderers[i].material = DataManager.Instance.materialLib.baseMaterial;
-        }
-        hitCoroutine = null;
-    }
-
-    private SerializableDictionary<KeyMap, KeyMapping> HotKey => SettingManager.Instance.keyMappings;
 
     public static EventHandler<float> DamageEvent;
 
+    private Coroutine hitCoroutine;
     private Coroutine soundCoroutine;
     private Coroutine decelerateCoroutine;
     private Coroutine recoverTractionCoroutine;
     private Coroutine iceCoroutine;
 
     public float dirftContactBlockTimer; // 드리프트로 좀비들 떨쳐낸 후 몇초간 좀비 붙기 면역
+
+    private void Start()
+    {
+        carRigidbody = gameObject.GetComponent<Rigidbody>();
+    }
+
+    public void SetTierPhysics()
+    {
+        if (decelerateCoroutine != null)
+        {
+            StopCoroutine(decelerateCoroutine);
+            decelerateCoroutine = null;
+        }
+        if (recoverTractionCoroutine != null)
+        {
+            StopCoroutine(recoverTractionCoroutine);
+            recoverTractionCoroutine = null;
+        }
+        if (iceCoroutine != null)
+        {
+            StopCoroutine(iceCoroutine);
+            iceCoroutine = null;
+        }
+
+        //In this part, we set the 'carRigidbody' value with the Rigidbody attached to this
+        //gameObject. Also, we define the center of mass of the car with the Vector3 given
+        //in the inspector.
+        carRigidbody.centerOfMass = bodyMassCenter;
+
+        //Initial setup to calculate the drift value of the car. This part could look a bit
+        //complicated, but do not be afraid, the only thing we're doing here is to save the default
+        //friction values of the car wheels so we can set an appropiate drifting value later.
+        FLwheelFriction = new WheelFrictionCurve();
+        FLwheelFriction.extremumSlip = frontLeftCollider.sidewaysFriction.extremumSlip;
+        FLWextremumSlip = frontLeftCollider.sidewaysFriction.extremumSlip;
+        FLwheelFriction.extremumValue = frontLeftCollider.sidewaysFriction.extremumValue;
+        FLwheelFriction.asymptoteSlip = frontLeftCollider.sidewaysFriction.asymptoteSlip;
+        FLwheelFriction.asymptoteValue = frontLeftCollider.sidewaysFriction.asymptoteValue;
+        FLwheelFriction.stiffness = frontLeftCollider.sidewaysFriction.stiffness;
+        FRwheelFriction = new WheelFrictionCurve();
+        FRwheelFriction.extremumSlip = frontRightCollider.sidewaysFriction.extremumSlip;
+        FRWextremumSlip = frontRightCollider.sidewaysFriction.extremumSlip;
+        FRwheelFriction.extremumValue = frontRightCollider.sidewaysFriction.extremumValue;
+        FRwheelFriction.asymptoteSlip = frontRightCollider.sidewaysFriction.asymptoteSlip;
+        FRwheelFriction.asymptoteValue = frontRightCollider.sidewaysFriction.asymptoteValue;
+        FRwheelFriction.stiffness = frontRightCollider.sidewaysFriction.stiffness;
+        RLwheelFriction = new WheelFrictionCurve();
+        RLwheelFriction.extremumSlip = rearLeftCollider.sidewaysFriction.extremumSlip;
+        RLWextremumSlip = rearLeftCollider.sidewaysFriction.extremumSlip;
+        RLwheelFriction.extremumValue = rearLeftCollider.sidewaysFriction.extremumValue;
+        RLwheelFriction.asymptoteSlip = rearLeftCollider.sidewaysFriction.asymptoteSlip;
+        RLwheelFriction.asymptoteValue = rearLeftCollider.sidewaysFriction.asymptoteValue;
+        RLwheelFriction.stiffness = rearLeftCollider.sidewaysFriction.stiffness;
+        RRwheelFriction = new WheelFrictionCurve();
+        RRwheelFriction.extremumSlip = rearRightCollider.sidewaysFriction.extremumSlip;
+        RRWextremumSlip = rearRightCollider.sidewaysFriction.extremumSlip;
+        RRwheelFriction.extremumValue = rearRightCollider.sidewaysFriction.extremumValue;
+        RRwheelFriction.asymptoteSlip = rearRightCollider.sidewaysFriction.asymptoteSlip;
+        RRwheelFriction.asymptoteValue = rearRightCollider.sidewaysFriction.asymptoteValue;
+        RRwheelFriction.stiffness = rearRightCollider.sidewaysFriction.stiffness;
+    }
+    public void SetSound()
+    {
+        if (carEngineSound != null)
+        {
+            initialCarEngineSoundPitch = carEngineSound.pitch;
+        }
+        if (soundCoroutine != null)
+        {
+            StopCoroutine(soundCoroutine);
+        }
+        soundCoroutine = StartCoroutine(CarSounds());
+    }
+    public void SetEtc()
+    {
+        ShakeOffAllZombies();
+
+        if (hitCoroutine != null)
+            StopCoroutine(hitCoroutine);
+
+        for (int i = 0; i < meshRenderers.Length; i++)
+        {
+            meshRenderers[i].material = DataManager.Instance.materialLib.baseMaterial;
+        }
+
+        UpdateBox(OrderManager.Instance.GetCurrentPizzaBox());
+    }
 
     void OnCollisionEnter(Collision collision)
     {
@@ -276,6 +244,8 @@ public class PlayerController : EventListener
             //}
         }
     }
+
+    // 빙판
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == 12) // 빙판
@@ -315,6 +285,25 @@ public class PlayerController : EventListener
 
         iceCoroutine = null;
     }
+    public void HitBlink()
+    {
+        if (hitCoroutine != null)
+            StopCoroutine(hitCoroutine);
+        hitCoroutine = StartCoroutine(HitBlinkSequence(meshRenderers));
+    }
+    private IEnumerator HitBlinkSequence(MeshRenderer[] meshes)
+    {
+        for (int i = 0; i < meshes.Length; i++)
+        {
+            meshes[i].material = DataManager.Instance.materialLib.hitMaterial;
+        }
+        yield return CoroutineHelper.WaitForSeconds(0.1f);
+        for (int i = 0; i < meshes.Length; i++)
+        {
+            meshes[i].material = DataManager.Instance.materialLib.baseMaterial;
+        }
+        hitCoroutine = null;
+    }
 
     public void UpdateBox(int box)
     {
@@ -322,7 +311,8 @@ public class PlayerController : EventListener
         {
             pizzaBoxes[i].SetActive(false);
         }
-        for (int i = 0; i < box; i++)
+        int max = Mathf.Min(box, pizzaBoxes.Length);
+        for (int i = 0; i < max; i++)
         {
             pizzaBoxes[i].SetActive(true);
         }
@@ -355,94 +345,6 @@ public class PlayerController : EventListener
         frontRightCollider.brakeTorque = Mathf.Infinity;
         rearLeftCollider.brakeTorque = Mathf.Infinity;
         rearRightCollider.brakeTorque = Mathf.Infinity;
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        //In this part, we set the 'carRigidbody' value with the Rigidbody attached to this
-        //gameObject. Also, we define the center of mass of the car with the Vector3 given
-        //in the inspector.
-        carRigidbody = gameObject.GetComponent<Rigidbody>();
-        carRigidbody.centerOfMass = bodyMassCenter;
-
-        //Initial setup to calculate the drift value of the car. This part could look a bit
-        //complicated, but do not be afraid, the only thing we're doing here is to save the default
-        //friction values of the car wheels so we can set an appropiate drifting value later.
-        FLwheelFriction = new WheelFrictionCurve();
-        FLwheelFriction.extremumSlip = frontLeftCollider.sidewaysFriction.extremumSlip;
-        FLWextremumSlip = frontLeftCollider.sidewaysFriction.extremumSlip;
-        FLwheelFriction.extremumValue = frontLeftCollider.sidewaysFriction.extremumValue;
-        FLwheelFriction.asymptoteSlip = frontLeftCollider.sidewaysFriction.asymptoteSlip;
-        FLwheelFriction.asymptoteValue = frontLeftCollider.sidewaysFriction.asymptoteValue;
-        FLwheelFriction.stiffness = frontLeftCollider.sidewaysFriction.stiffness;
-        FRwheelFriction = new WheelFrictionCurve();
-        FRwheelFriction.extremumSlip = frontRightCollider.sidewaysFriction.extremumSlip;
-        FRWextremumSlip = frontRightCollider.sidewaysFriction.extremumSlip;
-        FRwheelFriction.extremumValue = frontRightCollider.sidewaysFriction.extremumValue;
-        FRwheelFriction.asymptoteSlip = frontRightCollider.sidewaysFriction.asymptoteSlip;
-        FRwheelFriction.asymptoteValue = frontRightCollider.sidewaysFriction.asymptoteValue;
-        FRwheelFriction.stiffness = frontRightCollider.sidewaysFriction.stiffness;
-        RLwheelFriction = new WheelFrictionCurve();
-        RLwheelFriction.extremumSlip = rearLeftCollider.sidewaysFriction.extremumSlip;
-        RLWextremumSlip = rearLeftCollider.sidewaysFriction.extremumSlip;
-        RLwheelFriction.extremumValue = rearLeftCollider.sidewaysFriction.extremumValue;
-        RLwheelFriction.asymptoteSlip = rearLeftCollider.sidewaysFriction.asymptoteSlip;
-        RLwheelFriction.asymptoteValue = rearLeftCollider.sidewaysFriction.asymptoteValue;
-        RLwheelFriction.stiffness = rearLeftCollider.sidewaysFriction.stiffness;
-        RRwheelFriction = new WheelFrictionCurve();
-        RRwheelFriction.extremumSlip = rearRightCollider.sidewaysFriction.extremumSlip;
-        RRWextremumSlip = rearRightCollider.sidewaysFriction.extremumSlip;
-        RRwheelFriction.extremumValue = rearRightCollider.sidewaysFriction.extremumValue;
-        RRwheelFriction.asymptoteSlip = rearRightCollider.sidewaysFriction.asymptoteSlip;
-        RRwheelFriction.asymptoteValue = rearRightCollider.sidewaysFriction.asymptoteValue;
-        RRwheelFriction.stiffness = rearRightCollider.sidewaysFriction.stiffness;
-
-        // We save the initial pitch of the car engine sound.
-        if (carEngineSound != null)
-        {
-            initialCarEngineSoundPitch = carEngineSound.pitch;
-        }
-
-        // the speed of the car and CarSounds() controls the engine and drifting sounds. Both methods are invoked
-        // in 0 seconds, and repeatedly called every 0.1 seconds.
-        // 사운드
-        soundCoroutine = StartCoroutine(CarSounds());
-
-        if (!useEffects)
-        {
-            if (RLWParticleSystem != null)
-            {
-                RLWParticleSystem.Stop();
-            }
-            if (RRWParticleSystem != null)
-            {
-                RRWParticleSystem.Stop();
-            }
-            if (RLWTireSkid != null)
-            {
-                RLWTireSkid.emitting = false;
-            }
-            if (RRWTireSkid != null)
-            {
-                RRWTireSkid.emitting = false;
-            }
-        }
-
-        if (useTouchControls)
-        {
-            if (throttleButton != null && reverseButton != null && turnRightButton != null && turnLeftButton != null && handbrakeButton != null)
-            {
-
-                throttlePTI = throttleButton.GetComponent<PrometeoTouchInput>();
-                reversePTI = reverseButton.GetComponent<PrometeoTouchInput>();
-                turnLeftPTI = turnLeftButton.GetComponent<PrometeoTouchInput>();
-                turnRightPTI = turnRightButton.GetComponent<PrometeoTouchInput>();
-                handbrakePTI = handbrakeButton.GetComponent<PrometeoTouchInput>();
-                touchControlsSetup = true;
-
-            }
-        }
     }
 
 
@@ -492,7 +394,7 @@ public class PlayerController : EventListener
         upBreak = !pressBreak;
     }
 
-    // Update is called once per frame
+
     void Update()
     {
         //CAR DATA
@@ -547,56 +449,7 @@ public class PlayerController : EventListener
         In this part of the code we specify what the car needs to do if the user presses W (throttle), S (reverse),
         A (turn left), D (turn right) or Space bar (handbrake).
         */
-        if (useTouchControls && touchControlsSetup)
-        {
-            if (throttlePTI.buttonPressed)
-            {
-                StopDecelerateCoroutine();
-                deceleratingCar = false;
-                GoForward();
-            }
-            if (reversePTI.buttonPressed)
-            {
-                StopDecelerateCoroutine();
-                deceleratingCar = false;
-                GoReverse();
-            }
 
-            if (turnLeftPTI.buttonPressed)
-            {
-                TurnLeft();
-            }
-            if (turnRightPTI.buttonPressed)
-            {
-                TurnRight();
-            }
-            if (handbrakePTI.buttonPressed)
-            {
-                StopDecelerateCoroutine();
-                deceleratingCar = false;
-                Handbrake();
-            }
-            if (!handbrakePTI.buttonPressed)
-            {
-                if (recoverTractionCoroutine == null)
-                    recoverTractionCoroutine = StartCoroutine(RecoverTraction());
-            }
-            if ((!throttlePTI.buttonPressed && !reversePTI.buttonPressed))
-            {
-                ThrottleOff();
-            }
-            if ((!reversePTI.buttonPressed && !throttlePTI.buttonPressed) && !handbrakePTI.buttonPressed && !deceleratingCar)
-            {
-                if (decelerateCoroutine == null)
-                    decelerateCoroutine = StartCoroutine(DecelerateCar());
-                deceleratingCar = true;
-            }
-            if (!turnLeftPTI.buttonPressed && !turnRightPTI.buttonPressed && steeringAxis != 0f)
-            {
-                ResetSteeringAngle();
-            }
-        }
-        else
         {
             //bool forward = HotKey[KeyMap.carForward].Getkey();
             //bool backward = HotKey[KeyMap.carBackward].Getkey();
@@ -1053,47 +906,29 @@ public class PlayerController : EventListener
 
     // This function is used to emit both the particle systems of the tires' smoke and the trail renderers of the tire skids
     // depending on the value of the bool variables 'isDrifting' and 'isTractionLocked'.
-    public void DriftCarPS(){
-
-      if(useEffects){
-        try{
-          if(isDrifting){
+    public void DriftCarPS()
+    {
+        if (isDrifting)
+        {
             RLWParticleSystem.Play();
             RRWParticleSystem.Play();
-          }else if(!isDrifting){
+        }
+        else if (!isDrifting)
+        {
             RLWParticleSystem.Stop();
             RRWParticleSystem.Stop();
-          }
-        }catch(Exception ex){
-          Debug.LogWarning(ex);
         }
 
-        try{
-          if((isTractionLocked || Mathf.Abs(localVelocityX) > 5f) && Mathf.Abs(carSpeed) > 12f){
+        if ((isTractionLocked || Mathf.Abs(localVelocityX) > 5f) && Mathf.Abs(carSpeed) > 12f)
+        {
             RLWTireSkid.emitting = true;
             RRWTireSkid.emitting = true;
-          }else {
+        }
+        else
+        {
             RLWTireSkid.emitting = false;
             RRWTireSkid.emitting = false;
-          }
-        }catch(Exception ex){
-          Debug.LogWarning(ex);
         }
-      }else if(!useEffects){
-        if(RLWParticleSystem != null){
-          RLWParticleSystem.Stop();
-        }
-        if(RRWParticleSystem != null){
-          RRWParticleSystem.Stop();
-        }
-        if(RLWTireSkid != null){
-          RLWTireSkid.emitting = false;
-        }
-        if(RRWTireSkid != null){
-          RRWTireSkid.emitting = false;
-        }
-      }
-
     }
 
     // This function is used to recover the traction of the car when the user has stopped using the car's handbrake.

@@ -19,7 +19,7 @@ public class UINaviHelper_Ingame : MonoBehaviour
     public UINavi[] shops_orders_explores;
     public UINavi[] shops_managements;
     public UINavi[] shops_upgrades;
-    public UINavi[] shops_vehicles;
+    public List<UINavi> shops_vehicles;
     public UINavi shops_closeStore; // 영업 종료전 직접 닫는 버튼
     public UINavi shops_close;
 
@@ -271,30 +271,57 @@ public class UINaviHelper_Ingame : MonoBehaviour
         }
         return first;
     }
+
     public UINavi Shop_Vehicle_Reconnection()
     {
-        var ui = UIManager.Instance.shopUI.GetCurrentResearchUI();
-        return Shop_VehicleSelect(ui);
+        return Shop_VehicleSelect();
     }
-    private UINavi Shop_VehicleSelect(ResearchUI research)
+    private UINavi Shop_VehicleSelect()
     {
-        UINavi first = research.GetComponent<UINavi>();
+        UINavi first = shops_vehicles[4];
 
         first.ResetConnection();
-        first.down = shops_close;
+        first.down = shops_vehicles[2];
+        first.right = shops_vehicles[5];
+
+        shops_vehicles[5].ResetConnection();
+        shops_vehicles[5].down = shops_vehicles[1];
+        shops_vehicles[5].left = first;
 
         shops_vehicles[0].ResetConnection();
+        shops_vehicles[0].up = first;
         shops_vehicles[0].down = shops_close;
         shops_vehicles[0].right = first;
-        shops_vehicles[0].left = first;
+        shops_vehicles[0].left = shops_vehicles[5];
+
+        shops_vehicles[1].ResetConnection();
+        shops_vehicles[1].up = first;
+        shops_vehicles[1].left = shops_vehicles[2];
+        shops_vehicles[1].down = shops_vehicles[3];
+
+        shops_vehicles[2].ResetConnection();
+        shops_vehicles[2].up = shops_vehicles[5];
+        shops_vehicles[2].right = shops_vehicles[1];
+        shops_vehicles[2].down = shops_vehicles[3];
+
+        shops_vehicles[3].ResetConnection();
+        shops_vehicles[3].up = shops_vehicles[2];
+        shops_vehicles[3].left = shops_vehicles[2];
+        shops_vehicles[3].right = shops_vehicles[1];
+        shops_vehicles[3].down = shops_close;
 
         shops_close.ResetConnection();
-        shops_close.up = first;
+        shops_close.up = shops_vehicles[3];
+        shops_close.down = first;
 
-        if (shops_vehicles[0].gameObject.activeSelf)
+        if (shops_vehicles[0].gameObject.activeSelf && shops_vehicles[0].gameObject.activeInHierarchy)
         {
             first.left = shops_vehicles[0];
-            first.right = shops_vehicles[0];
+            shops_vehicles[5].right = shops_vehicles[0];
+
+            shops_vehicles[2].left = shops_vehicles[0];
+            shops_vehicles[1].right = shops_vehicles[0];
+
             shops_close.left = shops_vehicles[0];
             shops_close.right = shops_vehicles[0];
         }

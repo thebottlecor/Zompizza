@@ -847,10 +847,6 @@ private void KeyInit_SetOrder()
         SaveManager.Instance.SaveConfig();
         resolutionDropdown.RefreshShownValue();
 
-        if (ResolutionChangedEvent != null)
-            ResolutionChangedEvent(null, null);
-
-
         float ratio = (float)settingResolution.y / settingResolution.x;
         float modify = (ratio > 0.5625f) ? 0f : 1f;
 
@@ -859,6 +855,9 @@ private void KeyInit_SetOrder()
         {
             canvasScaler[i].matchWidthOrHeight = modify;
         }
+
+        if (ResolutionChangedEvent != null)
+            ResolutionChangedEvent(null, null);
     }
 
     public void SetFramerate(int idx)

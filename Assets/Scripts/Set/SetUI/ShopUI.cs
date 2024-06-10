@@ -96,10 +96,23 @@ public class ShopUI : EventListener
     public SerializableDictionary<ResearchInfo, RectTransform> upgradePositions;
     public List<MaskedUIHelper> maskedUIHelders;
 
+    [Header("차량탭")]
+    public GameObject upgradePanel_Vehicle;
     public TextMeshProUGUI upgradeDetailNameText_Vehicle;
     public TextMeshProUGUI upgradeDetailText_Vehicle;
     public Button upgrade_UnlockBtn_Vehicle;
     public TextMeshProUGUI upgrade_UnlockBtnText_Vehicle;
+
+    public GameObject infoPanel_Vehicle;
+    public int currentViewVehicle;
+    public TextMeshProUGUI ownedVehiclesText;
+    public Button selectVehicleBtn;
+    private int selectVehicleBtnMode;
+    public TextMeshProUGUI selectVehicleBtnText;
+    public Vehicle3DShowcase vehicleShowcase;
+
+    public TextMeshProUGUI vehicleInfo_NameText;
+    public TextMeshProUGUI vehicleInfo_DetailText;
 
     public void Init()
     {
@@ -364,6 +377,8 @@ public class ShopUI : EventListener
         rectTransform.anchoredPosition = new Vector2(0f, -2000f);
         canvasGroup.alpha = 0f;
 
+        HideAllVehicle();
+
         UINaviHelper.Instance.SetFirstSelect();
     }
 
@@ -388,6 +403,7 @@ public class ShopUI : EventListener
         UIManager.Instance.padUIs.SetActive(true);
         ExplorationManager.Instance.HideUI_ResultPanel_Instant();
         WorldMapManager.Instance.OpenMinimap();
+        HideAllVehicle();
 
         for (int i = 0; i < panelButtonPairs.Count; i++)
         {
@@ -410,6 +426,11 @@ public class ShopUI : EventListener
 
     public void SelectSubPanel(int idx)
     {
+        if (idx != 3)
+        {
+            HideAllVehicle();
+        }
+
         if (idx == 0)
         {
             SnapTo(null);
@@ -442,6 +463,7 @@ public class ShopUI : EventListener
                     SelectUpgrade(GetMainResearch().idx);
                     break;
                 case 3:
+                    ResetVehicleUI();
                     SelectUpgrade(GetMainResearch_Vehicle().idx);
                     break;
             }
@@ -595,6 +617,14 @@ public class ShopUI : EventListener
 
             if (temp.Value.hidden && !rm.Researched(temp.Key))
                 researchUI.gameObject.SetActive(false);
+
+            if (temp.Value.group == ResearchInfo.ResearchGroup.vehicle)
+            {
+                if (UINaviHelper.Instance != null)
+                {
+                    UINaviHelper.Instance.ingame.shops_vehicles.Add(obj.GetComponent<UINavi>());
+                }
+            }
         }
     }
     public void UpdateHiddenUpgrade()
@@ -662,6 +692,9 @@ public class ShopUI : EventListener
             nameText = upgradeDetailNameText_Vehicle;
             detailText = upgradeDetailText_Vehicle;
             unlockBtn = upgrade_UnlockBtn_Vehicle;
+
+            upgradePanel_Vehicle.SetActive(true);
+            infoPanel_Vehicle.SetActive(false);
         }
 
         if (idx == -1)
@@ -680,7 +713,8 @@ public class ShopUI : EventListener
         if (info.hidden)
             st2.Append("<color=#320D5C>");
         if (info.max > 1)
-            st2.AppendFormat("<b>{0}</b> ({1}/{2})", tm.GetResearch(idx), rm.GetResearchCount(idx), info.max);
+            //st2.AppendFormat("<b>{0}</b> ({1}/{2})", tm.GetResearch(idx), rm.GetResearchCount(idx), info.max);
+            st2.AppendFormat("<b>{0}</b>\n({1}/{2})", tm.GetResearch(idx), rm.GetResearchCount(idx), info.max);
         else
             st2.AppendFormat("<b>{0}</b>", tm.GetResearch(idx));
         if (info.hidden)
@@ -768,7 +802,10 @@ public class ShopUI : EventListener
         unlockBtn.gameObject.SetActive(canResearch);
         //upgrade_UnlockBtn.enabled = canResearch;
 
-        UINaviHelper.Instance.SetFirstSelect();
+        if (vehicle)
+            UINaviHelper.Instance.ingame.Shop_Vehicle_Reconnection();
+        else
+            UINaviHelper.Instance.SetFirstSelect();
     }
 
     public void ClickUpgrade()
@@ -791,6 +828,148 @@ public class ShopUI : EventListener
         {
             AudioManager.Instance.PlaySFX(Sfx.deny);
         }
+    }
+    #endregion
+
+    #region 차량 변경
+    public void ResetVehicleUI()
+    {
+        UpdateOwnedVehicles();
+
+        currentViewVehicle = GM.Instance.currentVehicle;
+        UpdateVehicleUI(currentViewVehicle);
+
+        UINaviHelper.Instance.SetFirstSelect();
+    }
+    private void UpdateOwnedVehicles()
+    {
+        int count = 0;
+        var array = GM.Instance.unlockedVehicles;
+        for (int i = 0; i < array.Length; i++)
+        {
+            if (array[i]) count++;
+        }
+        ownedVehiclesText.text = $"{tm.GetCommons("OwnedVehicles")} : {count} / {array.Length}";
+    }
+    private void UpdateVehicleUI(int idx)
+    {
+        HideAllVehicle();
+
+        vehicleShowcase.vehicleModels[idx].gameObject.SetActive(true);
+        vehicleShowcase.ResetAngle();
+
+        ShowVehicleStat();
+    }
+    public void HideAllVehicle()
+    {
+        for (int i = 0; i < vehicleShowcase.vehicleModels.Length; i++)
+        {
+            vehicleShowcase.vehicleModels[i].gameObject.SetActive(false);
+        }
+    }
+    private void ShowVehicleStat()
+    {
+        int current = currentViewVehicle;
+
+        if (upgradePanel_Vehicle.activeSelf)
+        {
+            upgradePanel_Vehicle.SetActive(false);
+            infoPanel_Vehicle.SetActive(true);
+
+            UINaviHelper.Instance.ingame.Shop_Vehicle_Reconnection();
+        }
+
+        //SelectUpgrade(0);
+
+        if (GM.Instance.currentVehicle == current)
+        {
+            selectVehicleBtnText.text = tm.GetCommons("SelectVehicles");
+            selectVehicleBtn.image.color = new Color(0.1753262f, 0.6415094f, 0.09985761f);
+            selectVehicleBtnMode = 0;
+        }
+        else
+        {
+            if (GM.Instance.unlockedVehicles[current])
+            {
+                selectVehicleBtnText.text = tm.GetCommons("SelectVehicles");
+                selectVehicleBtn.image.color = new Color(0.5283019f, 0.5283019f, 0.5283019f);
+                selectVehicleBtnMode = 1;
+            }
+            else
+            {
+                selectVehicleBtnText.text = $"{tm.GetCommons("BuyVehicles")} ({GM.Instance.costVehicles[current]}$)";
+                selectVehicleBtn.image.color = new Color(0.8113208f, 0.5289791f, 0.1033286f);
+                selectVehicleBtnMode = 2;
+            }
+        }
+
+        vehicleInfo_NameText.text = tm.GetVehicles(current);
+
+        var info = GM.Instance.controllerData[current];
+
+        StringBuilder st = new StringBuilder();
+
+        st.AppendLine();
+        st.AppendLine();
+        st.AppendFormat("{0} <size=95%>{1}</size>", tm.GetCommons("VehicleStat0"), info.maxLoad);
+        st.AppendLine();
+        int speed = (info.statStar % 100000000) / 1000000;
+        int durability = (info.statStar % 1000000) / 10000;
+        int handling = (info.statStar % 10000) / 100;
+        int weight = info.statStar % 100;
+
+        ShowStatStar(st, tm.GetCommons("VehicleStat1"), speed);
+        ShowStatStar(st, tm.GetCommons("VehicleStat2"), durability);
+        ShowStatStar(st, tm.GetCommons("VehicleStat3"), handling);
+        ShowStatStar(st, tm.GetCommons("VehicleStat4"), weight);
+
+        vehicleInfo_DetailText.text = st.ToString();
+
+        void ShowStatStar(StringBuilder st, string stat, int value)
+        {
+            st.AppendFormat("{0} ", stat);
+            int full = value / 10;
+            for (int i = 0; i < full; i++)
+            {
+                st.Append("<size=90%><sprite=1> ");
+            }
+            float half = value / 10f - full;
+            if (half > 0) st.Append("<sprite=4>");
+            st.Append("</size>");
+            st.AppendLine();
+        }
+    }
+    public void SelectVehicleBtnAction()
+    {
+        switch (selectVehicleBtnMode)
+        {
+            case 0:
+                break;
+            case 1:
+                GM.Instance.ChangeVehicle(currentViewVehicle);
+                break;
+            case 2:
+                GM.Instance.BuyVehicle(currentViewVehicle);
+                UpdateOwnedVehicles();
+                break;
+        }
+        UpdateVehicleUI(currentViewVehicle);
+    }
+    public void ChangeViewVehicle(bool right)
+    {
+        if (right)
+        {
+            currentViewVehicle++;
+            if (currentViewVehicle >= vehicleShowcase.vehicleModels.Length)
+                currentViewVehicle = 0;
+        }
+        else
+        {
+            currentViewVehicle--;
+            if (currentViewVehicle < 0)
+                currentViewVehicle = vehicleShowcase.vehicleModels.Length - 1;
+        }
+        UpdateVehicleUI(currentViewVehicle);
     }
     #endregion
 }

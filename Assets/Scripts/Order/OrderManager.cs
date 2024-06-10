@@ -35,7 +35,7 @@ public class OrderManager : Singleton<OrderManager>
 
     public static EventHandler<int> OrderRemovedEvent;
 
-    public int MaxAccpetance => Constant.baseMaxDeliveryAcceptance;
+    public int MaxAccpetance => GM.Instance.player.maxLoad;
     public int currentAcceptance;
     public bool IsMaxDelivery => currentAcceptance >= MaxAccpetance;
 

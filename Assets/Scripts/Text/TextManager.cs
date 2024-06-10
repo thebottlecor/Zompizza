@@ -54,6 +54,9 @@ public class TextManager : Singleton<TextManager>
     Dictionary<int, Dictionary<string, object>> characters;
     public string GetNames(int idx) => characters[idx][language.ToString()].ToString();
 
+    Dictionary<int, Dictionary<string, object>> vehicles;
+    public string GetVehicles(int idx) => vehicles[idx][language.ToString()].ToString();
+
     public CultureInfo defaultCultureInfo = new CultureInfo("en-US");
 
     protected override void Awake()
@@ -123,6 +126,7 @@ public class TextManager : Singleton<TextManager>
         keycodes = CSVReader.ReadCSV<KeyCode>("TextManager - keycode.csv");
         inputSystems = CSVReader.ReadCSV<KeyCode>("TextManager - inputSystem.csv");
         characters = CSVReader.ReadCSV<int>("TextManager - character.csv");
+        vehicles = CSVReader.ReadCSV<int>("TextManager - vehicle.csv");
 
         Lobby.Instance.UpdateTexts();
         SettingManager.Instance.UpdateTexts();
