@@ -25,7 +25,7 @@ MonoBehaviour:
   needResearch:
   - {fileID: 11400000, guid: eb1afdf72f5ab7249a84e4aed95785dc, type: 2}
   hidden: 0
-  invalid: 0
+  invalid: 1
   effect:
     goldGet: 0
     ratingGet: 0

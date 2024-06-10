@@ -35,6 +35,11 @@ public class UpgradeDirection : MonoBehaviour
         hideCoroutine = null;
     }
 
+    public void ResetPos()
+    {
+        effect.transform.position = stackTarget11.position;
+    }
+
     [ContextMenu("µð¹ö±ë")]
     public void Show_Debug()
     {

@@ -40,8 +40,9 @@ public class PizzaDirection : EventListener
     public static EventHandler<OrderInfo> PizzaCompleteEvent;
     public static EventHandler IngredientEnterEvent;
 
-    [Header("업그레이드 디렉션")]
+    [Header("해상도 따라가는 것들")]
     public UpgradeDirection upgradeDirection;
+    public Vehicle3DShowcase vehicle3DShowcase;
 
     protected override void AddListeners()
     {
@@ -81,7 +82,8 @@ public class PizzaDirection : EventListener
         }
 
         Init();
-        upgradeDirection.effect.transform.position = upgradeDirection.stackTarget11.position;
+        upgradeDirection.ResetPos();
+        vehicle3DShowcase.ResetPos();
 
         foreach (var temp in ingredients)
         {
@@ -114,7 +116,8 @@ public class PizzaDirection : EventListener
         yield return null;
 
         Init();
-        upgradeDirection.effect.transform.position = upgradeDirection.stackTarget11.position;
+        upgradeDirection.ResetPos();
+        vehicle3DShowcase.ResetPos();
 
         shopPanel.offsetMin = new Vector2(0, initShopPanelPos.x);
         shopPanel.offsetMax = new Vector2(0, initShopPanelPos.y);
