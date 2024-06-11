@@ -89,7 +89,7 @@ MonoBehaviour:
   shadow: {fileID: 5551583242430911235}
   contactingPlayer: 0
   contact: 0
-  range: 6
+  range: 5.5
   isRun: 1
   seeker: {fileID: 8468248722716590919}
   pizzaBox: {fileID: 5622349615085434284}
@@ -168,7 +168,7 @@ MonoBehaviour:
   movement:
     follower:
       rotationSpeed: 720
-      speed: 5
+      speed: 4.75
       maxRotationSpeed: 1080
       maxOnSpotRotationSpeed: 1080
       slowdownTime: 0.2
@@ -177,7 +177,7 @@ MonoBehaviour:
       leadInRadiusWhenApproachingDestination: 1
       allowRotatingOnSpotBacking: 1
     debugFlags: 0
-    stopDistance: 4
+    stopDistance: 3.75
     rotationSmoothing: 0
     positionSmoothing: 0
     groundMask:

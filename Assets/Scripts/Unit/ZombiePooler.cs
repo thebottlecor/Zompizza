@@ -133,7 +133,7 @@ public class ZombiePooler : Singleton<ZombiePooler>
         if (day > 3)
         {
             timer5 += 1f * Time.deltaTime;
-            if (timer5 >= 1f)
+            if (timer5 >= 10f)
             {
                 timer5 = 0f;
                 SpawnSanta(1);

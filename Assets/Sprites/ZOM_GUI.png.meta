@@ -899,9 +899,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 397
-        y: 497
-        width: 68
-        height: 94
+        y: 495
+        width: 124
+        height: 101
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -911,48 +911,6 @@ TextureImporter:
       bones: []
       spriteID: 3cf325569b4e0b54a9a1a5918d76f85e
       internalID: 1342675956
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ZOM_GUI_47
-      rect:
-        serializedVersion: 2
-        x: 467
-        y: 518
-        width: 26
-        height: 60
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 4e66fd6b1d7dd914885790fe19589f44
-      internalID: -1537542172
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: ZOM_GUI_48
-      rect:
-        serializedVersion: 2
-        x: 484
-        y: 502
-        width: 35
-        height: 93
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 81266ebcd8e9dab4f9a5167170e73b3b
-      internalID: -1502002095
       vertices: []
       indices: 
       edges: []
@@ -1764,7 +1722,7 @@ TextureImporter:
         width: 128
         height: 116
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []

@@ -142,6 +142,10 @@ public class AudioManager : Singleton<AudioManager>
             audioSourceSFX_Loop.Play();
         }
     }
+    public void PlaySFX(AudioClip clip, float volume = 1f)
+    {
+        audioSourceSFX.PlayOneShot(clip, volume);
+    }
 
     private IEnumerator FrameSoundCheck(Sfx idx)
     {
@@ -185,7 +189,7 @@ public enum Sfx
     inputFieldEnd,
     newInfo,
     money,
-    select,
+    visionRecipeFound,
     complete,
     nextDay,
     chop,
@@ -199,5 +203,6 @@ public enum Sfx
     pizzaComplete,
     santaTake,
     santaReturn,
-    visionRecipeFound,
+    cat,
+    raid
 }

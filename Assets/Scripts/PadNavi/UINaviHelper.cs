@@ -151,6 +151,10 @@ public class UINaviHelper : Singleton<UINaviHelper>
                             {
                                 current = ingame.raid_first;
                             }
+                            else if (GameEventManager.Instance.eventPanel.activeSelf)
+                            {
+                                current = ingame.GameEvent_Reconnection();
+                            }
                             else if (shop.shopCloseWarningObj.activeSelf)
                                 current = ingame.shopCloseWarning_first;
                             else
@@ -159,6 +163,10 @@ public class UINaviHelper : Singleton<UINaviHelper>
                         case 1:
                             if (gm.gameOverWarningObj.activeSelf)
                                 current = ingame.gameOverWarning_first;
+                            else if (GameEventManager.Instance.eventPanel.activeSelf)
+                            {
+                                current = ingame.GameEvent_Reconnection();
+                            }
                             else
                             {
                                 current = ingame.Shop_Management_Reconnection();

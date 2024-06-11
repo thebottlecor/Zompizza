@@ -561,6 +561,9 @@ public class OrderManager : Singleton<OrderManager>
         // 호감도에 따른 보너스
         int friendshipBonus = 0;
         float averageRating = customersInfos[goal].AverageRating();
+
+        if (GameEventManager.Instance.friendshipFixed > 0f) averageRating = GameEventManager.Instance.friendshipFixed;
+
         if (averageRating >= Constant.friendShip3) friendshipBonus = (int)(0.3f * rewards);
         else if (averageRating >= Constant.friendShip2) friendshipBonus = (int)(0.2f * rewards);
         else if (averageRating >= Constant.friendShip1) friendshipBonus = (int)(0.1f * rewards);

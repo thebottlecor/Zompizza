@@ -36,6 +36,9 @@ public class UINaviHelper_Ingame : MonoBehaviour
     public UINavi gameOver_first;
     public UINavi gameWin_first;
 
+    public UINavi gameEvent_accept;
+    public UINavi gameEvent_decline;
+
     [Header("항상 보여지는 인디케이터")]
     public PadKeyIndicator[] alwaysShow_PadUIs;
 
@@ -329,6 +332,24 @@ public class UINaviHelper_Ingame : MonoBehaviour
         {
 
         }
+        return first;
+    }
+
+    public UINavi GameEvent_Reconnection()
+    {
+        var ge = GameEventManager.Instance;
+
+        UINavi first = null;
+
+        if (ge.acceptBtn.gameObject.activeSelf)
+        {
+            first = gameEvent_accept;
+        }
+        else if (ge.declineBtn.gameObject.activeSelf)
+        {
+            first = gameEvent_decline;
+        }
+
         return first;
     }
 

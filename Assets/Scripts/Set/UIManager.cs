@@ -205,6 +205,12 @@ public class UIManager : Singleton<UIManager>
             GM.Instance.ShowGameOverWarning(false);
             return;
         }
+
+        if (GameEventManager.Instance.eventPanel.activeSelf)
+        {
+            return;
+        }
+
         //if (LoanManager.Instance.loanWarningObj.activeSelf)
         //{
         //    LoanManager.Instance.ShowLoanWarning(false);

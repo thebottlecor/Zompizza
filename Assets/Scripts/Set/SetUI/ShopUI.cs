@@ -193,6 +193,7 @@ public class ShopUI : EventListener
         if (GM.Instance.gameOverWarningObj.activeSelf) return;
         if (GM.Instance.raidObj.activeSelf) return;
         if (shopCloseWarningObj.activeSelf) return;
+        if (GameEventManager.Instance.eventPanel.activeSelf) return;
 
         float value = e.ReadValue<float>();
 
@@ -219,6 +220,9 @@ public class ShopUI : EventListener
 
     private void OnPlayerArriveShop(object sender, EventArgs e)
     {
+        ShowOrder();
+        playerStay = true;
+
         if (GM.Instance.rating >= Constant.winRating)
         {
             if (!GM.Instance.CongratulationTriggered)
@@ -228,9 +232,6 @@ public class ShopUI : EventListener
                 upgradeDirection.Show();
             }
         }
-
-        ShowOrder();
-        playerStay = true;
     }
 
     private void OnPlayerExitShop(object sender, EventArgs e)
@@ -849,7 +850,7 @@ public class ShopUI : EventListener
         {
             if (array[i]) count++;
         }
-        ownedVehiclesText.text = $"{tm.GetCommons("OwnedVehicles")} : {count} / {array.Length}";
+        ownedVehiclesText.text = $"{tm.GetCommons("OwnedVehicles")} {count} / {array.Length}";
     }
     private void UpdateVehicleUI(int idx)
     {
@@ -897,7 +898,8 @@ public class ShopUI : EventListener
             }
             else
             {
-                selectVehicleBtnText.text = $"{tm.GetCommons("BuyVehicles")} ({GM.Instance.costVehicles[current]}$)";
+                //selectVehicleBtnText.text = $"{tm.GetCommons("BuyVehicles")} ({GM.Instance.costVehicles[current]}$)";
+                selectVehicleBtnText.text = string.Format(tm.GetCommons("RatingNeed"), "<sprite=1>", GM.Instance.ratingVehicles[current]);
                 selectVehicleBtn.image.color = new Color(0.8113208f, 0.5289791f, 0.1033286f);
                 selectVehicleBtnMode = 2;
             }

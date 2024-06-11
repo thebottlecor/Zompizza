@@ -6292,7 +6292,7 @@ MonoBehaviour:
         maxPlay: 5
     - Key: 10
       Value:
-        clip: {fileID: 8300000, guid: 12d9a77a8fba0f04b855850cdc6d2ed4, type: 3}
+        clip: {fileID: 8300000, guid: 7e90f72284476fa4d9ce96d9d1663db8, type: 3}
         volumeOffset: 0
         maxPlay: 5
     - Key: 11
@@ -6362,7 +6362,12 @@ MonoBehaviour:
         maxPlay: 0
     - Key: 24
       Value:
-        clip: {fileID: 8300000, guid: 7e90f72284476fa4d9ce96d9d1663db8, type: 3}
+        clip: {fileID: 8300000, guid: aeff9f12b5da77441a4bfc4d803abae8, type: 3}
+        volumeOffset: 0
+        maxPlay: 0
+    - Key: 25
+      Value:
+        clip: {fileID: 8300000, guid: 5ff6cfbc96f2f884e98aecda1dd9d5d8, type: 3}
         volumeOffset: 0
         maxPlay: 0
 --- !u!1 &3230877239920990169
@@ -10006,7 +10011,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Color: {r: 0.12156863, g: 0.12156863, b: 0.12156863, a: 0.8}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

@@ -49,6 +49,9 @@ public class OrderUIObject : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         st.AppendLine();
 
         float averageRating = OrderManager.Instance.customersInfos[info.goal].AverageRating();
+
+        if (GameEventManager.Instance.friendshipFixed > 0f) averageRating = GameEventManager.Instance.friendshipFixed;
+
         if (averageRating >= Constant.friendShip3)
         {
             friendshipIcons[0].SetActive(true);

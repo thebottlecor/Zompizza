@@ -99,6 +99,7 @@ public class GM : Singleton<GM>
 
     [Header("평점 획득 축하")] // 원래는 빚 갚음
     public GameObject congratulationsObj;
+    public Button congratulationBtn_ToLobby;
     public TextMeshProUGUI[] congratulationsText;
     public TextMeshProUGUI congratulationsBtn_Text;
     public bool CongratulationTriggered { get; private set; }
@@ -127,6 +128,7 @@ public class GM : Singleton<GM>
     public PlayerControllerData[] controllerData;
     public bool[] unlockedVehicles;
     public int[] costVehicles;
+    public float[] ratingVehicles;
 
     [Space(10f)]
 
@@ -149,6 +151,8 @@ public class GM : Singleton<GM>
         {
             openImage.SetActive(false);
             closeImage.SetActive(true);
+
+            if (day == 5) GameEventManager.Instance.SetEvent(1); // 6일차 가게 닫은 후 이장 이벤트
         }
     }
 
@@ -183,6 +187,7 @@ public class GM : Singleton<GM>
 
         nextDayBtn.onClick.AddListener(() => { NextDay_Late(); });
         gameOverBtn_ToLobby.onClick.AddListener(() => { LoadingSceneManager.Instance.ToLobby(); });
+        congratulationBtn_ToLobby.onClick.AddListener(() => { LoadingSceneManager.Instance.ToLobby(); });
 
         tenDays_RaidRecords = new List<int>();
 
@@ -239,7 +244,8 @@ public class GM : Singleton<GM>
 
         congratulationsText[0].text = tm.GetCommons("Congratulations");
         congratulationsText[1].text = tm.GetCommons("CompleteRating");
-        congratulationsBtn_Text.text = tm.GetCommons("Resume");
+        //congratulationsBtn_Text.text = tm.GetCommons("Resume");
+        congratulationsBtn_Text.text = $"> {tm.GetCommons("Menu")} <";
     }
 
     private void Update()
@@ -276,6 +282,8 @@ public class GM : Singleton<GM>
             {
                 openImage.SetActive(false);
                 closeImage.SetActive(true);
+
+                if (day == 5) GameEventManager.Instance.SetEvent(1); // 6일차 가게 닫은 후 이장 이벤트
 
                 if (EndTimeEvent != null)
                     EndTimeEvent(null, true);
@@ -528,6 +536,7 @@ public class GM : Singleton<GM>
 
             TutorialManager.Instance.NextDay();
             StatManager.Instance.NextDay();
+            GameEventManager.Instance.NextDay();
             ResearchManager.Instance.ToggleAllHiddenRecipe(true);
             //RivalManager.Instance.NextDay();
             //ShowRatingText();
@@ -607,6 +616,11 @@ public class GM : Singleton<GM>
                     ShowRaidPanel();
                     break;
             }
+        }
+        else
+        {
+            if (day == 2) GameEventManager.Instance.SetEvent(0); // 3일차 아침 고아원 원장 이벤트
+            if (day == 8) GameEventManager.Instance.SetEvent(2); // 9일차 아침 고양이 이벤트
         }
     }
 
@@ -736,6 +750,12 @@ public class GM : Singleton<GM>
         {
             warningQueue.Enqueue(2);
             tenDays_RaidRecords.Add(1);
+            AudioManager.Instance.PlaySFX(Sfx.raid);
+        }
+        else
+        {
+            // 습격 왔을 땐, 빼먹지 않음
+            CatSteal();
         }
     }
     private bool CheckRaid()
@@ -758,6 +778,8 @@ public class GM : Singleton<GM>
                     percent = 0f;
                     break;
             }
+            if (GameEventManager.Instance.hasCat) percent -= 0.05f;
+            if (percent < 0) percent = 0f;
 
             int count = Mathf.CeilToInt(hasRes * percent);
             if (count >= hasRes) count = hasRes - 1;
@@ -831,6 +853,50 @@ public class GM : Singleton<GM>
         raidObj.SetActive(false);
         ShowWarningQueue();
     }
+
+    public void CatSteal() // 고양이 들일시 50% 확률로 매일 1개씩 재료 빼먹음
+    {
+        if (GameEventManager.Instance.hasCat)
+        {
+            if (UnityEngine.Random.Range(0, 2) == 1)
+            {
+                if (IngredientSteal(1))
+                {
+                    AudioManager.Instance.PlaySFX(Sfx.cat);
+                }
+            }
+        }
+    }
+
+    public bool IngredientSteal(int count)
+    {
+        int hasRes = HasIngredient;
+        if (hasRes <= 0) return false;
+        if (count >= hasRes) count = hasRes - 1;
+        if (count <= 0) return false;
+
+        List<Ingredient> tempIngredients = new List<Ingredient>();
+        foreach (var temp in ingredients)
+        {
+            if (temp.Value > 0)
+            {
+                tempIngredients.Add(temp.Key);
+            }
+        }
+
+        while (count > 0)
+        {
+            int rand = UnityEngine.Random.Range(0, tempIngredients.Count);
+            Ingredient ingredient = tempIngredients[rand];
+
+            if (ingredients[ingredient] > 0)
+            {
+                ingredients[ingredient]--;
+                count--;
+            }
+        }
+        return true;
+    }
     #endregion
 
     #region 차량 변경
@@ -851,11 +917,18 @@ public class GM : Singleton<GM>
     
     public bool BuyVehicle(int idx)
     {
-        if (!unlockedVehicles[idx] && gold >= costVehicles[idx])
+        //if (!unlockedVehicles[idx] && gold >= costVehicles[idx])
+        //{
+        //    // 성공 연출
+        //    AudioManager.Instance.PlaySFX(Sfx.complete);
+        //    AddGold(-1 * costVehicles[idx], GetGoldSource.upgrade);
+        //    unlockedVehicles[idx] = true;
+        //    return true;
+        //}
+        if (!unlockedVehicles[idx] && rating >= ratingVehicles[idx])
         {
             // 성공 연출
             AudioManager.Instance.PlaySFX(Sfx.complete);
-            AddGold(-1 * costVehicles[idx], GetGoldSource.upgrade);
             unlockedVehicles[idx] = true;
             return true;
         }
