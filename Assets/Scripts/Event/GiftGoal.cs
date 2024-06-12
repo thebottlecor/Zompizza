@@ -21,7 +21,7 @@ public class GiftGoal : MonoBehaviour
             Ingredient ingredient = GM.Instance.RandomIngredientGet();
             ingredientSprite.sprite = DataManager.Instance.uiLib.ingredients[ingredient];
             UIManager.Instance.UpdateIngredients();
-            UIManager.Instance.shopUI.OrderTextUpdate();
+            UIManager.Instance.OrderUIBtnUpdate();
             FindEffect();
         }
     }

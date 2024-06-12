@@ -255,6 +255,7 @@ public class OrderManager : Singleton<OrderManager>
                 info.stolen = true;
                 e.StealPizza();
                 GM.Instance.player.HitBlink();
+                GM.Instance.player.UpdateBox(GetCurrentPizzaBox());
                 return;
             }
         }
@@ -268,9 +269,40 @@ public class OrderManager : Singleton<OrderManager>
             {
                 AudioManager.Instance.PlaySFX(Sfx.santaReturn);
                 info.stolen = false;
+                GM.Instance.player.UpdateBox(GetCurrentPizzaBox());
                 return;
             }
         }
+    }
+    public void FailToReturnStolenPizza()
+    {
+        for (int i = orderList.Count - 1; i >= 0; i--)
+        {
+            var info = orderList[i];
+            if (info.accepted && info.stolen)
+            {
+                // 배달 실패
+                float fail = Constant.remainTimeRating4 + Constant.remainHpRating4;
+                GM.Instance.AddRating(fail, GM.GetRatingSource.delivery);
+                UIManager.Instance.shopUI.AddReview(info, Constant.remainTimeRating4, Constant.remainHpRating4);
+
+                orderGoals[info.goal].Hide();
+
+                orderMiniUIPair[info].Hide();
+                orderMiniUIPair.Remove(info);
+                orderList.RemoveAt(i);
+
+                ComboCalc(fail);
+                break;
+            }
+        }
+
+        if (OrderRemovedEvent != null)
+            OrderRemovedEvent(null, orderList.Count);
+
+        UIManager.Instance.shopUI.OrderTextUpdate();
+
+        UIManager.Instance.OrderUIBtnUpdate();
     }
 
     [ContextMenu("새로운 주문")]
@@ -597,6 +629,7 @@ public class OrderManager : Singleton<OrderManager>
             hp = 1f,
             timeLimit = timeLimit,
             timer = 0f,
+            stolen = false,
         };
         orderList.Add(newOrder);
         PairingMiniUI(newOrder);
@@ -727,9 +760,10 @@ public class OrderManager : Singleton<OrderManager>
         int count = 0;
         for (int i = 0; i < orderList.Count; i++)
         {
-            if (orderList[i].accepted)
+            var info = orderList[i];
+            if (info.accepted && !info.stolen)
             {
-                count += orderList[i].pizzas.Count;
+                count += info.pizzas.Count;
             }
         }
         return count;

@@ -159,6 +159,7 @@ public class ZombiePooler : Singleton<ZombiePooler>
         ResetSub(zombiesPoolFast);
         ResetSub(zombiesPoolRange);
         ResetSub(zombiesSubPoolRange);
+        ResetSub(zombiesPoolSanta);
     }
     private void ResetSub<T>(List<T> list) where T : MonoBehaviour
     {

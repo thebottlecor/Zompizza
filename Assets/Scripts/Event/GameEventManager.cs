@@ -152,7 +152,7 @@ public class GameEventManager : Singleton<GameEventManager>
                     int max = Mathf.Min(10, GM.Instance.HasIngredient);
                     GM.Instance.IngredientSteal(max);
                     UIManager.Instance.UpdateIngredients();
-                    UIManager.Instance.shopUI.OrderTextUpdate();
+                    UIManager.Instance.OrderUIBtnUpdate();
                     return max;
                 }
             case 1:

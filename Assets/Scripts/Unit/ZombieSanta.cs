@@ -45,6 +45,13 @@ public class ZombieSanta : ZombieBase
         float dist = Vector3.Distance(ZombiePooler.Instance.target.transform.position, transform.position);
         if (dist >= 100f)
         {
+            if (stealSomething)
+            {
+                stealSomething = false;
+                pizzaBox.SetActive(false);
+                OrderManager.Instance.FailToReturnStolenPizza();
+            }
+
             gameObject.SetActive(false);
             return;
         }
