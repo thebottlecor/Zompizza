@@ -18,8 +18,8 @@ MonoBehaviour:
   romanNum: 0
   group: 1
   max: 4
-  cost: 2000
-  increaseCost: 2000
+  cost: 1000
+  increaseCost: 1000
   rating: 0
   increaseRating: 0
   needResearch: []

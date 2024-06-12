@@ -18,8 +18,8 @@ MonoBehaviour:
   romanNum: 0
   group: 1
   max: 4
-  cost: 2000
-  increaseCost: 2000
+  cost: 1000
+  increaseCost: 1000
   rating: 0
   increaseRating: 0
   needResearch: []
@@ -43,7 +43,7 @@ MonoBehaviour:
     customer_max_tier: 0
     customer_max_amount: 0
     customer_max_type: 0
-    maxSpeed: 2
+    maxSpeed: 5
     damageReduce: 0
     acceleration: 0.05
   icon: {fileID: -377823705, guid: f6257e4801019a04989d75770b8da00e, type: 3}

@@ -154,8 +154,6 @@ public class GM : Singleton<GM>
         {
             openImage.SetActive(false);
             closeImage.SetActive(true);
-
-            if (day == 5) GameEventManager.Instance.SetEvent(1); // 6일차 가게 닫은 후 이장 이벤트
         }
     }
 
@@ -289,8 +287,6 @@ public class GM : Singleton<GM>
             {
                 openImage.SetActive(false);
                 closeImage.SetActive(true);
-
-                if (day == 5) GameEventManager.Instance.SetEvent(1); // 6일차 가게 닫은 후 이장 이벤트
 
                 if (EndTimeEvent != null)
                     EndTimeEvent(null, true);

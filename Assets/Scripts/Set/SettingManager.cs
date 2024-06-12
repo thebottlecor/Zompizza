@@ -339,7 +339,7 @@ public class SettingManager : Singleton<SettingManager>
         }
     }
 
-private void KeyInit_SetOrder()
+    private void KeyInit_SetOrder()
     {
         keyMappings = new SerializableDictionary<KeyMap, KeyMapping>();
 

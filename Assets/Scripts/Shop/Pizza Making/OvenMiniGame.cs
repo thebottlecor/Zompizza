@@ -121,7 +121,7 @@ public class OvenMiniGame : EventListener
         gaugeIndicator.rectTransform.rotation = Quaternion.Euler(0, 0, angle_progress);
         oven_operatingMat.SetFloat("_ColorSwapBlend", 0);
 
-        buttonPressed = false;
+        //buttonPressed = false;
     }
 
     public void StartOven(OrderInfo orderInfo)
@@ -169,21 +169,27 @@ public class OvenMiniGame : EventListener
             StopOven();
             return;
         }
-        if (buttonPressed)
-        {
-            AudioManager.Instance.PlaySFX(Sfx.buttons);
-            StopOven();
-            return;
-        }
+        //if (buttonPressed)
+        //{
+        //    AudioManager.Instance.PlaySFX(Sfx.buttons);
+        //    StopOven();
+        //    return;
+        //}
     }
 
-    bool buttonPressed;
+    //bool buttonPressed;
 
     public void OnButtonPressed(object sender, InputAction.CallbackContext e)
     {
         if (!operating) return;
 
-        buttonPressed = e.performed;
+        //buttonPressed = e.performed;
+
+        if (e.performed)
+        {
+            AudioManager.Instance.PlaySFX(Sfx.buttons);
+            StopOven();
+        }
     }
 
     public void StopOven()

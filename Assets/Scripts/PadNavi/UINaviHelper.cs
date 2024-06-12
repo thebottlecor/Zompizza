@@ -314,6 +314,7 @@ public class UINaviHelper : Singleton<UINaviHelper>
             if (selected != null && selected.idx != UIManager.Instance.shopUI.currentSelectUpgrade)
             {
                 UIManager.Instance.shopUI.SelectUpgrade(selected.idx);
+                AudioManager.Instance.PlaySFX(Sfx.buttons);
                 return;
             }
         }

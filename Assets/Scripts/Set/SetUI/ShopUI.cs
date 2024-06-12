@@ -150,7 +150,7 @@ public class ShopUI : EventListener
         shopCloseBtn_Text.text = tm.GetCommons("ShopClose");
         shopCloseWarning_Text.text = tm.GetCommons("Warning");
         shopCloseWarningDetail_Text.text = tm.GetCommons("ShopCloseWarning");
-        shopCloseWarningBtn_Text[0].text = tm.GetCommons("Close");
+        shopCloseWarningBtn_Text[0].text = tm.GetCommons("ShopClose");
         shopCloseWarningBtn_Text[1].text = tm.GetCommons("Cancel");
 
         loanText.text = tm.GetCommons("Loan");
@@ -185,6 +185,9 @@ public class ShopUI : EventListener
         /// <ser cref="UINaviHelper.SetFirstSelect"/>
         /// </summary>
 
+        if (UIManager.Instance.isDirecting || UIManager.Instance.changingResolution) return;
+        if (GM.Instance.loading) return;
+
         if (!opened || loading) return;
 
         var exploration = ExplorationManager.Instance;
@@ -192,6 +195,7 @@ public class ShopUI : EventListener
         if (exploration.canvasGroup_resultPanel.alpha >= 0.99f) return;
         if (GM.Instance.gameOverWarningObj.activeSelf) return;
         if (GM.Instance.raidObj.activeSelf) return;
+        if (GM.Instance.darkCanvas.blocksRaycasts) return;
         if (shopCloseWarningObj.activeSelf) return;
         if (GameEventManager.Instance.eventPanel.activeSelf) return;
 
@@ -355,6 +359,8 @@ public class ShopUI : EventListener
     {
         loading = false;
         opened = true;
+
+        if (GM.Instance.day == 5 && GM.Instance.closeImage.activeSelf) GameEventManager.Instance.SetEvent(1); // 6일차 가게 닫은 후 이장 이벤트
 
         //if (GM.Instance.rating >= Constant.winRating)
         //{
@@ -597,6 +603,7 @@ public class ShopUI : EventListener
         OrderManager.Instance.RemoveAllOrders();
         UINaviHelper.Instance.SetFirstSelect();
         ExplorationManager.Instance.SetCost();
+        if (GM.Instance.day == 5) GameEventManager.Instance.SetEvent(1); // 6일차 가게 닫은 후 이장 이벤트
     }
 
     #endregion

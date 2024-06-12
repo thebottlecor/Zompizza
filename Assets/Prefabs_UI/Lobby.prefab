@@ -6209,25 +6209,13 @@ MonoBehaviour:
   - clip: {fileID: 8300000, guid: 97bb397204832e443aae670190b1ebec, type: 3}
     volumeOffset: 0
     maxPlay: 0
-  - clip: {fileID: 8300000, guid: e6493039cb3e9854cbb6b2327e075ce2, type: 3}
-    volumeOffset: 0
-    maxPlay: 0
-  - clip: {fileID: 8300000, guid: 3c5ca46bd56092d408781bb81c18848a, type: 3}
-    volumeOffset: 0
-    maxPlay: 0
   - clip: {fileID: 8300000, guid: b4f70eaf7b1cf6a45891c8e16b5a876d, type: 3}
     volumeOffset: 0
     maxPlay: 0
   - clip: {fileID: 8300000, guid: 7bc1694d7897fd843b773721d2005e17, type: 3}
     volumeOffset: 0
     maxPlay: 0
-  - clip: {fileID: 8300000, guid: 00ccec4610f0c1440baff1c486eac2c2, type: 3}
-    volumeOffset: 0
-    maxPlay: 0
   - clip: {fileID: 8300000, guid: f4a631f09250c5449a2945cf40bd3b86, type: 3}
-    volumeOffset: 0
-    maxPlay: 0
-  - clip: {fileID: 8300000, guid: 6d5bac0a4cc1be9488210caba321891e, type: 3}
     volumeOffset: 0
     maxPlay: 0
   - clip: {fileID: 8300000, guid: 0a6d49526cba47140b10738817c13a77, type: 3}

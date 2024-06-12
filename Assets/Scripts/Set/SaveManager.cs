@@ -463,8 +463,8 @@ public class ConfigData
 {
     public string language;
 
-    public int volumeBGM = 5;
-    public int volumeSFX = 5;
+    public int volumeBGM = 10;
+    public int volumeSFX = 10;
 
     public int fullScreen = 0;
     public int framerate = 0;

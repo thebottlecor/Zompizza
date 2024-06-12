@@ -48,7 +48,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         ToggleCustomerMode(false, new Vector3(0f, 0f, -1000f));
         //pizzaShopPin.gameObject.SetActive(false);
 
-        toShopBtnText.text = TextManager.Instance.GetCommons("Order");
+        toShopBtnText.text = TextManager.Instance.GetCommons("Return");
         toShopBtn.gameObject.SetActive(false);
 
         worldmap.gameObject.SetActive(false);

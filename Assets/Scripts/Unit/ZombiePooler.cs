@@ -103,7 +103,7 @@ public class ZombiePooler : Singleton<ZombiePooler>
 
         int day = GM.Instance.day;
 
-        if (day > 1)
+        if (day > 0)
         {
             timer2 += 1f * Time.deltaTime;
             if (timer2 >= 10f)
@@ -112,7 +112,7 @@ public class ZombiePooler : Singleton<ZombiePooler>
                 SpawnFast(1);
             }
         }
-        if (day > 3)
+        if (day > 2)
         {
             timer4 += 1f * Time.deltaTime;
             if (timer4 >= 10f)
@@ -121,7 +121,7 @@ public class ZombiePooler : Singleton<ZombiePooler>
                 SpawnRange(1);
             }
         }
-        if (day > 5)
+        if (day > 4)
         {
             timer3 += 1f * Time.deltaTime;
             if (timer3 >= 10f)
@@ -130,7 +130,7 @@ public class ZombiePooler : Singleton<ZombiePooler>
                 SpawnHeavy(1);
             }
         }
-        if (day > 7)
+        if (day > 6)
         {
             timer5 += 1f * Time.deltaTime;
             if (timer5 >= 10f)

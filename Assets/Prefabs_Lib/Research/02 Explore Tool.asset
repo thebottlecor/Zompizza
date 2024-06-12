@@ -18,8 +18,10 @@ MonoBehaviour:
   romanNum: 0
   group: 0
   max: 1
-  cost: 2000
+  cost: 1500
   increaseCost: 4000
+  rating: 0
+  increaseRating: 0
   needResearch:
   - {fileID: 11400000, guid: 1cf06c4009d7e2d4595dd00232f68dcd, type: 2}
   hidden: 0

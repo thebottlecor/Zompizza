@@ -185,6 +185,8 @@ public class UIManager : Singleton<UIManager>
             return;
         }
 
+        if (GM.Instance.darkCanvas.blocksRaycasts) return;
+
         var exploration = ExplorationManager.Instance;
         if (exploration.canvasGroupLoading)
             return;
