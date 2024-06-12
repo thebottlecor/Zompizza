@@ -87,6 +87,9 @@ public class GameEventManager : Singleton<GameEventManager>
         if (triggeredEvents[idx]) return;
         triggeredEvents[idx] = true;
 
+        acceptBtn.gameObject.SetActive(false);
+        declineBtn.gameObject.SetActive(false);
+
         eventPanel.SetActive(true);
 
         AudioManager.Instance.PlaySFX(Sfx.newInfo);

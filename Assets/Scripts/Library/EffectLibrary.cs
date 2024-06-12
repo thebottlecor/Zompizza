@@ -13,4 +13,6 @@ public class EffectLibrary : ScriptableObject
 
     public GameObject goldCoinBlastEffect;
 
+    public GameObject appleBlastEffect;
+
 }

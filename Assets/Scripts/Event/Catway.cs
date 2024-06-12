@@ -12,15 +12,12 @@ public class Catway : MonoBehaviour
     public float speed = 5f;
 
     private Animator animator;
-    private Vector3 initScale;
-    private bool upSize;
     private int targetWayPoint;
     private float dealyToTargetTimer;
 
     private void Start()
     {
         animator = GetComponent<Animator>();
-        initScale = transform.localScale;
         RandomTarget();
     }
 
@@ -36,30 +33,6 @@ public class Catway : MonoBehaviour
         {
             animator.SetBool("Walk", false);
             dealyToTargetTimer -= Time.deltaTime;
-
-            if (upSize)
-            {
-                Vector3 newSize = transform.localScale;
-                newSize.y += 0.3f * Time.deltaTime;
-                if (newSize.y >= 2f)
-                {
-                    newSize.y = 2f;
-                    upSize = false;
-                }
-                transform.localScale = newSize;
-            }
-            else
-            {
-                Vector3 newSize = transform.localScale;
-                newSize.y += -0.3f * Time.deltaTime;
-                if (newSize.y <= 1.7f)
-                {
-                    newSize.y = 1.7f;
-                    upSize = true;
-                }
-                transform.localScale = newSize;
-            }
-
             return;
         }
 

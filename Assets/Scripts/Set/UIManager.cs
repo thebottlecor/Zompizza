@@ -270,16 +270,5 @@ public class UIManager : Singleton<UIManager>
             orderUIObjects[i].OrderReset();
         }
     }
-    public UINavi GetFirstOrder()
-    {
-        for (int i = 0; i < orderUIObjects.Count; i++)
-        {
-            if (orderUIObjects[i].gameObject.activeSelf && orderUIObjects[i].OrderAcceptable())
-            {
-                return orderUIObjects[i].navi;
-            }
-        }
-        return null;
-    }
     #endregion
 }

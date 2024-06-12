@@ -130,6 +130,9 @@ public class GM : Singleton<GM>
     public int[] costVehicles;
     public float[] ratingVehicles;
 
+    [Header("선물 상자")]
+    public GiftGoal[] giftGoals;
+
     [Space(10f)]
 
     public static EventHandler<bool> EndTimeEvent; // true일시 마감
@@ -202,6 +205,10 @@ public class GM : Singleton<GM>
         UIManager.Instance.shopUI.Init();
         TutorialManager.Instance.Init();
         OrderManager.Instance.Init();
+
+        // 저장 불러오기시 주의
+        RandomGiftBox();
+        ResearchManager.Instance.ToggleAllHiddenRecipe(true);
 
         InitPlayer();
     }
@@ -289,7 +296,8 @@ public class GM : Singleton<GM>
                     EndTimeEvent(null, true);
 
                 timeText.text = dayStr[1];
-                
+
+                HideAllGiftBox();
                 ResearchManager.Instance.ToggleAllHiddenRecipe(false);
             }
             EndTime = true;
@@ -363,6 +371,16 @@ public class GM : Singleton<GM>
             UpdateAccountUI();
             accountObj.SetActive(true);
             UINaviHelper.Instance.SetFirstSelect();
+
+            if (day >= 10)
+            {
+                if (!CongratulationTriggered)
+                {
+                    Congratulation(true);
+                    AudioManager.Instance.PlaySFX(Sfx.complete);
+                    UIManager.Instance.shopUI.upgradeDirection.Show();
+                }
+            }
         });
     }
     private void UpdateAccountUI()
@@ -537,6 +555,7 @@ public class GM : Singleton<GM>
             TutorialManager.Instance.NextDay();
             StatManager.Instance.NextDay();
             GameEventManager.Instance.NextDay();
+            RandomGiftBox();
             ResearchManager.Instance.ToggleAllHiddenRecipe(true);
             //RivalManager.Instance.NextDay();
             //ShowRatingText();
@@ -619,6 +638,7 @@ public class GM : Singleton<GM>
         }
         else
         {
+            UINaviHelper.Instance.SetFirstSelect();
             if (day == 2) GameEventManager.Instance.SetEvent(0); // 3일차 아침 고아원 원장 이벤트
             if (day == 8) GameEventManager.Instance.SetEvent(2); // 9일차 아침 고양이 이벤트
         }
@@ -704,10 +724,15 @@ public class GM : Singleton<GM>
 
         for (int i = 0; i < ratingText.Length; i++)
         {
+            //if (displayRating <= 0)
+            //    ratingText[i].text = $"<color=#A91111>{displayRating:0.#}</color> / {Constant.winRating:F0}";
+            //else
+            //    ratingText[i].text = $"{displayRating:0.#} / {Constant.winRating:F0}";
+
             if (displayRating <= 0)
-                ratingText[i].text = $"<color=#A91111>{displayRating:0.#}</color> / {Constant.winRating:F0}";
+                ratingText[i].text = $"<color=#A91111>{displayRating:0.#}</color>";
             else
-                ratingText[i].text = $"{displayRating:0.#} / {Constant.winRating:F0}";
+                ratingText[i].text = $"{displayRating:0.#}";
 
             //if (displayRating >= rivalRating)
             //    ratingText[i].text = $"{displayRating:0.#} / <sprite=6> {rivalRating:0.#}";
@@ -897,6 +922,24 @@ public class GM : Singleton<GM>
         }
         return true;
     }
+    public bool RandomIngredientGet(int count)
+    {
+        if (count <= 0) return false;
+
+        while (count > 0)
+        {
+            Ingredient ingredient = OrderManager.Instance.GetRandomIngredient_HighTier();
+            ingredients[ingredient]++;
+            count--;
+        }
+        return true;
+    }
+    public Ingredient RandomIngredientGet()
+    {
+        Ingredient ingredient = OrderManager.Instance.GetRandomIngredient_HighTier();
+        ingredients[ingredient]++;
+        return ingredient;
+    }
     #endregion
 
     #region 차량 변경
@@ -936,6 +979,27 @@ public class GM : Singleton<GM>
         {
             AudioManager.Instance.PlaySFX(Sfx.deny);
             return false;
+        }
+    }
+    #endregion
+
+    #region 선물 상자
+    public void RandomGiftBox() // 해가 뜬 후 최대 5개의 박스 활성화
+    {
+        HideAllGiftBox();
+
+        giftGoals.Shuffle();
+
+        for (int i = 0; i < 5; i++)
+        {
+            giftGoals[i].Show();
+        }
+    }
+    public void HideAllGiftBox() // 해가 진 후 모든 박스 비활성화
+    {
+        for (int i = 0; i < giftGoals.Length; i++)
+        {
+            giftGoals[i].Hide();
         }
     }
     #endregion

@@ -103,6 +103,20 @@ public class OrderManager : Singleton<OrderManager>
         else
             NewOrder();
     }
+    public Ingredient GetRandomIngredient_HighTier()
+    {
+        var list = ingredients_Tier1;
+
+        switch (ResearchManager.Instance.globalEffect.tier)
+        {
+            case 1:
+                list = ingredients_Tier2;
+                break;
+        }
+
+        int random = UnityEngine.Random.Range(0, list.Count);
+        return list[random];
+    }
     protected override void AddListeners()
     {
         OrderGoal.PlayerArriveEvent += OnPlayerArrive;

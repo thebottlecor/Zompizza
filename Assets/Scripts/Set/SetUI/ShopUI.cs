@@ -222,16 +222,6 @@ public class ShopUI : EventListener
     {
         ShowOrder();
         playerStay = true;
-
-        if (GM.Instance.rating >= Constant.winRating)
-        {
-            if (!GM.Instance.CongratulationTriggered)
-            {
-                GM.Instance.Congratulation(true);
-                AudioManager.Instance.PlaySFX(Sfx.complete);
-                upgradeDirection.Show();
-            }
-        }
     }
 
     private void OnPlayerExitShop(object sender, EventArgs e)
@@ -357,9 +347,24 @@ public class ShopUI : EventListener
         rectTransform.DOAnchorPos(new Vector2(0f, 0f), fadeTime, false).SetEase(Ease.OutElastic).SetUpdate(true);
         canvasGroup.DOFade(1f, fadeTime).SetUpdate(true).OnComplete(() =>
         {
-            loading = false;
-            opened = true;
+            WinCheck();
         });
+    }
+
+    private void WinCheck()
+    {
+        loading = false;
+        opened = true;
+
+        //if (GM.Instance.rating >= Constant.winRating)
+        //{
+        //    if (!GM.Instance.CongratulationTriggered)
+        //    {
+        //        GM.Instance.Congratulation(true);
+        //        AudioManager.Instance.PlaySFX(Sfx.complete);
+        //        upgradeDirection.Show();
+        //    }
+        //}
     }
 
     public void HideUI_Replace()

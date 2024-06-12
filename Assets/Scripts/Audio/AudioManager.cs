@@ -204,5 +204,6 @@ public enum Sfx
     santaTake,
     santaReturn,
     cat,
-    raid
+    raid,
+    itemGet,
 }
