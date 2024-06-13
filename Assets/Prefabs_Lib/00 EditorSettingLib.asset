@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: 00 EditorSettingLib
   m_EditorClassIdentifier: 
   forceStart: 1
-  sceneName: asu 5
+  sceneName: asu
   demoVersion: 0

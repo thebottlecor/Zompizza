@@ -13,10 +13,14 @@ public class HiddenRecipeGoal : MonoBehaviour
     public ResearchInfo researchInfo;
     public GameObject goalEffectObj;
 
+    public SpriteRenderer ingredientSprite;
+
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Player") && !ResearchManager.Instance.Researched(researchInfo.idx))
         {
+            ingredientSprite.sprite = DataManager.Instance.researches[researchInfo.idx].icon;
+
             ResearchManager.Instance.ResearchUnlock_Force(researchInfo.idx);
             StatManager.Instance.foundVisionRecipes++;
             FindEffect();
@@ -46,7 +50,21 @@ public class HiddenRecipeGoal : MonoBehaviour
         pos.y = 4f;
         var obj = Instantiate(source, pos, Quaternion.identity);
         Destroy(obj, 5f);
+
+        CoroutineHelper.StartCoroutine(HideIngredientObj());
+
         Hide();
+    }
+
+    private IEnumerator HideIngredientObj()
+    {
+        if (ingredientSprite != null)
+            ingredientSprite.gameObject.SetActive(true);
+
+        yield return CoroutineHelper.WaitForSeconds(2f);
+
+        if (ingredientSprite != null)
+            ingredientSprite.gameObject.SetActive(false);
     }
 
 }

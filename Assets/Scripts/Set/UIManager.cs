@@ -143,6 +143,7 @@ public class UIManager : Singleton<UIManager>
         if (!e.performed) return false;
         if (isDirecting || changingResolution) return false;
         if (GM.Instance.loading) return false;
+        if (LoadingSceneManager.Instance.logueLoading) return false;
         return true;
     }
 

@@ -11,7 +11,8 @@ public class UnstuckHelper : MonoBehaviour
 
     private void Update()
     {
-        unstuckButton.interactable = cooldown <= 0f;
+        if (unstuckButton != null)
+            unstuckButton.interactable = cooldown <= 0f;
 
         if (cooldown > 0f)
             cooldown -= Time.deltaTime;

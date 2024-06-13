@@ -188,7 +188,8 @@ public class GM : Singleton<GM>
 
         nextDayBtn.onClick.AddListener(() => { NextDay_Late(); });
         gameOverBtn_ToLobby.onClick.AddListener(() => { LoadingSceneManager.Instance.ToLobby(); });
-        congratulationBtn_ToLobby.onClick.AddListener(() => { LoadingSceneManager.Instance.ToLobby(); });
+        //congratulationBtn_ToLobby.onClick.AddListener(() => { LoadingSceneManager.Instance.ToLobby(); });
+        congratulationBtn_ToLobby.onClick.AddListener(() => { LoadingSceneManager.Instance.EpilogueStart(); });
 
         tenDays_RaidRecords = new List<int>();
 

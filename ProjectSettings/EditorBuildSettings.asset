@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/editor_lobby.unity
     guid: 476ad4265a1fe8745a4b755f4323d831
+  - enabled: 1
+    path: Assets/Scenes/Trailer/asu 5.unity
+    guid: ee1a9e43dbaf04f4d973dd315b2753e4
   m_configObjects: {}

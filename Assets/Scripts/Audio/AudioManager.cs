@@ -95,6 +95,11 @@ public class AudioManager : Singleton<AudioManager>
         masterMixer.SetFloat("volumeSFX", Mathf.Log(modify) * 20f);
     }
 
+    public void ToggleMute(bool on)
+    {
+        audioSourceBGM.mute = on;
+    }
+
     private void Update()
     {
         if (isPaused) return;

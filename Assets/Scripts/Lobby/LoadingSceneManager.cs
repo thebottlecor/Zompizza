@@ -11,6 +11,8 @@ public class LoadingSceneManager : Singleton<LoadingSceneManager>
     private int loading = 0;
     public bool IsSceneLoading => loading > 0;
 
+    public bool logueLoading;
+
     public GameStartInfo StartInfo { get; private set; }
 
     private readonly string LoadingSceneName = "loading";
@@ -43,6 +45,24 @@ public class LoadingSceneManager : Singleton<LoadingSceneManager>
     {
         nextScene = "asu";
         StartCoroutine(Co_LobbyStart());
+    }
+
+    public void EpilogueStart()
+    {
+        nextScene = "asu 5";
+
+        if (WorldMapManager.Instance != null)
+        {
+            WorldMapManager.Instance.CloseFullscreenMap();
+        }
+
+        SettingManager.Instance.ReturnToParent();
+        AudioManager.Instance.ToggleMute(true);
+
+        logueLoading = true;
+
+        StartCoroutine(Co_LobbyStart());
+        Time.timeScale = 1f;
     }
 
     public void ToLobby()
@@ -164,6 +184,8 @@ public class LoadingSceneManager : Singleton<LoadingSceneManager>
     void BeforeLoad()
     {
         loading++;
+
+        UINaviHelper.Instance.SetFirstSelect();
     }
 
     void LoadCompletedEvent()
