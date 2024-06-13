@@ -40,7 +40,7 @@ public class Catway : MonoBehaviour
         Vector3 dir = diff.normalized;
         float dist = diff.magnitude;
 
-        if (dist >= 0.25f)
+        if (dist >= 0.33f)
         {
             //위에서 구한 목표 방향(Vector3)을 사분위수로 전환하는 메서드
             Quaternion targetRotation = Quaternion.LookRotation(dir);

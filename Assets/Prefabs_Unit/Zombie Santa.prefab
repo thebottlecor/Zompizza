@@ -89,7 +89,7 @@ MonoBehaviour:
   shadow: {fileID: 5551583242430911235}
   contactingPlayer: 0
   contact: 0
-  range: 5.5
+  range: 5.25
   isRun: 1
   seeker: {fileID: 8468248722716590919}
   pizzaBox: {fileID: 5622349615085434284}
@@ -167,17 +167,17 @@ MonoBehaviour:
     height: 2
   movement:
     follower:
-      rotationSpeed: 720
-      speed: 4.75
-      maxRotationSpeed: 1080
-      maxOnSpotRotationSpeed: 1080
+      rotationSpeed: 600
+      speed: 4.5
+      maxRotationSpeed: 720
+      maxOnSpotRotationSpeed: 720
       slowdownTime: 0.2
       slowdownTimeWhenTurningOnSpot: 0
       desiredWallDistance: 0.5
       leadInRadiusWhenApproachingDestination: 1
       allowRotatingOnSpotBacking: 1
     debugFlags: 0
-    stopDistance: 3.75
+    stopDistance: 3.5
     rotationSmoothing: 0
     positionSmoothing: 0
     groundMask:
@@ -187,8 +187,8 @@ MonoBehaviour:
     isStopped: 0
   managedState:
     autoRepath:
-      mode: 2
-      period: 0.5
+      mode: 1
+      period: 2
       sensitivity: 9
       maximumPeriod: 2
       visualizeSensitivity: 0
@@ -1162,7 +1162,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.9, y: 3, z: 0.45}
+  m_Size: {x: 1.2, y: 3, z: 0.6}
   m_Center: {x: 0, y: 1.5, z: 0}
 --- !u!1001 &5622349615085454786
 PrefabInstance:

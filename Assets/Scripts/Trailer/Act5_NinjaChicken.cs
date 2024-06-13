@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class Act5_NinjaChicken : MonoBehaviour
 {
@@ -23,6 +24,8 @@ public class Act5_NinjaChicken : MonoBehaviour
 
     public int step = 0;
 
+    public CanvasGroup dark;
+
     private float timer;
 
     public AudioClip appearCilp;
@@ -33,6 +36,8 @@ public class Act5_NinjaChicken : MonoBehaviour
 
         randomSpeed = new float[cars.Length];
         reached = new bool[cars.Length];
+
+        dark.alpha = 0f;
 
         for (int i = 0; i < randomSpeed.Length; i++)
         {
@@ -53,7 +58,7 @@ public class Act5_NinjaChicken : MonoBehaviour
             Vector3 dir = diff.normalized;
             float dist = diff.magnitude;
 
-            if (dist > 0.1f)
+            if (dist > 0.33f)
             {
                 bossCar.position += speed * Time.deltaTime * dir;
             }
@@ -90,7 +95,7 @@ public class Act5_NinjaChicken : MonoBehaviour
                 Vector3 dir = diff.normalized;
                 float dist = diff.magnitude;
 
-                if (dist > 0.1f)
+                if (dist > 0.33f)
                 {
                     cars[i].position += (speed + randomSpeed[i]) * Time.deltaTime * dir;
                 }
@@ -111,9 +116,15 @@ public class Act5_NinjaChicken : MonoBehaviour
 
         if (step == 3)
         {
-            if (timer >= 1.6f)
+            if (timer >= 1.5f)
             {
-                LoadingSceneManager.Instance.ToLobby();
+                step = 4;
+
+                dark.DOFade(1f, 0.5f).OnComplete(() =>
+                {
+                    LoadingSceneManager.Instance.ToLobby();
+                });
+
             }
             else
             {
