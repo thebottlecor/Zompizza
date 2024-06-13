@@ -81,7 +81,8 @@ public class RivalManager : Singleton<RivalManager>
     {
         rankingObj.SetActive(true);
 
-        AudioManager.Instance.PlaySFX(Sfx.newInfo);
+        //AudioManager.Instance.PlaySFX(Sfx.newInfo);
+        AudioManager.Instance.PlaySFX(GameEventManager.Instance.audioClips[2]);
 
         rankingRect.localScale = 0.01f * Vector3.one;
         rankingRect.DOScale(new Vector3(1f, 1f, 1f), 0.5f).SetEase(Ease.OutElastic).SetUpdate(true);
