@@ -29,6 +29,7 @@ public class UINaviHelper_Ingame : MonoBehaviour
     [Header("인게임 - 특별")]
     public UINavi explore_first;
     public UINavi raid_first;
+    public UINavi ranking_first;
     public UINavi nextDay_first;
     public UINavi shopCloseWarning_first;
     public UINavi gameOverWarning_first;

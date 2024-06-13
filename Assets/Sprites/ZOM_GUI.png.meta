@@ -181,13 +181,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ZOM_GUI_4
+      name: medal_gold
       rect:
         serializedVersion: 2
         x: 448
-        y: 1504
+        y: 1518
         width: 163
-        height: 241
+        height: 227
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -202,13 +202,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ZOM_GUI_5
+      name: medal_sliver
       rect:
         serializedVersion: 2
         x: 622
-        y: 1504
+        y: 1518
         width: 163
-        height: 241
+        height: 227
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -223,13 +223,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ZOM_GUI_6
+      name: medal_copper
       rect:
         serializedVersion: 2
-        x: 798
-        y: 1520
+        x: 799
+        y: 1518
         width: 163
-        height: 225
+        height: 227
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -1774,7 +1774,6 @@ TextureImporter:
       ZOM_GUI_37: 872452833
       ZOM_GUI_38: 830426757
       ZOM_GUI_39: -1271976586
-      ZOM_GUI_4: -1784701257
       ZOM_GUI_40: 1216761451
       ZOM_GUI_41: -1886665554
       ZOM_GUI_42: 1467668265
@@ -1785,7 +1784,6 @@ TextureImporter:
       ZOM_GUI_47: -1537542172
       ZOM_GUI_48: -1502002095
       ZOM_GUI_49: -402926435
-      ZOM_GUI_5: 1417096844
       ZOM_GUI_50: -772541953
       ZOM_GUI_52: 1171680373
       ZOM_GUI_53: 17739959
@@ -1795,7 +1793,6 @@ TextureImporter:
       ZOM_GUI_57: 1895982423
       ZOM_GUI_58: -2024360725
       ZOM_GUI_59: -1146135056
-      ZOM_GUI_6: -710229829
       ZOM_GUI_60: -1178401396
       ZOM_GUI_61: 1188979254
       ZOM_GUI_62: 74425075
@@ -1838,6 +1835,9 @@ TextureImporter:
       gold: -473345904
       line_01: -1077415394
       line_02: 1388350798
+      medal_copper: -710229829
+      medal_gold: -1784701257
+      medal_sliver: 1417096844
       open: -294951090
       oven_ui_1: -1913751759
       oven_ui_2: -661241749

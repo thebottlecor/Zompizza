@@ -201,6 +201,11 @@ public class UIManager : Singleton<UIManager>
             GM.Instance.HideRaidPanel();
             return;
         }
+        if (RivalManager.Instance.rankingObj.activeSelf)
+        {
+            RivalManager.Instance.HideRankingPanel();
+            return;
+        }
 
         if (GM.Instance.gameOverWarningObj.activeSelf)
         {

@@ -10,13 +10,24 @@ public class UpgradeDirection : MonoBehaviour
     private Coroutine hideCoroutine;
 
     public Transform stackTarget11;
+    public Transform stackTarget12;
 
-    public void Show()
+    public void Show(int pos = 0)
     {
         if (hideCoroutine != null)
         {
             StopCoroutine(hideCoroutine);
         }
+
+        if (pos == 0)
+        {
+            effect.transform.position = stackTarget11.position;
+        }
+        else
+        {
+            effect.transform.position = stackTarget12.position;
+        }
+
         hideCoroutine = StartCoroutine(Hide(effect.main.duration));
     }
 

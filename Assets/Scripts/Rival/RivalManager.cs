@@ -3,15 +3,31 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Linq;
+using DG.Tweening;
 
 public class RivalManager : Singleton<RivalManager>
 {
 
-    public float rating;
+    public GameObject rankingObj;
+    public RectTransform rankingRect;
 
-    public float[] randomDailyAddRatings;
+    public float[] rating;
 
-    public int currentIdx;
+    public TextMeshProUGUI weeklyRankingTMP;
+    public RankingObj[] rankingObjs;
+
+    public Sprite[] medals;
+    public Sprite[] icons;
+
+    private bool playerWin;
+
+
+    public struct RankingInfo
+    {
+        public int idx;
+        public float rating;
+    }
 
     private void Start()
     {
@@ -20,46 +36,67 @@ public class RivalManager : Singleton<RivalManager>
 
     public void Init()
     {
-        rating = 0f;
-        currentIdx = 0;
-        CreateRandomRating();
+        weeklyRankingTMP.text = TextManager.Instance.GetCommons("WeeklyChoice");
+        rating = new float[2];
     }
 
-    private void CreateRandomRating()
+    public bool NextDay()
     {
-        randomDailyAddRatings = new float[10];
-        float[] values = new float[5] { 4f, 4.5f, 5f, 5.5f, 6f };
-        for (int i = 0; i < 2; i++)
+        rating[0] += UnityEngine.Random.Range(6, 11) * 0.5f;
+        rating[1] += UnityEngine.Random.Range(6, 11) * 0.5f;
+
+        if ((GM.Instance.day + 1) % 7 == 0)
         {
-            randomDailyAddRatings[i] = values[0];
+            SetRanking();
+            return true;
         }
-        for (int i = 2; i < 4; i++)
-        {
-            randomDailyAddRatings[i] = values[1];
-        }
-        for (int i = 4; i < 6; i++)
-        {
-            randomDailyAddRatings[i] = values[2];
-        }
-        for (int i = 6; i < 8; i++)
-        {
-            randomDailyAddRatings[i] = values[3];
-        }
-        for (int i = 8; i < 10; i++)
-        {
-            randomDailyAddRatings[i] = values[4];
-        }
-        randomDailyAddRatings.Shuffle();
+        return false;
     }
 
-    public void NextDay()
+    public void SetRanking()
     {
-        rating += randomDailyAddRatings[currentIdx];
-        currentIdx++;
-        if (currentIdx >= randomDailyAddRatings.Length)
+        playerWin = false;
+        float player = GM.Instance.rating > 0 ? GM.Instance.rating : 0f;
+
+        List<RankingInfo> rankings = new List<RankingInfo>(3);
+
+        rankings.Add(new RankingInfo { idx = 2, rating = player });
+        rankings.Add(new RankingInfo { idx = 0, rating = rating[0] });
+        rankings.Add(new RankingInfo { idx = 1, rating = rating[1] });
+
+        float total = player + rating[0] + rating[1];
+
+        var result = rankings.OrderByDescending(i => i.rating);
+
+        int ranking = 0;
+        foreach (var i in result)
         {
-            currentIdx = 0;
-            randomDailyAddRatings.Shuffle();
-        }    
+            if (ranking == 0 && i.idx == 2) playerWin = true;
+            rankingObjs[ranking].Init(i.idx, ranking, i.rating, i.rating / total);
+            ranking++;
+        }
+    }
+
+    public void ShowRankingPanel()
+    {
+        rankingObj.SetActive(true);
+
+        AudioManager.Instance.PlaySFX(Sfx.newInfo);
+
+        rankingRect.localScale = 0.01f * Vector3.one;
+        rankingRect.DOScale(new Vector3(1f, 1f, 1f), 0.5f).SetEase(Ease.OutElastic).SetUpdate(true);
+
+        if (playerWin)
+        {
+            AudioManager.Instance.PlaySFX(Sfx.pizzaComplete);
+            UIManager.Instance.shopUI.upgradeDirection.Show(1);
+        }
+
+        UINaviHelper.Instance.SetFirstSelect();
+    }
+    public void HideRankingPanel()
+    {
+        rankingObj.SetActive(false);
+        GM.Instance.ShowWarningQueue();
     }
 }

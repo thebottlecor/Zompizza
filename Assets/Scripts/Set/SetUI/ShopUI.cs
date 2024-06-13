@@ -195,6 +195,7 @@ public class ShopUI : EventListener
         if (exploration.canvasGroup_resultPanel.alpha >= 0.99f) return;
         if (GM.Instance.gameOverWarningObj.activeSelf) return;
         if (GM.Instance.raidObj.activeSelf) return;
+        if (RivalManager.Instance.rankingObj.activeSelf) return;
         if (GM.Instance.darkCanvas.blocksRaycasts) return;
         if (shopCloseWarningObj.activeSelf) return;
         if (GameEventManager.Instance.eventPanel.activeSelf) return;

@@ -151,6 +151,10 @@ public class UINaviHelper : Singleton<UINaviHelper>
                             {
                                 current = ingame.raid_first;
                             }
+                            else if (RivalManager.Instance.rankingObj.activeSelf)
+                            {
+                                current = ingame.ranking_first;
+                            }
                             else if (GameEventManager.Instance.eventPanel.activeSelf)
                             {
                                 current = ingame.GameEvent_Reconnection();
@@ -163,6 +167,14 @@ public class UINaviHelper : Singleton<UINaviHelper>
                         case 1:
                             if (gm.gameOverWarningObj.activeSelf)
                                 current = ingame.gameOverWarning_first;
+                            else if (gm.raidObj.activeSelf)
+                            {
+                                current = ingame.raid_first;
+                            }
+                            else if (RivalManager.Instance.rankingObj.activeSelf)
+                            {
+                                current = ingame.ranking_first;
+                            }
                             else if (GameEventManager.Instance.eventPanel.activeSelf)
                             {
                                 current = ingame.GameEvent_Reconnection();

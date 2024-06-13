@@ -374,7 +374,7 @@ public class GM : Singleton<GM>
                 {
                     Congratulation(true);
                     AudioManager.Instance.PlaySFX(Sfx.complete);
-                    UIManager.Instance.shopUI.upgradeDirection.Show();
+                    UIManager.Instance.shopUI.upgradeDirection.Show(1);
                 }
             }
         });
@@ -553,7 +553,11 @@ public class GM : Singleton<GM>
             GameEventManager.Instance.NextDay();
             RandomGiftBox();
             ResearchManager.Instance.ToggleAllHiddenRecipe(true);
-            //RivalManager.Instance.NextDay();
+
+            if (RivalManager.Instance.NextDay())
+            {
+                warningQueue.Enqueue(3);
+            }
             //ShowRatingText();
         });
         sequence.Append(darkCanvas.DOFade(0f, 0.5f));
@@ -629,6 +633,9 @@ public class GM : Singleton<GM>
                     break;
                 case 2: // 습격
                     ShowRaidPanel();
+                    break;
+                case 3: // 7일마다 랭킹
+                    RivalManager.Instance.ShowRankingPanel();
                     break;
             }
         }
@@ -783,8 +790,12 @@ public class GM : Singleton<GM>
     {
         int hasRes = HasIngredient;
 
-        // 가진 자원수가 30 넘을 때, 50% 확률로 습격 발생, 습격 관련 업그레이드에 따라서 30%~0% 만큼 자원을 빼앗김, 2 티어부터 발생
-        if (hasRes > 30 && ResearchManager.Instance.globalEffect.tier >= 1 && UnityEngine.Random.Range(0, 2) == 1)
+        // 가진 자원수가 60 넘을 때 (1티어), 30 넘을 때 (2티어), 50% 확률로 습격 발생, 습격 관련 업그레이드에 따라서 30%~0% 만큼 자원을 빼앗김
+        bool raid = false;
+        if (ResearchManager.Instance.globalEffect.tier == 0 && day >= 2 && hasRes > 60) raid = true;
+        else if (ResearchManager.Instance.globalEffect.tier >= 1 && hasRes > 30) raid = true;
+
+        if (raid && UnityEngine.Random.Range(0, 2) == 1)
         {
             float percent = 0.3f;
             switch (ResearchManager.Instance.globalEffect.raidDefense)
@@ -933,7 +944,7 @@ public class GM : Singleton<GM>
     public Ingredient RandomIngredientGet()
     {
         Ingredient ingredient = OrderManager.Instance.GetRandomIngredient_HighTier();
-        ingredients[ingredient]++;
+        ingredients[ingredient] += 3;
         return ingredient;
     }
     #endregion
