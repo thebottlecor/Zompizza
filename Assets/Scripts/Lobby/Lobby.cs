@@ -179,18 +179,19 @@ public class Lobby : Singleton<Lobby>
         LobbyUISwitch(false);
         GameStartInfo gameStartInfo = new GameStartInfo
         {
-            saveName = saveName
+            saveName = saveName,
         };
         LoadingSceneManager.Instance.LobbyStart(gameStartInfo, settingLib.sceneName);
     }
 
-    public void TEMP_GameSTART()
+    public void TEMP_GameSTART() // 현재 데모 버전 시작 버튼
     {
         CloseAllPanel();
         LobbyUISwitch(false);
         GameStartInfo gameStartInfo = new GameStartInfo
         {
             saveName = string.Empty,
+            tutorial = true,
         };
         LoadingSceneManager.Instance.LobbyStart(gameStartInfo, settingLib.sceneName);
     }

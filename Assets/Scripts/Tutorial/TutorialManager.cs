@@ -143,6 +143,22 @@ public class TutorialManager : Singleton<TutorialManager>
         driftText.text = st2.ToString();
     }
 
+    public void ToggleDriftGuide(bool on)
+    {
+        if (on)
+        {
+            var pad = Gamepad.current;
+            driftPadObj.SetActive(pad != null);
+            DriftTextUpdate(pad != null);
+            driftText.gameObject.SetActive(true);
+        }
+        else
+        {
+            driftPadObj.SetActive(false);
+            driftText.gameObject.SetActive(false);
+        }
+    }
+
     protected override void AddListeners()
     {
         TutorialEnterTrigger.PlayerArriveEvent += OnPlayerEnter;

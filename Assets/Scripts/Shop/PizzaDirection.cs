@@ -43,6 +43,7 @@ public class PizzaDirection : EventListener
     [Header("해상도 따라가는 것들")]
     public UpgradeDirection upgradeDirection;
     public Vehicle3DShowcase vehicle3DShowcase;
+    public OffScreenIndicator offScreenIndicator;
 
     protected override void AddListeners()
     {
@@ -84,6 +85,7 @@ public class PizzaDirection : EventListener
         Init();
         upgradeDirection.ResetPos();
         vehicle3DShowcase.ResetPos();
+        offScreenIndicator.ResetPos();
 
         foreach (var temp in ingredients)
         {
@@ -118,6 +120,7 @@ public class PizzaDirection : EventListener
         Init();
         upgradeDirection.ResetPos();
         vehicle3DShowcase.ResetPos();
+        offScreenIndicator.ResetPos();
 
         shopPanel.offsetMin = new Vector2(0, initShopPanelPos.x);
         shopPanel.offsetMax = new Vector2(0, initShopPanelPos.y);

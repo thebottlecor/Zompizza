@@ -52,6 +52,8 @@ public class WorldMapManager : Singleton<WorldMapManager>
         toShopBtn.gameObject.SetActive(false);
 
         worldmap.gameObject.SetActive(false);
+
+        OpenMinimap();
     }
 
     public void ToggleCustomerMode_Btn()

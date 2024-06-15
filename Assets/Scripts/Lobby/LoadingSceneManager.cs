@@ -33,6 +33,8 @@ public class LoadingSceneManager : Singleton<LoadingSceneManager>
 
         if (StartInfo.tutorial)
         {
+            logueLoading = true;
+
             StartCoroutine(Co_PrologueStart());
         }
         else
@@ -79,8 +81,10 @@ public class LoadingSceneManager : Singleton<LoadingSceneManager>
 
     IEnumerator Co_PrologueStart()
     {
+        BeforeLoad();
+
         // 프롤로그 시작
-        var asyncLoad = SceneManager.LoadSceneAsync(4);
+        var asyncLoad = SceneManager.LoadSceneAsync("prologue");
         asyncLoad.allowSceneActivation = false;
         float timer = 0f;
         float t = 0f;
@@ -102,10 +106,12 @@ public class LoadingSceneManager : Singleton<LoadingSceneManager>
                 if (t >= 1)
                 {
                     asyncLoad.allowSceneActivation = true;
+                    LoadCompletedEvent();
                     yield break;
                 }
             }
         }
+        LoadCompletedEvent();
     }
 
     IEnumerator Co_LobbyStart()

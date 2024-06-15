@@ -134,6 +134,7 @@ public class GM : Singleton<GM>
     public GiftGoal[] giftGoals;
 
     [Space(10f)]
+    public GameObject returnIndicator;
 
     public static EventHandler<bool> EndTimeEvent; // true일시 마감
     private TextManager tm => TextManager.Instance;
@@ -190,6 +191,8 @@ public class GM : Singleton<GM>
         gameOverBtn_ToLobby.onClick.AddListener(() => { LoadingSceneManager.Instance.ToLobby(); });
         //congratulationBtn_ToLobby.onClick.AddListener(() => { LoadingSceneManager.Instance.ToLobby(); });
         congratulationBtn_ToLobby.onClick.AddListener(() => { LoadingSceneManager.Instance.EpilogueStart(); });
+
+        LoadingSceneManager.Instance.logueLoading = false;
 
         tenDays_RaidRecords = new List<int>();
 
@@ -326,6 +329,43 @@ public class GM : Singleton<GM>
         }
 
         globalLight.transform.localEulerAngles = lightAngle;
+
+
+        if (TutorialManager.Instance.training && TutorialManager.Instance.step <= 1)
+        {
+            if (returnIndicator.activeSelf)
+            {
+                returnIndicator.SetActive(false);
+            }
+        }
+        else
+        {
+            if (OrderManager.Instance.currentAcceptance == 0)
+            {
+                float dist = (player.transform.position - pizzeriaPos.transform.position).magnitude;
+                if (dist > 100f)
+                {
+                    if (!returnIndicator.activeSelf)
+                    {
+                        returnIndicator.SetActive(true);
+                    }
+                }
+                else
+                {
+                    if (returnIndicator.activeSelf)
+                    {
+                        returnIndicator.SetActive(false);
+                    }
+                }
+            }
+            else
+            {
+                if (returnIndicator.activeSelf)
+                {
+                    returnIndicator.SetActive(false);
+                }
+            }
+        }
     }
 
     private void FixedUpdate()

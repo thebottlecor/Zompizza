@@ -17,6 +17,7 @@ public class CameraFollow2 : MonoBehaviour {
 
 	public Transform camTransform;
 
+	public Camera mainCam;
 	public Camera uiCam;
 
 	int layerMask;

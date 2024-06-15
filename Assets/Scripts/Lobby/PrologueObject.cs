@@ -17,25 +17,30 @@ public class PrologueObject : MonoBehaviour
         if (Input.anyKeyDown)
         {
             keydowned = true;
+            AudioManager.Instance.PlaySFX(Sfx.okay);
             LoadingSceneManager.Instance.PrologueStart();
         }
     }
 
     private string text;
+    private float typingSpeed;
     public TMP_Text targetText;
     public TMP_Text pressAnyKeyText;
 
     void Start()
     {
         text = TextManager.Instance.GetCommons("Prologue");
+
+        typingSpeed = 7.5f / text.Length;
+
         targetText.text = string.Empty;
         tmpCompleted = false;
         pressAnyKeyText.text = TextManager.Instance.GetCommons("PressAnyKey");
         pressAnyKeyText.gameObject.SetActive(false);
-        StartCoroutine(textPrint());
+        StartCoroutine(TextPrint());
     }
 
-    IEnumerator textPrint()
+    IEnumerator TextPrint()
     {
         int count = 0;
 
@@ -47,7 +52,10 @@ public class PrologueObject : MonoBehaviour
                 count++;
             }
 
-            yield return new WaitForSeconds(0.075f);
+            if (count % 4 == 0)
+                AudioManager.Instance.PlaySFX(Sfx.inputFieldStart);
+
+            yield return CoroutineHelper.WaitForSeconds(typingSpeed);
         }
 
         tmpCompleted = true;

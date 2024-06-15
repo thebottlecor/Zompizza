@@ -88,8 +88,7 @@ public class OrderManager : Singleton<OrderManager>
         customersInfos = new SerializableDictionary<int, CustomerInfo>();
         for (int i = 0; i < orderGoals.Count; i++)
         {
-            orderGoals[i].index = i;
-            orderGoals[i].minimapItem.spriteColor = DataManager.Instance.uiLib.customerPinColor[i];
+            orderGoals[i].Init(i);
 
             customersInfos.Add(new SerializableDictionary<int, CustomerInfo>.Pair { Key = i, Value = new CustomerInfo() }); 
         }
@@ -308,20 +307,20 @@ public class OrderManager : Singleton<OrderManager>
     [ContextMenu("새로운 주문")]
     public void NewOrder()
     {
-        // 데모용 2일:3개 = 3일 : 4개 ~~
+        // 데모용 2일:2개 / 3일 : 3개 / 4일 : 4개 ~~
         List<int> rand = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
         rand.Shuffle();
         switch (GM.Instance.day)
         {
             case 0:
             case 1:
-                rand = rand.Take(3).ToList();
+                rand = rand.Take(2).ToList();
                 break;
             case 2:
-                rand = rand.Take(4).ToList();
+                rand = rand.Take(3).ToList();
                 break;
-            case 3:
-                rand = rand.Take(5).ToList();
+            default:
+                rand = rand.Take(4).ToList();
                 break;
                 //default:
                 //    {
@@ -419,7 +418,7 @@ public class OrderManager : Singleton<OrderManager>
         randInfo_sub.Add(new SerializableDictionary<Ingredient, int>.Pair { Key = ingredients_Tier1[2], Value = 1 });
         int ingredientTotal = 3;
 
-        AddOrder_Sub(4, randInfo_sub, ingredientTotal);
+        AddOrder_Sub(4, randInfo_sub, ingredientTotal, 1); // 초반 지원금 명목의 x2배
 
         UIManager.Instance.OrderUIUpdate();
 

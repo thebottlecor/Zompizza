@@ -18,6 +18,9 @@ public class OrderGoal : MonoBehaviour
     public Canvas textCanvas;
     public TextMeshProUGUI goldText;
 
+    private Target target;
+
+
     public static EventHandler<int> PlayerArriveEvent;
 
     private void OnTriggerEnter(Collider other)
@@ -30,6 +33,16 @@ public class OrderGoal : MonoBehaviour
 
             }
         }
+    }
+
+    public void Init(int idx)
+    {
+        index = idx;
+        minimapItem.spriteColor = DataManager.Instance.uiLib.customerPinColor[idx];
+
+        target = GetComponent<Target>();
+
+        target.targetColor = minimapItem.spriteColor;
     }
 
     public void Hide()

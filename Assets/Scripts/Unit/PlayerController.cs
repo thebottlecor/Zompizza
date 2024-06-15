@@ -68,6 +68,7 @@ public class PlayerController : PlayerControllerData
     public List<ZombieBase> contactingZombies = new List<ZombieBase>();
     public float crashDrag = 1000f;
     private float beforeCollisionSpeed;
+    //private Vector3 beforeCollisionVec;
     private bool isCollision;
 
     public CameraFollow2 cam;
@@ -201,6 +202,7 @@ public class PlayerController : PlayerControllerData
                         {
                             crashDrag *= 200f * 2f * speedPercent;
                             beforeCollisionSpeed = MaxSpeed; // 헤비와 부딪히면 무조건 충돌 판정
+                            //beforeCollisionVec = carVel;
                             isCollision = true;
                         }
 
@@ -228,13 +230,16 @@ public class PlayerController : PlayerControllerData
                 if (contactingZombies.Count < 10 && zombie.CloseContact(cp.point)) // 최대 10명 부착
                 {
                     contactingZombies.Add(zombie);
+                    if (GM.Instance.day <= 1) TutorialManager.Instance.ToggleDriftGuide(true);
                 }
             }
         }
         //else if (!collision.gameObject.CompareTag("Plane") && collision.gameObject.layer == 6)
         else if (collision.gameObject.layer == 6) // 패스파인딩 블럭 (일반적인 장애물)
         {
+            //Vector3 carVel = carRigidbody.velocity.normalized;
             beforeCollisionSpeed = carSpeed;
+            //beforeCollisionVec = carVel;
             isCollision = true;
 
             //float speedPercent = Mathf.Abs(carSpeed) / maxSpeed;
@@ -417,6 +422,7 @@ public class PlayerController : PlayerControllerData
         {
             isCollision = false;
             float speedPercent = Mathf.Abs(beforeCollisionSpeed) / MaxSpeed;
+
             if (speedPercent > 0.15f)
             {
                 float speedDiff = carSpeed - beforeCollisionSpeed;
@@ -433,6 +439,20 @@ public class PlayerController : PlayerControllerData
                     cam.Shake(5f);
                 }
             }
+
+            //float playerDot = Vector3.Dot(beforeCollisionVec, transform.forward); // 차앞 방향과 속도 내적
+            //float crashDrag = this.crashDrag;
+            //crashDrag *= 100f * Mathf.Max(0.25f, speedPercent);
+            ////if (speedPercent > 0.25f) crashDrag *= 5f * Mathf.Pow(speedPercent - 0.25f, 2) + 1f;
+
+            //if (playerDot >= 0)
+            //{
+            //    carRigidbody.AddForce(-1f * crashDrag * transform.forward, ForceMode.Impulse);
+            //}
+            //else
+            //{
+            //    carRigidbody.AddForce(crashDrag * transform.forward, ForceMode.Impulse);
+            //}
         }
 
         if (GM.Instance.stop_control) return;
@@ -558,6 +578,7 @@ public class PlayerController : PlayerControllerData
             contactingZombies[i].DriftOffContact(localVelocityX, speedPercent);
             contactingZombies.RemoveAt(i);
         }
+        TutorialManager.Instance.ToggleDriftGuide(false);
     }
 
     // This method controls the car sounds. For example, the car engine will sound slow when the car speed is low because the

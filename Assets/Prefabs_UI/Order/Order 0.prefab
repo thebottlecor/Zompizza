@@ -173,6 +173,7 @@ GameObject:
   - component: {fileID: 2440627241454515191}
   - component: {fileID: 2707481222292273388}
   - component: {fileID: 9007479349898079458}
+  - component: {fileID: 6951413025951255799}
   m_Layer: 0
   m_Name: OrderGoal 0
   m_TagString: Untagged
@@ -262,6 +263,23 @@ MonoBehaviour:
   followRotationOf: 1
   customGameObjectToFollowRotation: {fileID: 0}
   movementsSmoothing: 14
+--- !u!114 &6951413025951255799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4401215816479575123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 411060de4483b5e4c9847cd3cbc18554, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetColor: {r: 1, g: 0, b: 0, a: 1}
+  needBoxIndicator: 0
+  needArrowIndicator: 1
+  needDistanceText: 0
+  indicator: {fileID: 0}
 --- !u!1 &8095215127021016402
 GameObject:
   m_ObjectHideFlags: 0

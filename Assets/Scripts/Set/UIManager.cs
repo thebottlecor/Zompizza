@@ -29,6 +29,7 @@ public class UIManager : Singleton<UIManager>
     public GameObject speedInfo;
     public GameObject timeInfo;
     public GameObject padUIs;
+    public GameObject orderIndicator;
 
     [Header("¿Á∑·√¢")]
     public GameObject ingredient_Source;

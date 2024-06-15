@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Trailer/asu 5.unity
     guid: ee1a9e43dbaf04f4d973dd315b2753e4
+  - enabled: 1
+    path: Assets/Scenes/prologue.unity
+    guid: 3487e9f4d3615ee43903b6c0a0b14b1f
   m_configObjects: {}

@@ -118,6 +118,7 @@ public class UtilUI : EventListener
 
         UIManager.Instance.orderMiniUIParent.SetActive(false);
         UIManager.Instance.speedInfo.SetActive(false);
+        UIManager.Instance.orderIndicator.SetActive(false);
         UIManager.Instance.timeInfo.SetActive(false);
         UIManager.Instance.padUIs.SetActive(false);
         WorldMapManager.Instance.CloseMinimap();
@@ -173,6 +174,7 @@ public class UtilUI : EventListener
 
         UIManager.Instance.orderMiniUIParent.SetActive(true);
         UIManager.Instance.speedInfo.SetActive(true);
+        UIManager.Instance.orderIndicator.SetActive(true);
         UIManager.Instance.timeInfo.SetActive(true);
         UIManager.Instance.padUIs.SetActive(true);
         WorldMapManager.Instance.CloseFullscreenMap();
