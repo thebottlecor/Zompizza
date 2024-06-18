@@ -168,6 +168,8 @@ public class PlayerController : PlayerControllerData
         }
 
         UpdateBox(OrderManager.Instance.GetCurrentPizzaBox());
+
+        UIManager.Instance.shopUI.OrderLoadCountTextUpdate();
     }
 
     void OnCollisionEnter(Collision collision)
@@ -202,7 +204,6 @@ public class PlayerController : PlayerControllerData
                         {
                             crashDrag *= 200f * 2f * speedPercent;
                             beforeCollisionSpeed = MaxSpeed; // 헤비와 부딪히면 무조건 충돌 판정
-                            //beforeCollisionVec = carVel;
                             isCollision = true;
                         }
 
@@ -234,19 +235,13 @@ public class PlayerController : PlayerControllerData
                 }
             }
         }
-        //else if (!collision.gameObject.CompareTag("Plane") && collision.gameObject.layer == 6)
-        else if (collision.gameObject.layer == 6) // 패스파인딩 블럭 (일반적인 장애물)
+        //else if (collision.gameObject.layer == 6) // 패스파인딩 블럭 (일반적인 장애물)
+        else if (collision.gameObject.layer == 6)
         {
-            //Vector3 carVel = carRigidbody.velocity.normalized;
-            beforeCollisionSpeed = carSpeed;
-            //beforeCollisionVec = carVel;
-            isCollision = true;
+            //dfffexcollisionFromSky = collision.gameObject.CompareTag("Plane");
 
-            //float speedPercent = Mathf.Abs(carSpeed) / maxSpeed;
-            //if (speedPercent >= 0.15f)
-            //{
-            //    AudioManager.Instance.PlaySFX(Sfx.crash);
-            //}
+            beforeCollisionSpeed = carSpeed;
+            isCollision = true;
         }
     }
 
@@ -416,14 +411,15 @@ public class PlayerController : PlayerControllerData
 
         backupSound.enabled = !GM.Instance.stop_control;
 
-        Physics.Raycast(transform.position, Vector3.down, 10f, 1 << LayerMask.NameToLayer("UI"));
+        //Physics.Raycast(transform.position, Vector3.down, 10f, 1 << LayerMask.NameToLayer("UI"));
 
         if (isCollision)
         {
             isCollision = false;
-            float speedPercent = Mathf.Abs(beforeCollisionSpeed) / MaxSpeed;
+            //float speedPercent = Mathf.Abs(beforeCollisionSpeed) / MaxSpeed;
 
-            if (speedPercent > 0.15f)
+            //if (speedPercent > 0.15f)
+            if (Mathf.Abs(beforeCollisionSpeed) > 20f)
             {
                 float speedDiff = carSpeed - beforeCollisionSpeed;
                 //Debug.Log(speedDiff);
@@ -439,20 +435,6 @@ public class PlayerController : PlayerControllerData
                     cam.Shake(5f);
                 }
             }
-
-            //float playerDot = Vector3.Dot(beforeCollisionVec, transform.forward); // 차앞 방향과 속도 내적
-            //float crashDrag = this.crashDrag;
-            //crashDrag *= 100f * Mathf.Max(0.25f, speedPercent);
-            ////if (speedPercent > 0.25f) crashDrag *= 5f * Mathf.Pow(speedPercent - 0.25f, 2) + 1f;
-
-            //if (playerDot >= 0)
-            //{
-            //    carRigidbody.AddForce(-1f * crashDrag * transform.forward, ForceMode.Impulse);
-            //}
-            //else
-            //{
-            //    carRigidbody.AddForce(crashDrag * transform.forward, ForceMode.Impulse);
-            //}
         }
 
         if (GM.Instance.stop_control) return;

@@ -207,7 +207,7 @@ public class OrderManager : Singleton<OrderManager>
         if (OrderRemovedEvent != null)
             OrderRemovedEvent(null, orderList.Count);
 
-        UIManager.Instance.shopUI.OrderTextUpdate();
+        UIManager.Instance.shopUI.OrderLoadCountTextUpdate();
 
         UIManager.Instance.OrderUIBtnUpdate();
     }
@@ -299,7 +299,7 @@ public class OrderManager : Singleton<OrderManager>
         if (OrderRemovedEvent != null)
             OrderRemovedEvent(null, orderList.Count);
 
-        UIManager.Instance.shopUI.OrderTextUpdate();
+        UIManager.Instance.shopUI.OrderLoadCountTextUpdate();
 
         UIManager.Instance.OrderUIBtnUpdate();
     }
@@ -308,7 +308,8 @@ public class OrderManager : Singleton<OrderManager>
     public void NewOrder()
     {
         // 데모용 2일:2개 / 3일 : 3개 / 4일 : 4개 ~~
-        List<int> rand = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        //List<int> rand = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        List<int> rand = new List<int> { 0, 1, 2, 3, 4, 5, 6, 8 };
         rand.Shuffle();
         switch (GM.Instance.day)
         {
@@ -344,28 +345,32 @@ public class OrderManager : Singleton<OrderManager>
 
         //bool hasMinimumRes = GM.Instance.HasIngredient >= Constant.customer_max_ingredient;
 
-        float totalDist = 0;
+        //float totalDist = 0;
         int lastRand = rand.Count;
 
-        for (int i = 0; i < rand.Count; i++)
-        {
-            float dist = (orderGoals[i].transform.position - pizzeria.transform.position).magnitude;
-            float km = dist * Constant.distanceScale; // 게임상 거리 200 = 1km
-            totalDist += km;
+        //for (int i = 0; i < rand.Count; i++)
+        //{
+        //    float dist = (orderGoals[rand[i]].transform.position - pizzeria.transform.position).magnitude;
+        //    float km = dist * Constant.distanceScale; // 게임상 거리 200 = 1km
+        //    totalDist += km;
 
-            if (totalDist >= Constant.delivery_order_km) // 최대 주행거리 이상일 경우 주문 그만 받음
-            {
-                lastRand = i + 1;
-                break;
-            }
-            if (i == 5)
-            {
-                lastRand = i + 1;
-                break;
-            }
-        }
+        //    if (totalDist >= Constant.delivery_order_km) // 최대 주행거리 이상일 경우 주문 그만 받음
+        //    {
+        //        lastRand = i + 1;
+        //        break;
+        //    }
+        //    if (i == 5)
+        //    {
+        //        lastRand = i + 1;
+        //        break;
+        //    }
+        //}
         
         int halfRand = lastRand / 2;
+
+        if (GM.Instance.day <= 2) // 3일차 까진, 자신이 가진 재료에서만 주문이 나옴
+            halfRand = lastRand;
+
         int hasRes = GM.Instance.HasIngredient;
         if (lastRand == 1 && hasRes >= 1) 
             halfRand = 1;
@@ -404,7 +409,7 @@ public class OrderManager : Singleton<OrderManager>
 
         OrderGoalUpdate();
 
-        UIManager.Instance.shopUI.OrderTextUpdate();
+        UIManager.Instance.shopUI.OrderLoadCountTextUpdate();
         UIManager.Instance.shopUI.SnapTo(null);
     }
 
@@ -424,7 +429,7 @@ public class OrderManager : Singleton<OrderManager>
 
         OrderGoalUpdate();
 
-        UIManager.Instance.shopUI.OrderTextUpdate();
+        UIManager.Instance.shopUI.OrderLoadCountTextUpdate();
     }
 
     public int CustomerMaxIngredient()
@@ -465,12 +470,14 @@ public class OrderManager : Singleton<OrderManager>
             return false; // 오류 발생
         }
 
+        // 자신이 가진 재료의 랜덤 주문의 재료 최소 기대값을 1 -> 5로 바꿈 (배달로 버는 돈++)
         switch (orderType)
         {
             case 0:
                 {
                     Ingredient randRes = ingredients2[0];
-                    int randCount = Mathf.Min(tempRes[randRes], UnityEngine.Random.Range(1, CustomerMaxIngredient() + 1));
+                    //int randCount = Mathf.Min(tempRes[randRes], UnityEngine.Random.Range(1, CustomerMaxIngredient() + 1));
+                    int randCount = Mathf.Min(tempRes[randRes], UnityEngine.Random.Range(5, CustomerMaxIngredient() + 1));
                     randInfo_sub.Add(new SerializableDictionary<Ingredient, int>.Pair { Key = randRes, Value = randCount });
                     ingredientTotal = randCount;
                     tempRes[randRes] -= randCount;
@@ -481,8 +488,8 @@ public class OrderManager : Singleton<OrderManager>
                 {
                     Ingredient randRes = ingredients2[0];
                     Ingredient randRes2 = ingredients2[1];
-                    int randCount = Mathf.Min(tempRes[randRes], UnityEngine.Random.Range(1, CustomerMaxIngredient()));
-                    int randCount2 = Mathf.Min(tempRes[randRes2], UnityEngine.Random.Range(1, CustomerMaxIngredient() - randCount + 1));
+                    int randCount = Mathf.Min(tempRes[randRes], UnityEngine.Random.Range(5, CustomerMaxIngredient()));
+                    int randCount2 = Mathf.Min(tempRes[randRes2], UnityEngine.Random.Range(5, CustomerMaxIngredient() - randCount + 1));
                     randInfo_sub.Add(new SerializableDictionary<Ingredient, int>.Pair { Key = randRes, Value = randCount });
                     randInfo_sub.Add(new SerializableDictionary<Ingredient, int>.Pair { Key = randRes2, Value = randCount2 });
                     ingredientTotal = randCount + randCount2;
@@ -496,9 +503,9 @@ public class OrderManager : Singleton<OrderManager>
                     Ingredient randRes = ingredients2[0];
                     Ingredient randRes2 = ingredients2[1];
                     Ingredient randRes3 = ingredients2[2];
-                    int randCount = Mathf.Min(tempRes[randRes], UnityEngine.Random.Range(1, CustomerMaxIngredient() - 1));
-                    int randCount2 = Mathf.Min(tempRes[randRes2], UnityEngine.Random.Range(1, CustomerMaxIngredient() - randCount));
-                    int randCount3 = Mathf.Min(tempRes[randRes3], UnityEngine.Random.Range(1, CustomerMaxIngredient() - randCount - randCount2 + 1));
+                    int randCount = Mathf.Min(tempRes[randRes], UnityEngine.Random.Range(5, CustomerMaxIngredient() - 1));
+                    int randCount2 = Mathf.Min(tempRes[randRes2], UnityEngine.Random.Range(5, CustomerMaxIngredient() - randCount));
+                    int randCount3 = Mathf.Min(tempRes[randRes3], UnityEngine.Random.Range(5, CustomerMaxIngredient() - randCount - randCount2 + 1));
                     randInfo_sub.Add(new SerializableDictionary<Ingredient, int>.Pair { Key = randRes, Value = randCount });
                     randInfo_sub.Add(new SerializableDictionary<Ingredient, int>.Pair { Key = randRes2, Value = randCount2 });
                     randInfo_sub.Add(new SerializableDictionary<Ingredient, int>.Pair { Key = randRes3, Value = randCount3 });
@@ -714,7 +721,7 @@ public class OrderManager : Singleton<OrderManager>
         UIManager.Instance.UpdateIngredients();
         UIManager.Instance.OffAll_Ingredient_Highlight();
 
-        UIManager.Instance.shopUI.OrderTextUpdate();
+        UIManager.Instance.shopUI.OrderLoadCountTextUpdate();
 
         UIManager.Instance.OrderUIBtnUpdate();
 
@@ -824,7 +831,7 @@ public class OrderManager : Singleton<OrderManager>
         }
 
         UIManager.Instance.OrderUIReset();
-        UIManager.Instance.shopUI.OrderTextUpdate();
+        UIManager.Instance.shopUI.OrderLoadCountTextUpdate();
 
         if (OrderRemovedEvent != null)
             OrderRemovedEvent(null, orderList.Count);

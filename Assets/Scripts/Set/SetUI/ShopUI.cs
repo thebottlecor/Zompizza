@@ -580,7 +580,7 @@ public class ShopUI : EventListener
         OrderManager.Instance.customersInfos[info.goal] = cInfo;
     }
 
-    public void OrderTextUpdate()
+    public void OrderLoadCountTextUpdate()
     {
         OrderManager.Instance.GetDeliveringCount();
         int current = OrderManager.Instance.currentAcceptance;

@@ -831,10 +831,12 @@ public class GM : Singleton<GM>
     {
         int hasRes = HasIngredient;
 
-        // 가진 자원수가 60 넘을 때 (1티어), 30 넘을 때 (2티어), 50% 확률로 습격 발생, 습격 관련 업그레이드에 따라서 30%~0% 만큼 자원을 빼앗김
+        // 가진 자원수가 60 넘을 때 (1티어), 60 넘을 때 (2티어), 50% 확률로 습격 발생, 습격 관련 업그레이드에 따라서 30%~0% 만큼 자원을 빼앗김
         bool raid = false;
-        if (ResearchManager.Instance.globalEffect.tier == 0 && day >= 2 && hasRes > 60) raid = true;
-        else if (ResearchManager.Instance.globalEffect.tier >= 1 && hasRes > 30) raid = true;
+        if (ResearchManager.Instance.globalEffect.tier == 0 && hasRes > 60) raid = true;
+        else if (ResearchManager.Instance.globalEffect.tier >= 1 && hasRes > 60) raid = true;
+
+        if (day <= 2) raid = false; // 3일차까진 습격 없음
 
         if (raid && UnityEngine.Random.Range(0, 2) == 1)
         {
