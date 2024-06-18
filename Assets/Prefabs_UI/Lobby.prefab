@@ -6896,7 +6896,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: v0.01
+  m_text: v0.03
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: dd233bf8bdb8cc54e81ad98a1da16fc9, type: 2}
   m_sharedMaterial: {fileID: 4247387016874453569, guid: dd233bf8bdb8cc54e81ad98a1da16fc9, type: 2}
@@ -13500,6 +13500,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextScene: 
+  logueLoading: 0
 --- !u!1 &7694117263103645337
 GameObject:
   m_ObjectHideFlags: 0

@@ -282,7 +282,7 @@ public class OrderManager : Singleton<OrderManager>
             {
                 // 배달 실패
                 float fail = Constant.remainTimeRating4 + Constant.remainHpRating4;
-                GM.Instance.AddRating(fail, GM.GetRatingSource.delivery);
+                GM.Instance.AddRating(fail, GM.GetRatingSource.notComplete); // 산타
                 UIManager.Instance.shopUI.AddReview(info, Constant.remainTimeRating4, Constant.remainHpRating4);
 
                 orderGoals[info.goal].Hide();
@@ -320,8 +320,14 @@ public class OrderManager : Singleton<OrderManager>
             case 2:
                 rand = rand.Take(3).ToList();
                 break;
-            default:
+            case 3:
                 rand = rand.Take(4).ToList();
+                break;
+            case 4:
+                rand = rand.Take(5).ToList();
+                break;
+            default:
+                rand = rand.Take(6).ToList();
                 break;
                 //default:
                 //    {
@@ -839,15 +845,20 @@ public class OrderManager : Singleton<OrderManager>
 
     private void NotAcceptedOrderPenalty(OrderInfo info)
     {
-        if (CheckIngredient(info)) // 재료를 가지고 있었던 경우
-        {
-            GM.Instance.AddRating(Constant.delivery_Not_accepted_rating, GM.GetRatingSource.notAccepted);
-            UIManager.Instance.shopUI.AddReview(info, -1000f, Constant.delivery_Not_accepted_rating); // 구분 기능 -100 => -2.5는 점수
-        }
-        else
-        {
-            GM.Instance.AddRating(Constant.delivery_Impossible_accepted_rating, GM.GetRatingSource.notAccepted);
-            UIManager.Instance.shopUI.AddReview(info, -100f, Constant.delivery_Impossible_accepted_rating); // 구분 기능 -100 => -1.5는 점수
-        }
+        // 6월 18일 데모에서 패널티 제거
+
+        //if (CheckIngredient(info)) // 재료를 가지고 있었던 경우
+        //{
+        //    GM.Instance.AddRating(Constant.delivery_Not_accepted_rating, GM.GetRatingSource.notAccepted);
+        //    UIManager.Instance.shopUI.AddReview(info, -1000f, Constant.delivery_Not_accepted_rating); // 구분 기능 -100 => -2.5는 점수
+        //}
+        //else
+        //{
+        //    GM.Instance.AddRating(Constant.delivery_Impossible_accepted_rating, GM.GetRatingSource.notAccepted);
+        //    UIManager.Instance.shopUI.AddReview(info, -100f, Constant.delivery_Impossible_accepted_rating); // 구분 기능 -100 => -1.5는 점수
+        //}
+
+        GM.Instance.AddRating(0f, GM.GetRatingSource.notAccepted);
+        UIManager.Instance.shopUI.AddReview(info, 0f, 0f);
     }
 }
