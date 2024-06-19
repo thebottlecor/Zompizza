@@ -149,7 +149,7 @@ public class GameEventManager : Singleton<GameEventManager>
             case 0:
                 {
                     AudioManager.Instance.PlaySFX(audioClips[0]);
-                    int max = Mathf.Min(10, GM.Instance.HasIngredient);
+                    int max = Mathf.Min(1, GM.Instance.HasIngredient);
                     GM.Instance.IngredientSteal(max);
                     UIManager.Instance.UpdateIngredients();
                     UIManager.Instance.OrderUIBtnUpdate();
@@ -158,7 +158,7 @@ public class GameEventManager : Singleton<GameEventManager>
             case 1:
                 {
                     AudioManager.Instance.PlaySFX(audioClips[2]);
-                    int max = Mathf.Min(3000, GM.Instance.gold);
+                    int max = Mathf.Min(1000, GM.Instance.gold);
                     GM.Instance.AddGold(-1 * max, GM.GetGoldSource.upgrade);
                     friendshipFixed = 5f;
                     return -1 * max;

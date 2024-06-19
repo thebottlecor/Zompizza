@@ -42,8 +42,8 @@ public class RivalManager : Singleton<RivalManager>
 
     public bool NextDay()
     {
-        rating[0] += UnityEngine.Random.Range(6, 11) * 0.5f;
-        rating[1] += UnityEngine.Random.Range(6, 11) * 0.5f;
+        rating[0] += UnityEngine.Random.Range(10, 21) * 0.5f;
+        rating[1] += UnityEngine.Random.Range(10, 21) * 0.5f;
 
         if ((GM.Instance.day + 1) % 7 == 0)
         {

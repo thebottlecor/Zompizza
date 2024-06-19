@@ -806,6 +806,7 @@ public class ShopUI : EventListener
 
         info.effect.Showcustomer_timelimit(st);
         info.effect.Showcustomer_max_tier(st);
+        info.effect.Showorder_max(st);
         info.effect.Showcustomer_max_amount(st);
         info.effect.Showcustomer_max_type(st);
 

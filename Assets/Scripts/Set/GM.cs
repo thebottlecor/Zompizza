@@ -826,6 +826,8 @@ public class GM : Singleton<GM>
             // Ω¿∞› ø‘¿ª ∂©, ª©∏‘¡ˆ æ ¿Ω
             CatSteal();
         }
+        UIManager.Instance.UpdateIngredients();
+        UIManager.Instance.OrderUIBtnUpdate();
     }
     private bool CheckRaid()
     {

@@ -43,6 +43,7 @@ MonoBehaviour:
     customer_timelimit: 0
     customer_max_tier: 0
     customer_max_amount: 2
+    order_max: 1
     customer_max_type: 0
     maxSpeed: 0
     damageReduce: 0

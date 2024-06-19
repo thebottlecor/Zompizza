@@ -311,23 +311,26 @@ public class OrderManager : Singleton<OrderManager>
         //List<int> rand = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
         List<int> rand = new List<int> { 0, 1, 2, 3, 4, 5, 6, 8 };
         rand.Shuffle();
+
+        int extraOrder = ResearchManager.Instance.globalEffect.order_max;
+
         switch (GM.Instance.day)
         {
             case 0:
             case 1:
-                rand = rand.Take(2).ToList();
+                rand = rand.Take(2 + extraOrder).ToList();
                 break;
             case 2:
-                rand = rand.Take(3).ToList();
+                rand = rand.Take(3 + extraOrder).ToList();
                 break;
-            case 3:
-                rand = rand.Take(4).ToList();
-                break;
-            case 4:
-                rand = rand.Take(5).ToList();
-                break;
+            //case 3:
+            //    rand = rand.Take(4).ToList();
+            //    break;
+            //case 4:
+            //    rand = rand.Take(5).ToList();
+            //    break;
             default:
-                rand = rand.Take(6).ToList();
+                rand = rand.Take(4 + extraOrder).ToList();
                 break;
                 //default:
                 //    {
@@ -429,7 +432,7 @@ public class OrderManager : Singleton<OrderManager>
         randInfo_sub.Add(new SerializableDictionary<Ingredient, int>.Pair { Key = ingredients_Tier1[2], Value = 1 });
         int ingredientTotal = 3;
 
-        AddOrder_Sub(4, randInfo_sub, ingredientTotal, 1); // 초반 지원금 명목의 x2배
+        AddOrder_Sub(4, randInfo_sub, ingredientTotal, 0.35f); 
 
         UIManager.Instance.OrderUIUpdate();
 
@@ -483,7 +486,7 @@ public class OrderManager : Singleton<OrderManager>
                 {
                     Ingredient randRes = ingredients2[0];
                     //int randCount = Mathf.Min(tempRes[randRes], UnityEngine.Random.Range(1, CustomerMaxIngredient() + 1));
-                    int randCount = Mathf.Min(tempRes[randRes], UnityEngine.Random.Range(5, CustomerMaxIngredient() + 1));
+                    int randCount = Mathf.Min(tempRes[randRes], UnityEngine.Random.Range(3, CustomerMaxIngredient() + 1));
                     randInfo_sub.Add(new SerializableDictionary<Ingredient, int>.Pair { Key = randRes, Value = randCount });
                     ingredientTotal = randCount;
                     tempRes[randRes] -= randCount;
@@ -494,8 +497,8 @@ public class OrderManager : Singleton<OrderManager>
                 {
                     Ingredient randRes = ingredients2[0];
                     Ingredient randRes2 = ingredients2[1];
-                    int randCount = Mathf.Min(tempRes[randRes], UnityEngine.Random.Range(5, CustomerMaxIngredient()));
-                    int randCount2 = Mathf.Min(tempRes[randRes2], UnityEngine.Random.Range(5, CustomerMaxIngredient() - randCount + 1));
+                    int randCount = Mathf.Min(tempRes[randRes], UnityEngine.Random.Range(3, CustomerMaxIngredient()));
+                    int randCount2 = Mathf.Min(tempRes[randRes2], UnityEngine.Random.Range(1, CustomerMaxIngredient() - randCount + 1));
                     randInfo_sub.Add(new SerializableDictionary<Ingredient, int>.Pair { Key = randRes, Value = randCount });
                     randInfo_sub.Add(new SerializableDictionary<Ingredient, int>.Pair { Key = randRes2, Value = randCount2 });
                     ingredientTotal = randCount + randCount2;
@@ -509,9 +512,9 @@ public class OrderManager : Singleton<OrderManager>
                     Ingredient randRes = ingredients2[0];
                     Ingredient randRes2 = ingredients2[1];
                     Ingredient randRes3 = ingredients2[2];
-                    int randCount = Mathf.Min(tempRes[randRes], UnityEngine.Random.Range(5, CustomerMaxIngredient() - 1));
-                    int randCount2 = Mathf.Min(tempRes[randRes2], UnityEngine.Random.Range(5, CustomerMaxIngredient() - randCount));
-                    int randCount3 = Mathf.Min(tempRes[randRes3], UnityEngine.Random.Range(5, CustomerMaxIngredient() - randCount - randCount2 + 1));
+                    int randCount = Mathf.Min(tempRes[randRes], UnityEngine.Random.Range(3, CustomerMaxIngredient() - 1));
+                    int randCount2 = Mathf.Min(tempRes[randRes2], UnityEngine.Random.Range(1, CustomerMaxIngredient() - randCount));
+                    int randCount3 = Mathf.Min(tempRes[randRes3], UnityEngine.Random.Range(1, CustomerMaxIngredient() - randCount - randCount2 + 1));
                     randInfo_sub.Add(new SerializableDictionary<Ingredient, int>.Pair { Key = randRes, Value = randCount });
                     randInfo_sub.Add(new SerializableDictionary<Ingredient, int>.Pair { Key = randRes2, Value = randCount2 });
                     randInfo_sub.Add(new SerializableDictionary<Ingredient, int>.Pair { Key = randRes3, Value = randCount3 });
@@ -566,7 +569,7 @@ public class OrderManager : Singleton<OrderManager>
         {
             case 0:
                 {
-                    int randCount = UnityEngine.Random.Range(1, CustomerMaxIngredient() + 1);
+                    int randCount = UnityEngine.Random.Range(3, CustomerMaxIngredient() + 1);
                     selectedTierGroup.Shuffle();
                     randInfo_sub.Add(new SerializableDictionary<Ingredient, int>.Pair { Key = selectedTierGroup[0], Value = randCount });
                     ingredientTotal = randCount;
@@ -574,7 +577,7 @@ public class OrderManager : Singleton<OrderManager>
                 break;
             case 1:
                 {
-                    int randCount = UnityEngine.Random.Range(1, CustomerMaxIngredient());
+                    int randCount = UnityEngine.Random.Range(3, CustomerMaxIngredient());
                     int randCount2 = UnityEngine.Random.Range(1, CustomerMaxIngredient() - randCount + 1);
                     selectedTierGroup.Shuffle();
                     randInfo_sub.Add(new SerializableDictionary<Ingredient, int>.Pair { Key = selectedTierGroup[0], Value = randCount });
@@ -584,7 +587,7 @@ public class OrderManager : Singleton<OrderManager>
                 break;
             case 2:
                 {
-                    int randCount = UnityEngine.Random.Range(1, CustomerMaxIngredient() - 1);
+                    int randCount = UnityEngine.Random.Range(3, CustomerMaxIngredient() - 1);
                     int randCount2 = UnityEngine.Random.Range(1, CustomerMaxIngredient() - randCount);
                     int randCount3 = UnityEngine.Random.Range(1, CustomerMaxIngredient() - randCount - randCount2 + 1);
                     selectedTierGroup.Shuffle();
@@ -609,7 +612,7 @@ public class OrderManager : Singleton<OrderManager>
         PizzaInfo randInfo = new PizzaInfo { ingredients = randInfo_sub };
         randPizzas.Add(randInfo);
 
-        int rewards = ingredientTotal * 130; // 현재 재료값은 100으로 고정 => 130% 받음
+        int rewards = ingredientTotal * Constant.delivery_reward_ingredients; // 현재 재료값은 100으로 고정 => 150% 받음
         float mileBouns = Constant.delivery_reward_1km * km;
         rewards += (int)mileBouns;
 

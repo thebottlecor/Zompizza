@@ -30,6 +30,7 @@ public struct ResearchEffect
     public float customer_timelimit;
     public int customer_max_tier;
     public int customer_max_amount;
+    public int order_max;
     // ¹Ì¿Ï
     public int customer_max_type;
 
@@ -243,6 +244,21 @@ public struct ResearchEffect
             st.AppendLine();
         }
     }
+    public void Showorder_max(StringBuilder st)
+    {
+        var tm = TextManager.Instance;
+        var value = order_max;
+        if (value != 0)
+        {
+            string sub;
+            if (value > 0)
+                sub = string.Format("+{0}", value);
+            else
+                sub = string.Format("{0}", value);
+            st.AppendFormat(tm.GetCommons("UpgradeEffect20"), sub);
+            st.AppendLine();
+        }
+    }
     public void Showcustomer_max_type(StringBuilder st)
     {
         var tm = TextManager.Instance;
@@ -396,6 +412,7 @@ public class ResearchInfo : ScriptableObject
             customer_timelimit = effect.customer_timelimit + global.customer_timelimit,
             //customer_max_tier = effect.customer_max_tier + global.customer_max_tier,
             customer_max_amount = effect.customer_max_amount + global.customer_max_amount,
+            order_max = effect.order_max + global.order_max,
             customer_max_type = effect.customer_max_type + global.customer_max_type,
 
             maxSpeed = effect.maxSpeed + global.maxSpeed,
