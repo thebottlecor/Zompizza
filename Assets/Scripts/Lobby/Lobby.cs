@@ -207,7 +207,6 @@ public class Lobby : Singleton<Lobby>
     [SerializeField] private TextMeshProUGUI settingsTMP;
     [SerializeField] private TextMeshProUGUI exitTMP;
     [SerializeField] private TextMeshProUGUI versionTMP;
-    [SerializeField] private TextMeshProUGUI creditButtonTMP;
     [SerializeField] private TextMeshProUGUI creditPanelTMP;
 
     [SerializeField] private TextMeshProUGUI newGamePanelTMP;
@@ -218,6 +217,7 @@ public class Lobby : Singleton<Lobby>
     //[SerializeField] private TextMeshProUGUI disasterIntensityTMP;
     //[SerializeField] private TextMeshProUGUI initialPopulationTMP;
     //[SerializeField] private TextMeshProUGUI initialResourceTMP;
+    [SerializeField] private TextMeshProUGUI settings_titleTMP;
     [SerializeField] private TextMeshProUGUI wishlistNowTMP;
 
     public void UpdateTexts()
@@ -228,7 +228,6 @@ public class Lobby : Singleton<Lobby>
         settingsTMP.text = tm.GetCommons("Menu");
         exitTMP.text = tm.GetCommons("Exit");
         versionTMP.text = string.Format("v{0:0.00}", (SaveManager.Instance.version / 100f));
-        creditButtonTMP.text = tm.GetCommons("Credits");
         creditPanelTMP.text = tm.GetCommons("Credits");
 
         //resourceDensityDropdown.options[0].text = tm.GetCommons("Little");
@@ -256,7 +255,8 @@ public class Lobby : Singleton<Lobby>
 
         //tutorialTMP.text = tm.GetCommons("Tutorial");
 
-        wishlistNowTMP.text = tm.GetCommons("WishlistNow");
+        settings_titleTMP.text = tm.GetCommons("Settings");
+        wishlistNowTMP.text = tm.GetCommons("WishlistNow2");
     }
 
     #region NewGame

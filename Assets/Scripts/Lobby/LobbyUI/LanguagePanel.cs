@@ -11,7 +11,7 @@ public class LanguagePanel : MonoBehaviour
     public GameObject languageObject_Source;
 
     private TextManager tm => TextManager.Instance;
-    [SerializeField] private TextMeshProUGUI languagePanelOpenButtonTmp;
+    //[SerializeField] private TextMeshProUGUI languagePanelOpenButtonTmp;
     [SerializeField] private TextMeshProUGUI languageSettingsTMP;
 
     public void Init()
@@ -72,14 +72,14 @@ public class LanguagePanel : MonoBehaviour
         }
         UINaviHelper.Instance.title_language_first = firstNavi;
 
-        languagePanelOpenButtonTmp.text = tm.GetCommons("Language2", tm.language);
+        //languagePanelOpenButtonTmp.text = tm.GetCommons("Language2", tm.language);
         languageSettingsTMP.text = tm.GetCommons("Language");
     }
 
     public void SetLanguage(Language language)
     {
         TextManager.Instance.SetLanguage(language);
-        languagePanelOpenButtonTmp.text = tm.GetCommons("Language2", language);
+        //languagePanelOpenButtonTmp.text = tm.GetCommons("Language2", language);
         languageSettingsTMP.text = tm.GetCommons("Language");
         SaveManager.Instance.SaveConfig();
     }
