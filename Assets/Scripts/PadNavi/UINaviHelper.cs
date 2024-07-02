@@ -309,8 +309,20 @@ public class UINaviHelper : Singleton<UINaviHelper>
             return;
         }
 
+        if (!e.performed) return;
+        if (ingame != null)
+        {
+            if (current == null)
+            {
+                if (OrderManager.Instance.fastTravleBtn.gameObject.activeInHierarchy)
+                {
+                    OrderManager.Instance.FastTravelAction();
+                }
+                else
+                    return;
+            }
+        }
         if (!uiMoveCheckFunc()) return;
-        if (current == null || !e.performed) return;
 
         if (ingame != null && ingame.virtualCursor.gameObject.activeSelf)
         {

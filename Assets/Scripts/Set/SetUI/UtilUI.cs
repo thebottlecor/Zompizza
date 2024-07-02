@@ -121,6 +121,7 @@ public class UtilUI : EventListener
         UIManager.Instance.orderIndicator.SetActive(false);
         UIManager.Instance.timeInfo.SetActive(false);
         UIManager.Instance.padUIs.SetActive(false);
+        OrderManager.Instance.fastTravelBtnParnet.SetActive(false);
         WorldMapManager.Instance.CloseMinimap();
         WorldMapManager.Instance.OpenFullscreenMap();
 
@@ -177,6 +178,7 @@ public class UtilUI : EventListener
         UIManager.Instance.orderIndicator.SetActive(true);
         UIManager.Instance.timeInfo.SetActive(true);
         UIManager.Instance.padUIs.SetActive(true);
+        OrderManager.Instance.fastTravelBtnParnet.SetActive(true);
         WorldMapManager.Instance.CloseFullscreenMap();
         WorldMapManager.Instance.OpenMinimap();
         SettingManager.Instance.EndKeyBinding();

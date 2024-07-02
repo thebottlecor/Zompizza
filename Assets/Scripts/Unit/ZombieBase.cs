@@ -11,6 +11,7 @@ public abstract class ZombieBase : MonoBehaviour
 
     public bool dead;
     public bool isHeavy;
+    public bool contact;
 
     public SkinnedMeshRenderer meshRenderer;
     public GameObject shadow;

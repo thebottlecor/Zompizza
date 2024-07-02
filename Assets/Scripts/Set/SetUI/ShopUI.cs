@@ -343,6 +343,7 @@ public class ShopUI : EventListener
         UIManager.Instance.orderIndicator.SetActive(false);
         UIManager.Instance.timeInfo.SetActive(false);
         UIManager.Instance.padUIs.SetActive(false);
+        OrderManager.Instance.fastTravelBtnParnet.SetActive(false);
         ExplorationManager.Instance.HideUI_ResultPanel_Instant();
         WorldMapManager.Instance.CloseMinimap();
 
@@ -416,6 +417,7 @@ public class ShopUI : EventListener
         UIManager.Instance.orderIndicator.SetActive(true);
         UIManager.Instance.timeInfo.SetActive(true);
         UIManager.Instance.padUIs.SetActive(true);
+        OrderManager.Instance.fastTravelBtnParnet.SetActive(true);
         ExplorationManager.Instance.HideUI_ResultPanel_Instant();
         WorldMapManager.Instance.OpenMinimap();
         HideAllVehicle();

@@ -9,7 +9,6 @@ public class ZombieSanta : ZombieBase
 {
 
     public bool contactingPlayer;
-    public bool contact;
     private float attackTimer;
     private float contactTimer;
 
@@ -42,7 +41,7 @@ public class ZombieSanta : ZombieBase
         bool walk = false;
         bool attack = false;
 
-        float dist = Vector3.Distance(ZombiePooler.Instance.target.transform.position, transform.position);
+        float dist = Vector3.Distance(ZombiePooler.Instance.currentTarget.transform.position, transform.position);
         if (dist >= 100f)
         {
             if (stealSomething)
@@ -84,7 +83,7 @@ public class ZombieSanta : ZombieBase
 
             walk = true; // Ç×»ó true
 
-            if (ZombiePooler.Instance.target != null)
+            if (ZombiePooler.Instance.currentTarget != null)
             {
                 if (!ai.isStopped)
                 {
@@ -199,7 +198,7 @@ public class ZombieSanta : ZombieBase
             AudioManager.Instance.PlaySFX(Sfx.zombieCrash);
         }
 
-        Transform tempTarger = ZombiePooler.Instance.target;
+        Transform tempTarger = ZombiePooler.Instance.currentTarget;
 
         this.transform.SetParent(ZombiePooler.Instance.zombieSpawnParent);
 
@@ -232,7 +231,7 @@ public class ZombieSanta : ZombieBase
     {
         base.StateReset();
 
-        destinationSetter.target = ZombiePooler.Instance.target;
+        destinationSetter.target = ZombiePooler.Instance.currentTarget;
         stealSomething = false;
         pizzaBox.SetActive(false);
 

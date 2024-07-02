@@ -38,7 +38,7 @@ public class Zombie1 : MonoBehaviour
 
         if (!dead)
         {
-            float dist = Vector3.Distance(ZombiePooler.Instance.target.transform.position, transform.position);
+            float dist = Vector3.Distance(ZombiePooler.Instance.currentTarget.transform.position, transform.position);
             if (dist > 75f) // 그리드 범위는 100f
             {
                 ai.isStopped = true;
@@ -51,7 +51,7 @@ public class Zombie1 : MonoBehaviour
 
             walk = true; // 항상 true
 
-            if (ZombiePooler.Instance.target != null)
+            if (ZombiePooler.Instance.currentTarget != null)
             {
                 if (!ai.isStopped)
                 {
@@ -112,14 +112,14 @@ public class Zombie1 : MonoBehaviour
         rigid.isKinematic = true;
         coll.enabled = false;
 
-        this.transform.SetParent(ZombiePooler.Instance.target);
+        this.transform.SetParent(ZombiePooler.Instance.currentTarget);
 
-        Vector3 origin = ZombiePooler.Instance.target.position;
+        Vector3 origin = ZombiePooler.Instance.currentTarget.position;
         origin.y += 2f;
         if (Physics.Raycast(origin, hitPos - origin, out RaycastHit result, 2f, LayerMask.GetMask("Car Contact Coll")))
         {
             transform.position = result.point;
-            transform.LookAt(ZombiePooler.Instance.target);
+            transform.LookAt(ZombiePooler.Instance.currentTarget);
         }
 
         return true;
@@ -127,7 +127,7 @@ public class Zombie1 : MonoBehaviour
 
     public void DriftOffContact(float localXvel, float speed) // localXvel < 0 오른쪽 , > 0 왼쪽 (로컬 기준)
     {
-        Transform tempTarger = ZombiePooler.Instance.target;
+        Transform tempTarger = ZombiePooler.Instance.currentTarget;
 
         this.transform.SetParent(ZombiePooler.Instance.zombieSpawnParent);
 

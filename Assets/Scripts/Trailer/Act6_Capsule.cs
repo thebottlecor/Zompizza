@@ -26,7 +26,10 @@ public class Act6_Capsule : MonoBehaviour
         target.transform.position = this.transform.position;
         target.transform.rotation = this.transform.rotation;
         target.transform.localScale = this.transform.localScale;
+    }
 
+    private void Update()
+    {
         for (int i = 0; i < animators.Length; i++)
         {
             animators[i].SetBool("Walk", true);

@@ -33,12 +33,12 @@ public class Zombie : MonoBehaviour
         {
             walk = true; // 항상 true
 
-            if (ZombiePooler.Instance.target != null)
+            if (ZombiePooler.Instance.currentTarget != null)
             {
                 if (navMeshAgent.enabled)
                 {
                     walk = true;
-                    navMeshAgent.SetDestination(ZombiePooler.Instance.target.position);
+                    navMeshAgent.SetDestination(ZombiePooler.Instance.currentTarget.position);
 
                     if (!navMeshAgent.pathPending)
                     {
@@ -108,14 +108,14 @@ public class Zombie : MonoBehaviour
         rigid.isKinematic = true;
         coll.enabled = false;
 
-        this.transform.SetParent(ZombiePooler.Instance.target);
+        this.transform.SetParent(ZombiePooler.Instance.currentTarget);
 
-        Vector3 origin = ZombiePooler.Instance.target.position;
+        Vector3 origin = ZombiePooler.Instance.currentTarget.position;
         origin.y += 2f;
         if (Physics.Raycast(origin, hitPos - origin, out RaycastHit result, 2f, LayerMask.GetMask("Car Contact Coll")))
         {
             transform.position = result.point;
-            transform.LookAt(ZombiePooler.Instance.target);
+            transform.LookAt(ZombiePooler.Instance.currentTarget);
         }
 
         return true;
@@ -123,7 +123,7 @@ public class Zombie : MonoBehaviour
 
     public void DriftOffContact(float localXvel, float speed) // localXvel < 0 오른쪽 , > 0 왼쪽 (로컬 기준)
     {
-        Transform tempTarger = ZombiePooler.Instance.target;
+        Transform tempTarger = ZombiePooler.Instance.currentTarget;
 
         this.transform.SetParent(ZombiePooler.Instance.zombieSpawnParent);
 

@@ -9,7 +9,6 @@ public class Zombie2 : ZombieBase
 {
 
     public bool contactingPlayer;
-    public bool contact;
     private float attackTimer;
     private float contactTimer;
 
@@ -41,7 +40,7 @@ public class Zombie2 : ZombieBase
         bool walk = false;
         bool attack = false;
 
-        float dist = Vector3.Distance(ZombiePooler.Instance.target.transform.position, transform.position);
+        float dist = Vector3.Distance(ZombiePooler.Instance.currentTarget.transform.position, transform.position);
         if (dist >= 100f)
         {
             gameObject.SetActive(false);
@@ -76,7 +75,7 @@ public class Zombie2 : ZombieBase
 
             walk = true; // Ç×»ó true
 
-            if (ZombiePooler.Instance.target != null)
+            if (ZombiePooler.Instance.currentTarget != null)
             {
                 if (!ai.isStopped)
                 {
@@ -195,14 +194,14 @@ public class Zombie2 : ZombieBase
         contact = true;
         shadow.SetActive(false);
 
-        this.transform.SetParent(ZombiePooler.Instance.target);
+        this.transform.SetParent(ZombiePooler.Instance.currentTarget);
 
-        Vector3 origin = ZombiePooler.Instance.target.position;
+        Vector3 origin = ZombiePooler.Instance.currentTarget.position;
         origin.y += 2f;
         if (Physics.Raycast(origin, hitPos - origin, out RaycastHit result, 2f, LayerMask.GetMask("Car Contact Coll")))
         {
             transform.position = result.point;
-            transform.LookAt(ZombiePooler.Instance.target);
+            transform.LookAt(ZombiePooler.Instance.currentTarget);
         }
 
         return true;
@@ -215,7 +214,7 @@ public class Zombie2 : ZombieBase
             AudioManager.Instance.PlaySFX(Sfx.zombieCrash);
         }
 
-        Transform tempTarger = ZombiePooler.Instance.target;
+        Transform tempTarger = ZombiePooler.Instance.currentTarget;
 
         this.transform.SetParent(ZombiePooler.Instance.zombieSpawnParent);
 
@@ -247,6 +246,8 @@ public class Zombie2 : ZombieBase
     public override void StateReset()
     {
         base.StateReset();
+
+        destinationSetter.target = ZombiePooler.Instance.currentTarget;
 
         ai.isStopped = false;
         ai.canMove = false;

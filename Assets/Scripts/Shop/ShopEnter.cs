@@ -28,7 +28,7 @@ public class ShopEnter : MonoBehaviour
             //indicator.SetActive(false);
 
             if (PlayerArriveEvent != null)
-            {                         
+            {
                 PlayerArriveEvent(this, null);
             }
         }

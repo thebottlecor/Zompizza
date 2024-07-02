@@ -57,7 +57,7 @@ public class TutorialManager : Singleton<TutorialManager>
 
         for (int i = 0; i < tutorialZombie.Length; i++)
         {
-            tutorialZombie[i].Init(ZombiePooler.Instance.target);
+            tutorialZombie[i].Init(ZombiePooler.Instance.currentTarget);
             tutorialZombie[i].gameObject.SetActive(false);
         }
         controlText.gameObject.SetActive(false);
@@ -174,9 +174,10 @@ public class TutorialManager : Singleton<TutorialManager>
     public void GoToTutorial()
     {
         trainingCenter.SetActive(true);
-        GM.Instance.player.StopPlayer(false);
-        GM.Instance.player.transform.position = trainingCenterPos.position;
-        GM.Instance.player.cam.ForceUpdate();
+        var player = GM.Instance.player;
+        player.StopPlayer(false);
+        player.transform.position = trainingCenterPos.position;
+        player.cam.ForceUpdate();
         training = true;
 
         guideObjects[0].SetActive(true);
@@ -189,9 +190,10 @@ public class TutorialManager : Singleton<TutorialManager>
     public void TutorialSkip()
     {
         trainingCenter.SetActive(false);
-        GM.Instance.player.StopPlayer(instance:true);
-        GM.Instance.player.transform.position = GM.Instance.pizzeriaPos.position;
-        GM.Instance.player.cam.ForceUpdate_WhenMoving();
+        var player = GM.Instance.player;
+        player.StopPlayer(instance:true);
+        player.transform.position = GM.Instance.pizzeriaPos.position;
+        player.cam.ForceUpdate_WhenMoving();
         for (int i = 0; i < tutorialZombie.Length; i++)
         {
             tutorialZombie[i].gameObject.SetActive(false);

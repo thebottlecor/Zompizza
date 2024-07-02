@@ -31,7 +31,7 @@ public class ZombiePooler : Singleton<ZombiePooler>
     public List<ZombieBase> zombiesPoolSanta;
 
     [Header("전역 설정")]
-    public Transform target;
+    public Transform currentTarget;
     public Transform fleeTarget;
     public float knockbackPower;
     public float power;
@@ -75,7 +75,7 @@ public class ZombiePooler : Singleton<ZombiePooler>
         for (int i = 0; i < max; i++)
         {
             var newZombie = Instantiate(source, zombieSpawnParent).GetComponent<ZombieBase>();
-            newZombie.Init(target);
+            newZombie.Init(currentTarget);
             newZombie.gameObject.SetActive(false);
             list.Add(newZombie);
         }
@@ -190,7 +190,7 @@ public class ZombiePooler : Singleton<ZombiePooler>
             {
                 Vector3 node = GetRandomPos(30f);
 
-                float dist = (target.position - node).magnitude;
+                float dist = (currentTarget.position - node).magnitude;
 
                 if (dist < spawnDist * 0.75f)
                 {
@@ -226,7 +226,7 @@ public class ZombiePooler : Singleton<ZombiePooler>
             {
                 Vector3 node = GetRandomPos(10f);
 
-                float dist = (target.position - node).magnitude;
+                float dist = (currentTarget.position - node).magnitude;
 
                 if (dist < spawnDist * 0.75f)
                 {
@@ -258,7 +258,7 @@ public class ZombiePooler : Singleton<ZombiePooler>
             {
                 Vector3 node = GetRandomPos(10f);
 
-                float dist = (target.position - node).magnitude;
+                float dist = (currentTarget.position - node).magnitude;
 
                 if (dist < spawnDist * 0.75f)
                 {
@@ -290,7 +290,7 @@ public class ZombiePooler : Singleton<ZombiePooler>
             {
                 Vector3 node = GetRandomPos(5f);
 
-                float dist = (target.position - node).magnitude;
+                float dist = (currentTarget.position - node).magnitude;
 
                 if (dist < spawnDist * 0.75f)
                 {
@@ -322,7 +322,7 @@ public class ZombiePooler : Singleton<ZombiePooler>
             {
                 Vector3 node = GetRandomPos(25f);
 
-                float dist = (target.position - node).magnitude;
+                float dist = (currentTarget.position - node).magnitude;
 
                 if (dist < spawnDist * 0.75f)
                 {
@@ -371,8 +371,8 @@ public class ZombiePooler : Singleton<ZombiePooler>
     private Vector3 GetRandomPos(float max)
     {
         float random = Random.Range(-1f, 1f) * max;
-        var v3 = Quaternion.AngleAxis(random, Vector3.up) * target.forward;
-        Vector3 newPos = target.transform.position + v3 * spawnDist;
+        var v3 = Quaternion.AngleAxis(random, Vector3.up) * currentTarget.forward;
+        Vector3 newPos = currentTarget.transform.position + v3 * spawnDist;
         newPos.y = 0f;
 
         var node = AstarPath.active.GetNearest(newPos, Pathfinding.NNConstraint.Walkable).position;

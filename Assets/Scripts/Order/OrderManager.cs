@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using System.Linq;
+using UnityEngine.UI;
+using TMPro;
 
 public class OrderManager : Singleton<OrderManager>
 {
@@ -43,6 +45,12 @@ public class OrderManager : Singleton<OrderManager>
     private List<Ingredient> ingredients_Tier2;
     private HashSet<Ingredient> ingredients_Tier1_Hash;
     private HashSet<Ingredient> ingredients_Tier2_Hash;
+
+    public GameObject fastTravelBtnParnet;
+    public Button fastTravleBtn;
+    public RectTransform padKeyIndicators;
+    public TextMeshProUGUI fastTravelText;
+    public TextMeshProUGUI fastTravelTimeText;
 
     public void Init()
     {
@@ -95,7 +103,6 @@ public class OrderManager : Singleton<OrderManager>
 
         orderMiniUIPair = new SerializableDictionary<OrderInfo, OrderMiniUI>();
         orderList = new List<OrderInfo>();
-
 
         if (TutorialManager.Instance.training)
             NewOrder_Tutorial();
@@ -208,6 +215,11 @@ public class OrderManager : Singleton<OrderManager>
             OrderRemovedEvent(null, orderList.Count);
 
         UIManager.Instance.shopUI.OrderLoadCountTextUpdate();
+
+        if (currentAcceptance == 0)
+        {
+            FastTravelShow();
+        }
 
         UIManager.Instance.OrderUIBtnUpdate();
     }
@@ -696,6 +708,11 @@ public class OrderManager : Singleton<OrderManager>
             if (OrderRemovedEvent != null)
                 OrderRemovedEvent(null, orderList.Count);
         }
+
+        if (fastTravleBtn.gameObject.activeSelf)
+        {
+            FastTravelCalc();
+        }
     }
 
     public void OrderGoalUpdate()
@@ -863,5 +880,52 @@ public class OrderManager : Singleton<OrderManager>
 
         GM.Instance.AddRating(0f, GM.GetRatingSource.notAccepted);
         UIManager.Instance.shopUI.AddReview(info, 0f, 0f);
+    }
+
+
+    private float travelTime;
+
+    private void FastTravelShow()
+    {
+        if (GM.Instance.day <= 0) return;
+
+        fastTravelText.text = TextManager.Instance.GetCommons("FastTravel");
+        fastTravleBtn.gameObject.SetActive(true);
+        padKeyIndicators.anchoredPosition = new Vector2(0f, 120f);
+        FastTravelCalc();
+    }
+
+    public void FastTravelAction()
+    {
+        GM.Instance.timer += travelTime;
+
+        var player = GM.Instance.player;
+        player.StopPlayer(instance: true);
+        player.transform.position = GM.Instance.pizzeriaPos.position;
+        player.cam.ForceUpdate_WhenMoving();
+        player.ShakeOffAllZombies();
+
+        fastTravleBtn.gameObject.SetActive(false);
+        padKeyIndicators.anchoredPosition = new Vector2(0f, 0f);
+    }
+
+    private void FastTravelCalc()
+    {
+        float dist = (GM.Instance.player.transform.position - pizzeria.transform.position).magnitude;
+        float km = dist * Constant.distanceScale; // 게임상 거리 200 = 1km
+
+        if (km <= 0.5f)
+        {
+            fastTravleBtn.gameObject.SetActive(false);
+            padKeyIndicators.anchoredPosition = new Vector2(0f, 0f);
+            return;
+        }
+
+        travelTime = km * 35f;
+
+        int hour = (int)(travelTime / Constant.oneHour);
+        int minute = (int)((travelTime - hour * Constant.oneHour) / Constant.oneMinute);
+
+        fastTravelTimeText.text = TextManager.Instance.GetCommons("TravelTime") + $" : {hour:00}:{minute:00}";
     }
 }
