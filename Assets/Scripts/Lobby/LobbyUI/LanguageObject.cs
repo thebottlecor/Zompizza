@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class LanguageObject : MonoBehaviour
 {
 
+    public Image image;
     public TextMeshProUGUI tmp;
     [SerializeField] private LanguagePanel panel;
-    [SerializeField] private Language language;
+    [SerializeField] public Language language;
 
     public void Init(Language language, LanguagePanel panel)
     {
@@ -19,7 +21,7 @@ public class LanguageObject : MonoBehaviour
 
     public void SetLanguage()
     {
-        panel.SetLanguage(language);
+        panel.SetLanguage(language, this);
         AudioManager.Instance.PlaySFX(Sfx.buttons); // 언어 변경 버튼
     }
 }

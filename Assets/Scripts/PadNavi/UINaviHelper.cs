@@ -63,7 +63,7 @@ public class UINaviHelper : Singleton<UINaviHelper>
         var pad = Gamepad.current;
         if (pad == null) return;
 
-        if (LoadingSceneManager.Instance == null || LoadingSceneManager.Instance.IsSceneLoading)
+        if (LoadingSceneManager.Instance == null || LoadingSceneManager.Instance.IsSceneLoading || LoadingSceneManager.Instance.logueLoading)
         {
             return;
         }

@@ -58,7 +58,7 @@ public class Act5_NinjaChicken : MonoBehaviour
             Vector3 dir = diff.normalized;
             float dist = diff.magnitude;
 
-            if (dist > 0.33f)
+            if (dist > 0.5f)
             {
                 bossCar.position += speed * Time.deltaTime * dir;
             }
@@ -95,7 +95,7 @@ public class Act5_NinjaChicken : MonoBehaviour
                 Vector3 dir = diff.normalized;
                 float dist = diff.magnitude;
 
-                if (dist > 0.33f)
+                if (dist > 0.5f)
                 {
                     cars[i].position += (speed + randomSpeed[i]) * Time.deltaTime * dir;
                 }

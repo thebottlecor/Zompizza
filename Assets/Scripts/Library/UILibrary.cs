@@ -9,6 +9,11 @@ using System.Text.RegularExpressions;
 public class UILibrary : ScriptableObject
 {
 
+    public Color button_MainColor;
+    public Color button_HighlightColor;
+    public Color button_subColor;
+    public Color button_inactiveColor;
+
     public Sprite shopButton;
     public Sprite shopButtonHighlighted;
 

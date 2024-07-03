@@ -14,6 +14,8 @@ public class LanguagePanel : MonoBehaviour
     //[SerializeField] private TextMeshProUGUI languagePanelOpenButtonTmp;
     [SerializeField] private TextMeshProUGUI languageSettingsTMP;
 
+    private List<LanguageObject> languageObjects;
+
     public void Init()
     {
         Language firstLanguage = Language.en;
@@ -40,20 +42,29 @@ public class LanguagePanel : MonoBehaviour
                 break;
         }
 
+        languageObjects = new List<LanguageObject>();
         List<UINavi> tempList = new List<UINavi>();
 
+        LanguageObject saveLanObj = null;
         LanguageObject languageObject = Instantiate(languageObject_Source, objectParent).GetComponent<LanguageObject>();
         languageObject.Init(firstLanguage, this);
-        UINavi firstNavi = languageObject.GetComponent<UINavi>();
-        tempList.Add(firstNavi);
+        languageObjects.Add(languageObject);
+        tempList.Add(languageObject.GetComponent<UINavi>());
+        LanguageObject firstObj = languageObject;
+        if (firstLanguage == TextManager.Instance.language)
+            saveLanObj = languageObject;
 
         for (int i = 0; i < (int)Language.LAST; i++)
         {
             if ((Language)i != firstLanguage)
             {
                 languageObject = Instantiate(languageObject_Source, objectParent).GetComponent<LanguageObject>();
-                languageObject.Init((Language)i, this);
+                Language language = (Language)i;
+                languageObject.Init(language, this);
+                languageObjects.Add(languageObject);
                 tempList.Add(languageObject.GetComponent<UINavi>());
+                if (language == TextManager.Instance.language)
+                    saveLanObj = languageObject;
             }
         }
         for (int i = 0; i < tempList.Count; i++)
@@ -70,18 +81,34 @@ public class LanguagePanel : MonoBehaviour
 
             tempList[i].down = UINaviHelper.Instance.title_settings_close;
         }
-        UINaviHelper.Instance.title_language_first = firstNavi;
+        if (saveLanObj != null)
+            firstObj = saveLanObj;
+        SetHighlight(firstObj);
 
         //languagePanelOpenButtonTmp.text = tm.GetCommons("Language2", tm.language);
         languageSettingsTMP.text = tm.GetCommons("Language");
     }
 
-    public void SetLanguage(Language language)
+    public void SetLanguage(Language language, LanguageObject self)
     {
         TextManager.Instance.SetLanguage(language);
         //languagePanelOpenButtonTmp.text = tm.GetCommons("Language2", language);
         languageSettingsTMP.text = tm.GetCommons("Language");
         SaveManager.Instance.SaveConfig();
+
+        SetHighlight(self);
+    }
+
+    private void SetHighlight(LanguageObject self)
+    {
+        for (int i = 0; i < languageObjects.Count; i++)
+        {
+            languageObjects[i].image.color = DataManager.Instance.uiLib.button_MainColor;
+        }
+
+        self.image.color = DataManager.Instance.uiLib.button_HighlightColor;
+
+        UINaviHelper.Instance.title_language_first = self.GetComponent<UINavi>();
     }
 
 }
