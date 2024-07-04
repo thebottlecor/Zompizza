@@ -253,8 +253,8 @@ MonoBehaviour:
   flipInX: 0
   flipInY: 0
   raycastTarget: 0
-  sizeOnMinimap: {x: 30, y: 0, z: 30}
-  sizeOnHighlight: 30
+  sizeOnMinimap: {x: 32, y: 0, z: 32}
+  sizeOnHighlight: 24
   orderInLayer: 1
   particlesHighlightMode: 0
   particlesSprite: {fileID: 0}

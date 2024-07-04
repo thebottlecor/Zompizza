@@ -46,6 +46,7 @@ public class OrderManager : Singleton<OrderManager>
     private HashSet<Ingredient> ingredients_Tier1_Hash;
     private HashSet<Ingredient> ingredients_Tier2_Hash;
 
+    [Header("빠른 이동")]
     public GameObject fastTravelBtnParnet;
     public Button fastTravleBtn;
     public RectTransform padKeyIndicators;
@@ -926,6 +927,6 @@ public class OrderManager : Singleton<OrderManager>
         int hour = (int)(travelTime / Constant.oneHour);
         int minute = (int)((travelTime - hour * Constant.oneHour) / Constant.oneMinute);
 
-        fastTravelTimeText.text = TextManager.Instance.GetCommons("TravelTime") + $" : {hour:00}:{minute:00}";
+        fastTravelTimeText.text = TextManager.Instance.GetCommons("TravelTime") + $" {hour:00}:{minute:00}";
     }
 }

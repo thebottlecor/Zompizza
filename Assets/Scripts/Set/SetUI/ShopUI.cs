@@ -114,6 +114,8 @@ public class ShopUI : EventListener
     public TextMeshProUGUI vehicleInfo_NameText;
     public TextMeshProUGUI vehicleInfo_DetailText;
 
+    private UILibrary uiLib => DataManager.Instance.uiLib;
+
     public void Init()
     {
         reviewDayObjects = new List<ReviewDayObject>();
@@ -774,11 +776,22 @@ public class ShopUI : EventListener
             float rating = rm.GetRating(idx);
             if (rating > 0)
             {
-                st.AppendFormat(tm.GetCommons("RatingNeed"), "<sprite=1>", rating);
+                if (GM.Instance.rating >= rating)
+                    st.AppendFormat(tm.GetCommons("RatingNeed"), "<sprite=1>", rating);
+                else
+                {
+                    st.AppendFormat(tm.GetCommons("RatingNeed"), "<sprite=1>", "<color=#A91111>" + rating + "</color>");
+                }
                 st.AppendLine();
             }
 
-            st.AppendFormat("{0} : {1}$", tm.GetCommons("Costs"), rm.GetCost(idx));
+            int cost = rm.GetCost(idx);
+            if (GM.Instance.gold >= cost)
+                st.AppendFormat("<sprite=2> {0} : {1}$", tm.GetCommons("Costs"), rm.GetCost(idx));
+            else
+            {
+                //st.AppendFormat("<sprite=2> {0} : <color=#A91111>{1}$</color>", tm.GetCommons("Costs"), rm.GetCost(idx));
+            }
         }
         st.AppendLine();
         st.AppendLine();
@@ -819,6 +832,17 @@ public class ShopUI : EventListener
         detailText.text = st.ToString();
 
         unlockBtn.gameObject.SetActive(canResearch);
+        if (canResearch)
+        {
+            if (ResearchManager.Instance.CheckCanUnlocked(idx))
+            {
+                unlockBtn.GetComponent<Image>().color = uiLib.button_MainColor;
+            }
+            else
+            {
+                unlockBtn.GetComponent<Image>().color = uiLib.button_inactiveColor;
+            }
+        }
         //upgrade_UnlockBtn.enabled = canResearch;
 
         if (vehicle)
@@ -903,7 +927,8 @@ public class ShopUI : EventListener
         if (GM.Instance.currentVehicle == current)
         {
             selectVehicleBtnText.text = tm.GetCommons("SelectVehicles");
-            selectVehicleBtn.image.color = new Color(0.1753262f, 0.6415094f, 0.09985761f);
+            //selectVehicleBtn.image.color = new Color(0.1753262f, 0.6415094f, 0.09985761f);
+            selectVehicleBtn.image.color = uiLib.button_HighlightColor;
             selectVehicleBtnMode = 0;
         }
         else
@@ -911,14 +936,26 @@ public class ShopUI : EventListener
             if (GM.Instance.unlockedVehicles[current])
             {
                 selectVehicleBtnText.text = tm.GetCommons("SelectVehicles");
-                selectVehicleBtn.image.color = new Color(0.5283019f, 0.5283019f, 0.5283019f);
+                //selectVehicleBtn.image.color = new Color(0.5283019f, 0.5283019f, 0.5283019f);
+                selectVehicleBtn.image.color = uiLib.button_MainColor;
                 selectVehicleBtnMode = 1;
             }
             else
             {
                 //selectVehicleBtnText.text = $"{tm.GetCommons("BuyVehicles")} ({GM.Instance.costVehicles[current]}$)";
+
+                if (GM.Instance.CanBuyVehicle(current))
+                {
+                    //selectVehicleBtn.image.color = new Color(0.8113208f, 0.5289791f, 0.1033286f);
+                    selectVehicleBtn.image.color = uiLib.button_MainColor;
+                }
+                else
+                {
+                    //selectVehicleBtn.image.color = new Color(0.8113208f, 0.5289791f, 0.1033286f);
+                    selectVehicleBtn.image.color = uiLib.button_inactiveColor;
+                }
+
                 selectVehicleBtnText.text = string.Format(tm.GetCommons("RatingNeed"), "<sprite=1>", GM.Instance.ratingVehicles[current]);
-                selectVehicleBtn.image.color = new Color(0.8113208f, 0.5289791f, 0.1033286f);
                 selectVehicleBtnMode = 2;
             }
         }

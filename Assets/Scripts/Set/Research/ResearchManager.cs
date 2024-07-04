@@ -318,10 +318,15 @@ public class ResearchManager : Singleton<ResearchManager>
         return ResearchInfo[idx].max > researchedCount[idx] && CheckneedResearch(idx);
     }
 
+    public bool CheckCanUnlocked(int idx)
+    {
+        return CanResearced(idx) && CheckRating(idx) && PayCost(idx, false);
+    }
+
     public bool ResearchUnlock(int idx)
     {
         // 실제 돈 지불이 들어가는 PayCost는 맨 마지막 조건므로
-        if (CanResearced(idx) && CheckRating(idx) && PayCost(idx))
+        if (CanResearced(idx) && CheckRating(idx) && PayCost(idx, true))
         {
             globalEffect = ResearchInfo[idx].AddEffect(globalEffect);
             researchedCount[idx]++;
@@ -372,7 +377,7 @@ public class ResearchManager : Singleton<ResearchManager>
         return !ResearchInfo[idx].invalid;
     }
 
-    private bool PayCost(int idx)
+    private bool PayCost(int idx, bool pay = false)
     {
         //if (GM.Instance.TEST_Free_Research) return true;
 
@@ -383,8 +388,11 @@ public class ResearchManager : Singleton<ResearchManager>
         if (gold < needCost)
             return false;
 
-        // 실제 지불
-        GM.Instance.AddGold(-1 * needCost, GM.GetGoldSource.upgrade);
+        if (pay)
+        {
+            // 실제 지불
+            GM.Instance.AddGold(-1 * needCost, GM.GetGoldSource.upgrade);
+        }
         return true;
     }
     public int GetCost(int idx)

@@ -16,6 +16,7 @@ MonoBehaviour:
   button_HighlightColor: {r: 0.9528302, g: 0.49648076, b: 0.373042, a: 1}
   button_subColor: {r: 0.67058825, g: 0.47450984, b: 0.21960786, a: 1}
   button_inactiveColor: {r: 0.2, g: 0.17254902, b: 0.16470589, a: 1}
+  button_Upgrade: {r: 0.3113208, g: 0.06096512, b: 0.04552332, a: 1}
   shopButton: {fileID: 793004247, guid: 3aa4e097f0107b14291c62f14a55a3b9, type: 3}
   shopButtonHighlighted: {fileID: 1118936077, guid: 3aa4e097f0107b14291c62f14a55a3b9, type: 3}
   customerPinColor:

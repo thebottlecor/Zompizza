@@ -376,7 +376,8 @@ public class GM : Singleton<GM>
     private void DayStringUpdate()
     {
         dayStr[0] = string.Format(tm.GetCommons("Day"), day + 1) + "  ";
-        dayStr[1] = string.Format(tm.GetCommons("Day"), day + 1) + "  <color=#A91111>18:00</color>"; // 영업 종료시
+        //dayStr[1] = string.Format(tm.GetCommons("Day"), day + 1) + "  <color=#000000>18:00</color>"; // 영업 종료시
+        dayStr[1] = "<color=#000000>" + string.Format(tm.GetCommons("Day"), day + 1) + "  18:00</color>"; // 영업 종료시
     }
 
     public void NextDay()
@@ -1010,6 +1011,11 @@ public class GM : Singleton<GM>
         controllerData[idx].SetData(player);
     }
     
+    public bool CanBuyVehicle(int idx)
+    {
+        return !unlockedVehicles[idx] && rating >= ratingVehicles[idx];
+    }
+
     public bool BuyVehicle(int idx)
     {
         //if (!unlockedVehicles[idx] && gold >= costVehicles[idx])
@@ -1020,7 +1026,7 @@ public class GM : Singleton<GM>
         //    unlockedVehicles[idx] = true;
         //    return true;
         //}
-        if (!unlockedVehicles[idx] && rating >= ratingVehicles[idx])
+        if (CanBuyVehicle(idx))
         {
             // 성공 연출
             AudioManager.Instance.PlaySFX(Sfx.complete);

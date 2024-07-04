@@ -7,6 +7,8 @@ using TMPro;
 public class ResearchUI : MonoBehaviour
 {
 
+    public Image bg;
+
     public int idx;
     public Image icon;
     public Image level_highlight;
@@ -70,11 +72,13 @@ public class ResearchUI : MonoBehaviour
         {
             (transform as RectTransform).sizeDelta = 1.25f * initSizeDelta;
             romanNumText.rectTransform.localScale = initRomanScale * 1.25f;
+            bg.color = DataManager.Instance.uiLib.button_HighlightColor;
         }
         else
         {
             (transform as RectTransform).sizeDelta = initSizeDelta;
             romanNumText.rectTransform.localScale = initRomanScale;
+            bg.color = DataManager.Instance.uiLib.button_Upgrade;
         }
     }
 

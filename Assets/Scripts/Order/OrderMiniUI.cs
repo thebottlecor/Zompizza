@@ -10,6 +10,7 @@ public class OrderMiniUI : MonoBehaviour
     public Image pin;
     public Image profile;
 
+    public Image timerGauge;
     public Image pizzaHpGauge;
 
     public TextMeshProUGUI timerTMP;
@@ -71,10 +72,14 @@ public class OrderMiniUI : MonoBehaviour
 
         if (overLimit)
         {
-            timerTMP.text = $"<color=#ff0000>{hour:00}:{minute:00}</color>";
+            timerGauge.fillAmount = 0f;
+            timerTMP.text = $"<color=#A91111>{hour:00}:{minute:00}</color>";
         }
         else
+        {
+            timerGauge.fillAmount = remainTime / info.timeLimit;
             timerTMP.text = $"{hour:00}:{minute:00}";
+        }
 
         bool angry = CalcAngry(overLimit, info.hp);
         if (emoji.gameObject.activeSelf != angry)

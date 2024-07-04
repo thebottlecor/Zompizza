@@ -29,6 +29,8 @@ public class OvenMiniGame : EventListener
     public GameObject keyPadObj;
     public TextMeshProUGUI[] gradeTexts;
 
+    public Button keyTextBtn;
+
     private SerializableDictionary<KeyMap, KeyMapping> HotKey => SettingManager.Instance.keyMappings;
     private TextManager tm => TextManager.Instance;
 
@@ -86,6 +88,7 @@ public class OvenMiniGame : EventListener
         oven_operating.SetActive(true);
 
         operating = true;
+        keyTextBtn.interactable = true;
 
         AudioManager.Instance.PlaySFX(Sfx.kitchenTimer, true);
     }
@@ -105,11 +108,15 @@ public class OvenMiniGame : EventListener
 
         var pad = Gamepad.current;
         if (pad == null)
-            keyText.text = $">> {tm.GetCommons("Stop")} ({HotKey[KeyMap.carBreak].GetName()}) <<";
+            keyText.text = $"{tm.GetCommons("Stop")} ({HotKey[KeyMap.carBreak].GetName()})";
         else
-            keyText.text = $">> {tm.GetCommons("Stop")} <<";
+            keyText.text = $"{tm.GetCommons("Stop")}";
         keyPadObj.SetActive(pad != null);
-
+        RectTransform keyRect = keyText.transform as RectTransform;
+        LayoutRebuilder.ForceRebuildLayoutImmediate(keyRect);
+        RectTransform buttonRect = (keyTextBtn.transform as RectTransform);
+        buttonRect.sizeDelta = new Vector2(keyRect.sizeDelta.x + 144f, buttonRect.sizeDelta.y);
+        keyTextBtn.interactable = false;
         operating = false;
 
         oven_stay.SetActive(true);
@@ -191,6 +198,13 @@ public class OvenMiniGame : EventListener
             StopOven();
         }
     }
+    public void ButtonClick()
+    {
+        if (!operating) return;
+
+        AudioManager.Instance.PlaySFX(Sfx.buttons);
+        StopOven();
+    }
 
     public void StopOven()
     {
@@ -199,6 +213,7 @@ public class OvenMiniGame : EventListener
         AudioManager.Instance.StopSFX(true);
         AudioManager.Instance.PlaySFX(Sfx.complete);
         operating = false;
+        keyTextBtn.interactable = false;
 
         oven_stay.SetActive(true);
         oven_operating.SetActive(false);
