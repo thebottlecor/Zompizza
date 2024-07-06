@@ -132,6 +132,9 @@ public class GM : Singleton<GM>
 
     [Header("선물 상자")]
     public GiftGoal[] giftGoals;
+    [Header("축구공")]
+    private Vector3 footBallPos;
+    public Transform footBall;
 
     [Space(10f)]
     public GameObject returnIndicator;
@@ -213,6 +216,8 @@ public class GM : Singleton<GM>
         ResearchManager.Instance.ToggleAllHiddenRecipe(true);
 
         InitPlayer();
+
+        footBallPos = footBall.position;
     }
 
     public void TextUpdate()
@@ -420,6 +425,8 @@ public class GM : Singleton<GM>
                 }
             }
         });
+
+        footBall.position = footBallPos;
     }
     private void UpdateAccountUI()
     {

@@ -42,6 +42,7 @@ public class ZombiePooler : Singleton<ZombiePooler>
     public Vector3 spawnOffset;
     public float spawnDist;
     public int spawnCount = 1;
+    public int spawnCountRandomAdd = 0;
     private float timer;
     private float timer2;
     private float timer3;
@@ -98,7 +99,8 @@ public class ZombiePooler : Singleton<ZombiePooler>
         if (timer >= 1f)
         {
             timer = 0f;
-            Spawn(spawnCount);
+            int count = spawnCount + UnityEngine.Random.Range(0, spawnCountRandomAdd + 1);
+            Spawn(count);
         }
 
         int day = GM.Instance.day;
