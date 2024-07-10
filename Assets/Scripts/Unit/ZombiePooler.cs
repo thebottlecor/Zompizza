@@ -30,6 +30,9 @@ public class ZombiePooler : Singleton<ZombiePooler>
     public int maxZombieSanta = 1;
     public List<ZombieBase> zombiesPoolSanta;
 
+    public int maxHitEffect = 10;
+    public List<GameObject> hitEffectPool;
+
     [Header("전역 설정")]
     public Transform currentTarget;
     public Transform fleeTarget;
@@ -68,6 +71,8 @@ public class ZombiePooler : Singleton<ZombiePooler>
         Pool_Init(ref zombiesPoolRange, maxZombieRange, zombieSourceRange);
         Pool_Init(ref zombiesSubPoolRange, maxZombieRange, ZombieSubSourceRange);
         Pool_Init(ref zombiesPoolSanta, maxZombieSanta, zombieSourceSanta);
+
+        Pool_Init(ref hitEffectPool, maxHitEffect, DataManager.Instance.effectLib.hitEffects);
     }
 
     private void Pool_Init(ref List<ZombieBase> list, int max, GameObject source)
@@ -87,14 +92,24 @@ public class ZombiePooler : Singleton<ZombiePooler>
         for (int i = 0; i < max; i++)
         {
             var newZombie = Instantiate(source, zombieSpawnParent);
-            newZombie.gameObject.SetActive(false);
+            newZombie.SetActive(false);
+            list.Add(newZombie);
+        }
+    }
+    private void Pool_Init(ref List<GameObject> list, int max, GameObject[] source)
+    {
+        list = new List<GameObject>(max);
+        for (int i = 0; i < max; i++)
+        {
+            var newZombie = Instantiate(source[UnityEngine.Random.Range(0, source.Length)], zombieSpawnParent);
+            newZombie.SetActive(false);
             list.Add(newZombie);
         }
     }
 
     private void Update()
     {
-        timer += 1f * Time.deltaTime;
+        timer += Time.deltaTime;
 
         if (timer >= 1f)
         {
@@ -107,7 +122,7 @@ public class ZombiePooler : Singleton<ZombiePooler>
 
         if (day > 0)
         {
-            timer2 += 1f * Time.deltaTime;
+            timer2 += Time.deltaTime;
             if (timer2 >= 10f)
             {
                 timer2 = 0f;
@@ -116,7 +131,7 @@ public class ZombiePooler : Singleton<ZombiePooler>
         }
         if (day > 2)
         {
-            timer4 += 1f * Time.deltaTime;
+            timer4 += Time.deltaTime;
             if (timer4 >= 10f)
             {
                 timer4 = 0f;
@@ -125,7 +140,7 @@ public class ZombiePooler : Singleton<ZombiePooler>
         }
         if (day > 4)
         {
-            timer3 += 1f * Time.deltaTime;
+            timer3 += Time.deltaTime;
             if (timer3 >= 10f)
             {
                 timer3 = 0f;
@@ -134,13 +149,16 @@ public class ZombiePooler : Singleton<ZombiePooler>
         }
         if (day > 6)
         {
-            timer5 += 1f * Time.deltaTime;
+            timer5 += Time.deltaTime;
             if (timer5 >= 15f)
             {
                 timer5 = 0f;
                 SpawnSanta(1);
             }
         }
+
+        if (hitEffectCooldown > 0f)
+            hitEffectCooldown -= Time.deltaTime;
     }
 
     public int GetActiveZomibes()
@@ -379,5 +397,33 @@ public class ZombiePooler : Singleton<ZombiePooler>
 
         var node = AstarPath.active.GetNearest(newPos, Pathfinding.NNConstraint.Walkable).position;
         return node;
+    }
+
+
+    private float hitEffectCooldown;
+
+    public void SpawnHitEffect(Vector3 pos)
+    {
+        if (hitEffectCooldown > 0f) return;
+
+        pos.y = 2f;
+
+        for (int i = 0; i < maxHitEffect; i++)
+        {
+            var zom = hitEffectPool[i];
+            if (!zom.activeSelf)
+            {
+                zom.transform.position = pos;
+                hitEffectCooldown = 0.05f;
+                StartCoroutine(HitEffectRecycle(zom));
+                break;
+            }
+        }
+    }
+    private IEnumerator HitEffectRecycle(GameObject obj)
+    {
+        obj.SetActive(true);
+        yield return CoroutineHelper.WaitForSeconds(3f);
+        obj.SetActive(false);
     }
 }

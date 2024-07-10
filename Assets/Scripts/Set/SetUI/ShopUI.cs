@@ -108,6 +108,7 @@ public class ShopUI : EventListener
     public TextMeshProUGUI ownedVehiclesText;
     public Button selectVehicleBtn;
     private int selectVehicleBtnMode;
+    public GameObject canBuyVehicleHighlight;
     public TextMeshProUGUI selectVehicleBtnText;
     public Vehicle3DShowcase vehicleShowcase;
 
@@ -924,6 +925,7 @@ public class ShopUI : EventListener
 
         //SelectUpgrade(0);
 
+        canBuyVehicleHighlight.SetActive(false);
         if (GM.Instance.currentVehicle == current)
         {
             selectVehicleBtnText.text = tm.GetCommons("SelectVehicles");
@@ -948,6 +950,7 @@ public class ShopUI : EventListener
                 {
                     //selectVehicleBtn.image.color = new Color(0.8113208f, 0.5289791f, 0.1033286f);
                     selectVehicleBtn.image.color = uiLib.button_MainColor;
+                    canBuyVehicleHighlight.SetActive(true);
                 }
                 else
                 {

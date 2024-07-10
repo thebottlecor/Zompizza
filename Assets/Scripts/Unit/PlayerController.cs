@@ -69,9 +69,8 @@ public class PlayerController : PlayerControllerData
     float RRWextremumSlip;
 
     [Header("Custom")]
-    public float impactPower = 3000f;
-    public List<ZombieBase> contactingZombies = new List<ZombieBase>();
     public float crashDrag = 1000f;
+    public List<ZombieBase> contactingZombies = new List<ZombieBase>();
     private float beforeCollisionSpeed;
     //private Vector3 beforeCollisionVec;
     private bool isCollision;

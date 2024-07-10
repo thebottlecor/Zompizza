@@ -22,7 +22,7 @@ public class PlayerControllerData : EventListener
     public int maxReverseSpeed = 80; //The maximum speed that the car can reach while going on reverse in km/h.
 
     [Range(1, 20)]
-    public int accelerationMultiplier = 5; // How fast the car can accelerate. 1 is a slow acceleration and 10 is the fastest.
+    public float accelerationMultiplier = 5f; // How fast the car can accelerate. 1 is a slow acceleration and 10 is the fastest.
     public float Accel => (ResearchManager.Instance.globalEffect.acceleration + 1f) * 50f * accelerationMultiplier;
     [Space(10)]
     [Range(10, 45)]

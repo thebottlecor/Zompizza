@@ -81,6 +81,8 @@ MonoBehaviour:
   coll: {fileID: 7608486549936029157}
   animator: {fileID: 9090047537539905066}
   dead: 0
+  isHeavy: 0
+  contact: 0
   meshRenderer: {fileID: 7066969436891953704}
   shadow: {fileID: 5551583242430911235}
 --- !u!54 &4240378934813003587
@@ -91,7 +93,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3100070116413714573}
   serializedVersion: 4
-  m_Mass: 5
+  m_Mass: 4
   m_Drag: 0.3
   m_AngularDrag: 0.2
   m_CenterOfMass: {x: 0, y: 0, z: 0}

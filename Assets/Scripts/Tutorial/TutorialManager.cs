@@ -22,7 +22,7 @@ public class TutorialManager : Singleton<TutorialManager>
     public bool training;
 
     [Header("특수 : 튜토리얼")]
-    public Zombie4[] tutorialZombie;
+    public Zombie_Tutorial_Contact[] tutorialZombie;
     public GameObject trainingCenterSpawnBlock;
     public GameObject trainingCenter;
     public Transform trainingCenterPos;

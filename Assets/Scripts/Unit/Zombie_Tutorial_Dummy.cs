@@ -5,7 +5,7 @@ using UnityEngine.AI;
 using Pathfinding;
 using System;
 
-public class Zombie3 : ZombieBase
+public class Zombie_Tutorial_Dummy : ZombieBase
 {
 
     private void Start()
@@ -29,6 +29,8 @@ public class Zombie3 : ZombieBase
         {
             //knockbackDir.y += 0.1f;
             rigid.AddForce(speed * ZombiePooler.Instance.knockbackPower * knockbackDir, ForceMode.Impulse);
+
+            ZombiePooler.Instance.SpawnHitEffect(hitPos);
         }
         coll.gameObject.layer = LayerMask.NameToLayer("Flying Zombie");
 

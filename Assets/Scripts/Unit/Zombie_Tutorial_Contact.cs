@@ -5,7 +5,7 @@ using UnityEngine.AI;
 using Pathfinding;
 using System;
 
-public class Zombie4 : ZombieBase
+public class Zombie_Tutorial_Contact : ZombieBase
 {
     private float contactTimer;
     private float attackTimer;
@@ -87,6 +87,8 @@ public class Zombie4 : ZombieBase
         {
             //knockbackDir.y += 0.1f;
             rigid.AddForce(speed * ZombiePooler.Instance.knockbackPower * knockbackDir, ForceMode.Impulse);
+
+            ZombiePooler.Instance.SpawnHitEffect(hitPos);
         }
         coll.gameObject.layer = LayerMask.NameToLayer("Flying Zombie");
 
@@ -94,7 +96,6 @@ public class Zombie4 : ZombieBase
             rigid.AddExplosionForce(0.05f * ZombiePooler.Instance.power * speed, expPos, ZombiePooler.Instance.radius, ZombiePooler.Instance.height * 0.05f);
         else
             rigid.AddExplosionForce(ZombiePooler.Instance.power * speed, expPos, ZombiePooler.Instance.radius, ZombiePooler.Instance.height);
-
 
         DeadHandle();
     }
