@@ -16,8 +16,4 @@ MonoBehaviour:
   goldCoinBlastEffect: {fileID: 143964, guid: 09d9de58ef3bf5444ac94afa0e6013cb, type: 3}
   appleBlastEffect: {fileID: 6113892806898033283, guid: 4683c7649bdadc34299fa8b5bdcbea53, type: 3}
   hitEffects:
-  - {fileID: 1477782971762948, guid: 8e2edb2a8a19e674f80d0fb19fe5c051, type: 3}
-  - {fileID: 1364846237022580, guid: 990ce8da5db516343b9d9233a8cf7685, type: 3}
-  - {fileID: 1614511924170784, guid: 45e92963ad52cfa4b8a3029973510231, type: 3}
-  - {fileID: 1471140406605954, guid: 65764dc3d99d1d4439ff6535f1533f92, type: 3}
-  - {fileID: 1960811579338830, guid: 8e2817433efc76449a65d91afc648ac7, type: 3}
+  - {fileID: 7248555855582809004, guid: da337e0d224b3c64495b62306b81c0f8, type: 3}

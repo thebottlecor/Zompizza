@@ -111,49 +111,54 @@ public class ZombiePooler : Singleton<ZombiePooler>
     {
         timer += Time.deltaTime;
 
+        float dist = (GM.Instance.player.transform.position - GM.Instance.pizzeriaPos.transform.position).magnitude;
+        bool playerInBase = dist < 60f;
+
         if (timer >= 1f)
         {
             timer = 0f;
             int count = spawnCount + UnityEngine.Random.Range(0, spawnCountRandomAdd + 1);
-            Spawn(count);
+            Spawn(count, playerInBase);
         }
 
-        int day = GM.Instance.day;
-
-        if (day > 0)
+        if (!playerInBase)
         {
-            timer2 += Time.deltaTime;
-            if (timer2 >= 10f)
+            int day = GM.Instance.day;
+            if (day > 0)
             {
-                timer2 = 0f;
-                SpawnFast(1);
+                timer2 += Time.deltaTime;
+                if (timer2 >= 10f)
+                {
+                    timer2 = 0f;
+                    SpawnFast(1);
+                }
             }
-        }
-        if (day > 2)
-        {
-            timer4 += Time.deltaTime;
-            if (timer4 >= 10f)
+            if (day > 2)
             {
-                timer4 = 0f;
-                SpawnRange(1);
+                timer4 += Time.deltaTime;
+                if (timer4 >= 10f)
+                {
+                    timer4 = 0f;
+                    SpawnRange(1);
+                }
             }
-        }
-        if (day > 4)
-        {
-            timer3 += Time.deltaTime;
-            if (timer3 >= 10f)
+            if (day > 4)
             {
-                timer3 = 0f;
-                SpawnHeavy(1);
+                timer3 += Time.deltaTime;
+                if (timer3 >= 10f)
+                {
+                    timer3 = 0f;
+                    SpawnHeavy(1);
+                }
             }
-        }
-        if (day > 6)
-        {
-            timer5 += Time.deltaTime;
-            if (timer5 >= 15f)
+            if (day > 6)
             {
-                timer5 = 0f;
-                SpawnSanta(1);
+                timer5 += Time.deltaTime;
+                if (timer5 >= 15f)
+                {
+                    timer5 = 0f;
+                    SpawnSanta(1);
+                }
             }
         }
 
@@ -198,12 +203,13 @@ public class ZombiePooler : Singleton<ZombiePooler>
         }
     }
 
-    public void Spawn(int count)
+    public void Spawn(int count, bool playerInBase)
     {
-        if (count <= 0)
-            return;
+        if (count <= 0) return;
 
-        for (int i = 0; i < maxZombie; i++)
+        int max = playerInBase ? 100 : maxZombie;
+
+        for (int i = 0; i < max; i++)
         {
             var zom = zombiesPool[i];
             if (!zom.gameObject.activeSelf)
@@ -422,6 +428,11 @@ public class ZombiePooler : Singleton<ZombiePooler>
     }
     private IEnumerator HitEffectRecycle(GameObject obj)
     {
+        for (int i = 0; i < obj.transform.childCount; i++)
+        {
+            obj.transform.GetChild(i).gameObject.SetActive(false);
+        }
+        obj.transform.GetChild(UnityEngine.Random.Range(0, obj.transform.childCount)).gameObject.SetActive(true);
         obj.SetActive(true);
         yield return CoroutineHelper.WaitForSeconds(3f);
         obj.SetActive(false);
