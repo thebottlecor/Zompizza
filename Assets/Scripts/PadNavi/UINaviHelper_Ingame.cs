@@ -50,8 +50,14 @@ public class UINaviHelper_Ingame : MonoBehaviour
             UINaviHelper.Instance.ingame = this;
             UINaviHelper.Instance.inputHelper.PadCheck();
         }
-        virtualCursorTMP[0].text = TextManager.Instance.GetCommons("VirtualCursor");
+        virtualCursorTMP[0].text = TextManager.Instance.GetCommons("VirtualCursor0");
         virtualCursorTMP[1].text = TextManager.Instance.GetCommons("VirtualCursor2");
+
+        virtualCursorTMP[2].text = TextManager.Instance.GetCommons("VirtualCursor5");
+        virtualCursorTMP[3].text = TextManager.Instance.GetCommons("VirtualCursor1");
+
+        virtualCursorTMP[4].text = TextManager.Instance.GetCommons("VirtualCursor6");
+        virtualCursorTMP[5].text = TextManager.Instance.GetCommons("VirtualCursor0");
     }
 
     public UINavi Utils_Map_Reconnection()

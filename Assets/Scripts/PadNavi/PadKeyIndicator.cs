@@ -46,6 +46,7 @@ public class PadKeyIndicator : MonoBehaviour
         }
 
         var data = DataManager.Instance;
+        if (data == null) data = FindObjectsOfType<DataManager>()[0];
 
         if (padKey != PadKeyCode.None)
         {

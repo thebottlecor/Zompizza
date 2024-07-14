@@ -194,12 +194,15 @@ public class TutorialManager : Singleton<TutorialManager>
         player.StopPlayer(instance:true);
         player.transform.position = GM.Instance.pizzeriaPos.position;
         player.cam.ForceUpdate_WhenMoving();
+
         for (int i = 0; i < tutorialZombie.Length; i++)
         {
             tutorialZombie[i].gameObject.SetActive(false);
             tutorialZombie[i].DriftOffContact(0f, 0f);
             tutorialZombie[i].transform.SetParent(trainingCenter.transform);
         }
+        player.ShakeOffAllZombies();
+
         training = false;
 
         controlText.gameObject.SetActive(false);

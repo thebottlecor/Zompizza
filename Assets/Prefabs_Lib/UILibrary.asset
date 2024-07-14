@@ -243,6 +243,8 @@ MonoBehaviour:
       Value: {fileID: 21300000, guid: 086480d570ebeb044bbfe9b6b1a4d0db, type: 3}
     - Key: 16
       Value: {fileID: 21300000, guid: 23cbfb7161ad0d94786c5b923c05141f, type: 3}
+    - Key: 17
+      Value: {fileID: 21300000, guid: b8367a0a3b7d96a46b8d6ef0b318dce8, type: 3}
   padKeyUIsPS:
     array:
     - Key: 0
@@ -279,6 +281,8 @@ MonoBehaviour:
       Value: {fileID: 21300000, guid: 29c8603624e9d314d88849f6fd27d896, type: 3}
     - Key: 16
       Value: {fileID: 21300000, guid: 30fbbdf6afaacaf41a5d64457b72b22e, type: 3}
+    - Key: 17
+      Value: {fileID: 21300000, guid: ed857df2e43d8fb4c907fee9f54e1f5d, type: 3}
   researchLineInfos:
   - thickness: 85
     sprite: {fileID: 21300000, guid: 21c66ceb57309454eaec9610ca8d1154, type: 3}

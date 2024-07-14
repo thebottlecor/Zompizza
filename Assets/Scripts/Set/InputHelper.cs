@@ -102,6 +102,7 @@ public class InputHelper : MonoBehaviour
 
         // 패드 없음 - 비활성화
         uiNaviHelper.PadDisconnected();
+        uiNaviHelper.Toggle_AlwaysShow_PadUIs(false);
         if (uiNaviHelper.ingame != null) uiNaviHelper.ingame.Toggle_AlwaysShow_PadUIs(false, uiNaviHelper.PadType);
     }
     public void PadConnected()
@@ -118,6 +119,7 @@ public class InputHelper : MonoBehaviour
         var pad = Gamepad.current;
         if (pad != null)
         {
+            uiNaviHelper.Toggle_AlwaysShow_PadUIs(true);
             if (uiNaviHelper.ingame != null) uiNaviHelper.ingame.Toggle_AlwaysShow_PadUIs(true, uiNaviHelper.PadType);
             if (pad is UnityEngine.InputSystem.DualShock.DualShockGamepad)
             {
@@ -136,6 +138,7 @@ public class InputHelper : MonoBehaviour
 
         // 패드 없음 - 비활성화
         uiNaviHelper.PadDisconnected();
+        uiNaviHelper.Toggle_AlwaysShow_PadUIs(false);
         if (uiNaviHelper.ingame != null) uiNaviHelper.ingame.Toggle_AlwaysShow_PadUIs(false, uiNaviHelper.PadType);
     }
 }
@@ -159,4 +162,5 @@ public enum PadKeyCode
     B_Right,
     LeftStick,
     RightStick,
+    D_Pad,
 }

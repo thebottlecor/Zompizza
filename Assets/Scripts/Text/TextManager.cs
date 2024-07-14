@@ -130,6 +130,7 @@ public class TextManager : Singleton<TextManager>
 
         Lobby.Instance.UpdateTexts();
         SettingManager.Instance.UpdateTexts();
+        UINaviHelper.Instance.UpdateTexts();
         //SaveManager.Instance.UpdateTexts();
     }
 }

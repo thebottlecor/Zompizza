@@ -32,6 +32,10 @@ public class UINaviHelper : Singleton<UINaviHelper>
     [Header("인게임 - 옵션 저장값")]
     [HideInInspector] public UINaviHelper_Ingame ingame;
 
+    [Header("항상 보여지는 인디케이터")]
+    public PadKeyIndicator[] alwaysShow_PadUIs;
+    public TextMeshProUGUI[] virtualCursorTMP;
+
     protected override void AddListeners()
     {
         InputHelper.UIMoveEvent += OnUIMove;
@@ -495,6 +499,8 @@ public class UINaviHelper : Singleton<UINaviHelper>
         scrollMoveDir = Vector3.zero;
         virtualCursorDir = Vector2.zero;
 
+        sliderDir = 0f;
+
         if (!uiMoveCheckFunc()) return;
         if (current == null || !e.performed) return;
 
@@ -505,11 +511,26 @@ public class UINaviHelper : Singleton<UINaviHelper>
             //scrollMoveDir = new Vector3(input.x, 0f, input.y).normalized;
             scrollMoveDir = new Vector3(0f, 0f, input.y).normalized;
             virtualCursorDir = new Vector3(input.x, input.y).normalized;
+
+            if (input.x > 0) 
+                sliderDir = 1f;
+            else if (input.x < 0) 
+                sliderDir = -1f;
         }
     }
 
     Vector3 scrollMoveDir;
     Vector2 virtualCursorDir;
+    float sliderDir;
+    float sliderGauge;
+
+    public void UpdateTexts()
+    {
+        virtualCursorTMP[0].text = TextManager.Instance.GetCommons("VirtualCursor0");
+        virtualCursorTMP[1].text = TextManager.Instance.GetCommons("VirtualCursor3");
+        virtualCursorTMP[2].text = TextManager.Instance.GetCommons("VirtualCursor4");
+        virtualCursorTMP[3].text = TextManager.Instance.GetCommons("VirtualCursor6");
+    }
 
     private void Update()
     {
@@ -520,6 +541,19 @@ public class UINaviHelper : Singleton<UINaviHelper>
                 Scrollbar scrollbar = current.self as Scrollbar;
 
                 scrollbar.value += 2f * Time.unscaledDeltaTime * scrollMoveDir.z;
+            }
+            else if (current.self is Slider)
+            {
+                Slider slider = current.self as Slider;
+
+                if (sliderDir == 0f) sliderGauge = 0f;
+                else sliderGauge += Time.unscaledDeltaTime;
+
+                if (sliderGauge > 0.075f)
+                {
+                    sliderGauge = 0f;
+                    slider.value += sliderDir;
+                }
             }
         }
         if (ingame != null)
@@ -533,17 +567,36 @@ public class UINaviHelper : Singleton<UINaviHelper>
 
     private void OnSliderMove(object sender, InputAction.CallbackContext e)
     {
-        if (!uiMoveCheckFunc()) return;
-        if (current == null || !e.performed) return;
+        //if (!uiMoveCheckFunc()) return;
+        //if (current == null || !e.performed) return;
 
-        float value = e.ReadValue<float>();
+        //float value = e.ReadValue<float>();
 
-        if (current.self is Slider)
+        //if (current.self is Slider)
+        //{
+        //    if (value > 0)
+        //        (current.self as Slider).value -= 1;
+        //    else if (value < 0)
+        //        (current.self as Slider).value += 1;
+        //}
+    }
+
+    public void Toggle_AlwaysShow_PadUIs(bool on)
+    {
+        if (on)
         {
-            if (value > 0)
-                (current.self as Slider).value -= 1;
-            else if (value < 0)
-                (current.self as Slider).value += 1;
+            for (int i = 0; i < alwaysShow_PadUIs.Length; i++)
+            {
+                alwaysShow_PadUIs[i].UIUpdate(PadType);
+                alwaysShow_PadUIs[i].gameObject.SetActive(true);
+            }
+        }
+        else
+        {
+            for (int i = 0; i < alwaysShow_PadUIs.Length; i++)
+            {
+                alwaysShow_PadUIs[i].gameObject.SetActive(false);
+            }
         }
     }
 }
