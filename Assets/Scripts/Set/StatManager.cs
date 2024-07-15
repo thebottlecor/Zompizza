@@ -9,8 +9,6 @@ public class StatManager : Singleton<StatManager>
     public int acceptedOrders;
     public int completedOrders;
 
-    public int maxCombo;
-
     public int totalEarn;
     public float totalRating;
 
@@ -43,8 +41,6 @@ public class StatManager : Singleton<StatManager>
         statTexts[idx++].text = $"{tm.GetCommons("TotalAcceptedOrders")} : {acceptedOrders}";
         float completePercent = (acceptedOrders > 0 ? ((float)completedOrders / acceptedOrders) * 100f : 0f);
         statTexts[idx++].text = $"{tm.GetCommons("TotalCompletedOrders")} : {completedOrders} ({completePercent:F0}%)";
-
-        statTexts[idx++].text = $"{tm.GetCommons("MaxCombo")} : {maxCombo} {tm.GetCommons("Combo")}";
 
         statTexts[idx++].text = $"<sprite=2> {tm.GetCommons("TotalSales")} : {totalEarn}$";
         statTexts[idx++].text = $"<sprite=2> {tm.GetCommons("HighestSalesDay")} : {string.Format(tm.GetCommons("Day"), highestEarningDay + 1)}, {highestEarningValue}$";

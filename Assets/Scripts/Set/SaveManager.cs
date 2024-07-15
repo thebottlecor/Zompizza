@@ -85,7 +85,7 @@ public struct Save2DArray<T>
 public class SaveManager : Singleton<SaveManager>
 {
 
-    public readonly int version = 13;
+    public readonly int version = 14;
 
 
     public override void CallAfterAwake()
@@ -104,6 +104,11 @@ public class SaveManager : Singleton<SaveManager>
         gameSaveData.meta = new MetaSaveData {
             version = this.version,
             dateInfo = new DateInfo { year = DateTime.Now.Year, month = DateTime.Now.Month, day = DateTime.Now.Day, hour = DateTime.Now.Hour, minute = DateTime.Now.Minute },
+        };
+
+        gameSaveData.gm = new GMSaveData
+        {
+            data = GM.Instance.Save(),
         };
 
         //
@@ -294,6 +299,13 @@ public class SaveManager : Singleton<SaveManager>
         saveCanvas.gameObject.SetActive(false);
     }
 
+    public void ZompizzaAutoSave()
+    {
+        string slotName = "Slot 1";
+        Debug.Log("Save Slot 1");
+        Save(slotName);
+    }
+
     public void NewSave()
     {
         //var gm = GM.Instance;
@@ -415,8 +427,7 @@ public struct DateInfo
 [Serializable]
 public struct GMSaveData
 {
-    //public GM.SaveData data;
-    //public CameraControl.SaveData cam;
+    public GM.SaveData data;
     public CustomDifficultyData customDifficulty;
     public TutorialData tutorial;
 }
@@ -432,9 +443,6 @@ public struct CustomDifficultyData
 public struct TutorialData
 {
     public int step;
-    //public Point houseGrid;
-    //public List<BuildingType> buildedList;
-    //public TutorialManager.GoalInfo goalInfo;
 }
 
 [Serializable]

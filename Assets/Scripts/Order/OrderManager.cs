@@ -203,8 +203,6 @@ public class OrderManager : Singleton<OrderManager>
                 orderMiniUIPair.Remove(info);
                 orderList.RemoveAt(i);
 
-                ComboCalc(resultRating);
-
                 StatManager.Instance.CalcAverageDeliveryStat(overTime, hpPercent, rewards, resultRating);
 
                 TutorialManager.Instance.OrderCompleted();
@@ -223,20 +221,6 @@ public class OrderManager : Singleton<OrderManager>
         }
 
         UIManager.Instance.OrderUIBtnUpdate();
-    }
-
-    private void ComboCalc(float result)
-    {
-        if (result > 0f)
-        {
-            GM.Instance.combo++;
-        }
-        else
-        {
-            GM.Instance.combo = 0;
-        }
-        if (GM.Instance.combo > StatManager.Instance.maxCombo)
-            StatManager.Instance.maxCombo = GM.Instance.combo;
     }
 
     private void OnPlayerDamaged(object sender, float e)
@@ -304,7 +288,6 @@ public class OrderManager : Singleton<OrderManager>
                 orderMiniUIPair.Remove(info);
                 orderList.RemoveAt(i);
 
-                ComboCalc(fail);
                 break;
             }
         }

@@ -9,7 +9,41 @@ using System.Text;
 
 public class GM : Singleton<GM>
 {
+    [Serializable]
+    public struct SaveData
+    {
+        public int day;
+        public float timer;
+        public int gold;
+        public float rating;
 
+        public SerializableDictionary<Ingredient, int> ingredients;
+    }
+    public SaveData Save()
+    {
+        SaveData data = new()
+        {
+            day = this.day,
+            timer = this.timer,
+
+            gold = this.gold,
+            rating = this.rating,
+
+            ingredients = this.ingredients,
+        };
+
+        return data;
+    }
+    public void Load(SaveData data)
+    {
+        day = data.day;
+        timer = data.timer;
+
+        SetGold(data.gold);
+        SetRating(data.rating);
+
+        ingredients = data.ingredients;
+    }
 
     public bool stop_control;
 
@@ -37,8 +71,6 @@ public class GM : Singleton<GM>
     // 플레이어가 가진 자원
     public int gold;
     public float rating;
-
-    public int combo;
 
     public float RatingDailyChange { get; private set; }
     public SerializableDictionary<Ingredient, int> ingredients;
@@ -160,7 +192,6 @@ public class GM : Singleton<GM>
             closeImage.SetActive(true);
         }
     }
-
     private void Start()
     {
         ingredients = new SerializableDictionary<Ingredient, int>();
@@ -169,18 +200,6 @@ public class GM : Singleton<GM>
             Ingredient key = (Ingredient)temp;
             ingredients.Add(new SerializableDictionary<Ingredient, int>.Pair(key, 0));
         }
-        int initAmount = 10;
-        ingredients[Ingredient.meat1] = initAmount;
-        ingredients[Ingredient.meat2] = initAmount;
-        ingredients[Ingredient.vegetable1] = initAmount;
-        ingredients[Ingredient.vegetable2] = initAmount;
-        ingredients[Ingredient.herb1] = initAmount;
-        ingredients[Ingredient.herb2] = initAmount;
-
-        UIManager.Instance.Init();
-
-        SetGold(1000);
-        SetRating(5f);
 
         dayOne_Gold = new SerializableDictionary<GetGoldSource, int>();
         dayOne_Rating = new SerializableDictionary<GetRatingSource, float>();
@@ -195,15 +214,57 @@ public class GM : Singleton<GM>
         //congratulationBtn_ToLobby.onClick.AddListener(() => { LoadingSceneManager.Instance.ToLobby(); });
         congratulationBtn_ToLobby.onClick.AddListener(() => { LoadingSceneManager.Instance.EpilogueStart(); });
 
-        LoadingSceneManager.Instance.logueLoading = false;
-
         tenDays_RaidRecords = new List<int>();
-
         unlockedVehicles = new bool[controllerData.Length];
+
+        //
+
+        GameSaveData gameSaveData = null;
+
+        GameStartInfo startInfo = new GameStartInfo();
+        if (LoadingSceneManager.Instance != null)
+        {
+            startInfo = LoadingSceneManager.Instance.StartInfo;
+        }
+
+        if (SaveManager.Instance != null && !startInfo.saveName.Equals(string.Empty))
+        {
+            gameSaveData = SaveManager.Instance.LoadSaveData(startInfo.saveName);
+
+            // 리턴된 gameSaveData로 값 적용하기
+
+            Load(gameSaveData.gm.data);
+        }
+        else
+        {
+            // 게임 초기화
+
+            //cityName = startInfo.cityName;
+
+            day = 0;
+
+            int initAmount = 10;
+            ingredients[Ingredient.meat1] = initAmount;
+            ingredients[Ingredient.meat2] = initAmount;
+            ingredients[Ingredient.vegetable1] = initAmount;
+            ingredients[Ingredient.vegetable2] = initAmount;
+            ingredients[Ingredient.herb1] = initAmount;
+            ingredients[Ingredient.herb2] = initAmount;
+
+            SetGold(1000);
+            SetRating(5f);
+        }
+
+        //CallAfterStart(gameSaveData);
+        //SaveDataLoading = false;
+
+        UIManager.Instance.Init();
+
+
+        LoadingSceneManager.Instance.logueLoading = false;
 
         TextUpdate();
 
-        day = 0;
         DayStringUpdate();
         ResearchManager.Instance.Init();
         //LoanManager.Instance.Init();
@@ -213,6 +274,7 @@ public class GM : Singleton<GM>
 
         // 저장 불러오기시 주의
         RandomGiftBox();
+
         ResearchManager.Instance.ToggleAllHiddenRecipe(true);
 
         InitPlayer();
@@ -608,6 +670,8 @@ public class GM : Singleton<GM>
                 warningQueue.Enqueue(3);
             }
             //ShowRatingText();
+
+            SaveManager.Instance.ZompizzaAutoSave();
         });
         sequence.Append(darkCanvas.DOFade(0f, 0.5f));
     }
