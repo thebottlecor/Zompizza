@@ -69,6 +69,7 @@ public class PlayerController : PlayerControllerData
     float RRWextremumSlip;
 
     [Header("Custom")]
+    public float drift_X_value = 2f;
     public float crashDrag = 1000f;
     public List<ZombieBase> contactingZombies = new List<ZombieBase>();
     private float beforeCollisionSpeed;
@@ -86,6 +87,7 @@ public class PlayerController : PlayerControllerData
     private Coroutine iceCoroutine;
 
     public float dirftContactBlockTimer; // 드리프트로 좀비들 떨쳐낸 후 몇초간 좀비 붙기 면역
+
 
     private void Start()
     {
@@ -448,6 +450,8 @@ public class PlayerController : PlayerControllerData
                     if (DamageEvent != null)
                         DamageEvent(null, Constant.crash_damage * UnityEngine.Random.Range(0.75f, 1.25f));
 
+                    ShakeOffAllZombies();
+
                     StatManager.Instance.carCrash++;
 
                     cam.Shake(5f);
@@ -714,7 +718,7 @@ public class PlayerController : PlayerControllerData
     {
         //If the forces aplied to the rigidbody in the 'x' asis are greater than
         //3f, it means that the car is losing traction, then the car will start emitting particle systems.
-        if (Mathf.Abs(localVelocityX) > 2.5f)
+        if (Mathf.Abs(localVelocityX) > drift_X_value)
         {
             isDrifting = true;
             DriftCarPS();
@@ -769,7 +773,7 @@ public class PlayerController : PlayerControllerData
     {
         //If the forces aplied to the rigidbody in the 'x' asis are greater than
         //3f, it means that the car is losing traction, then the car will start emitting particle systems.
-        if (Mathf.Abs(localVelocityX) > 2.5f)
+        if (Mathf.Abs(localVelocityX) > drift_X_value)
         {
             isDrifting = true;
             DriftCarPS();
@@ -780,7 +784,7 @@ public class PlayerController : PlayerControllerData
             DriftCarPS();
         }
         // The following part sets the throttle power to -1 smoothly.
-        throttleAxis -= (Time.deltaTime * 3f);
+        throttleAxis -= (Time.deltaTime * 6f);
         if (throttleAxis < -1f)
         {
             throttleAxis = -1f;
@@ -798,13 +802,13 @@ public class PlayerController : PlayerControllerData
             {
                 //Apply negative torque in all wheels to go in reverse if maxReverseSpeed has not been reached.
                 frontLeftCollider.brakeTorque = 0;
-                frontLeftCollider.motorTorque = Accel * throttleAxis;
+                frontLeftCollider.motorTorque = Accel * throttleAxis * 1.1f; // 후진 가속도는 10% 더 빠름
                 frontRightCollider.brakeTorque = 0;
-                frontRightCollider.motorTorque = Accel * throttleAxis;
+                frontRightCollider.motorTorque = Accel * throttleAxis * 1.1f;
                 rearLeftCollider.brakeTorque = 0;
-                rearLeftCollider.motorTorque = Accel * throttleAxis;
+                rearLeftCollider.motorTorque = Accel * throttleAxis * 1.1f;
                 rearRightCollider.brakeTorque = 0;
-                rearRightCollider.motorTorque = Accel * throttleAxis;
+                rearRightCollider.motorTorque = Accel * throttleAxis * 1.1f;
             }
             else
             {
@@ -835,7 +839,7 @@ public class PlayerController : PlayerControllerData
     {
         yield return CoroutineHelper.WaitForSeconds(0.1f);
 
-        if (Mathf.Abs(localVelocityX) > 2.5f)
+        if (Mathf.Abs(localVelocityX) > drift_X_value)
         {
             isDrifting = true;
             DriftCarPS();
@@ -918,7 +922,7 @@ public class PlayerController : PlayerControllerData
         // We are going to start losing traction smoothly, there is were our 'driftingAxis' variable takes
         // place. This variable will start from 0 and will reach a top value of 1, which means that the maximum
         // drifting value has been reached. It will increase smoothly by using the variable Time.deltaTime.
-        driftingAxis += (Time.deltaTime);
+        driftingAxis += 2f * Time.deltaTime;
         float secureStartingPoint = driftingAxis * FLWextremumSlip * handbrakeDriftMultiplier;
 
         if (secureStartingPoint < FLWextremumSlip)
@@ -931,7 +935,7 @@ public class PlayerController : PlayerControllerData
         }
         //If the forces aplied to the rigidbody in the 'x' asis are greater than
         //3f, it means that the car lost its traction, then the car will start emitting particle systems.
-        if (Mathf.Abs(localVelocityX) > 2.5f)
+        if (Mathf.Abs(localVelocityX) >= drift_X_value * 0.5f) // 드리프트 키를 사용할 경우, 드리프트 효과 (좀비 떼내기), 비쥬얼 이펙트 역치가 낮아짐
         {
             isDrifting = true;
         }
