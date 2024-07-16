@@ -104,6 +104,7 @@ public class InputHelper : MonoBehaviour
         uiNaviHelper.PadDisconnected();
         uiNaviHelper.Toggle_AlwaysShow_PadUIs(false);
         if (uiNaviHelper.ingame != null) uiNaviHelper.ingame.Toggle_AlwaysShow_PadUIs(false, uiNaviHelper.PadType);
+        if (TutorialManager.Instance != null) TutorialManager.Instance.PadCheck();
     }
     public void PadConnected()
     {
@@ -117,23 +118,24 @@ public class InputHelper : MonoBehaviour
     public void PadCheck()
     {
         var pad = Gamepad.current;
+        if (TutorialManager.Instance != null) TutorialManager.Instance.PadCheck();
         if (pad != null)
         {
-            uiNaviHelper.Toggle_AlwaysShow_PadUIs(true);
-            if (uiNaviHelper.ingame != null) uiNaviHelper.ingame.Toggle_AlwaysShow_PadUIs(true, uiNaviHelper.PadType);
             if (pad is UnityEngine.InputSystem.DualShock.DualShockGamepad)
             {
                 uiNaviHelper.UIUpdate(0);
-                uiNaviHelper.SetFirstSelect();
-                return;
             }
             else
             {
                 // 나머지는 Xbox UI로 통일
                 uiNaviHelper.UIUpdate(1);
-                uiNaviHelper.SetFirstSelect();
-                return;
             }
+
+            uiNaviHelper.Toggle_AlwaysShow_PadUIs(true);
+            if (uiNaviHelper.ingame != null) uiNaviHelper.ingame.Toggle_AlwaysShow_PadUIs(true, uiNaviHelper.PadType);
+
+            uiNaviHelper.SetFirstSelect();
+            return;
         }
 
         // 패드 없음 - 비활성화

@@ -7,12 +7,21 @@ public class TransparentObject : MonoBehaviour
 
 	public float timer;
 
+	private bool specialObj;
 	private MeshRenderer[] meshes;
 
-	public void Init(float timer)
+	private SpecialTransparent specialTransparent;
+
+	public void Init(float timer, bool specialObj)
     {
-		meshes = GetComponentsInChildren<MeshRenderer>();
 		this.timer = timer;
+		this.specialObj = specialObj;
+
+		if (specialObj) 
+			specialTransparent = GetComponent<SpecialTransparent>();
+		else 
+			meshes = GetComponentsInChildren<MeshRenderer>();
+
 		BecomeTransparent();
     }
 
@@ -30,16 +39,30 @@ public class TransparentObject : MonoBehaviour
 
     public void BecomeTransparent()
 	{
-		for (int i = 0; i < meshes.Length; i++)
+		if (!specialObj)
 		{
-			meshes[i].material = DataManager.Instance.materialLib.transparentMaterial;
+			for (int i = 0; i < meshes.Length; i++)
+			{
+				meshes[i].material = DataManager.Instance.materialLib.transparentMaterial;
+			}
+		}
+		else
+        {
+			specialTransparent.BecomeTransparent();
 		}
 	}
 	public void ResetTransparent()
 	{
-		for (int i = 0; i < meshes.Length; i++)
+		if (!specialObj)
 		{
-			meshes[i].material = DataManager.Instance.materialLib.baseMaterial;
+			for (int i = 0; i < meshes.Length; i++)
+			{
+				meshes[i].material = DataManager.Instance.materialLib.baseMaterial;
+			}
+		}
+		else
+		{
+			specialTransparent.ResetTransparent();
 		}
 	}
 }

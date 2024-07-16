@@ -85,7 +85,7 @@ public struct Save2DArray<T>
 public class SaveManager : Singleton<SaveManager>
 {
 
-    public readonly int version = 14;
+    public readonly int version = 21;
 
 
     public override void CallAfterAwake()
@@ -301,9 +301,11 @@ public class SaveManager : Singleton<SaveManager>
 
     public void ZompizzaAutoSave()
     {
-        string slotName = "Slot 1";
-        Debug.Log("Save Slot 1");
-        Save(slotName);
+        // Å×½ºÆ®
+
+        //string slotName = "Slot 1";
+        //Debug.Log("Save Slot 1");
+        //Save(slotName);
     }
 
     public void NewSave()

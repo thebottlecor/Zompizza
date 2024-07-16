@@ -26,6 +26,7 @@ public class ShopUI : EventListener
     public RectTransform rectTransform;
 
     public GameObject shopUIOpenButton;
+    public TextMeshProUGUI shopUIOpenTmp;
 
     public bool loading;
     public bool opened;
@@ -301,6 +302,12 @@ public class ShopUI : EventListener
         }
         if ((buttonOn && !shopUIOpenButton.activeSelf) || !buttonOn && shopUIOpenButton.activeSelf)
         {
+            if (buttonOn)
+            {
+                var pad = Gamepad.current;
+                shopUIOpenTmp.text = $"{tm.GetKeyMaps(KeyMap.enterStore)} ({SettingManager.Instance.keyMappings[KeyMap.enterStore].GetName()})";
+                shopUIOpenTmp.gameObject.SetActive(pad == null);
+            }
             shopUIOpenButton.SetActive(buttonOn);
         }
     }

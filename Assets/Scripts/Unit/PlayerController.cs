@@ -935,7 +935,7 @@ public class PlayerController : PlayerControllerData
         }
         //If the forces aplied to the rigidbody in the 'x' asis are greater than
         //3f, it means that the car lost its traction, then the car will start emitting particle systems.
-        if (Mathf.Abs(localVelocityX) >= drift_X_value * 0.5f) // 드리프트 키를 사용할 경우, 드리프트 효과 (좀비 떼내기), 비쥬얼 이펙트 역치가 낮아짐
+        if (Mathf.Abs(localVelocityX) >= drift_X_value * 0.6f) // 드리프트 키를 사용할 경우, 드리프트 효과 (좀비 떼내기), 비쥬얼 이펙트 역치가 낮아짐
         {
             isDrifting = true;
         }

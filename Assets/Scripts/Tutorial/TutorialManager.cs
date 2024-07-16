@@ -171,6 +171,18 @@ public class TutorialManager : Singleton<TutorialManager>
         PizzaDirection.PizzaCompleteEvent -= OnPizzaComplete;
     }
 
+    public void PadCheck()
+    {
+        switch (step)
+        {
+            case 0:
+                var pad = Gamepad.current;
+                controlPadObj.SetActive(pad != null);
+                controlText.gameObject.SetActive(pad == null);
+                break;
+        }
+    }
+
     public void GoToTutorial()
     {
         trainingCenter.SetActive(true);

@@ -862,7 +862,7 @@ public class OrderManager : Singleton<OrderManager>
         //    UIManager.Instance.shopUI.AddReview(info, -100f, Constant.delivery_Impossible_accepted_rating); // 구분 기능 -100 => -1.5는 점수
         //}
 
-        GM.Instance.AddRating(0f, GM.GetRatingSource.notAccepted);
+        //GM.Instance.AddRating(0f, GM.GetRatingSource.notAccepted);
         UIManager.Instance.shopUI.AddReview(info, 0f, 0f);
     }
 

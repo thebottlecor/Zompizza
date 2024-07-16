@@ -26,7 +26,7 @@ public class CameraFollow2 : MonoBehaviour {
 
     private void Awake()
     {
-		layerMask = 1 << LayerMask.NameToLayer("EnvironmentObject");
+		layerMask = 1 << LayerMask.NameToLayer("EnvironmentObject") | 1 << LayerMask.NameToLayer("EnvironmentRocket");
 		uiCam.gameObject.SetActive(false);
 	}
 
@@ -79,12 +79,14 @@ public class CameraFollow2 : MonoBehaviour {
 		Ray ray = new Ray(transform.position, direction);
 		if (Physics.Raycast(ray, out hitInfo, Mathf.Infinity, layerMask, QueryTriggerInteraction.UseGlobal))
 		{
+			bool specialObj = hitInfo.collider.gameObject.layer == 14;
+
 			var hitsTransform = hitInfo.transform;
             var check = hitsTransform.gameObject.GetComponent<TransparentObject>();
             if (check == null)
             {
                 var obj = hitsTransform.gameObject.AddComponent<TransparentObject>();
-                obj.Init(1f);
+                obj.Init(1f, specialObj);
             }
             else
             {

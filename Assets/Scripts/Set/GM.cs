@@ -104,7 +104,7 @@ public class GM : Singleton<GM>
     {
         delivery,
         notComplete,
-        notAccepted,
+        //notAccepted,
     }
 
     public Light globalLight;
@@ -300,7 +300,7 @@ public class GM : Singleton<GM>
         StringBuilder st2 = new StringBuilder();
         st2.Append(tm.GetCommons("Delivery")).AppendLine();
         st2.Append(tm.GetCommons("NotCompleted")).AppendLine();
-        st2.Append(tm.GetCommons("NotAccepted")).AppendLine();
+        //st2.Append(tm.GetCommons("NotAccepted")).AppendLine();
 
         profitText[2].text = st2.ToString();
 
