@@ -209,7 +209,8 @@ public class GM : Singleton<GM>
         darkCanvas.interactable = false;
         darkCanvas.blocksRaycasts = false;
 
-        nextDayBtn.onClick.AddListener(() => { NextDay_Late(); });
+        //nextDayBtn.onClick.AddListener(() => { NextDay_Late(); });
+        nextDayBtn.onClick.AddListener(() => { Show_SpaceshipProject(); });
         gameOverBtn_ToLobby.onClick.AddListener(() => { LoadingSceneManager.Instance.ToLobby(); });
         //congratulationBtn_ToLobby.onClick.AddListener(() => { LoadingSceneManager.Instance.ToLobby(); });
         congratulationBtn_ToLobby.onClick.AddListener(() => { LoadingSceneManager.Instance.EpilogueStart(); });
@@ -587,7 +588,24 @@ public class GM : Singleton<GM>
 
     }
 
-    private void NextDay_Late()
+    public void Show_SpaceshipProject()
+    {
+        dayOne_Gold = new SerializableDictionary<GetGoldSource, int>();
+        dayOne_Rating = new SerializableDictionary<GetRatingSource, float>();
+
+        if (RocketManager.Instance.Completed)
+        {
+            NextDay_Late();
+        }
+        else
+        {
+            RocketManager.Instance.ShowPanel();
+            accountObj.SetActive(false);
+            UINaviHelper.Instance.SetFirstSelect();
+        }
+    }
+
+    public void NextDay_Late()
     {
         accountObj.SetActive(false);
         UINaviHelper.Instance.SetFirstSelect();
@@ -627,9 +645,6 @@ public class GM : Singleton<GM>
         if (EndTimeEvent != null)
             EndTimeEvent(null, false);
         EndTime = false;
-
-        dayOne_Gold = new SerializableDictionary<GetGoldSource, int>();
-        dayOne_Rating = new SerializableDictionary<GetRatingSource, float>();
 
         Sequence sequence = DOTween.Sequence().SetUpdate(true).SetAutoKill(true);
         sequence.AppendCallback(() =>

@@ -143,6 +143,10 @@ public class UINaviHelper : Singleton<UINaviHelper>
                                 {
                                     current = ingame.nextDay_first;
                                 }
+                                else if (RocketManager.Instance.panel.activeSelf)
+                                {
+                                    current = ingame.rocket_first;
+                                }
                                 else
                                 {
                                     // null

@@ -756,7 +756,7 @@ TextureImporter:
         width: 36
         height: 600
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -764,6 +764,27 @@ TextureImporter:
       bones: []
       spriteID: 7fe86f5e83dd3854883bebb73db41c88
       internalID: 108167488
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: account panel
+      rect:
+        serializedVersion: 2
+        x: 1353
+        y: 326
+        width: 638
+        height: 695
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 54, y: 32, z: 54, w: 16}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c1927a6f1676d1f49951519cda411155
+      internalID: -1928759715
       vertices: []
       indices: 
       edges: []
@@ -809,6 +830,7 @@ TextureImporter:
       Speed Needle: 846378295
       SpeedBox: -113594338
       TimeBox: 1006927032
+      account panel: -1928759715
       event button: 499962599
       event panel: -205499084
       event panel 2: -1174101114

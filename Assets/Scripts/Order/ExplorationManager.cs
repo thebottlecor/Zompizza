@@ -108,6 +108,7 @@ public class ExplorationManager : Singleton<ExplorationManager>
     public void SendExploration()
     {
         if (GM.Instance.gold < cost) return;
+        if (GM.Instance.loading) return;
 
         TutorialManager.Instance.SendExploration();
 
