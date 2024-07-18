@@ -474,9 +474,6 @@ public class GM : Singleton<GM>
         sequence.AppendCallback(() =>
         {
             darkCanvas.interactable = true;
-            UpdateAccountUI();
-            accountObj.SetActive(true);
-            UINaviHelper.Instance.SetFirstSelect();
 
             if (day >= 10)
             {
@@ -487,12 +484,158 @@ public class GM : Singleton<GM>
                     UIManager.Instance.shopUI.upgradeDirection.Show(1);
                 }
             }
+            else
+            {
+                //UpdateAccountUI();
+                //accountObj.SetActive(true);
+                //UINaviHelper.Instance.SetFirstSelect();
+
+                accountObj.SetActive(true);
+                StartCoroutine(UpdateAccountUI2());
+            }
         });
 
         footBall.position = footBallPos;
     }
+    private IEnumerator UpdateAccountUI2()
+    {
+        nextDayBtn.gameObject.SetActive(false);
+
+        accountText[1].text = $"<sprite={2}> {tm.GetCommons("Money")}";
+        accountText[2].text = $"<sprite={1}> {tm.GetCommons("Rating")}";
+
+
+        profitText[1].text = string.Empty;
+        profit_totalText[1].text = string.Empty;
+        profitText[3].text = string.Empty;
+        profit_totalText[3].text = string.Empty;
+
+        AudioManager.Instance.PlaySFX(Sfx.inputFieldStart);
+        yield return CoroutineHelper.WaitForSecondsRealtime(0.2f);
+        accountText[1].text = $"{accountText[1].text} ({gold})";
+
+        // 머니
+        {
+            int total = 0;
+            StringBuilder st = new StringBuilder();
+            var list2 = System.Enum.GetValues(typeof(GetGoldSource));
+            foreach (var temp in list2)
+            {
+                if (!dayOne_Gold.ContainsKey((GetGoldSource)temp))
+                    dayOne_Gold.Add(new SerializableDictionary<GetGoldSource, int>.Pair { Key = (GetGoldSource)temp, Value = 0 });
+            }
+
+            int count = dayOne_Gold.Count;
+            foreach (var temp in dayOne_Gold)
+            {
+                int value = temp.Value;
+                if (value >= 0)
+                {
+                    if (value == 0)
+                        st.Append("0");
+                    else
+                        st.AppendFormat("+{0}", value);
+                }
+                else
+                    st.AppendFormat("<color=#A91111>{0}</color>", value);
+                total += value;
+                count--;
+                if (count > 0)
+                    st.AppendLine();
+
+                AudioManager.Instance.PlaySFX(Sfx.inputFieldStart);
+                yield return CoroutineHelper.WaitForSecondsRealtime(0.2f);
+                profitText[1].text = st.ToString();
+            }
+            profitText[1].text = st.ToString();
+
+            AudioManager.Instance.PlaySFX(Sfx.inputFieldStart);
+            yield return CoroutineHelper.WaitForSecondsRealtime(0.2f);
+
+            if (total >= 0)
+            {
+                if (total == 0)
+                    profit_totalText[1].text = "0";
+                else
+                    profit_totalText[1].text = $"+{total}";
+            }
+            else
+                profit_totalText[1].text = $"<color=#A91111>{total}</color>";
+        }
+
+        AudioManager.Instance.PlaySFX(Sfx.inputFieldStart);
+        yield return CoroutineHelper.WaitForSecondsRealtime(0.2f);
+        if (rating > 0)
+            accountText[2].text = $"{accountText[2].text} ({rating:0.#})";
+        else
+            accountText[2].text = $"{accountText[2].text} (<color=#A91111>{rating:0.#}</color>)";
+
+        // 평점
+        {
+            float total = 0;
+            StringBuilder st = new StringBuilder();
+            var list3 = System.Enum.GetValues(typeof(GetRatingSource));
+            foreach (var temp in list3)
+            {
+                if (!dayOne_Rating.ContainsKey((GetRatingSource)temp))
+                    dayOne_Rating.Add(new SerializableDictionary<GetRatingSource, float>.Pair { Key = (GetRatingSource)temp, Value = 0 });
+            }
+
+            int count = dayOne_Rating.Count;
+            foreach (var temp in dayOne_Rating)
+            {
+                float value = temp.Value;
+                if (value >= 0)
+                {
+                    if (value == 0)
+                        st.Append("0");
+                    else
+                        st.AppendFormat("+{0:0.#}", value);
+                }
+                else
+                    st.AppendFormat("<color=#A91111>{0:0.#}</color>", value);
+                total += value;
+                count--;
+                if (count > 0)
+                    st.AppendLine();
+                AudioManager.Instance.PlaySFX(Sfx.inputFieldStart);
+                yield return CoroutineHelper.WaitForSecondsRealtime(0.2f);
+                profitText[3].text = st.ToString();
+            }
+            profitText[3].text = st.ToString();
+
+            AudioManager.Instance.PlaySFX(Sfx.inputFieldStart);
+            yield return CoroutineHelper.WaitForSecondsRealtime(0.2f);
+
+            if (total >= 0)
+            {
+                if (total == 0)
+                    profit_totalText[3].text = "0";
+                else
+                    profit_totalText[3].text = $"+{total:0.#}";
+            }
+            else
+                profit_totalText[3].text = $"<color=#A91111>{total:0.#}</color>";
+
+            RatingDailyChange = total;
+        }
+
+        AudioManager.Instance.PlaySFX(Sfx.inputFieldEnd);
+        yield return CoroutineHelper.WaitForSecondsRealtime(0.2f);
+
+        nextDayBtn.gameObject.SetActive(true);
+        UINaviHelper.Instance.SetFirstSelect();
+
+    }
     private void UpdateAccountUI()
     {
+        accountText[1].text = $"<sprite={2}> {tm.GetCommons("Money")} ({gold})";
+        //if (rating >= RivalManager.Instance.rating)
+        if (rating > 0)
+            accountText[2].text = $"<sprite={1}> {tm.GetCommons("Rating")} ({rating:0.#})";
+        else
+            accountText[2].text = $"<sprite={1}> {tm.GetCommons("Rating")} (<color=#A91111>{rating:0.#}</color>)";
+
         // 머니
         {
             int total = 0;
@@ -578,13 +721,6 @@ public class GM : Singleton<GM>
 
             RatingDailyChange = total;
         }
-
-        accountText[1].text = $"<sprite={2}> {tm.GetCommons("Money")} ({gold})";
-        //if (rating >= RivalManager.Instance.rating)
-        if (rating > 0)
-            accountText[2].text = $"<sprite={1}> {tm.GetCommons("Rating")} ({rating:0.#})";
-        else
-            accountText[2].text = $"<sprite={1}> {tm.GetCommons("Rating")} (<color=#A91111>{rating:0.#}</color>)";
 
     }
 

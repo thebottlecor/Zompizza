@@ -10,7 +10,7 @@ public class EditorLibrary : ScriptableObject
 {
 
     private readonly string key = "1NOGWHtmQdhGVYGXuN7Lo-oK3gIzWajo7b7D7g7a241w";
-    private readonly string[] sheetName = new string[] { "resource","recipe", "research", "common", "keymap", "keycode", "inputSystem", "character", "vehicle" };
+    private readonly string[] sheetName = new string[] { "resource","recipe", "research", "common", "keymap", "keycode", "inputSystem", "character", "vehicle", "spaceship" };
 
     private string Get_URL(int idx)
     {

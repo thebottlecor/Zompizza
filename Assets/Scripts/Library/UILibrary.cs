@@ -48,4 +48,7 @@ public class UILibrary : ScriptableObject
         public Sprite sprite;
     }
     public List<ResearchLineInfo> researchLineInfos;
+
+
+    public List<Sprite> spaceshipParts;
 }

@@ -211,4 +211,5 @@ public enum Sfx
     cat,
     raid,
     itemGet,
+    Repair,
 }

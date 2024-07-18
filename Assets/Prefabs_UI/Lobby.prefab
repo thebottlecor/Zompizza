@@ -6192,6 +6192,11 @@ MonoBehaviour:
         clip: {fileID: 8300000, guid: 21fa51b28d32daf41b0e3bfa77cb5496, type: 3}
         volumeOffset: 0
         maxPlay: 0
+    - Key: 27
+      Value:
+        clip: {fileID: 8300000, guid: d770643c13f243543bc4314f952183aa, type: 3}
+        volumeOffset: 0
+        maxPlay: 0
 --- !u!1 &3230877239920990169
 GameObject:
   m_ObjectHideFlags: 0

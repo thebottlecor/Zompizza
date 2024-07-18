@@ -496,27 +496,6 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TimeBox
-      rect:
-        serializedVersion: 2
-        x: 311
-        y: 628
-        width: 193
-        height: 70
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: e86cbb9d69fdf4b4990c4dabd5f0605e
-      internalID: 1006927032
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: Silder Vertical
       rect:
         serializedVersion: 2
@@ -789,6 +768,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: TimeZone
+      rect:
+        serializedVersion: 2
+        x: 311
+        y: 628
+        width: 193
+        height: 70
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 10c7722695c9bba45862bf42a387bf9b
+      internalID: -1384827913
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -830,6 +830,7 @@ TextureImporter:
       Speed Needle: 846378295
       SpeedBox: -113594338
       TimeBox: 1006927032
+      TimeZone: -1384827913
       account panel: -1928759715
       event button: 499962599
       event panel: -205499084
