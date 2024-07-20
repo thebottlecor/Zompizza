@@ -145,7 +145,14 @@ public class UINaviHelper : Singleton<UINaviHelper>
                                 }
                                 else if (RocketManager.Instance.panel.activeSelf)
                                 {
-                                    current = ingame.rocket_first;
+                                    if (ingame.rocket_first[0].gameObject.activeSelf)
+                                        current = ingame.rocket_first[0];
+                                    else if (ingame.rocket_first[1].gameObject.activeSelf)
+                                        current = ingame.rocket_first[1];
+                                    else
+                                    {
+                                        // null
+                                    }
                                 }
                                 else
                                 {
@@ -208,7 +215,11 @@ public class UINaviHelper : Singleton<UINaviHelper>
                 }
                 else
                 {
-
+                    if (DialogueManager.Instance.eventPanel.activeSelf)
+                    {
+                        current = ingame.Dialogue_Reconnection();
+                        uiMoveCheckFunc = Check_Dialouge;
+                    }
                 }
             }
         }
@@ -281,6 +292,11 @@ public class UINaviHelper : Singleton<UINaviHelper>
         if (inputHelper.disconnectedPanel.activeSelf) return false;
         var set = UIManager.Instance;
         return (ingame != null) && (set != null && set.shopUI.opened && !set.shopUI.loading);
+    }
+    private bool Check_Dialouge()
+    {
+        if (inputHelper.disconnectedPanel.activeSelf) return false;
+        return true;
     }
     private bool CheckFail()
     {

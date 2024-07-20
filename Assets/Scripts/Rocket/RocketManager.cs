@@ -57,7 +57,6 @@ public class RocketManager : Singleton<RocketManager>
         spaceTMP.text = tm.GetCommons("Spaceship");
 
         developTMP.text = tm.GetCommons("Develop");
-        skipTMP.text = tm.GetCommons("Skip");
 
         HidePanel();
         UpdateModels();
@@ -97,6 +96,7 @@ public class RocketManager : Singleton<RocketManager>
         }
 
         developBtn.gameObject.SetActive(true);
+        skipTMP.text = tm.GetCommons("Skip");
         skipBtn.gameObject.SetActive(true);
 
         panel.SetActive(true);
@@ -123,7 +123,10 @@ public class RocketManager : Singleton<RocketManager>
             partsImage.sprite = DataManager.Instance.uiLib.spaceshipParts[currentStep];
             //partsImage.color = Color.white;
 
-            currentCostTMP.text = $"<sprite=2> {tm.GetCommons("Costs")} {cost[currentStep]}$";
+            if (cost[currentStep] > GM.Instance.gold)
+                currentCostTMP.text = $"<color=#AB5239><sprite=2> {tm.GetCommons("Costs")} {cost[currentStep]}$</color>";
+            else
+                currentCostTMP.text = $"<sprite=2> {tm.GetCommons("Costs")} {cost[currentStep]}$";
         }
         else
         {
@@ -166,6 +169,7 @@ public class RocketManager : Singleton<RocketManager>
 
             developBtn.gameObject.SetActive(false);
             skipBtn.gameObject.SetActive(false);
+            UINaviHelper.Instance.SetFirstSelect();
         });
         sequence.AppendInterval(0.15f);
         sequence.AppendCallback(() =>
@@ -225,7 +229,9 @@ public class RocketManager : Singleton<RocketManager>
         {
             // ¿¬Ãâ ÈÄ ´Ý±â
             loading = false;
-            Skip();
+            skipTMP.text = tm.GetCommons("Close");
+            skipBtn.gameObject.SetActive(true);
+            UINaviHelper.Instance.SetFirstSelect();
         });
     }
     public void Skip()

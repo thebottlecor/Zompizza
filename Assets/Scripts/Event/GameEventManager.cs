@@ -27,6 +27,7 @@ public class GameEventManager : Singleton<GameEventManager>
     public float typingSpeed = 0.05f;
     private bool tmpCompleted;
 
+    // 이벤트에 의한 일회성 호감도 고정
     public float friendshipFixed;
     public bool hasCat;
     public GameObject cat;

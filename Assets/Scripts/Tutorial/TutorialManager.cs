@@ -9,6 +9,7 @@ using UnityEngine.InputSystem;
 public class TutorialManager : Singleton<TutorialManager>
 {
     [Header("µð¹ö±ë")]
+    public bool debug_skipToPrologue;
     public bool debug_skipToShop;
     public bool debug_skipToReturn;
     public bool debug_TutorialDisable;
@@ -25,7 +26,9 @@ public class TutorialManager : Singleton<TutorialManager>
     public Zombie_Tutorial_Contact[] tutorialZombie;
     public GameObject trainingCenterSpawnBlock;
     public GameObject trainingCenter;
+    public GameObject prologueObj;
     public Transform trainingCenterPos;
+    public Transform prologuePos;
 
     public TextMeshProUGUI controlText;
     public GameObject controlPadObj;
@@ -46,6 +49,9 @@ public class TutorialManager : Singleton<TutorialManager>
 
     public void Init()
     {
+        trainingCenter.SetActive(false);
+        prologueObj.SetActive(false);
+
         step = 0;
 
         UpdateText();
@@ -79,6 +85,12 @@ public class TutorialManager : Singleton<TutorialManager>
         {
             TutorialSkip();
             step = 100;
+            return;
+        }
+
+        if (debug_skipToPrologue)
+        {
+            Step1_2();
             return;
         }
 
@@ -197,11 +209,14 @@ public class TutorialManager : Singleton<TutorialManager>
         var pad = Gamepad.current;
         controlPadObj.SetActive(pad != null);
         controlText.gameObject.SetActive(pad == null);
+
+        UIManager.Instance.ToggleDrivingInfo(false);
     }
 
     public void TutorialSkip()
     {
         trainingCenter.SetActive(false);
+        prologueObj.SetActive(false);
         var player = GM.Instance.player;
         player.StopPlayer(instance:true);
         player.transform.position = GM.Instance.pizzeriaPos.position;
@@ -221,6 +236,9 @@ public class TutorialManager : Singleton<TutorialManager>
         controlPadObj.SetActive(false);
         driftText.gameObject.SetActive(false);
         driftPadObj.SetActive(false);
+
+        UIManager.Instance.ToggleDrivingInfo(true);
+        AudioManager.Instance.ToggleMute(false);
     }
 
     private void OnPlayerEnter(object sender, int e)
@@ -235,11 +253,16 @@ public class TutorialManager : Singleton<TutorialManager>
                 if (step == 1)
                 {
                     AudioManager.Instance.PlaySFX(Sfx.complete);
-                    Step2();
+                    Step1_2();
                 }
                 break;
             case 2:
-                if (step == 2)
+                if (step == 1)
+                {
+                    DialogueManager.Instance.SetDialogue(0);
+                    //Step2();
+                }
+                else if (step == 2)
                     Step3();
                 break;
             case 3:
@@ -273,13 +296,37 @@ public class TutorialManager : Singleton<TutorialManager>
         }
     }
 
-    private void Step2()
+    private void Step1_2()
+    {
+        TutorialSkip();
+        prologueObj.SetActive(true);
+        AudioManager.Instance.ToggleMute(true);
+
+        var player = GM.Instance.player;
+        player.transform.position = prologuePos.position;
+        player.transform.localEulerAngles = new Vector3(0f, 180f, 0f);
+        player.cam.ForceUpdate_WhenMoving();
+        GM.Instance.timer = Constant.dayTime - 1f;
+        GM.Instance.rainObj.SetActive(true);
+
+        UIManager.Instance.ToggleDrivingInfo(false);
+
+        step = 1;
+
+        training = true;
+        guideObjects[0].SetActive(false);
+    }
+
+    public void Step2()
     {
         TutorialSkip();
         training = true;
-        guideObjects[0].SetActive(false);
+        //guideObjects[0].SetActive(false);
         guideObjects[1].SetActive(true);
         shopGoal.SetActive(true);
+        GM.Instance.timer = Constant.dayTime * 0.75f;
+        OrderManager.Instance.NewOrder_Tutorial();
+        GM.Instance.rainObj.SetActive(false);
         step = 2;
 
         shopGate.alwaysClosed = true;

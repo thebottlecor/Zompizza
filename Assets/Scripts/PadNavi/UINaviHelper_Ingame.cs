@@ -31,7 +31,7 @@ public class UINaviHelper_Ingame : MonoBehaviour
     public UINavi raid_first;
     public UINavi ranking_first;
     public UINavi nextDay_first;
-    public UINavi rocket_first;
+    public UINavi[] rocket_first;
     public UINavi shopCloseWarning_first;
     public UINavi gameOverWarning_first;
 
@@ -40,6 +40,7 @@ public class UINaviHelper_Ingame : MonoBehaviour
 
     public UINavi gameEvent_accept;
     public UINavi gameEvent_decline;
+    public UINavi dialogue_next;
 
     [Header("항상 보여지는 인디케이터")]
     public PadKeyIndicator[] alwaysShow_PadUIs;
@@ -356,6 +357,19 @@ public class UINaviHelper_Ingame : MonoBehaviour
         else if (ge.declineBtn.gameObject.activeSelf)
         {
             first = gameEvent_decline;
+        }
+
+        return first;
+    }
+    public UINavi Dialogue_Reconnection()
+    {
+        var di = DialogueManager.Instance;
+
+        UINavi first = null;
+
+        if (di.nextBtn.gameObject.activeSelf)
+        {
+            first = dialogue_next;
         }
 
         return first;

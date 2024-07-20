@@ -131,9 +131,11 @@ public class ShopUI : EventListener
     {
         buttonTexts[0].text = tm.GetCommons("Order");
         buttonTexts[1].text = tm.GetCommons("Management");
-        buttonTexts[2].text = tm.GetCommons("Upgrade");
+        //buttonTexts[2].text = tm.GetCommons("Upgrade");
+        buttonTexts[2].text = tm.GetCommons("Research");
         //buttonTexts[3].text = tm.GetCommons("News");
-        buttonTexts[3].text = tm.GetCommons("Vehicle");
+        //buttonTexts[3].text = tm.GetCommons("Vehicle");
+        buttonTexts[3].text = tm.GetCommons("Garage");
 
         //buttonTexts[4].text = tm.GetCommons("Back");
         buttonTexts[4].text = tm.GetCommons("Close");
@@ -203,6 +205,7 @@ public class ShopUI : EventListener
         if (GM.Instance.darkCanvas.blocksRaycasts) return;
         if (shopCloseWarningObj.activeSelf) return;
         if (GameEventManager.Instance.eventPanel.activeSelf) return;
+        if (DialogueManager.Instance.eventPanel.activeSelf) return;
 
         float value = e.ReadValue<float>();
 
@@ -348,14 +351,12 @@ public class ShopUI : EventListener
         Time.timeScale = 0f;
         loading = true;
 
-        UIManager.Instance.orderMiniUIParent.SetActive(false);
-        UIManager.Instance.speedInfo.SetActive(false);
+        UIManager.Instance.ToggleDrivingInfo(false);
+
         UIManager.Instance.orderIndicator.SetActive(false);
-        UIManager.Instance.timeInfo.SetActive(false);
         UIManager.Instance.padUIs.SetActive(false);
         OrderManager.Instance.fastTravelBtnParnet.SetActive(false);
         ExplorationManager.Instance.HideUI_ResultPanel_Instant();
-        WorldMapManager.Instance.CloseMinimap();
 
         SelectSubPanel(activeSubPanel);
 
@@ -422,14 +423,12 @@ public class ShopUI : EventListener
         Time.timeScale = 1f;
         loading = true;
 
-        UIManager.Instance.orderMiniUIParent.SetActive(true);
-        UIManager.Instance.speedInfo.SetActive(true);
+        UIManager.Instance.ToggleDrivingInfo(true);
+
         UIManager.Instance.orderIndicator.SetActive(true);
-        UIManager.Instance.timeInfo.SetActive(true);
         UIManager.Instance.padUIs.SetActive(true);
         OrderManager.Instance.fastTravelBtnParnet.SetActive(true);
         ExplorationManager.Instance.HideUI_ResultPanel_Instant();
-        WorldMapManager.Instance.OpenMinimap();
         HideAllVehicle();
 
         for (int i = 0; i < panelButtonPairs.Count; i++)
@@ -798,7 +797,7 @@ public class ShopUI : EventListener
                 st.AppendFormat("<sprite=2> {0} : {1}$", tm.GetCommons("Costs"), rm.GetCost(idx));
             else
             {
-                //st.AppendFormat("<sprite=2> {0} : <color=#A91111>{1}$</color>", tm.GetCommons("Costs"), rm.GetCost(idx));
+                st.AppendFormat("<sprite=2> {0} : <color=#A91111>{1}$</color>", tm.GetCommons("Costs"), rm.GetCost(idx));
             }
         }
         st.AppendLine();

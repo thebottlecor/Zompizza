@@ -116,13 +116,11 @@ public class UtilUI : EventListener
         Time.timeScale = 0f;
         loading = true;
 
-        UIManager.Instance.orderMiniUIParent.SetActive(false);
-        UIManager.Instance.speedInfo.SetActive(false);
+        UIManager.Instance.ToggleDrivingInfo(false);
+
         UIManager.Instance.orderIndicator.SetActive(false);
-        UIManager.Instance.timeInfo.SetActive(false);
         UIManager.Instance.padUIs.SetActive(false);
         OrderManager.Instance.fastTravelBtnParnet.SetActive(false);
-        WorldMapManager.Instance.CloseMinimap();
         WorldMapManager.Instance.OpenFullscreenMap();
 
         SelectSubPanel(activeSubPanel);
@@ -173,14 +171,12 @@ public class UtilUI : EventListener
         Time.timeScale = 1f;
         loading = true;
 
-        UIManager.Instance.orderMiniUIParent.SetActive(true);
-        UIManager.Instance.speedInfo.SetActive(true);
+        UIManager.Instance.ToggleDrivingInfo(true);
+
         UIManager.Instance.orderIndicator.SetActive(true);
-        UIManager.Instance.timeInfo.SetActive(true);
         UIManager.Instance.padUIs.SetActive(true);
         OrderManager.Instance.fastTravelBtnParnet.SetActive(true);
         WorldMapManager.Instance.CloseFullscreenMap();
-        WorldMapManager.Instance.OpenMinimap();
         SettingManager.Instance.EndKeyBinding();
 
         for (int i = 0; i < panelButtonPairs.Count; i++)

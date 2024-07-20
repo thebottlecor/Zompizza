@@ -170,6 +170,7 @@ public class GM : Singleton<GM>
 
     [Space(10f)]
     public GameObject returnIndicator;
+    public GameObject rainObj;
 
     public static EventHandler<bool> EndTimeEvent; // true일시 마감
     private TextManager tm => TextManager.Instance;
@@ -279,6 +280,7 @@ public class GM : Singleton<GM>
         ResearchManager.Instance.ToggleAllHiddenRecipe(true);
 
         InitPlayer();
+        rainObj.SetActive(false);
 
         footBallPos = footBall.position;
     }
@@ -434,6 +436,10 @@ public class GM : Singleton<GM>
                 }
             }
         }
+
+        Vector3 rainPos = player.transform.position;
+        rainPos.y = 20f;
+        rainObj.transform.position = rainPos;
     }
 
     private void FixedUpdate()
@@ -450,6 +456,8 @@ public class GM : Singleton<GM>
 
     public void NextDay()
     {
+        rainObj.SetActive(false);
+
         timer = 0f;
         accountText[0].text = string.Format(tm.GetCommons("Day"), day + 1);
         day++;
@@ -745,6 +753,12 @@ public class GM : Singleton<GM>
     {
         accountObj.SetActive(false);
         UINaviHelper.Instance.SetFirstSelect();
+
+        // 임시 비 효과
+        if (day == 3 || day == 8)
+        {
+            rainObj.SetActive(true);
+        }
 
         //int loanWarning = LoanManager.Instance.NextDayLate();
         int loanWarning = -1;

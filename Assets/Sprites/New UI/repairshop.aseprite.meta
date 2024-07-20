@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: ce0a45b2de46f5644a46c8094b8fd46b
+guid: 0988a2827b5b20b45a38483c3abf6d95
 ScriptedImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -121,7 +121,7 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: timezone
+  - name: repairshop
     originalName: 
     pivot: {x: 0.5, y: 0}
     alignment: 9
@@ -130,9 +130,9 @@ ScriptedImporter:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 200
-      height: 70
-    spriteID: d2d62a84f43967d4e989fa28480e977f
+      width: 323
+      height: 342
+    spriteID: 63c11b429cac94843b978263e016c05f
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -144,24 +144,24 @@ ScriptedImporter:
   spriteSheetImportData: []
   asepriteLayers:
   - layerIndex: 0
-    guid: 1367419659
-    name: timezone
+    guid: 519522773
+    name: repairshop
     layerFlags: 0
     layerType: 0
     blendMode: 0
     cells:
-    - name: timezone
+    - name: repairshop
       frameIndex: 0
       cellRect:
         x: 0
         y: 0
-        width: 200
-        height: 70
-      spriteId: d2d62a84f43967d4e989fa28480e977f
+        width: 323
+        height: 342
+      spriteId: 63c11b429cac94843b978263e016c05f
     linkedCells: []
     parentIndex: -1
   platformSettings: []
   generatePhysicsShape: 0
   secondarySpriteTextures: []
   spritePackingTag: 
-  canvasSize: {x: 200, y: 70}
+  canvasSize: {x: 323, y: 342}

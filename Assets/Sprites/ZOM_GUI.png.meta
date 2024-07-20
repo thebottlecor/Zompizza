@@ -664,7 +664,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: ZOM_GUI_29
+      name: Next
       rect:
         serializedVersion: 2
         x: 92
@@ -1745,6 +1745,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
+      Next: 398142997
       ZOM_GUI_0: 638396757
       ZOM_GUI_1: 1870865058
       ZOM_GUI_10: -282567330
@@ -1762,7 +1763,6 @@ TextureImporter:
       ZOM_GUI_25: -1471986665
       ZOM_GUI_26: 1958567784
       ZOM_GUI_28: 612039958
-      ZOM_GUI_29: 398142997
       ZOM_GUI_3: -435436588
       ZOM_GUI_30: 895953832
       ZOM_GUI_31: 2013824448

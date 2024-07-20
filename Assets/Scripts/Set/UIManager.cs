@@ -94,6 +94,26 @@ public class UIManager : Singleton<UIManager>
         }
     }
 
+    public void ToggleDrivingInfo(bool on)
+    {
+        if (on)
+        {
+            if (TutorialManager.Instance.training && TutorialManager.Instance.step <= 1) return;
+
+            WorldMapManager.Instance.OpenMinimap();
+            orderMiniUIParent.SetActive(true);
+            timeInfo.SetActive(true);
+            speedInfo.SetActive(true);
+        }
+        else
+        {
+            WorldMapManager.Instance.CloseMinimap();
+            orderMiniUIParent.SetActive(false);
+            timeInfo.SetActive(false);
+            speedInfo.SetActive(false);
+        }
+    }
+
     public void UpdateIngredientsTier()
     {
         for (int i = 0; i < ingredientUIs.Count; i++)
@@ -145,6 +165,8 @@ public class UIManager : Singleton<UIManager>
         if (isDirecting || changingResolution) return false;
         if (GM.Instance.loading) return false;
         if (LoadingSceneManager.Instance.logueLoading) return false;
+        if (GameEventManager.Instance.eventPanel.activeSelf) return false;
+        if (DialogueManager.Instance.eventPanel.activeSelf) return false;
         return true;
     }
 
@@ -212,11 +234,6 @@ public class UIManager : Singleton<UIManager>
         if (GM.Instance.gameOverWarningObj.activeSelf)
         {
             GM.Instance.ShowGameOverWarning(false);
-            return;
-        }
-
-        if (GameEventManager.Instance.eventPanel.activeSelf)
-        {
             return;
         }
 

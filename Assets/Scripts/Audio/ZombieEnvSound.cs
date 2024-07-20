@@ -31,6 +31,8 @@ public class ZombieEnvSound : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (TutorialManager.Instance.training && TutorialManager.Instance.step <= 1) return;
+
         timer += 1f * Time.deltaTime;
 
         if (timer > randomInterval)

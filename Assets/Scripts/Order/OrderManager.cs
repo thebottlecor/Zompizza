@@ -106,9 +106,13 @@ public class OrderManager : Singleton<OrderManager>
         orderList = new List<OrderInfo>();
 
         if (TutorialManager.Instance.training)
-            NewOrder_Tutorial();
+        {
+
+        }
         else
+        {
             NewOrder();
+        }
     }
     public Ingredient GetRandomIngredient_HighTier()
     {

@@ -109,6 +109,8 @@ public class ZombiePooler : Singleton<ZombiePooler>
 
     private void Update()
     {
+        if (TutorialManager.Instance.training && TutorialManager.Instance.step <= 1) return;
+
         timer += Time.deltaTime;
 
         float dist = (GM.Instance.player.transform.position - GM.Instance.pizzeriaPos.transform.position).magnitude;
