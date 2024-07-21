@@ -777,7 +777,7 @@ TextureImporter:
         width: 193
         height: 70
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -785,6 +785,27 @@ TextureImporter:
       bones: []
       spriteID: 10c7722695c9bba45862bf42a387bf9b
       internalID: -1384827913
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NextArrow
+      rect:
+        serializedVersion: 2
+        x: 684
+        y: 714
+        width: 61
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bf1bad9d59235cd4d9ddc3297765a2f2
+      internalID: -1649125948
       vertices: []
       indices: 
       edges: []
@@ -816,6 +837,7 @@ TextureImporter:
       Frame 1_9: 160382532
       Loading: 596820598
       Loading Fill: -406014899
+      NextArrow: -1649125948
       Order Accept: 1620981197
       Order Accept 2: -2041004710
       Order Location: -493887256

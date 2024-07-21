@@ -5,6 +5,7 @@ using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using DG.Tweening;
 
 public class TutorialManager : Singleton<TutorialManager>
 {
@@ -21,6 +22,8 @@ public class TutorialManager : Singleton<TutorialManager>
     public int step;
 
     public bool training;
+    public GameObject blackScreen;
+    public TextMeshProUGUI oneYearsLaterTMP;
 
     [Header("특수 : 튜토리얼")]
     public Zombie_Tutorial_Contact[] tutorialZombie;
@@ -96,7 +99,7 @@ public class TutorialManager : Singleton<TutorialManager>
 
         if (debug_skipToShop)
         {
-            Step2();
+            Step2_Before();
             return;
         }
         if (debug_skipToReturn)
@@ -134,7 +137,6 @@ public class TutorialManager : Singleton<TutorialManager>
         guideTexts[5].text = tm.GetCommons("Tutorial06");
         guideTexts[6].text = tm.GetCommons("Tutorial07");
         guideTexts[7].text = tm.GetCommons("Tutorial08");
-        guideTexts[8].text = tm.GetCommons("Tutorial09");
     }
 
     private void DriftTextUpdate(bool pad)
@@ -220,7 +222,7 @@ public class TutorialManager : Singleton<TutorialManager>
         var player = GM.Instance.player;
         player.StopPlayer(instance:true);
         player.transform.position = GM.Instance.pizzeriaPos.position;
-        player.cam.ForceUpdate_WhenMoving();
+        player.cam.ForceUpdate();
 
         for (int i = 0; i < tutorialZombie.Length; i++)
         {
@@ -296,8 +298,32 @@ public class TutorialManager : Singleton<TutorialManager>
         }
     }
 
+    private IEnumerator BlackScreen(float time, Action action)
+    {
+        GM.Instance.stop_control = true;
+        Time.timeScale = 0f;
+        blackScreen.SetActive(true);
+
+        yield return CoroutineHelper.WaitForSecondsRealtime(time);
+
+        GM.Instance.stop_control = false;
+        Time.timeScale = 1f;
+        blackScreen.SetActive(false);
+
+        action?.Invoke();
+    }
+
     private void Step1_2()
     {
+        oneYearsLaterTMP.text = tm.GetCommons("OutbreakDay");
+        oneYearsLaterTMP.rectTransform.localScale = 0.75f * Vector3.one;
+        oneYearsLaterTMP.gameObject.SetActive(true);
+        Sequence seq = DOTween.Sequence().SetUpdate(true).SetAutoKill(true);
+        seq.AppendInterval(1.25f);
+        seq.Append(oneYearsLaterTMP.rectTransform.DOScale(0.25f, 0.6f).SetEase(Ease.InExpo));
+
+        StartCoroutine(BlackScreen(1.75f, null));
+
         TutorialSkip();
         prologueObj.SetActive(true);
         AudioManager.Instance.ToggleMute(true);
@@ -305,7 +331,7 @@ public class TutorialManager : Singleton<TutorialManager>
         var player = GM.Instance.player;
         player.transform.position = prologuePos.position;
         player.transform.localEulerAngles = new Vector3(0f, 180f, 0f);
-        player.cam.ForceUpdate_WhenMoving();
+        player.cam.ForceUpdate();
         GM.Instance.timer = Constant.dayTime - 1f;
         GM.Instance.rainObj.SetActive(true);
 
@@ -317,17 +343,42 @@ public class TutorialManager : Singleton<TutorialManager>
         guideObjects[0].SetActive(false);
     }
 
-    public void Step2()
+    public void Step2_Before()
     {
+        oneYearsLaterTMP.text = tm.GetCommons("OneYearLater");
+        oneYearsLaterTMP.rectTransform.localScale = Vector3.zero;
+        oneYearsLaterTMP.gameObject.SetActive(true);
+        Sequence seq = DOTween.Sequence().SetUpdate(true).SetAutoKill(true);
+        seq.AppendInterval(0.5f);
+        seq.AppendCallback(() =>
+        {
+            oneYearsLaterTMP.rectTransform.localScale = 0.5f * Vector3.one;
+        });
+        seq.Append(oneYearsLaterTMP.rectTransform.DOScale(1f, 1.5f));
+        seq.AppendInterval(1f);
+        seq.Append(oneYearsLaterTMP.rectTransform.DOScale(0.5f, 0.6f).SetEase(Ease.InExpo));
+
+        StartCoroutine(BlackScreen(3.5f, () => 
+        { 
+            DialogueManager.Instance.SetDialogue(1);
+            GM.Instance.TimeUpdate();
+        }));
+
         TutorialSkip();
         training = true;
-        //guideObjects[0].SetActive(false);
+        step = 2;
+
+        UIManager.Instance.ToggleDrivingInfo(false);
+    }
+
+    public void Step2()
+    {
+        UIManager.Instance.ToggleDrivingInfo(true);
         guideObjects[1].SetActive(true);
         shopGoal.SetActive(true);
         GM.Instance.timer = Constant.dayTime * 0.75f;
         OrderManager.Instance.NewOrder_Tutorial();
         GM.Instance.rainObj.SetActive(false);
-        step = 2;
 
         shopGate.alwaysClosed = true;
     }
@@ -369,8 +420,7 @@ public class TutorialManager : Singleton<TutorialManager>
         }
         else if (step == 11)
         {
-            //guideObjects[7].SetActive(false);
-            guideObjects[8].SetActive(false);
+            guideObjects[7].SetActive(false);
             step = 12;
         }
     }
@@ -420,8 +470,7 @@ public class TutorialManager : Singleton<TutorialManager>
     {
         if (step == 10)
         {
-            //guideObjects[7].SetActive(true);
-            guideObjects[8].SetActive(true);
+            guideObjects[7].SetActive(true);
             indicators[5].SetActive(false);
             step = 11;
         }

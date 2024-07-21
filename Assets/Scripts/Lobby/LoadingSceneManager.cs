@@ -31,16 +31,18 @@ public class LoadingSceneManager : Singleton<LoadingSceneManager>
         nextScene = sceneName;
         this.StartInfo = startInfo;
 
-        if (StartInfo.tutorial)
-        {
-            logueLoading = true;
+        //if (StartInfo.tutorial)
+        //{
+        //    logueLoading = true;
 
-            StartCoroutine(Co_PrologueStart());
-        }
-        else
-        {
-            StartCoroutine(Co_LobbyStart());
-        }
+        //    StartCoroutine(Co_PrologueStart());
+        //}
+        //else
+        //{
+        //    StartCoroutine(Co_LobbyStart());
+        //}
+
+        StartCoroutine(Co_LobbyStart());
     }
 
     public void PrologueStart()

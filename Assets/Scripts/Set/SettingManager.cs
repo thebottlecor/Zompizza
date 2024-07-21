@@ -743,8 +743,8 @@ public class SettingManager : Singleton<SettingManager>
             resolutionDropdown.value = possibleResolution.Count - 1;
             SetResolution(possibleResolution.Count - 1);
 
-            bgmSlider.value = 5;
-            sfxSlider.value = 5;
+            bgmSlider.value = 10; // 브금 초기값 100%
+            sfxSlider.value = 10; // SFX 초기값 100%
             AudioManager.Instance.SetBGMVolume(bgmSlider.value);
             AudioManager.Instance.SetSFXVolume(sfxSlider.value);
         }

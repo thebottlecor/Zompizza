@@ -167,6 +167,7 @@ public class UIManager : Singleton<UIManager>
         if (LoadingSceneManager.Instance.logueLoading) return false;
         if (GameEventManager.Instance.eventPanel.activeSelf) return false;
         if (DialogueManager.Instance.eventPanel.activeSelf) return false;
+        if (TutorialManager.Instance.blackScreen.activeSelf) return false;
         return true;
     }
 

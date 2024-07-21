@@ -106,16 +106,7 @@ public class OvenMiniGame : EventListener
             gradeTexts[i].gameObject.SetActive(false);
         }
 
-        var pad = Gamepad.current;
-        if (pad == null)
-            keyText.text = $"{tm.GetCommons("Stop")} ({HotKey[KeyMap.carBreak].GetName()})";
-        else
-            keyText.text = $"{tm.GetCommons("Stop")}";
-        keyPadObj.SetActive(pad != null);
-        RectTransform keyRect = keyText.transform as RectTransform;
-        LayoutRebuilder.ForceRebuildLayoutImmediate(keyRect);
-        RectTransform buttonRect = (keyTextBtn.transform as RectTransform);
-        buttonRect.sizeDelta = new Vector2(keyRect.sizeDelta.x + 144f, buttonRect.sizeDelta.y);
+        //KeyBtnUIUpdate();
         keyTextBtn.interactable = false;
         operating = false;
 
@@ -131,12 +122,29 @@ public class OvenMiniGame : EventListener
         //buttonPressed = false;
     }
 
+    private void KeyBtnUIUpdate()
+    {
+        if (tm == null) return;
+
+        var pad = Gamepad.current;
+        if (pad == null)
+            keyText.text = $"{tm.GetCommons("Stop")} ({HotKey[KeyMap.carBreak].GetName()})";
+        else
+            keyText.text = $"{tm.GetCommons("Stop")}";
+        keyPadObj.SetActive(pad != null);
+        RectTransform keyRect = keyText.transform as RectTransform;
+        LayoutRebuilder.ForceRebuildLayoutImmediate(keyRect);
+        RectTransform buttonRect = (keyTextBtn.transform as RectTransform);
+        buttonRect.sizeDelta = new Vector2(keyRect.sizeDelta.x + 144f, buttonRect.sizeDelta.y);
+    }
+
     public void StartOven(OrderInfo orderInfo)
     {
         Init();
         this.orderInfo = orderInfo;
         UIManager.Instance.shopUI.orderPanel.SetActive(false);
         UIManager.Instance.shopUI.makingPanel.SetActive(true);
+        KeyBtnUIUpdate();
         UINaviHelper.Instance.SetFirstSelect();
     }
 

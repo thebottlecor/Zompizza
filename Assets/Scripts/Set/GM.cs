@@ -330,7 +330,55 @@ public class GM : Singleton<GM>
     private void Update()
     {
         if (loading) return;
+        if (TutorialManager.Instance.blackScreen.activeSelf) return;
+        if (GameEventManager.Instance.eventPanel.activeSelf) return;
+        if (DialogueManager.Instance.eventPanel.activeSelf) return;
 
+        TimeUpdate();
+
+        if (TutorialManager.Instance.training && TutorialManager.Instance.step <= 1)
+        {
+            if (returnIndicator.activeSelf)
+            {
+                returnIndicator.SetActive(false);
+            }
+        }
+        else
+        {
+            if (OrderManager.Instance.currentAcceptance == 0)
+            {
+                float dist = (player.transform.position - pizzeriaPos.transform.position).magnitude;
+                if (dist > 100f)
+                {
+                    if (!returnIndicator.activeSelf)
+                    {
+                        returnIndicator.SetActive(true);
+                    }
+                }
+                else
+                {
+                    if (returnIndicator.activeSelf)
+                    {
+                        returnIndicator.SetActive(false);
+                    }
+                }
+            }
+            else
+            {
+                if (returnIndicator.activeSelf)
+                {
+                    returnIndicator.SetActive(false);
+                }
+            }
+        }
+
+        Vector3 rainPos = player.transform.position;
+        rainPos.y = 20f;
+        rainObj.transform.position = rainPos;
+    }
+
+    public void TimeUpdate()
+    {
         var tuto = TutorialManager.Instance;
         if (!tuto.training && !tuto.debug_fixTime && !tuto.debug_fixTime_Noon)
             timer += Time.deltaTime;
@@ -399,47 +447,6 @@ public class GM : Singleton<GM>
         }
 
         globalLight.transform.localEulerAngles = lightAngle;
-
-
-        if (TutorialManager.Instance.training && TutorialManager.Instance.step <= 1)
-        {
-            if (returnIndicator.activeSelf)
-            {
-                returnIndicator.SetActive(false);
-            }
-        }
-        else
-        {
-            if (OrderManager.Instance.currentAcceptance == 0)
-            {
-                float dist = (player.transform.position - pizzeriaPos.transform.position).magnitude;
-                if (dist > 100f)
-                {
-                    if (!returnIndicator.activeSelf)
-                    {
-                        returnIndicator.SetActive(true);
-                    }
-                }
-                else
-                {
-                    if (returnIndicator.activeSelf)
-                    {
-                        returnIndicator.SetActive(false);
-                    }
-                }
-            }
-            else
-            {
-                if (returnIndicator.activeSelf)
-                {
-                    returnIndicator.SetActive(false);
-                }
-            }
-        }
-
-        Vector3 rainPos = player.transform.position;
-        rainPos.y = 20f;
-        rainObj.transform.position = rainPos;
     }
 
     private void FixedUpdate()

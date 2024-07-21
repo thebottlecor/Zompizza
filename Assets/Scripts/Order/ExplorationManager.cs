@@ -76,6 +76,14 @@ public class ExplorationManager : Singleton<ExplorationManager>
         SetCost();
     }
 
+    public void SetHighTierQuality()
+    {
+        UpgradeUpdate();
+        quality.slider.SetValueWithoutNotify(quality.slider.maxValue);
+        quality.UpdateUI();
+        SlideQuality(quality.slider.maxValue);
+    }
+
     private void UpgradeUpdate()
     {
         quantity.slider.maxValue = Constant.explorationQuantityMax + ResearchManager.Instance.globalEffect.explore_max_pay;
@@ -84,8 +92,6 @@ public class ExplorationManager : Singleton<ExplorationManager>
 
     public void SetCost()
     {
-        UpgradeUpdate();
-
         float value = quantityValue * 100f;
 
         value *= (qualityValue + 1);

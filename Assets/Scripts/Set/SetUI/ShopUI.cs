@@ -206,6 +206,7 @@ public class ShopUI : EventListener
         if (shopCloseWarningObj.activeSelf) return;
         if (GameEventManager.Instance.eventPanel.activeSelf) return;
         if (DialogueManager.Instance.eventPanel.activeSelf) return;
+        if (TutorialManager.Instance.blackScreen.activeSelf) return;
 
         float value = e.ReadValue<float>();
 
@@ -264,29 +265,36 @@ public class ShopUI : EventListener
 
         if (e) // 마감
         {
-            orderPanel.SetActive(false);
-            explorePanel.SetActive(true);
+            if (!explorePanel.activeSelf)
+            {
+                orderPanel.SetActive(false);
+                explorePanel.SetActive(true);
+                ExplorationManager.Instance.SetHighTierQuality();
 
-            buttonTexts[0].text = tm.GetCommons("Explore");
+                buttonTexts[0].text = tm.GetCommons("Explore");
 
-            pizzaBoys[0].gameObject.SetActive(false);
-            pizzaBoys[1].gameObject.SetActive(false);
-            pizzaBoys[2].gameObject.SetActive(true);
+                pizzaBoys[0].gameObject.SetActive(false);
+                pizzaBoys[1].gameObject.SetActive(false);
+                pizzaBoys[2].gameObject.SetActive(true);
 
-            shopCloseBtn.gameObject.SetActive(false);
+                shopCloseBtn.gameObject.SetActive(false);
+            }
         }
         else
         {
-            orderPanel.SetActive(true);
-            explorePanel.SetActive(false);
+            if (!orderPanel.activeSelf)
+            {
+                orderPanel.SetActive(true);
+                explorePanel.SetActive(false);
 
-            buttonTexts[0].text = tm.GetCommons("Order");
+                buttonTexts[0].text = tm.GetCommons("Order");
 
-            pizzaBoys[0].gameObject.SetActive(false);
-            pizzaBoys[1].gameObject.SetActive(true);
-            pizzaBoys[2].gameObject.SetActive(false);
+                pizzaBoys[0].gameObject.SetActive(false);
+                pizzaBoys[1].gameObject.SetActive(true);
+                pizzaBoys[2].gameObject.SetActive(false);
 
-            shopCloseBtn.gameObject.SetActive(true);
+                shopCloseBtn.gameObject.SetActive(true);
+            }
         }
     }
 
@@ -467,7 +475,8 @@ public class ShopUI : EventListener
             }
             if (explorePanel.activeSelf)
             {
-                ExplorationManager.Instance.SetCost();
+                ExplorationManager.Instance.SetHighTierQuality();
+                //ExplorationManager.Instance.SetCost();
             }
 
             shopCloseBtn.gameObject.SetActive(!endTime);
@@ -616,7 +625,8 @@ public class ShopUI : EventListener
         AudioManager.Instance.PlaySFX(Sfx.close);
         OrderManager.Instance.RemoveAllOrders();
         UINaviHelper.Instance.SetFirstSelect();
-        ExplorationManager.Instance.SetCost();
+        ExplorationManager.Instance.SetHighTierQuality();
+        //ExplorationManager.Instance.SetCost();
         if (GM.Instance.day == 5) GameEventManager.Instance.SetEvent(1); // 6일차 가게 닫은 후 이장 이벤트
     }
 
@@ -784,7 +794,9 @@ public class ShopUI : EventListener
             if (rating > 0)
             {
                 if (GM.Instance.rating >= rating)
+                {
                     st.AppendFormat(tm.GetCommons("RatingNeed"), "<sprite=1>", rating);
+                }
                 else
                 {
                     st.AppendFormat(tm.GetCommons("RatingNeed"), "<sprite=1>", "<color=#A91111>" + rating + "</color>");
@@ -793,11 +805,16 @@ public class ShopUI : EventListener
             }
 
             int cost = rm.GetCost(idx);
-            if (GM.Instance.gold >= cost)
-                st.AppendFormat("<sprite=2> {0} : {1}$", tm.GetCommons("Costs"), rm.GetCost(idx));
-            else
+            if (cost > 0)
             {
-                st.AppendFormat("<sprite=2> {0} : <color=#A91111>{1}$</color>", tm.GetCommons("Costs"), rm.GetCost(idx));
+                if (GM.Instance.gold >= cost)
+                {
+                    st.AppendFormat("<sprite=2> {0} : {1}$", tm.GetCommons("Costs"), rm.GetCost(idx));
+                }
+                else
+                {
+                    st.AppendFormat("<sprite=2> {0} : <color=#A91111>{1}$</color>", tm.GetCommons("Costs"), rm.GetCost(idx));
+                }
             }
         }
         st.AppendLine();

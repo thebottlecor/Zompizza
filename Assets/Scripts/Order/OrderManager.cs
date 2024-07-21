@@ -667,6 +667,12 @@ public class OrderManager : Singleton<OrderManager>
     private void Update()
     {
         bool someOrderRemoved = false;
+        float globalTimeLimit = 1f / (1f + ResearchManager.Instance.globalEffect.customer_timelimit); // 시간제한이 늘어나면 그만큼 빨리 접수종료되는 상황이 발생, 역수를 곱하면 업글 영향 안 받음
+        if (TutorialManager.Instance.training)
+        {
+            globalTimeLimit = 0f; // 튜토리얼 중에는 시간에 상관없이 주문이 안 없어짐
+        }
+
         for (int i = orderList.Count - 1; i >= 0; i--)
         {
             if (orderList[i].accepted)
@@ -677,7 +683,7 @@ public class OrderManager : Singleton<OrderManager>
             }
             else
             {
-                if (orderList[i].timeLimit * 0.5f > GM.Instance.remainTime) // 배달 제한 시간이 남은 영업 시간 초과시
+                if (orderList[i].timeLimit * globalTimeLimit * 0.5f > GM.Instance.remainTime) // 배달 제한 시간이 남은 영업 시간 초과시
                 {
                     // 미-접수 패널티
                     NotAcceptedOrderPenalty(orderList[i]);
@@ -890,7 +896,7 @@ public class OrderManager : Singleton<OrderManager>
         var player = GM.Instance.player;
         player.StopPlayer(instance: true);
         player.transform.position = GM.Instance.pizzeriaPos.position;
-        player.cam.ForceUpdate_WhenMoving();
+        player.cam.ForceUpdate();
         player.ShakeOffAllZombies();
 
         fastTravleBtn.gameObject.SetActive(false);

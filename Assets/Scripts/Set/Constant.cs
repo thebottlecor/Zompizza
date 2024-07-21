@@ -20,7 +20,7 @@ public class Constant
     public const float distance_1km = 1 / distanceScale;
 
     public const float delivery_timeLimit_1km = 35f;
-    public const int delivery_reward_1km = 200;
+    public const int delivery_reward_1km = 250;
     public const int delivery_reward_ingredients = 130;
 
     public const float delivery_order_km = 10f;

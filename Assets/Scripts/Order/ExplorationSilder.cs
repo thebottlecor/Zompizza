@@ -36,4 +36,12 @@ public class ExplorationSilder : MonoBehaviour
         changedAction(a);
     }
 
+    public void UpdateUI()
+    {
+        if (intValue)
+            percentText.text = $"{slider.value + 1:F0}";
+        else
+            percentText.text = $"{slider.value * 10f:F0}%";
+    }
+
 }

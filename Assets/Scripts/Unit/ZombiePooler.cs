@@ -109,6 +109,9 @@ public class ZombiePooler : Singleton<ZombiePooler>
 
     private void Update()
     {
+        if (hitEffectCooldown > 0f)
+            hitEffectCooldown -= Time.deltaTime;
+
         if (TutorialManager.Instance.training && TutorialManager.Instance.step <= 1) return;
 
         timer += Time.deltaTime;
@@ -163,9 +166,6 @@ public class ZombiePooler : Singleton<ZombiePooler>
                 }
             }
         }
-
-        if (hitEffectCooldown > 0f)
-            hitEffectCooldown -= Time.deltaTime;
     }
 
     public int GetActiveZomibes()

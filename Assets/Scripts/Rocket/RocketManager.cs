@@ -31,7 +31,8 @@ public class RocketManager : Singleton<RocketManager>
     public const int MaxStep = 10;
     public const int Countdown = 30;
 
-    public List<int> cost = new List<int>() { 5000, 10000, 20000, 40000, 80000, 120000, 160000, 200000, 240000, 280000 };
+    private List<int> cost = new List<int>() { 3000, 6000, 12000, 24000, int.MaxValue - 99, int.MaxValue - 98, int.MaxValue - 97, int.MaxValue - 96, int.MaxValue - 95, int.MaxValue - 94 };
+    //public List<int> cost = new List<int>() { 5000, 10000, 20000, 40000, 80000, 120000, 160000, 200000, 240000, 280000 };
 
     [System.Serializable]
     public struct RocketModels
@@ -95,9 +96,16 @@ public class RocketManager : Singleton<RocketManager>
             effects3[i].SetActive(false);
         }
 
-        developBtn.gameObject.SetActive(true);
+        if (cost[currentStep] >= int.MaxValue - 100) // 데모 개발 중지
+        {
+            developBtn.gameObject.SetActive(false);
+        }
+        else
+            developBtn.gameObject.SetActive(true);
         skipTMP.text = tm.GetCommons("Skip");
         skipBtn.gameObject.SetActive(true);
+
+        GM.Instance.globalLight.color = DataManager.Instance.uiLib.timeLightGradient.Evaluate(0); // 로켓 밝게 보이게 낮으로 조정
 
         panel.SetActive(true);
     }
@@ -123,10 +131,17 @@ public class RocketManager : Singleton<RocketManager>
             partsImage.sprite = DataManager.Instance.uiLib.spaceshipParts[currentStep];
             //partsImage.color = Color.white;
 
-            if (cost[currentStep] > GM.Instance.gold)
-                currentCostTMP.text = $"<color=#AB5239><sprite=2> {tm.GetCommons("Costs")} {cost[currentStep]}$</color>";
+            if (cost[currentStep] >= int.MaxValue - 100) // 데모 개발 중지
+            {
+                currentCostTMP.text = tm.GetCommons("DemoInvalid2");
+            }
             else
-                currentCostTMP.text = $"<sprite=2> {tm.GetCommons("Costs")} {cost[currentStep]}$";
+            {
+                if (cost[currentStep] > GM.Instance.gold)
+                    currentCostTMP.text = $"<color=#AB5239><sprite=2> {tm.GetCommons("Costs")} {cost[currentStep]}$</color>";
+                else
+                    currentCostTMP.text = $"<sprite=2> {tm.GetCommons("Costs")} {cost[currentStep]}$";
+            }
         }
         else
         {
@@ -143,7 +158,12 @@ public class RocketManager : Singleton<RocketManager>
     {
         if (loading) return;
         if (Completed) return;
-        if (GM.Instance.gold < cost[currentStep]) return;
+        if (cost[currentStep] >= int.MaxValue - 100) return; // 데모 개발 중지
+        if (GM.Instance.gold < cost[currentStep])
+        {
+            AudioManager.Instance.PlaySFX(Sfx.deny);
+            return;
+        }
 
         GM.Instance.AddGold(-1 * cost[currentStep], GM.GetGoldSource.upgrade);
 

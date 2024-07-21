@@ -111,7 +111,11 @@ public class UINaviHelper : Singleton<UINaviHelper>
 
             if (UIManager.Instance != null)
             {
-                if (util.IsActive)
+                if (TutorialManager.Instance.blackScreen.activeSelf)
+                {
+
+                }
+                else if (util.IsActive)
                 {
                     switch (util.activeSubPanel)
                     {
