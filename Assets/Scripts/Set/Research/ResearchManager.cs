@@ -345,6 +345,12 @@ public class ResearchManager : Singleton<ResearchManager>
         }
         return false;
     }
+    public void AutoResearch_For_Tier() // 티어 자동 업그레이드
+    {
+        int idx = 0;
+        ResearchUnlock(idx);
+    }
+
     public void ResearchUnlock_Force(int idx)
     {
         globalEffect = ResearchInfo[idx].AddEffect(globalEffect);

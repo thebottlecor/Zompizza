@@ -234,6 +234,7 @@ public class ShopUI : EventListener
     private void OnPlayerArriveShop(object sender, EventArgs e)
     {
         ShowOrder();
+        UIManager.Instance.TierUp();
         playerStay = true;
     }
 

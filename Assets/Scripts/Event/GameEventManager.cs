@@ -138,8 +138,7 @@ public class GameEventManager : Singleton<GameEventManager>
 
         StartCoroutine(TextPrint(text, 1f, () =>
         {
-            eventPanel.SetActive(false);
-            UINaviHelper.Instance.SetFirstSelect();
+            EventHide();
         }));
     }
 
@@ -190,9 +189,16 @@ public class GameEventManager : Singleton<GameEventManager>
 
         StartCoroutine(TextPrint(tm.GetCommons($"{currentEvent}Event_decline"), 1f, () =>
         {
-            eventPanel.SetActive(false);
-            UINaviHelper.Instance.SetFirstSelect();
+            EventHide();
         }));
+    }
+
+    public void EventHide()
+    {
+        eventPanel.SetActive(false);
+        UINaviHelper.Instance.SetFirstSelect();
+
+        TutorialManager.Instance.NoMoreEvented();
     }
 
     private void DeclineEffect()

@@ -129,14 +129,19 @@ public class TutorialManager : Singleton<TutorialManager>
 
         controlText.text = st.ToString();
 
-        guideTexts[0].text = tm.GetCommons("Tutorial01");
-        guideTexts[1].text = tm.GetCommons("Tutorial02");
-        guideTexts[2].text = tm.GetCommons("Tutorial03");
-        guideTexts[3].text = tm.GetCommons("Tutorial04");
-        guideTexts[4].text = string.Format(tm.GetCommons("Tutorial05"), tm.GetKeyMaps(KeyMap.worldMap), sm.keyMappings[KeyMap.worldMap].GetName());
-        guideTexts[5].text = tm.GetCommons("Tutorial06");
-        guideTexts[6].text = tm.GetCommons("Tutorial07");
-        guideTexts[7].text = tm.GetCommons("Tutorial08");
+        guideTexts[0].text = tm.GetCommons("Tutorial01"); // 운전 연습장
+        guideTexts[1].text = tm.GetCommons("Tutorial02"); // 가게 진입
+        guideTexts[2].text = tm.GetCommons("Tutorial03"); // 주문 받기
+        guideTexts[3].text = tm.GetCommons("Tutorial04"); // 배달 시작
+        guideTexts[4].text = string.Format(tm.GetCommons("Tutorial05"), tm.GetKeyMaps(KeyMap.worldMap), sm.keyMappings[KeyMap.worldMap].GetName()); // 배달중
+        guideTexts[5].text = tm.GetCommons("Tutorial06"); // 복귀
+        guideTexts[6].text = tm.GetCommons("Tutorial07"); // 탐험
+        guideTexts[7].text = tm.GetCommons("Tutorial08"); // 평점
+
+        guideTexts[8].text = tm.GetCommons("Tutorial09"); // 우주선
+        guideTexts[9].text = tm.GetCommons("Tutorial10"); // 연구
+        guideTexts[10].text = tm.GetCommons("Tutorial11"); // 차량
+        guideTexts[11].text = tm.GetCommons("Tutorial12"); // 주민
     }
 
     private void DriftTextUpdate(bool pad)
@@ -358,6 +363,8 @@ public class TutorialManager : Singleton<TutorialManager>
         seq.AppendInterval(1f);
         seq.Append(oneYearsLaterTMP.rectTransform.DOScale(0.5f, 0.6f).SetEase(Ease.InExpo));
 
+        GM.Instance.timer = Constant.dayTime * 0.75f;
+
         StartCoroutine(BlackScreen(3.5f, () => 
         { 
             DialogueManager.Instance.SetDialogue(1);
@@ -376,7 +383,6 @@ public class TutorialManager : Singleton<TutorialManager>
         UIManager.Instance.ToggleDrivingInfo(true);
         guideObjects[1].SetActive(true);
         shopGoal.SetActive(true);
-        GM.Instance.timer = Constant.dayTime * 0.75f;
         OrderManager.Instance.NewOrder_Tutorial();
         GM.Instance.rainObj.SetActive(false);
 
@@ -398,6 +404,7 @@ public class TutorialManager : Singleton<TutorialManager>
         {
             guideObjects[2].SetActive(false);
             indicators[0].SetActive(false);
+            indicators[6].SetActive(true);
             step = 4;
         }
     }
@@ -407,21 +414,68 @@ public class TutorialManager : Singleton<TutorialManager>
         {
             guideObjects[3].SetActive(true);
             indicators[1].SetActive(true);
+            indicators[6].SetActive(false);
             step = 5;
         }
     }
     public void ShopWindowHide()
     {
-        if (step == 5)
+        switch (step)
         {
-            guideObjects[3].SetActive(false);
-            indicators[1].SetActive(false);
-            step = 6;
+            case 5:
+                guideObjects[3].SetActive(false);
+                indicators[1].SetActive(false);
+                step = 6;
+                break;
+            case 11:
+                NextDay_After();
+                break;
+            case 13:
+                ThreeDay_After();
+                break;
+            case 15:
+                FourDay_After();
+                break;
         }
-        else if (step == 11)
+    }
+    public void DayChanged()
+    {
+        int day = GM.Instance.day;
+        switch (day)
         {
-            guideObjects[7].SetActive(false);
-            step = 12;
+            case 2:
+                NextDay_After();
+                break;
+            case 3:
+                ThreeDay_After();
+                break;
+            case 4:
+                FourDay_After();
+                break;
+        }
+    }
+    public void NoMoreEvented()
+    {
+        int day = GM.Instance.day;
+        switch (day)
+        {
+            case 1:
+                NextDay();
+                break;
+            case 2:
+                ThreeDay();
+                break;
+            case 3:
+                FourDay();
+                break;
+        }
+    }
+
+    public void RocketWindowHide()
+    {
+        if (step == 10)
+        {
+            guideObjects[8].SetActive(false);
         }
     }
     public void ShopWindowHideComplete()
@@ -462,8 +516,17 @@ public class TutorialManager : Singleton<TutorialManager>
             indicators[4].SetActive(false);
             indicators[5].SetActive(true);
             UIManager.Instance.shopUI.shopCloseBtn.enabled = true;
-            training = false;
             step = 10;
+
+            // 탐색 때 트레이닝 해제
+            training = false;
+        }
+    }
+    public void Spaceship()
+    {
+        if (step == 10)
+        {
+            guideObjects[8].SetActive(true);
         }
     }
     public void NextDay()
@@ -474,6 +537,40 @@ public class TutorialManager : Singleton<TutorialManager>
             indicators[5].SetActive(false);
             step = 11;
         }
+    }
+    private void NextDay_After()
+    {
+        guideObjects[7].SetActive(false);
+        step = 12;
+    }
+    public void ThreeDay() // 탐험, 이벤트 완료후
+    {
+        if (step == 12)
+        {
+            UIManager.Instance.shopUI.SelectSubPanel(2);
+            guideObjects[9].SetActive(true);
+            step = 13;
+        }
+    }
+    private void ThreeDay_After()
+    {
+        guideObjects[9].SetActive(false);
+        step = 14;
+    }
+    public void FourDay()
+    {
+        if (step == 14)
+        {
+            UIManager.Instance.shopUI.SelectSubPanel(3);
+            UIManager.Instance.shopUI.ChangeViewVehicle(true);
+            guideObjects[10].SetActive(true);
+            step = 15;
+        }
+    }
+    private void FourDay_After()
+    {
+        guideObjects[10].SetActive(false);
+        step = 16;
     }
 
     public void TutorialDisalbe()

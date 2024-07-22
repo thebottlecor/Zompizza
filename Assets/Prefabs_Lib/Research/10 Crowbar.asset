@@ -20,6 +20,8 @@ MonoBehaviour:
   max: 1
   cost: 0
   increaseCost: 0
+  rating: 0
+  increaseRating: 0
   needResearch: []
   hidden: 1
   invalid: 0
@@ -28,7 +30,7 @@ MonoBehaviour:
     ratingGet: 0
     explore_max_pay: 0
     explore_cost: 0
-    explore_get_bonus: 0.025
+    explore_get_bonus: 0.05
     tier: 0
     meat_tier: 0
     vegetable_tier: 0
@@ -40,6 +42,7 @@ MonoBehaviour:
     customer_timelimit: 0
     customer_max_tier: 0
     customer_max_amount: 0
+    order_max: 0
     customer_max_type: 0
     maxSpeed: 0
     damageReduce: 0

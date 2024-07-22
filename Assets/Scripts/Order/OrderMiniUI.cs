@@ -27,6 +27,11 @@ public class OrderMiniUI : MonoBehaviour
 
     UILibrary uiLib => DataManager.Instance.uiLib;
 
+    //private void Start()
+    //{
+    //    Hide();
+    //}
+
     public void Init(OrderInfo info)
     {
         prevHp = info.hp;

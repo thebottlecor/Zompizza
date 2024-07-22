@@ -29,7 +29,7 @@ MonoBehaviour:
     goldGet: 0
     ratingGet: 0
     explore_max_pay: 10
-    explore_cost: -0.05
+    explore_cost: -0.1
     explore_get_bonus: 0
     tier: 0
     meat_tier: 0
@@ -42,6 +42,7 @@ MonoBehaviour:
     customer_timelimit: 0
     customer_max_tier: 0
     customer_max_amount: 0
+    order_max: 0
     customer_max_type: 0
     maxSpeed: 0
     damageReduce: 0

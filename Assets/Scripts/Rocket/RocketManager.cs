@@ -77,6 +77,7 @@ public class RocketManager : Singleton<RocketManager>
 
     public void ShowPanel()
     {
+        TutorialManager.Instance.Spaceship();
         planetCam.SetActive(true);
         rocketCam.SetActive(true);
 
@@ -105,7 +106,7 @@ public class RocketManager : Singleton<RocketManager>
         skipTMP.text = tm.GetCommons("Skip");
         skipBtn.gameObject.SetActive(true);
 
-        GM.Instance.globalLight.color = DataManager.Instance.uiLib.timeLightGradient.Evaluate(0); // 로켓 밝게 보이게 낮으로 조정
+        GM.Instance.SetLight(0f, 0); // 로켓 밝게 보이게 낮으로 조정
 
         panel.SetActive(true);
     }
@@ -258,6 +259,7 @@ public class RocketManager : Singleton<RocketManager>
     {
         if (loading) return;
         HidePanel();
+        TutorialManager.Instance.RocketWindowHide();
         GM.Instance.NextDay_Late();
         loading = false;
     }

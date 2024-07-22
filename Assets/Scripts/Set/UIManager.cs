@@ -5,6 +5,8 @@ using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using TMPro;
+using System.Text;
 
 public class UIManager : Singleton<UIManager>
 {
@@ -37,7 +39,11 @@ public class UIManager : Singleton<UIManager>
     public List<IngredientUI> ingredientUIs;
     public Dictionary<Ingredient, IngredientUI> ingredientUIPairs;
 
-    private SerializableDictionary<KeyMap, KeyMapping> HotKey => SettingManager.Instance.keyMappings;
+    [Header("Æ¼¾î¾÷")]
+    public int tierUpMilestone;
+    public GameObject tierUpEffect;
+    public GameObject tierUpPanel;
+    public TextMeshProUGUI tierUpTMP;
 
     public void Init()
     {
@@ -298,4 +304,38 @@ public class UIManager : Singleton<UIManager>
         }
     }
     #endregion
+
+    public void TierUp()
+    {
+        ResearchManager.Instance.AutoResearch_For_Tier();
+
+        int tier = ResearchManager.Instance.globalEffect.tier;
+
+        if (tierUpMilestone < tier)
+        {
+            ExplorationManager.Instance.SetHighTierQuality();
+
+            tierUpMilestone = tier;
+            tierUpEffect.SetActive(true);
+
+            StringBuilder st = new StringBuilder();
+            st.Append("<color=#E66D4C>").Append(TextManager.Instance.GetCommons("Tier3")).Append("</color>");
+            st.AppendLine();
+            st.Append("<size=50%>").AppendFormat(TextManager.Instance.GetCommons("UpgradeEffect5"), tier + 1);
+
+            tierUpTMP.text = st.ToString();
+            tierUpPanel.SetActive(true);
+
+            AudioManager.Instance.PlaySFX(GameEventManager.Instance.audioClips[2]);
+            AudioManager.Instance.PlaySFX(Sfx.pizzaComplete);
+
+            StartCoroutine(TierUpEffectHide());
+        }
+    }
+    private IEnumerator TierUpEffectHide()
+    {
+        yield return CoroutineHelper.WaitForSecondsRealtime(3f);
+        tierUpEffect.SetActive(false);
+        tierUpPanel.SetActive(false);
+    }
 }

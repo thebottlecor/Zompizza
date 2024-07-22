@@ -380,8 +380,17 @@ public class GM : Singleton<GM>
     public void TimeUpdate()
     {
         var tuto = TutorialManager.Instance;
-        if (!tuto.training && !tuto.debug_fixTime && !tuto.debug_fixTime_Noon)
-            timer += Time.deltaTime;
+        if (!tuto.debug_fixTime && !tuto.debug_fixTime_Noon)
+        {
+            if (tuto.training && tuto.step <= 7)
+            {
+
+            }
+            else
+            {
+                timer += Time.deltaTime;
+            }
+        }
 
         if (tuto.debug_fixTime_Noon)
             timer = Constant.oneHour * 6;
@@ -431,6 +440,11 @@ public class GM : Singleton<GM>
         }
 
         float timePercent = timer / Constant.dayTime;
+        SetLight(timePercent, hour);
+    }
+
+    public void SetLight(float timePercent, int hour)
+    {
         globalLight.color = DataManager.Instance.uiLib.timeLightGradient.Evaluate(timePercent);
         Vector3 lightAngle = globalLight.transform.localEulerAngles;
         lightAngle.y = (lightAngleY.y - lightAngleY.x) * timePercent + lightAngleY.x;
@@ -826,12 +840,13 @@ public class GM : Singleton<GM>
                 warningQueue.Enqueue(1);
             }
 
+            TutorialManager.Instance.DayChanged();
+
             if (!hasResult)
             {
                 ShowWarningQueue();
             }
 
-            TutorialManager.Instance.NextDay();
             StatManager.Instance.NextDay();
             GameEventManager.Instance.NextDay();
             RandomGiftBox();
@@ -927,8 +942,15 @@ public class GM : Singleton<GM>
         else
         {
             UINaviHelper.Instance.SetFirstSelect();
-            if (day == 2) GameEventManager.Instance.SetEvent(0); // 3일차 아침 고아원 원장 이벤트
-            if (day == 8) GameEventManager.Instance.SetEvent(2); // 9일차 아침 고양이 이벤트
+            switch (day)
+            {
+                case 2: GameEventManager.Instance.SetEvent(0); // 3일차 아침 고아원 원장 이벤트
+                    break;
+                case 8: GameEventManager.Instance.SetEvent(2); // 9일차 아침 고양이 이벤트
+                    break;
+                default: TutorialManager.Instance.NoMoreEvented();
+                    break;
+            }
         }
     }
 
