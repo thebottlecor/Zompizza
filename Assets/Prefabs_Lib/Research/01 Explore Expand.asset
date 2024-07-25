@@ -20,8 +20,10 @@ MonoBehaviour:
   max: 1
   cost: 1000
   increaseCost: 4000
-  rating: 0
-  increaseRating: 0
+  researchPoint: 30
+  increaseRP: 0
+  rating_require: 0
+  increaseRating_require: 0
   needResearch: []
   hidden: 0
   invalid: 0

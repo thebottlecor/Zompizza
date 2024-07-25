@@ -20,8 +20,10 @@ MonoBehaviour:
   max: 1
   cost: 1500
   increaseCost: 4000
-  rating: 0
-  increaseRating: 0
+  researchPoint: 45
+  increaseRP: 0
+  rating_require: 0
+  increaseRating_require: 0
   needResearch:
   - {fileID: 11400000, guid: bfb1c6f340c7cf84e82a7b8ffe6d2bda, type: 2}
   hidden: 0
@@ -43,6 +45,7 @@ MonoBehaviour:
     customer_timelimit: 0.05
     customer_max_tier: 1
     customer_max_amount: 0
+    order_max: 0
     customer_max_type: 0
     maxSpeed: 0
     damageReduce: 0

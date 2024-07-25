@@ -16,6 +16,7 @@ public class GM : Singleton<GM>
         public float timer;
         public int gold;
         public float rating;
+        public float researchPoint;
 
         public SerializableDictionary<Ingredient, int> ingredients;
     }
@@ -28,6 +29,7 @@ public class GM : Singleton<GM>
 
             gold = this.gold,
             rating = this.rating,
+            researchPoint = this.researchPoint,
 
             ingredients = this.ingredients,
         };
@@ -41,6 +43,7 @@ public class GM : Singleton<GM>
 
         SetGold(data.gold);
         SetRating(data.rating);
+        SetRatingPoint(data.researchPoint);
 
         ingredients = data.ingredients;
     }
@@ -67,10 +70,13 @@ public class GM : Singleton<GM>
     public TextMeshProUGUI[] goldText;
     private float displayRating;
     public TextMeshProUGUI[] ratingText;
+    private float displayResearchPoints;
+    public TextMeshProUGUI[] researchPointsText;
 
     // 플레이어가 가진 자원
     public int gold;
     public float rating;
+    public float researchPoint; // 연구로 소모되는 평점
 
     public float RatingDailyChange { get; private set; }
     public SerializableDictionary<Ingredient, int> ingredients;
@@ -254,7 +260,9 @@ public class GM : Singleton<GM>
             ingredients[Ingredient.herb2] = initAmount;
 
             SetGold(1000);
-            SetRating(5f);
+            float initRating = 0f;
+            SetRating(initRating); // initRating = 0f
+            SetRatingPoint(initRating); // initRating = 0f
         }
 
         //CallAfterStart(gameSaveData);
@@ -656,6 +664,9 @@ public class GM : Singleton<GM>
         UINaviHelper.Instance.SetFirstSelect();
 
     }
+
+    #region 창고
+    /*
     private void UpdateAccountUI()
     {
         accountText[1].text = $"<sprite={2}> {tm.GetCommons("Money")} ({gold})";
@@ -752,6 +763,8 @@ public class GM : Singleton<GM>
         }
 
     }
+    */
+    #endregion
 
     public void Show_SpaceshipProject()
     {
@@ -786,22 +799,24 @@ public class GM : Singleton<GM>
 
         bool showWarning = false;
         //if (rating < RivalManager.Instance.rating)
-        if (rating <= 0)
-        {
-            if (!warning_gameOver)
-            {
-                warning_gameOver = true;
-                showWarning = true;
-            }
-            else
-            {
-                gameOverText[1].text = tm.GetCommons("Gameover2");
-                GameOver();
-                return;
-            }
-        }
-        else
-            warning_gameOver = false;
+        //if (rating <= 0)
+        //{
+        //    if (!warning_gameOver)
+        //    {
+        //        warning_gameOver = true;
+        //        showWarning = true;
+        //    }
+        //    else
+        //    {
+        //        gameOverText[1].text = tm.GetCommons("Gameover2");
+        //        GameOver();
+        //        return;
+        //    }
+        //}
+        //else
+        //    warning_gameOver = false;
+
+        warning_gameOver = false; // 평점 0점 이하 패배 조건 삭제
 
         if (loanWarning == 0)
         {
@@ -999,8 +1014,10 @@ public class GM : Singleton<GM>
 
     private void ShowGoldText()
     {
+        string str = $"{displayGold}$";
+
         for (int i = 0; i < goldText.Length; i++)
-            goldText[i].text = $"{displayGold}$";
+            goldText[i].text = str;
     }
 
     public void SetGold(int value)
@@ -1026,11 +1043,22 @@ public class GM : Singleton<GM>
             dayOne_Rating[source] += value;
 
         StatManager.Instance.totalRating += value;
+
+        if (value > 0)
+        {
+            AddResearchPoint(value * 10f); // 연구 포인트는 양수의 평점을 받았을 때만 올라감 (내려가는 일 없음) // 10배수
+        }
     }
 
     private void ShowRatingText()
     {
         //float rivalRating = RivalManager.Instance.rating;
+
+        string str;
+        if (displayRating < 0)
+            str = $"<color=#A91111>{displayRating:0.#}</color>";
+        else
+            str = $"{displayRating:0.#}";
 
         for (int i = 0; i < ratingText.Length; i++)
         {
@@ -1039,10 +1067,7 @@ public class GM : Singleton<GM>
             //else
             //    ratingText[i].text = $"{displayRating:0.#} / {Constant.winRating:F0}";
 
-            if (displayRating <= 0)
-                ratingText[i].text = $"<color=#A91111>{displayRating:0.#}</color>";
-            else
-                ratingText[i].text = $"{displayRating:0.#}";
+            ratingText[i].text = str;
 
             //if (displayRating >= rivalRating)
             //    ratingText[i].text = $"{displayRating:0.#} / <sprite=6> {rivalRating:0.#}";
@@ -1061,6 +1086,32 @@ public class GM : Singleton<GM>
         displayRating = value;
         rating = value;
         ShowRatingText();
+    }
+    public void SetRatingPoint(float value)
+    {
+        displayResearchPoints = value;
+        researchPoint = value;
+        ShowResearchPointText();
+    }
+    public void AddResearchPoint(float value)
+    {
+        float target = researchPoint + value;
+        DOVirtual.Float(researchPoint, target, 0.75f, (x) =>
+        {
+            displayResearchPoints = x;
+            ShowResearchPointText();
+        }).SetEase(Ease.OutCirc).SetUpdate(true);
+        researchPoint = target;
+    }
+    private void ShowResearchPointText()
+    {
+        string str = $"{displayResearchPoints:F0}";
+
+        for (int i = 0; i < researchPointsText.Length; i++)
+        {
+            //researchPointsText[i].text = $"{displayResearchPoints:0.#}";
+            researchPointsText[i].text = str;
+        }
     }
     #endregion
 
@@ -1303,6 +1354,16 @@ public class GM : Singleton<GM>
             AudioManager.Instance.PlaySFX(Sfx.deny);
             return false;
         }
+    }
+    public int Auto_ButVehicle() // 차량 자동 구매
+    {
+        int idx = 1;
+        if (CanBuyVehicle(idx))
+        {
+            unlockedVehicles[idx] = true;
+            return idx;
+        }
+        return -1;
     }
     #endregion
 

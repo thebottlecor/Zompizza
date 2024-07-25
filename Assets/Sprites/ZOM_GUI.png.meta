@@ -374,7 +374,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 280
-        y: 1290
+        y: 1293
         width: 180
         height: 181
       alignment: 0
@@ -1734,6 +1734,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: inspiration
+      rect:
+        serializedVersion: 2
+        x: 430
+        y: 1819
+        width: 148
+        height: 180
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1c7fca11d3d8c9b4cbd3cf673792f526
+      internalID: -891697425
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -1833,6 +1854,7 @@ TextureImporter:
       close: 1410198721
       edge_01: 284716777
       gold: -473345904
+      inspiration: -891697425
       line_01: -1077415394
       line_02: 1388350798
       medal_copper: -710229829

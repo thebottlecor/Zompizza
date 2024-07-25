@@ -350,15 +350,21 @@ public class ResearchInfo : ScriptableObject
 
     // 최대 연구 가능 횟수
     public int max = 1;
+    [Space(5f)]
     public int cost; // 기본 비용
     public float increaseCost; // 연구한 횟수마다 증가하는 비용
-    public float rating; // 필요한 평점 (소비되진 않음)
-    public float increaseRating; // 연구한 횟수마다 증가하는 필요한 평점
+    [Space(5f)]
+    public float researchPoint; // 소비되는 평점
+    public float increaseRP; // 연구 횟수마다 증가하는 평점
+    [Space(5f)]
+    public float rating_require; // 필요한 평점 (소비되진 않음 - 계속 누적되는 평점 기록)
+    public float increaseRating_require; // 연구한 횟수마다 증가하는 필요한 평점
+    [Space(5f)]
     public List<ResearchInfo> needResearch;
-
+    [Space(5f)]
     public bool hidden; // 비밀 레시피 - 연구되기 전까지 (발견전까지) 공개되지 않음
     public bool invalid;
-
+    [Space(5f)]
     public ResearchEffect effect;
 
     //public List<BuildingType> unlockBuildings;
@@ -375,12 +381,21 @@ public class ResearchInfo : ScriptableObject
 
         return value;
     }
-    public float Rating(int level = 0)
+    public float ResearchPoint(int level = 0)
     {
-        float value = rating;
+        float value = researchPoint;
 
         if (level >= 1)
-            value += level * increaseRating;
+            value += level * increaseRP;
+
+        return value;
+    }
+    public float Rating_Require(int level = 0)
+    {
+        float value = rating_require;
+
+        if (level >= 1)
+            value += level * increaseRating_require;
 
         return value;
     }

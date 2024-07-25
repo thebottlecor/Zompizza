@@ -42,8 +42,11 @@ public class UIManager : Singleton<UIManager>
     [Header("Æ¼¾î¾÷")]
     public int tierUpMilestone;
     public GameObject tierUpEffect;
+    public GameObject vehicleUpEffect;
     public GameObject tierUpPanel;
     public TextMeshProUGUI tierUpTMP;
+
+    private TextManager tm => TextManager.Instance;
 
     public void Init()
     {
@@ -305,6 +308,32 @@ public class UIManager : Singleton<UIManager>
     }
     #endregion
 
+
+    public void VehicleUnlock()
+    {
+        int newVehicle = GM.Instance.Auto_ButVehicle();
+
+        if (newVehicle > 0)
+        {
+            ExplorationManager.Instance.SetHighTierQuality();
+
+            vehicleUpEffect.SetActive(true);
+
+            StringBuilder st = new StringBuilder();
+            st.Append("<color=#E66D4C>").Append(tm.GetVehicles(newVehicle)).Append("</color>");
+            st.AppendLine();
+            st.Append("<size=50%>").AppendFormat(tm.GetCommons("NewVehicle"));
+
+            tierUpTMP.text = st.ToString();
+            tierUpPanel.SetActive(true);
+
+            AudioManager.Instance.PlaySFX(GameEventManager.Instance.audioClips[2]);
+            AudioManager.Instance.PlaySFX(Sfx.pizzaComplete);
+
+            StartCoroutine(TierUpEffectHide());
+        }
+    }
+
     public void TierUp()
     {
         ResearchManager.Instance.AutoResearch_For_Tier();
@@ -319,9 +348,9 @@ public class UIManager : Singleton<UIManager>
             tierUpEffect.SetActive(true);
 
             StringBuilder st = new StringBuilder();
-            st.Append("<color=#E66D4C>").Append(TextManager.Instance.GetCommons("Tier3")).Append("</color>");
+            st.Append("<color=#E66D4C>").Append(tm.GetCommons("Tier3")).Append("</color>");
             st.AppendLine();
-            st.Append("<size=50%>").AppendFormat(TextManager.Instance.GetCommons("UpgradeEffect5"), tier + 1);
+            st.Append("<size=50%>").AppendFormat(tm.GetCommons("UpgradeEffect5"), tier + 1);
 
             tierUpTMP.text = st.ToString();
             tierUpPanel.SetActive(true);
@@ -336,6 +365,7 @@ public class UIManager : Singleton<UIManager>
     {
         yield return CoroutineHelper.WaitForSecondsRealtime(3f);
         tierUpEffect.SetActive(false);
+        vehicleUpEffect.SetActive(false);
         tierUpPanel.SetActive(false);
     }
 }

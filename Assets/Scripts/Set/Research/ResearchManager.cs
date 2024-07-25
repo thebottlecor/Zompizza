@@ -320,13 +320,15 @@ public class ResearchManager : Singleton<ResearchManager>
 
     public bool CheckCanUnlocked(int idx)
     {
-        return CanResearced(idx) && CheckRating(idx) && PayCost(idx, false);
+        return CanResearced(idx) && CheckRating(idx) && PayResearchPoint(idx, false);
+        // CanResearced(idx) && CheckRating(idx) && PayCost(idx, false) && PayResearchPoint(idx, false);
     }
 
     public bool ResearchUnlock(int idx)
     {
         // 실제 돈 지불이 들어가는 PayCost는 맨 마지막 조건므로
-        if (CanResearced(idx) && CheckRating(idx) && PayCost(idx, true))
+        //if (CanResearced(idx) && CheckRating(idx) && PayCost(idx, true))
+        if (CanResearced(idx) && CheckRating(idx) && PayResearchPoint(idx, true))
         {
             globalEffect = ResearchInfo[idx].AddEffect(globalEffect);
             researchedCount[idx]++;
@@ -405,20 +407,44 @@ public class ResearchManager : Singleton<ResearchManager>
     {
         return ResearchInfo[idx].Cost(researchedCount[idx]);
     }
+
     private bool CheckRating(int idx)
     {
         float rating = GM.Instance.rating;
 
-        float needRating = GetRating(idx);
+        float needRating = GetRating_Require(idx);
 
         if (needRating > 0f && rating < needRating)
             return false;
 
         return true;
     }
-    public float GetRating(int idx)
+    public float GetRating_Require(int idx)
     {
-        return ResearchInfo[idx].Rating(researchedCount[idx]);
+        return ResearchInfo[idx].Rating_Require(researchedCount[idx]);
+    }
+
+    private bool PayResearchPoint(int idx, bool pay = false)
+    {
+        //if (GM.Instance.TEST_Free_Research) return true;
+
+        float rp = GM.Instance.researchPoint;
+
+        float needCost = GetResearchPoint(idx);
+
+        if (rp < needCost)
+            return false;
+
+        if (pay)
+        {
+            // 실제 지불
+            GM.Instance.AddResearchPoint(-1 * needCost);
+        }
+        return true;
+    }
+    public float GetResearchPoint(int idx)
+    {
+        return ResearchInfo[idx].ResearchPoint(researchedCount[idx]);
     }
     public bool AllResearched()
     {

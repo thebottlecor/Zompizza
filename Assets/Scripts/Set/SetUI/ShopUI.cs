@@ -234,6 +234,7 @@ public class ShopUI : EventListener
     private void OnPlayerArriveShop(object sender, EventArgs e)
     {
         ShowOrder();
+        UIManager.Instance.VehicleUnlock();
         UIManager.Instance.TierUp();
         playerStay = true;
     }
@@ -791,7 +792,7 @@ public class ShopUI : EventListener
         }
         if (canResearch)
         {
-            float rating = rm.GetRating(idx);
+            float rating = rm.GetRating_Require(idx);
             if (rating > 0)
             {
                 if (GM.Instance.rating >= rating)
@@ -805,16 +806,29 @@ public class ShopUI : EventListener
                 st.AppendLine();
             }
 
-            int cost = rm.GetCost(idx);
-            if (cost > 0)
+            //int cost = rm.GetCost(idx);
+            //if (cost > 0)
+            //{
+            //    if (GM.Instance.gold >= cost)
+            //    {
+            //        st.AppendFormat("<sprite=2> {0} : {1}$", tm.GetCommons("Costs"), cost);
+            //    }
+            //    else
+            //    {
+            //        st.AppendFormat("<sprite=2> {0} : <color=#A91111>{1}$</color>", tm.GetCommons("Costs"), cost);
+            //    }
+            //}
+
+            float rp = rm.GetResearchPoint(idx);
+            if (rp > 0)
             {
-                if (GM.Instance.gold >= cost)
+                if (GM.Instance.researchPoint >= rp)
                 {
-                    st.AppendFormat("<sprite=2> {0} : {1}$", tm.GetCommons("Costs"), rm.GetCost(idx));
+                    st.AppendFormat("{0} : <sprite=7> {1:0.#}", tm.GetCommons("Costs"), rp);
                 }
                 else
                 {
-                    st.AppendFormat("<sprite=2> {0} : <color=#A91111>{1}$</color>", tm.GetCommons("Costs"), rm.GetCost(idx));
+                    st.AppendFormat("{0} : <sprite=7> <color=#A91111>{1:0.#}</color>", tm.GetCommons("Costs"), rp);
                 }
             }
         }

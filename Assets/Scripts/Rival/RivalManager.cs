@@ -58,11 +58,12 @@ public class RivalManager : Singleton<RivalManager>
         playerWin = false;
         float player = GM.Instance.rating > 0 ? GM.Instance.rating : 0f;
 
-        List<RankingInfo> rankings = new List<RankingInfo>(3);
-
-        rankings.Add(new RankingInfo { idx = 2, rating = player });
-        rankings.Add(new RankingInfo { idx = 0, rating = rating[0] });
-        rankings.Add(new RankingInfo { idx = 1, rating = rating[1] });
+        List<RankingInfo> rankings = new List<RankingInfo>(3)
+        {
+            new RankingInfo { idx = 2, rating = player },
+            new RankingInfo { idx = 0, rating = rating[0] },
+            new RankingInfo { idx = 1, rating = rating[1] }
+        };
 
         float total = player + rating[0] + rating[1];
 
