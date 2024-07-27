@@ -89,6 +89,8 @@ namespace Pathfinding {
 		[HideInInspector]
 		public int graphIndex;
 
+		public GraphUpdateScene updateScene;
+
 		void Start () {
 			if (AstarPath.active == null) throw new System.Exception("There is no AstarPath object in the scene");
 
@@ -161,13 +163,19 @@ namespace Pathfinding {
 				return;
 			}
 
-			if (graph is GridGraph gg) {
+			if (graph is GridGraph gg) 
+			{
 				UpdateGridGraph(gg, async);
-			} else if (graph is RecastGraph rg) {
+				updateScene.Apply();
+			} 
+			else if (graph is RecastGraph rg) 
+			{
 				var delta = RecastGraphTileShift(rg, target.position);
-				if (delta.x != 0 || delta.y != 0) {
+				if (delta.x != 0 || delta.y != 0) 
+				{
 					updatingGraph = true;
 					UpdateRecastGraph(rg, delta, async);
+					updateScene.Apply();
 				}
 			}
 		}
