@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Pathfinding;
 
 public class ResearchManager : Singleton<ResearchManager>
 {
@@ -293,6 +294,8 @@ public class ResearchManager : Singleton<ResearchManager>
             raidDefenses_Add[0].SetActive(true);
             raidDefenses_Remove[0].SetActive(false);
         }
+
+        AstarPath.active.Scan();
     }
 
     public void ToggleAllHiddenRecipe(bool on)

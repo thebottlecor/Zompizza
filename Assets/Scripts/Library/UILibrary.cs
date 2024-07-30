@@ -51,4 +51,7 @@ public class UILibrary : ScriptableObject
 
 
     public List<Sprite> spaceshipParts;
+
+    public Sprite[] villagerItems;
+    public Sprite[] villagerProfile;
 }

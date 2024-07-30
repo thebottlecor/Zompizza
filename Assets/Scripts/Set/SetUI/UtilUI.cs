@@ -16,15 +16,17 @@ public class UtilUI : EventListener
     public CanvasGroup canvasGroup;
     public RectTransform rectTransform;
 
-    public bool loading;
-    public bool opened;
+    [HideInInspector] public bool loading;
+    [HideInInspector] public bool opened;
 
     public bool IsActive => loading || opened;
 
     public ScrollingUIEffect scrollEffect;
 
-    public TextManager tm => TextManager.Instance;
     public TextMeshProUGUI[] buttonTexts;
+
+    private UIManager um => UIManager.Instance;
+    private TextManager tm => TextManager.Instance;
 
     public void UpdateTexts()
     {
@@ -95,14 +97,18 @@ public class UtilUI : EventListener
 
     public void OpenUI()
     {
-        if (UIManager.Instance.isDirecting || UIManager.Instance.changingResolution) return;
+        if (um.isDirecting || um.changingResolution) return;
         if (GM.Instance.loading) return;
 
         if (loading) return;
 
-        if (UIManager.Instance.shopUI.IsActive)
+        if (um.shopUI.IsActive)
         {
-            UIManager.Instance.shopUI.HideUI_Replace();
+            um.shopUI.HideUI_Replace();
+        }
+        if (um.villagerUI.IsActive)
+        {
+            um.villagerUI.HideUI_Replace();
         }
 
         if (opened)
@@ -116,10 +122,10 @@ public class UtilUI : EventListener
         Time.timeScale = 0f;
         loading = true;
 
-        UIManager.Instance.ToggleDrivingInfo(false);
+        um.ToggleDrivingInfo(false);
 
-        UIManager.Instance.orderIndicator.SetActive(false);
-        UIManager.Instance.padUIs.SetActive(false);
+        um.orderIndicator.SetActive(false);
+        um.padUIs.SetActive(false);
         OrderManager.Instance.fastTravelBtnParnet.SetActive(false);
         WorldMapManager.Instance.OpenFullscreenMap();
 
@@ -158,8 +164,8 @@ public class UtilUI : EventListener
 
     public void HideUI()
     {
-        //if (UIManager.Instance.isDirecting) OrderManager.Instance.pizzaDirection.StopSequence();
-        if (UIManager.Instance.isDirecting || UIManager.Instance.changingResolution) return;
+        //if (um.isDirecting) OrderManager.Instance.pizzaDirection.StopSequence();
+        if (um.isDirecting || um.changingResolution) return;
         if (GM.Instance.loading) return;
 
         if (!opened) return;
@@ -171,10 +177,10 @@ public class UtilUI : EventListener
         Time.timeScale = 1f;
         loading = true;
 
-        UIManager.Instance.ToggleDrivingInfo(true);
+        um.ToggleDrivingInfo(true);
 
-        UIManager.Instance.orderIndicator.SetActive(true);
-        UIManager.Instance.padUIs.SetActive(true);
+        um.orderIndicator.SetActive(true);
+        um.padUIs.SetActive(true);
         OrderManager.Instance.fastTravelBtnParnet.SetActive(true);
         WorldMapManager.Instance.CloseFullscreenMap();
         SettingManager.Instance.EndKeyBinding();

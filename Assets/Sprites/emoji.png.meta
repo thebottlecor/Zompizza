@@ -100,12 +100,12 @@ TextureImporter:
       name: emoji_0
       rect:
         serializedVersion: 2
-        x: 1
-        y: 95
-        width: 32
-        height: 32
+        x: 0
+        y: 110
+        width: 34
+        height: 34
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -121,12 +121,12 @@ TextureImporter:
       name: emoji_1
       rect:
         serializedVersion: 2
-        x: 35
-        y: 95
-        width: 32
-        height: 32
+        x: 34
+        y: 110
+        width: 34
+        height: 34
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -142,12 +142,12 @@ TextureImporter:
       name: emoji_2
       rect:
         serializedVersion: 2
-        x: 69
-        y: 95
-        width: 32
-        height: 32
+        x: 68
+        y: 110
+        width: 34
+        height: 34
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -163,12 +163,12 @@ TextureImporter:
       name: emoji_3
       rect:
         serializedVersion: 2
-        x: 1
-        y: 61
-        width: 32
-        height: 32
+        x: 0
+        y: 76
+        width: 34
+        height: 34
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -184,12 +184,12 @@ TextureImporter:
       name: emoji_4
       rect:
         serializedVersion: 2
-        x: 35
-        y: 61
-        width: 32
-        height: 32
+        x: 34
+        y: 76
+        width: 34
+        height: 34
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -205,10 +205,10 @@ TextureImporter:
       name: emoji_5
       rect:
         serializedVersion: 2
-        x: 69
-        y: 61
-        width: 32
-        height: 32
+        x: 68
+        y: 76
+        width: 34
+        height: 34
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -218,6 +218,132 @@ TextureImporter:
       bones: []
       spriteID: 743955c16ba1fcf4fbba12da665f5f79
       internalID: 311702552
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: emoji_6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 42
+        width: 34
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a9a5aba61da97d344a5b7706c2c43ee9
+      internalID: -1472116853
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: emoji_7
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 42
+        width: 34
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ce016947134c038449d5bb40956690ca
+      internalID: -218426752
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: emoji_8
+      rect:
+        serializedVersion: 2
+        x: 68
+        y: 42
+        width: 34
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a9a120f488472f64583eeadd8009839f
+      internalID: 539291555
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: emoji_9
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 8
+        width: 34
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 372734e599995844e9fa8ad74af03322
+      internalID: 604005740
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: emoji_10
+      rect:
+        serializedVersion: 2
+        x: 34
+        y: 8
+        width: 34
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f1808e76a23f3f5409af7726ce9a8270
+      internalID: 1605123357
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: emoji_11
+      rect:
+        serializedVersion: 2
+        x: 68
+        y: 8
+        width: 34
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 264cb8f373a3f5d4581e297fb5f0c32f
+      internalID: 608618791
       vertices: []
       indices: 
       edges: []
@@ -235,10 +361,16 @@ TextureImporter:
     nameFileIdTable:
       emoji_0: 756618678
       emoji_1: 1315299027
+      emoji_10: 1605123357
+      emoji_11: 608618791
       emoji_2: 1855918368
       emoji_3: -1206879322
       emoji_4: -835645486
       emoji_5: 311702552
+      emoji_6: -1472116853
+      emoji_7: -218426752
+      emoji_8: 539291555
+      emoji_9: 604005740
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

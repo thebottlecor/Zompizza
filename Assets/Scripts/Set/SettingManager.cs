@@ -47,7 +47,7 @@ public class KeySaveData
         new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.worldMapZoomIn, Value = KeyCode.PageDown },
         new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.worldMapZoomOut, Value = KeyCode.PageUp },
 
-        new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.enterStore, Value = KeyCode.Return },
+        new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.enterStore, Value = KeyCode.E },
     };
 }
 [Serializable]
@@ -432,7 +432,7 @@ public class SettingManager : Singleton<SettingManager>
     }
     public void ButtonHighlightSound() // 큰 탭 관련 (월드맵, 설정, 주문, 관리 등등)
     {
-        if (loading || (UIManager.Instance != null && (UIManager.Instance.shopUI.loading || UIManager.Instance.utilUI.loading))) return;
+        if (loading || (UIManager.Instance != null && UIManager.Instance.Panels_Loading)) return;
 
         AudioManager.Instance.PlaySFX(Sfx.btnHighlight2, volume: 0.75f);
     }

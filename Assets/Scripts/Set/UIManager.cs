@@ -13,6 +13,7 @@ public class UIManager : Singleton<UIManager>
 
     public ShopUI shopUI;
     public UtilUI utilUI;
+    public VillagerUI villagerUI;
 
     public RectTransform movingSettingsPanelParent;
 
@@ -29,6 +30,7 @@ public class UIManager : Singleton<UIManager>
     public GameObject orderMiniUIParent;
 
     public GameObject speedInfo;
+    public GameObject talkInfo;
     public GameObject timeInfo;
     public GameObject padUIs;
     public GameObject orderIndicator;
@@ -60,6 +62,7 @@ public class UIManager : Singleton<UIManager>
 
         shopUI.UpdateTexts();
         utilUI.UpdateTexts();
+        villagerUI.UpdateTexts();
 
         // 운행중 배달 정보
         orderMiniUIs = new List<OrderMiniUI>(maxOrderMiniUI);
@@ -112,6 +115,10 @@ public class UIManager : Singleton<UIManager>
             WorldMapManager.Instance.OpenMinimap();
             orderMiniUIParent.SetActive(true);
             timeInfo.SetActive(true);
+            talkInfo.SetActive(true);
+
+            if (GM.Instance.midNight) return;
+
             speedInfo.SetActive(true);
         }
         else
@@ -119,6 +126,7 @@ public class UIManager : Singleton<UIManager>
             WorldMapManager.Instance.CloseMinimap();
             orderMiniUIParent.SetActive(false);
             timeInfo.SetActive(false);
+            talkInfo.SetActive(false);
             speedInfo.SetActive(false);
         }
     }
@@ -180,15 +188,29 @@ public class UIManager : Singleton<UIManager>
         return true;
     }
 
+    public bool Panels_Inactive => !shopUI.IsActive && !utilUI.IsActive && !villagerUI.IsActive;
+    public bool Panels_Loading => shopUI.loading || utilUI.loading || villagerUI.loading;
+
     private void OnShopEnter(object sender, InputAction.CallbackContext e)
     {
         if (!Interacting(e)) return;
 
+        var vs = VillagerManager.Instance.villagerSearcher;
+
         if (shopUI.shopUIOpenButton.activeSelf)
         {
-            if (!shopUI.IsActive && !utilUI.IsActive)
+            if (Panels_Inactive)
             {
                 shopUI.ShowOrder();
+            }
+        }
+        else if (vs.talkObj.activeSelf)
+        {
+            if (Panels_Inactive)
+            {
+                int idx = vs.GetVillagerIdx();
+                if (idx >= 0)
+                    villagerUI.OpenUI(idx);
             }
         }
     }
@@ -197,7 +219,7 @@ public class UIManager : Singleton<UIManager>
     {
         if (!Interacting(e)) return;
 
-        if (!shopUI.IsActive && !utilUI.IsActive)
+        if (Panels_Inactive)
         {
             utilUI.OpenWorldMap();
         }
@@ -257,6 +279,11 @@ public class UIManager : Singleton<UIManager>
             shopUI.ShowShopCloseWarning(false);
             return;
         }
+        if (villagerUI.expelWarningObj.activeSelf)
+        {
+            villagerUI.ShowExpelWarning(false);
+            return;
+        }
 
         if (utilUI.IsActive)
         {
@@ -265,6 +292,10 @@ public class UIManager : Singleton<UIManager>
         else if (shopUI.IsActive)
         {
             shopUI.HideUI();
+        }
+        else if (villagerUI.IsActive)
+        {
+            villagerUI.HideUI();
         }
         else
         {

@@ -22,6 +22,7 @@ public class UnstuckHelper : MonoBehaviour
     {
         if (cooldown > 0f) return;
         if (GM.Instance == null) return;
+        if (GM.Instance.midNight) return; // 플레이어 인간 조작중 탈출 불가
         if (TutorialManager.Instance.training) return;
 
         var player = GM.Instance.player;

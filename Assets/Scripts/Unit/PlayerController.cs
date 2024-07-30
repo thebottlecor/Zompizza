@@ -88,6 +88,11 @@ public class PlayerController : PlayerControllerData
 
     public float dirftContactBlockTimer; // 드리프트로 좀비들 떨쳐낸 후 몇초간 좀비 붙기 면역
 
+    public bool manMode; // 인간 조종 모드
+    public float manSpeed;
+    public float manRotSpeed;
+    public GameObject manObj;
+    public Animator manAnim;
 
     private void Start()
     {
@@ -358,12 +363,23 @@ public class PlayerController : PlayerControllerData
         carRigidbody.velocity = Vector3.zero;
         carRigidbody.angularVelocity = Vector3.zero;
 
+        frontLeftCollider.motorTorque = 0;
+        frontRightCollider.motorTorque = 0;
+        rearLeftCollider.motorTorque = 0;
+        rearRightCollider.motorTorque = 0;
+
         frontLeftCollider.brakeTorque = Mathf.Infinity;
         frontRightCollider.brakeTorque = Mathf.Infinity;
         rearLeftCollider.brakeTorque = Mathf.Infinity;
         rearRightCollider.brakeTorque = Mathf.Infinity;
 
+        carSpeed = 0;
+        localVelocityX = 0;
+        localVelocityZ = 0;
+
         isDrifting = false;
+        if (pressBreak)
+            RecoverTraction_Instant();
         DriftCarPS();
     }
 
@@ -374,6 +390,7 @@ public class PlayerController : PlayerControllerData
     bool right;
     bool pressBreak;
     bool upBreak;
+    Vector2 input;
 
     protected override void AddListeners()
     {
@@ -388,6 +405,7 @@ public class PlayerController : PlayerControllerData
 
     public void OnMove(object sender, InputAction.CallbackContext e)
     {
+        input = Vector2.zero;
         if (GM.Instance.stop_control)
         {
             forward = false;
@@ -397,7 +415,7 @@ public class PlayerController : PlayerControllerData
             return;
         }
 
-        Vector2 input = e.ReadValue<Vector2>();
+        input = e.ReadValue<Vector2>();
         if (input != null)
         {
             forward = input.y > 0;
@@ -405,32 +423,39 @@ public class PlayerController : PlayerControllerData
             left = input.x < 0;
             right = input.x > 0;
         }
+        else
+            input = Vector2.zero;
     }
     public void OnSideBreak(object sender, InputAction.CallbackContext e)
     {
-        if (GM.Instance.stop_control) return;
+        if (GM.Instance.stop_control)
+        {
+            pressBreak = false;
+            upBreak = true;
+            return;
+        }
 
         pressBreak = e.performed;
         upBreak = !pressBreak;
     }
 
-
-    void Update()
+    private void CalcSpeed()
     {
-        //CAR DATA
-
         // We determine the speed of the car.
         carSpeed = (2 * Mathf.PI * frontLeftCollider.radius * frontLeftCollider.rpm * 60) / 1000;
         // Save the local velocity of the car in the x axis. Used to know if the car is drifting.
         localVelocityX = transform.InverseTransformDirection(carRigidbody.velocity).x;
         // Save the local velocity of the car in the z axis. Used to know if the car is going forward or backwards.
         localVelocityZ = transform.InverseTransformDirection(carRigidbody.velocity).z;
+    }
 
+    void Update()
+    {
+        //CAR DATA
+        CalcSpeed();
         carEngineSound.enabled = !GM.Instance.stop_control;
         tireScreechSound.enabled = !GM.Instance.stop_control;
-
         backupSound.enabled = !GM.Instance.stop_control;
-
         //Physics.Raycast(transform.position, Vector3.down, 10f, 1 << LayerMask.NameToLayer("UI"));
 
         if (isCollision)
@@ -570,6 +595,65 @@ public class PlayerController : PlayerControllerData
         AnimateWheelMeshes();
 
         StatManager.Instance.carMileage += Mathf.Abs(carSpeed) * 0.00001f;
+    }
+
+    private void FixedUpdate()
+    {
+        if (GM.Instance.stop_control) return;
+        if (!manObj.activeSelf) return;
+
+        bool walk = false;
+        bool run = pressBreak;
+        if (manMode)
+        {
+            if (input.y < 0)
+            {
+                //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.forward), 0.1f);
+                //transform.Translate(manSpeed * Time.fixedDeltaTime * Vector3.forward);
+                //walk = true;
+
+                //transform.rotation = Quaternion.Euler(-transform.rotation.x, -transform.rotation.y, -transform.rotation.z);
+
+                //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0, -transform.rotation.y, 0), 0.1f);
+
+                //Vector3 targetAngles = transform.eulerAngles + 180f * Vector3.up;
+                //transform.eulerAngles = targetAngles;
+                //transform.eulerAngles = Vector3.Lerp(transform.eulerAngles, targetAngles, Time.fixedDeltaTime);
+                //walk = true;
+                //run = false;
+            }
+            if (input.x > 0)
+            {
+                //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.left), 0.1f);
+
+                transform.Rotate(manRotSpeed * Time.fixedDeltaTime * new Vector3(0, 1, 0));
+
+                //transform.Translate(manSpeed * Time.fixedDeltaTime * Vector3.forward);
+                walk = true;
+                run = false;
+            }
+            if (input.x < 0)
+            {
+                //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.right), 0.1f);
+
+                transform.Rotate(manRotSpeed * Time.fixedDeltaTime * new Vector3(0, -1, 0));
+
+                //transform.Translate(manSpeed * Time.fixedDeltaTime * Vector3.forward);
+                walk = true;
+                run = false;
+            }
+
+            if (input.y > 0)
+            {
+                //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.back), 0.1f);
+                float speed = (pressBreak ? 1.5f * manSpeed : manSpeed) * Time.fixedDeltaTime;
+                transform.Translate(speed * Vector3.forward);
+                walk = true;
+                run = pressBreak;
+            }
+        }
+        manAnim.SetBool("Walk", walk);
+        manAnim.SetBool("Run", run);
     }
 
     public void ShakeOffAllZombies()
@@ -977,7 +1061,7 @@ public class PlayerController : PlayerControllerData
             RLWParticleSystem.Play();
             RRWParticleSystem.Play();
         }
-        else if (!isDrifting)
+        else
         {
             RLWParticleSystem.Stop();
             RRWParticleSystem.Stop();
@@ -1044,5 +1128,23 @@ public class PlayerController : PlayerControllerData
 
             recoverTractionCoroutine = null;
         }
+    }
+    private void RecoverTraction_Instant()
+    {
+        isTractionLocked = false;
+
+        FLwheelFriction.extremumSlip = FLWextremumSlip;
+        frontLeftCollider.sidewaysFriction = FLwheelFriction;
+
+        FRwheelFriction.extremumSlip = FRWextremumSlip;
+        frontRightCollider.sidewaysFriction = FRwheelFriction;
+
+        RLwheelFriction.extremumSlip = RLWextremumSlip;
+        rearLeftCollider.sidewaysFriction = RLwheelFriction;
+
+        RRwheelFriction.extremumSlip = RRWextremumSlip;
+        rearRightCollider.sidewaysFriction = RRwheelFriction;
+
+        driftingAxis = 0f;
     }
 }

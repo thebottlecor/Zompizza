@@ -84,12 +84,12 @@ public class InputHelper : MonoBehaviour
 
     public void PadDisconnected()
     {
-        var uimanager = UIManager.Instance;
-        if (uimanager != null)
+        var um = UIManager.Instance;
+        if (um != null)
         {
-            if (!uimanager.shopUI.IsActive && !uimanager.utilUI.IsActive)
+            if (um.Panels_Inactive)
             {
-                uimanager.utilUI.OpenSettings();
+                um.utilUI.OpenSettings();
             }
         }
         var tm = TextManager.Instance;

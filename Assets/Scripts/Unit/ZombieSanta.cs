@@ -18,7 +18,6 @@ public class ZombieSanta : ZombieBase
 
     protected IAstarAI ai;
     protected AIDestinationSetter destinationSetter;
-    public Seeker seeker;
 
     public GameObject pizzaBox;
     public bool stealSomething;

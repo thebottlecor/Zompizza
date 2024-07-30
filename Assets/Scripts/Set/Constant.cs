@@ -61,4 +61,7 @@ public class Constant
     public const float friendShip3 = 4f;
     public const float friendShip2 = 3.5f;
     public const float friendShip1 = 3f;
+
+    // ÁÖ¹Î °ü·Ã
+    public const int villagerIncome = 500;
 }

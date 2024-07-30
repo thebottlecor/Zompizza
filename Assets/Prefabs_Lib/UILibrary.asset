@@ -115,20 +115,11 @@ MonoBehaviour:
   - {fileID: 21300000, guid: d644255c0feb56f45b428c09410c0e06, type: 3}
   - {fileID: 21300000, guid: 9562b3bb4638b0b4f9612ce5d7646f22, type: 3}
   - {fileID: 21300000, guid: dce76c43d1e932745a647e879658332a, type: 3}
-  - {fileID: 21300000, guid: 6f38de49bd9830b4ab1579b7e8346b2b, type: 3}
-  - {fileID: 21300000, guid: 0ba73e4876f23574f9b54dde3ce28652, type: 3}
-  - {fileID: 21300000, guid: f4075eb3553a2544da384c921a4287fe, type: 3}
-  - {fileID: 21300000, guid: 0a22b596184268a459d3278fbf9568cc, type: 3}
-  - {fileID: 21300000, guid: fb2f0047e23933d43a38b731741a4dff, type: 3}
-  - {fileID: 21300000, guid: 9283a629343e8f0439f5f76e3cc9ff8a, type: 3}
-  - {fileID: 21300000, guid: 1d79cfc4aa87f6e4097d5a380a79ec00, type: 3}
   - {fileID: 21300000, guid: 2455b2504f4362f4e893a551dec89f4c, type: 3}
   - {fileID: 21300000, guid: b3d14cae0df452a4cb9e10a5fccb4b5f, type: 3}
-  - {fileID: 21300000, guid: eb5fc00aafcc3fe4785520a6e0d230a1, type: 3}
   - {fileID: 21300000, guid: 129d0d13e5f39c44fb08312a1db9fdb8, type: 3}
-  - {fileID: 21300000, guid: 697de66ddf8b2574c8bc6b191981903c, type: 3}
   - {fileID: 21300000, guid: e9d9afdc287eaf149863eb9f794b0191, type: 3}
-  - {fileID: 21300000, guid: 219d15414c06f754caca74cee93c737b, type: 3}
+  - {fileID: 21300000, guid: f4075eb3553a2544da384c921a4287fe, type: 3}
   ingredients:
     array:
     - Key: 0
@@ -302,3 +293,25 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 4403109b71c426140910aacd5a5b0e37, type: 3}
   - {fileID: 21300000, guid: 6f882faa71faae7499b298625f5e67b7, type: 3}
   - {fileID: 21300000, guid: 7f08f0c3e466d0a43a69366faec7c7ae, type: 3}
+  villagerItems:
+  - {fileID: 1984200568, guid: 03eb74b139c0b9c4995c11bb565321fa, type: 3}
+  - {fileID: 1412782144, guid: 03eb74b139c0b9c4995c11bb565321fa, type: 3}
+  - {fileID: -422217324, guid: 03eb74b139c0b9c4995c11bb565321fa, type: 3}
+  - {fileID: 1689468774, guid: 03eb74b139c0b9c4995c11bb565321fa, type: 3}
+  - {fileID: 383449345, guid: 03eb74b139c0b9c4995c11bb565321fa, type: 3}
+  - {fileID: -658379096, guid: 03eb74b139c0b9c4995c11bb565321fa, type: 3}
+  - {fileID: 1361927050, guid: 03eb74b139c0b9c4995c11bb565321fa, type: 3}
+  - {fileID: -1225504425, guid: 03eb74b139c0b9c4995c11bb565321fa, type: 3}
+  - {fileID: 257204976, guid: 03eb74b139c0b9c4995c11bb565321fa, type: 3}
+  - {fileID: 460278795, guid: 03eb74b139c0b9c4995c11bb565321fa, type: 3}
+  villagerProfile:
+  - {fileID: 21300000, guid: fb2f0047e23933d43a38b731741a4dff, type: 3}
+  - {fileID: 21300000, guid: 6f38de49bd9830b4ab1579b7e8346b2b, type: 3}
+  - {fileID: 21300000, guid: 219d15414c06f754caca74cee93c737b, type: 3}
+  - {fileID: 21300000, guid: 0ba73e4876f23574f9b54dde3ce28652, type: 3}
+  - {fileID: 21300000, guid: 0aee8d0cbde68dd49bef5a31f4174310, type: 3}
+  - {fileID: 21300000, guid: eb5fc00aafcc3fe4785520a6e0d230a1, type: 3}
+  - {fileID: 21300000, guid: 0a22b596184268a459d3278fbf9568cc, type: 3}
+  - {fileID: 21300000, guid: 1d79cfc4aa87f6e4097d5a380a79ec00, type: 3}
+  - {fileID: 21300000, guid: 697de66ddf8b2574c8bc6b191981903c, type: 3}
+  - {fileID: 21300000, guid: 9283a629343e8f0439f5f76e3cc9ff8a, type: 3}

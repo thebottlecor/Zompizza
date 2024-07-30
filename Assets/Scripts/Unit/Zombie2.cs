@@ -20,7 +20,6 @@ public class Zombie2 : ZombieBase
 
     protected IAstarAI ai;
     protected AIDestinationSetter destinationSetter;
-    public Seeker seeker;
 
     public static EventHandler<float> DamageEvent;
 

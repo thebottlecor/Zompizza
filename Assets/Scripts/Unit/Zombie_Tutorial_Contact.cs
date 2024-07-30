@@ -17,7 +17,6 @@ public class Zombie_Tutorial_Contact : ZombieBase
 
     protected IAstarAI ai;
     protected AIDestinationSetter destinationSetter;
-    public Seeker seeker;
 
     public static EventHandler<float> DamageEvent;
 

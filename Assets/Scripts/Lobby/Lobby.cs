@@ -273,7 +273,7 @@ public class Lobby : Singleton<Lobby>
 
     public void OpenNewGameCanvas()
     {
-        cityNameInputField.text = TextManager.Instance.GetNames(0);
+        cityNameInputField.text = TextManager.Instance.GetSurvivorName(0);
         mapseedInputField.text = UnityEngine.Random.Range(0, int.MaxValue).ToString();
 
         ResetDropdown(resourceDensityDropdown, 1);

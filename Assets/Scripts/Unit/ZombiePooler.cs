@@ -62,6 +62,7 @@ public class ZombiePooler : Singleton<ZombiePooler>
         public Mesh mesh;
     }
 
+    private Pathfinding.NNConstraint constraint;
 
     private void Start()
     {
@@ -73,6 +74,12 @@ public class ZombiePooler : Singleton<ZombiePooler>
         Pool_Init(ref zombiesPoolSanta, maxZombieSanta, zombieSourceSanta);
 
         Pool_Init(ref hitEffectPool, maxHitEffect, DataManager.Instance.effectLib.hitEffects);
+
+        constraint = Pathfinding.NNConstraint.None;
+        constraint.constrainWalkability = true;
+        constraint.walkable = true;
+        constraint.constrainTags = true;
+        constraint.tags = (1 << 0);
     }
 
     private void Pool_Init(ref List<ZombieBase> list, int max, GameObject source)
@@ -113,6 +120,7 @@ public class ZombiePooler : Singleton<ZombiePooler>
             hitEffectCooldown -= Time.deltaTime;
 
         if (TutorialManager.Instance.training && TutorialManager.Instance.step <= 1) return;
+        if (GM.Instance.midNight) return; // 한밤중 좀비 스폰 중지
 
         timer += Time.deltaTime;
 
@@ -403,7 +411,7 @@ public class ZombiePooler : Singleton<ZombiePooler>
         Vector3 newPos = currentTarget.transform.position + v3 * spawnDist;
         newPos.y = 0f;
 
-        var node = AstarPath.active.GetNearest(newPos, Pathfinding.NNConstraint.Walkable).position;
+        var node = AstarPath.active.GetNearest(newPos, constraint).position;
         return node;
     }
 

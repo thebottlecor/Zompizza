@@ -28,8 +28,8 @@ public class ShopUI : EventListener
     public GameObject shopUIOpenButton;
     public TextMeshProUGUI shopUIOpenTmp;
 
-    public bool loading;
-    public bool opened;
+    [HideInInspector] public bool loading;
+    [HideInInspector] public bool opened;
 
     public bool IsActive => loading || opened;
 
@@ -37,7 +37,6 @@ public class ShopUI : EventListener
 
     public ScrollingUIEffect scrollEffect;
 
-    public TextManager tm => TextManager.Instance;
     public TextMeshProUGUI[] buttonTexts;
 
     [Header("ÁÖ¹®ÅÇ")]
@@ -63,6 +62,10 @@ public class ShopUI : EventListener
     public TextMeshProUGUI orderText;
     public TextMeshProUGUI ingredientText;
     public TextMeshProUGUI[] ingredientsSub;
+
+    [Header("¾ß°£ ¸ðµå - ÇÑ¹ãÁß")]
+    public GameObject midnightPanel;
+    public TextMeshProUGUI midnightStartText;
 
     [Header("°ü¸®ÅÇ")]
     public TextMeshProUGUI reviewsText;
@@ -116,6 +119,8 @@ public class ShopUI : EventListener
     public TextMeshProUGUI vehicleInfo_NameText;
     public TextMeshProUGUI vehicleInfo_DetailText;
 
+    private TextManager tm => TextManager.Instance;
+    private UIManager um => UIManager.Instance;
     private UILibrary uiLib => DataManager.Instance.uiLib;
 
     public void Init()
@@ -162,6 +167,8 @@ public class ShopUI : EventListener
         loanText.text = tm.GetCommons("Loan");
 
         rivalText.text = tm.GetCommons("Rival");
+
+        midnightStartText.text = tm.GetCommons("ShopOpen");
     }
 
     protected override void AddListeners()
@@ -191,7 +198,7 @@ public class ShopUI : EventListener
         /// <ser cref="UINaviHelper.SetFirstSelect"/>
         /// </summary>
 
-        if (UIManager.Instance.isDirecting || UIManager.Instance.changingResolution) return;
+        if (um.isDirecting || um.changingResolution) return;
         if (GM.Instance.loading) return;
 
         if (!opened || loading) return;
@@ -234,8 +241,8 @@ public class ShopUI : EventListener
     private void OnPlayerArriveShop(object sender, EventArgs e)
     {
         ShowOrder();
-        UIManager.Instance.VehicleUnlock();
-        UIManager.Instance.TierUp();
+        um.VehicleUnlock();
+        um.TierUp();
         playerStay = true;
     }
 
@@ -271,6 +278,7 @@ public class ShopUI : EventListener
             {
                 orderPanel.SetActive(false);
                 explorePanel.SetActive(true);
+                midnightPanel.SetActive(false);
                 ExplorationManager.Instance.SetHighTierQuality();
 
                 buttonTexts[0].text = tm.GetCommons("Explore");
@@ -288,6 +296,7 @@ public class ShopUI : EventListener
             {
                 orderPanel.SetActive(true);
                 explorePanel.SetActive(false);
+                midnightPanel.SetActive(false);
 
                 buttonTexts[0].text = tm.GetCommons("Order");
 
@@ -299,6 +308,20 @@ public class ShopUI : EventListener
             }
         }
     }
+    public void ForceMidnightUIUpdate()
+    {
+        orderPanel.SetActive(false);
+        explorePanel.SetActive(false); 
+        midnightPanel.SetActive(true);
+
+        buttonTexts[0].text = tm.GetCommons("ShopOpen");
+
+        pizzaBoys[0].gameObject.SetActive(false);
+        pizzaBoys[1].gameObject.SetActive(false);
+        pizzaBoys[2].gameObject.SetActive(false);
+
+        shopCloseBtn.gameObject.SetActive(false);
+    }
 
     private void Start()
     {
@@ -309,7 +332,7 @@ public class ShopUI : EventListener
     private void Update()
     {
         bool buttonOn = false;
-        if (!IsActive && !UIManager.Instance.utilUI.IsActive && playerStay)
+        if (!IsActive && !um.utilUI.IsActive && !um.villagerUI.IsActive && playerStay)
         {
             buttonOn = true;
         }
@@ -333,20 +356,24 @@ public class ShopUI : EventListener
     public void ShowOrder(int customerIdx)
     {
         activeSubPanel = 0;
-        SnapTo(UIManager.Instance.orderUIObjects[customerIdx].transform as RectTransform);
+        SnapTo(um.orderUIObjects[customerIdx].transform as RectTransform);
         OpenUI();
     }
 
     public void OpenUI()
     {
-        if (UIManager.Instance.isDirecting || UIManager.Instance.changingResolution) return;
+        if (um.isDirecting || um.changingResolution) return;
         if (GM.Instance.loading) return;
 
         if (loading) return;
 
-        if (UIManager.Instance.utilUI.IsActive)
+        if (um.utilUI.IsActive)
         {
-            UIManager.Instance.utilUI.HideUI_Replace();
+            um.utilUI.HideUI_Replace();
+        }
+        if (um.villagerUI.IsActive)
+        {
+            um.villagerUI.HideUI_Replace();
         }
 
         if (opened)
@@ -356,15 +383,15 @@ public class ShopUI : EventListener
         }
 
         scrollEffect.enabled = true;
-        UIManager.Instance.OffAll_Ingredient_Highlight();
+        um.OffAll_Ingredient_Highlight();
         GM.Instance.stop_control = true;
         Time.timeScale = 0f;
         loading = true;
 
-        UIManager.Instance.ToggleDrivingInfo(false);
+        um.ToggleDrivingInfo(false);
 
-        UIManager.Instance.orderIndicator.SetActive(false);
-        UIManager.Instance.padUIs.SetActive(false);
+        um.orderIndicator.SetActive(false);
+        um.padUIs.SetActive(false);
         OrderManager.Instance.fastTravelBtnParnet.SetActive(false);
         ExplorationManager.Instance.HideUI_ResultPanel_Instant();
 
@@ -418,25 +445,30 @@ public class ShopUI : EventListener
         UINaviHelper.Instance.SetFirstSelect();
     }
 
-    public void HideUI()
+    public void HideUI(bool instant = false)
     {
-        //if (UIManager.Instance.isDirecting) OrderManager.Instance.pizzaDirection.StopSequence();
-        if (UIManager.Instance.isDirecting || UIManager.Instance.changingResolution) return;
+        //if (um.isDirecting) OrderManager.Instance.pizzaDirection.StopSequence();
+        if (um.isDirecting || um.changingResolution) return;
         if (GM.Instance.loading) return;
 
         if (!opened) return;
         if (loading) return;
 
+        HideUI_Main(instant);
+    }
+
+    private void HideUI_Main(bool instant)
+    {
         scrollEffect.enabled = false;
         opened = false;
         GM.Instance.stop_control = false;
         Time.timeScale = 1f;
         loading = true;
 
-        UIManager.Instance.ToggleDrivingInfo(true);
+        um.ToggleDrivingInfo(true);
 
-        UIManager.Instance.orderIndicator.SetActive(true);
-        UIManager.Instance.padUIs.SetActive(true);
+        um.orderIndicator.SetActive(true);
+        um.padUIs.SetActive(true);
         OrderManager.Instance.fastTravelBtnParnet.SetActive(true);
         ExplorationManager.Instance.HideUI_ResultPanel_Instant();
         HideAllVehicle();
@@ -448,16 +480,27 @@ public class ShopUI : EventListener
 
         TutorialManager.Instance.ShopWindowHide();
 
-        canvasGroup.alpha = 1f;
-        rectTransform.transform.localPosition = new Vector3(0f, 0f, 0f);
-        float hideFast = fadeTime * 0.5f;
-        rectTransform.DOAnchorPos(new Vector2(0f, -2000f), hideFast, false).SetEase(Ease.InOutQuint).SetUpdate(true);
-        canvasGroup.DOFade(0f, hideFast).SetUpdate(true).OnComplete(() =>
+        if (instant)
         {
+            rectTransform.transform.localPosition = new Vector3(0f, -2000f, 0f);
+            canvasGroup.alpha = 0f;
             loading = false;
             TutorialManager.Instance.ShopWindowHideComplete();
             UINaviHelper.Instance.SetFirstSelect();
-        });
+        }
+        else
+        {
+            canvasGroup.alpha = 1f;
+            rectTransform.transform.localPosition = new Vector3(0f, 0f, 0f);
+            float hideFast = fadeTime * 0.5f;
+            rectTransform.DOAnchorPos(new Vector2(0f, -2000f), hideFast, false).SetEase(Ease.InOutQuint).SetUpdate(true);
+            canvasGroup.DOFade(0f, hideFast).SetUpdate(true).OnComplete(() =>
+            {
+                loading = false;
+                TutorialManager.Instance.ShopWindowHideComplete();
+                UINaviHelper.Instance.SetFirstSelect();
+            });
+        }
     }
 
     public void SelectSubPanel(int idx)
@@ -473,7 +516,7 @@ public class ShopUI : EventListener
             UpdatePizzaBox(null);
             if (orderPanel.activeSelf)
             {
-                UIManager.Instance.OrderUIBtnUpdate();
+                um.OrderUIBtnUpdate();
             }
             if (explorePanel.activeSelf)
             {
@@ -485,7 +528,7 @@ public class ShopUI : EventListener
         }
         else
         {
-            if (UIManager.Instance.isDirecting) 
+            if (um.isDirecting) 
                 OrderManager.Instance.pizzaDirection.StopSequence();
             ExplorationManager.Instance.HideUI_ResultPanel_Instant();
 
@@ -542,7 +585,13 @@ public class ShopUI : EventListener
         if (info != null)
             count -= info.pizzas.Count;
 
-        if (endTime)
+        if (GM.Instance.midNight)
+        {
+            pizzaBoys[0].gameObject.SetActive(false);
+            pizzaBoys[1].gameObject.SetActive(false);
+            pizzaBoys[2].gameObject.SetActive(false);
+        }
+        else if (endTime)
         {
             pizzaBoys[0].gameObject.SetActive(count != 0);
             pizzaBoys[1].gameObject.SetActive(false);

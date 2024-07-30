@@ -19,6 +19,7 @@ public class CharacterLookPlayer : MonoBehaviour
     void Update()
     {
         Vector3 differ = (target.position - transform.position);
+        differ.y = 0f;
         float dist = differ.magnitude;
 
         if (dist < seeDist)

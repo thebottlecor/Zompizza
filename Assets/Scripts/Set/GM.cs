@@ -55,7 +55,7 @@ public class GM : Singleton<GM>
     [HideInInspector] public float remainTime;
 
     public TextMeshProUGUI timeText;
-    private string[] dayStr = new string[2];
+    private string[] dayStr;
     public GameObject openImage;
     public GameObject closeImage;
 
@@ -102,8 +102,9 @@ public class GM : Singleton<GM>
     {
         delivery,
         explore,
-        zombie,
+        villager,
         upgrade,
+        zombie,
         //loan,
     }
     public enum GetRatingSource
@@ -174,6 +175,11 @@ public class GM : Singleton<GM>
     private Vector3 footBallPos;
     public Transform footBall;
 
+    [Header("한밤중")]
+    public bool midNight;
+    public ShopGate[] shopGates;
+    public ZombieEnvSound zombieEnvSound;
+
     [Space(10f)]
     public GameObject returnIndicator;
     public GameObject rainObj;
@@ -201,6 +207,7 @@ public class GM : Singleton<GM>
     }
     private void Start()
     {
+        dayStr = new string[3];
         ingredients = new SerializableDictionary<Ingredient, int>();
         foreach (var temp in DataManager.Instance.ingredientLib.ingredientTypes)
         {
@@ -301,8 +308,10 @@ public class GM : Singleton<GM>
         StringBuilder st = new StringBuilder();
         st.Append(tm.GetCommons("Delivery")).AppendLine();
         st.Append(tm.GetCommons("Explore")).AppendLine();
-        st.Append(tm.GetCommons("Zombie")).AppendLine();
-        st.Append(tm.GetCommons("Upgrade"));
+        st.Append(tm.GetCommons("Villager")).AppendLine();
+        //st.Append(tm.GetCommons("Upgrade")).AppendLine();
+        st.Append(tm.GetCommons("Spaceship")).AppendLine();
+        st.Append(tm.GetCommons("Zombie"));
         //.AppendLine();
         //st.Append(tm.GetCommons("Loan")).AppendLine();
 
@@ -337,7 +346,12 @@ public class GM : Singleton<GM>
 
     private void Update()
     {
+        Vector3 rainPos = player.transform.position;
+        rainPos.y = 20f;
+        rainObj.transform.position = rainPos;
+
         if (loading) return;
+        if (midNight) return;
         if (TutorialManager.Instance.blackScreen.activeSelf) return;
         if (GameEventManager.Instance.eventPanel.activeSelf) return;
         if (DialogueManager.Instance.eventPanel.activeSelf) return;
@@ -379,10 +393,6 @@ public class GM : Singleton<GM>
                 }
             }
         }
-
-        Vector3 rainPos = player.transform.position;
-        rainPos.y = 20f;
-        rainObj.transform.position = rainPos;
     }
 
     public void TimeUpdate()
@@ -481,16 +491,20 @@ public class GM : Singleton<GM>
         dayStr[0] = string.Format(tm.GetCommons("Day"), day + 1) + "  ";
         //dayStr[1] = string.Format(tm.GetCommons("Day"), day + 1) + "  <color=#000000>18:00</color>"; // 영업 종료시
         dayStr[1] = "<color=#000000>" + string.Format(tm.GetCommons("Day"), day + 1) + "  18:00</color>"; // 영업 종료시
+        dayStr[2] = string.Format(tm.GetCommons("Day"), day + 1) + "  " + tm.GetCommons("Midnight"); // 한밤중
     }
 
     public void NextDay()
     {
         rainObj.SetActive(false);
+        zombieEnvSound.Mute(true);
+        for (int i = 0; i < shopGates.Length; i++)
+        {
+            shopGates[i].alwaysClosed = true;
+        }
 
-        timer = 0f;
         accountText[0].text = string.Format(tm.GetCommons("Day"), day + 1);
         day++;
-        DayStringUpdate();
         UIManager.Instance.shopUI.DayFirstReview();
         player.ShakeOffAllZombies();
         ZombiePooler.Instance.ZombieReset();
@@ -510,6 +524,8 @@ public class GM : Singleton<GM>
         sequence.AppendInterval(0.5f);
         sequence.AppendCallback(() =>
         {
+            VillagerManager.Instance.GetIncome();
+
             darkCanvas.interactable = true;
 
             if (day >= 10)
@@ -773,7 +789,8 @@ public class GM : Singleton<GM>
 
         if (RocketManager.Instance.Completed)
         {
-            NextDay_Late();
+            NextDay_Midnight();
+            //NextDay_Late();
         }
         else
         {
@@ -783,16 +800,35 @@ public class GM : Singleton<GM>
         }
     }
 
-    public void NextDay_Late()
+    public void NextDay_Midnight()
     {
+        loading = false;
+
         accountObj.SetActive(false);
         UINaviHelper.Instance.SetFirstSelect();
+        var shopUI = UIManager.Instance.shopUI;
+        shopUI.HideUI(true);
+        shopUI.ForceMidnightUIUpdate();
+        UIManager.Instance.speedInfo.SetActive(false);
 
-        // 임시 비 효과
-        if (day == 3 || day == 8)
-        {
-            rainObj.SetActive(true);
-        }
+        player.transform.position = pizzeriaPos.position;
+        shopUI.playerStay = false;
+        SetLight(1f, 24);
+
+        ChangeMan(true);
+        midNight = true;
+        UINaviHelper.Instance.ingame.UIUpdate(UINaviHelper.Instance.PadType);
+        VillagerManager.Instance.SetMidNight(true);
+        timeText.text = dayStr[2];
+
+        darkCanvas.blocksRaycasts = false;
+        darkCanvas.interactable = false;
+        darkCanvas.alpha = 0f;
+    }
+
+    public void NextDay_Late()
+    {
+        VillagerManager.Instance.villagerSearcher.Clear();
 
         //int loanWarning = LoanManager.Instance.NextDayLate();
         int loanWarning = -1;
@@ -825,16 +861,43 @@ public class GM : Singleton<GM>
             return;
         }
 
-        openImage.SetActive(true);
-        closeImage.SetActive(false);
-
-        if (EndTimeEvent != null)
-            EndTimeEvent(null, false);
-        EndTime = false;
-
         Sequence sequence = DOTween.Sequence().SetUpdate(true).SetAutoKill(true);
         sequence.AppendCallback(() =>
         {
+            darkCanvas.alpha = 0f;
+            darkCanvas.interactable = false;
+            darkCanvas.blocksRaycasts = true;
+            loading = true;
+            UINaviHelper.Instance.SetFirstSelect();
+        });
+        sequence.Append(darkCanvas.DOFade(1f, 0.5f));
+        sequence.AppendInterval(1.25f);
+        sequence.AppendCallback(() =>
+        {
+            timer = 0f;
+            ChangeMan(false);
+            midNight = false;
+            UINaviHelper.Instance.ingame.UIUpdate(UINaviHelper.Instance.PadType);
+            VillagerManager.Instance.SetMidNight(false);
+            DayStringUpdate();
+
+            openImage.SetActive(true);
+            closeImage.SetActive(false);
+
+            if (EndTimeEvent != null)
+                EndTimeEvent(null, false);
+            EndTime = false;
+        });
+        sequence.Append(darkCanvas.DOFade(0f, 0.25f));
+        sequence.AppendCallback(() =>
+        {
+            // 임시 비 효과
+            if (day == 3 || day == 8)
+            {
+                rainObj.SetActive(true);
+            }
+            VillagerManager.Instance.NextDay();
+
             AudioManager.Instance.PlaySFX(Sfx.nextDay);
 
             darkCanvas.blocksRaycasts = false;
@@ -872,6 +935,11 @@ public class GM : Singleton<GM>
                 warningQueue.Enqueue(3);
             }
             //ShowRatingText();
+            zombieEnvSound.Mute(false);
+            for (int i = 0; i < shopGates.Length; i++)
+            {
+                shopGates[i].alwaysClosed = false;
+            }
 
             SaveManager.Instance.ZompizzaAutoSave();
         });
@@ -1317,6 +1385,27 @@ public class GM : Singleton<GM>
         currentVehicle = 0;
         controllerData[0].SetData(player);
         unlockedVehicles[0] = true;
+    }
+
+    public void ChangeMan(bool man)
+    {
+        if (man)
+        {
+            player.manObj.SetActive(true);
+            for (int i = 0; i < controllerData.Length; i++)
+            {
+                controllerData[i].gameObject.SetActive(false);
+            }
+            player.cam.mainCam.fieldOfView = 20f;
+            player.manMode = true;
+        }
+        else
+        {
+            ChangeVehicle(currentVehicle);
+            player.manObj.SetActive(false);
+            player.cam.mainCam.fieldOfView = 25f;
+            player.manMode = false;
+        }
     }
 
     public void ChangeVehicle(int idx)
