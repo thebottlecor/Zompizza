@@ -279,6 +279,10 @@ public class UIManager : Singleton<UIManager>
             shopUI.ShowShopCloseWarning(false);
             return;
         }
+        if (shopUI.sosWarningObj.activeSelf)
+        {
+            shopUI.ShowSosWarning(false);
+        }
         if (villagerUI.expelWarningObj.activeSelf)
         {
             villagerUI.ShowExpelWarning(false);

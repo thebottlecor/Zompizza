@@ -378,8 +378,8 @@ public class PlayerController : PlayerControllerData
         localVelocityZ = 0;
 
         isDrifting = false;
-        if (pressBreak)
-            RecoverTraction_Instant();
+        //if (pressBreak)
+        //    RecoverTraction_Instant();
         DriftCarPS();
     }
 
@@ -485,6 +485,19 @@ public class PlayerController : PlayerControllerData
         }
 
         if (GM.Instance.stop_control) return;
+        if (manObj.activeSelf)
+        {
+            if (recoverTractionCoroutine == null)
+                recoverTractionCoroutine = StartCoroutine(RecoverTraction());
+
+            if (decelerateCoroutine == null)
+                decelerateCoroutine = StartCoroutine(DecelerateCar());
+            deceleratingCar = true;
+
+            ResetSteeringAngle();
+
+            return;
+        }
 
         //CAR PHYSICS
 

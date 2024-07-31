@@ -290,7 +290,7 @@ public class GM : Singleton<GM>
         OrderManager.Instance.Init();
 
         // 저장 불러오기시 주의
-        RandomGiftBox();
+        GiftBoxHide();
 
         ResearchManager.Instance.ToggleAllHiddenRecipe(true);
 
@@ -442,7 +442,6 @@ public class GM : Singleton<GM>
 
                 timeText.text = dayStr[1];
 
-                HideAllGiftBox();
                 ResearchManager.Instance.ToggleAllHiddenRecipe(false);
             }
             EndTime = true;
@@ -789,8 +788,12 @@ public class GM : Singleton<GM>
 
         if (RocketManager.Instance.Completed)
         {
-            NextDay_Midnight();
             //NextDay_Late();
+            int currentVillager = VillagerManager.Instance.GetRecruitedVillagerCount();
+            if (currentVillager > 0)
+                NextDay_Midnight();
+            else
+                NextDay_Late(false);
         }
         else
         {
@@ -826,7 +829,7 @@ public class GM : Singleton<GM>
         darkCanvas.alpha = 0f;
     }
 
-    public void NextDay_Late()
+    public void NextDay_Late(bool fromMidnight)
     {
         VillagerManager.Instance.villagerSearcher.Clear();
 
@@ -862,16 +865,31 @@ public class GM : Singleton<GM>
         }
 
         Sequence sequence = DOTween.Sequence().SetUpdate(true).SetAutoKill(true);
-        sequence.AppendCallback(() =>
+        if (fromMidnight)
         {
-            darkCanvas.alpha = 0f;
-            darkCanvas.interactable = false;
-            darkCanvas.blocksRaycasts = true;
-            loading = true;
-            UINaviHelper.Instance.SetFirstSelect();
-        });
-        sequence.Append(darkCanvas.DOFade(1f, 0.5f));
-        sequence.AppendInterval(1.25f);
+            sequence.AppendCallback(() =>
+            {
+                darkCanvas.alpha = 0f;
+                darkCanvas.interactable = false;
+                darkCanvas.blocksRaycasts = true;
+                loading = true;
+                UINaviHelper.Instance.SetFirstSelect();
+            });
+            sequence.Append(darkCanvas.DOFade(1f, 0.5f));
+            sequence.AppendInterval(1.25f);
+        }
+        else
+        {
+            sequence.AppendCallback(() =>
+            {
+                darkCanvas.alpha = 1f;
+                darkCanvas.interactable = false;
+                darkCanvas.blocksRaycasts = true;
+                loading = true;
+                UINaviHelper.Instance.SetFirstSelect();
+            });
+            sequence.AppendInterval(0.5f);
+        }
         sequence.AppendCallback(() =>
         {
             timer = 0f;
@@ -927,7 +945,7 @@ public class GM : Singleton<GM>
 
             StatManager.Instance.NextDay();
             GameEventManager.Instance.NextDay();
-            RandomGiftBox();
+            GiftBoxHide();
             ResearchManager.Instance.ToggleAllHiddenRecipe(true);
 
             if (RivalManager.Instance.NextDay())
@@ -1031,7 +1049,7 @@ public class GM : Singleton<GM>
                     break;
                 case 8: GameEventManager.Instance.SetEvent(2); // 9일차 아침 고양이 이벤트
                     break;
-                default: TutorialManager.Instance.NoMoreEvented();
+                default: TutorialManager.Instance.NoMoreEvented(); // 이벤트가 없거나, 있으면 이벤트 후에 튜토 활성화
                     break;
             }
         }
@@ -1457,22 +1475,16 @@ public class GM : Singleton<GM>
     #endregion
 
     #region 선물 상자
-    public void RandomGiftBox() // 해가 뜬 후 최대 5개의 박스 활성화
+    public void GiftBoxHide() // 해가 뜬 후 배달 위치의 박스들 모두 숨기기
     {
-        HideAllGiftBox();
+        var orderGoals = OrderManager.Instance.orderGoals;
 
-        giftGoals.Shuffle();
-
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < orderGoals.Count; i++)
         {
-            giftGoals[i].Show();
-        }
-    }
-    public void HideAllGiftBox() // 해가 진 후 모든 박스 비활성화
-    {
-        for (int i = 0; i < giftGoals.Length; i++)
-        {
-            giftGoals[i].Hide();
+            for (int n = 0; n < orderGoals[i].giftGoals.Length; n++)
+            {
+                orderGoals[i].giftGoals[n].Hide();
+            }
         }
     }
     #endregion

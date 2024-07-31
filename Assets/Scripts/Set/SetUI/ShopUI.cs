@@ -53,6 +53,13 @@ public class ShopUI : EventListener
     public TextMeshProUGUI shopCloseWarning_Text;
     public TextMeshProUGUI shopCloseWarningDetail_Text;
 
+    [Header("SOS")]
+    public GameObject sosWarningObj;
+    public RectTransform sosWarningRect;
+    public TextMeshProUGUI sosWarningBtn_Text;
+    public TextMeshProUGUI sosWarning_Text;
+    public TextMeshProUGUI sosWarningDetail_Text;
+
     [Header("야간 모드 - 탐험")]
     public GameObject orderPanel;
     public GameObject makingPanel;
@@ -164,6 +171,10 @@ public class ShopUI : EventListener
         shopCloseWarningBtn_Text[0].text = tm.GetCommons("ShopClose");
         shopCloseWarningBtn_Text[1].text = tm.GetCommons("Cancel");
 
+        sosWarning_Text.text = tm.GetCommons("Sos");
+        sosWarningDetail_Text.text = tm.GetCommons("Sos2");
+        sosWarningBtn_Text.text = tm.GetCommons("Sos3");
+
         loanText.text = tm.GetCommons("Loan");
 
         rivalText.text = tm.GetCommons("Rival");
@@ -211,6 +222,7 @@ public class ShopUI : EventListener
         if (RivalManager.Instance.rankingObj.activeSelf) return;
         if (GM.Instance.darkCanvas.blocksRaycasts) return;
         if (shopCloseWarningObj.activeSelf) return;
+        if (sosWarningObj.activeSelf) return;
         if (GameEventManager.Instance.eventPanel.activeSelf) return;
         if (DialogueManager.Instance.eventPanel.activeSelf) return;
         if (TutorialManager.Instance.blackScreen.activeSelf) return;
@@ -411,7 +423,19 @@ public class ShopUI : EventListener
         loading = false;
         opened = true;
 
-        if (GM.Instance.day == 5 && GM.Instance.closeImage.activeSelf) GameEventManager.Instance.SetEvent(1); // 6일차 가게 닫은 후 이장 이벤트
+        if (GM.Instance.closeImage.activeSelf)
+        {
+            bool triggered = false;
+            if (GM.Instance.day == 5)
+            {
+                triggered = GameEventManager.Instance.SetEvent(1); // 6일차 가게 닫은 후 이장 이벤트
+            }
+
+            if (!triggered && !GM.Instance.midNight)
+            {
+                VillagerManager.Instance.CreateSOS();
+            }
+        }
 
         //if (GM.Instance.rating >= Constant.winRating)
         //{
@@ -678,7 +702,35 @@ public class ShopUI : EventListener
         UINaviHelper.Instance.SetFirstSelect();
         ExplorationManager.Instance.SetHighTierQuality();
         //ExplorationManager.Instance.SetCost();
-        if (GM.Instance.day == 5) GameEventManager.Instance.SetEvent(1); // 6일차 가게 닫은 후 이장 이벤트
+
+        bool triggered = false;
+        if (GM.Instance.day == 5)
+        {
+            triggered = GameEventManager.Instance.SetEvent(1); // 6일차 가게 "강제로" 닫은 후 이장 이벤트
+        }
+        if (!triggered)
+        {
+            VillagerManager.Instance.CreateSOS();
+        }
+    }
+    #endregion
+
+    #region 구조 신호 경고
+    public void ShowSosWarning(bool on)
+    {
+        sosWarningObj.SetActive(on);
+
+        if (!on)
+        {
+            HideUI();
+        }
+        else
+        {
+            sosWarningRect.localScale = 0.01f * Vector3.one;
+            sosWarningRect.DOScale(new Vector3(1f, 1f, 1f), 0.5f).SetEase(Ease.OutElastic).SetUpdate(true);
+        }
+
+        UINaviHelper.Instance.SetFirstSelect();
     }
 
     #endregion

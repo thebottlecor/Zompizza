@@ -23,6 +23,8 @@ public class VillagerSearcher : MonoBehaviour
 
     public int GetVillagerIdx()
     {
+        if (villagers == null) return -1;
+
         var list = VillagerManager.Instance.villagers;
         foreach (var temp in villagers)
         {
@@ -98,10 +100,13 @@ public class VillagerSearcher : MonoBehaviour
     public void Clear()
     {
         talkObj.SetActive(false);
-        foreach (var temp in villagers)
+        if (villagers != null)
         {
-            temp.interactionObj.SetActive(false);
+            foreach (var temp in villagers)
+            {
+                temp.interactionObj.SetActive(false);
+            }
+            villagers.Clear();
         }
-        villagers.Clear();
     }
 }

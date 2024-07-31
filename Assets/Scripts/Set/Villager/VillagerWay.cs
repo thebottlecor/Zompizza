@@ -33,6 +33,7 @@ public class VillagerWay : MonoBehaviour
     public float seeDist = 20f;
     public float rotSpeed = 60f;
     private Quaternion firstQuat;
+    public int idx;
     public int gender;
 
     private void Start()
@@ -44,7 +45,8 @@ public class VillagerWay : MonoBehaviour
         minimapObj.SetActive(false);
         RandomTarget();
 
-        Recruit();
+        gameObject.SetActive(false);
+        //Recruit();
     }
 
     public void RandomTarget()
@@ -206,25 +208,25 @@ public class VillagerWay : MonoBehaviour
             currentNeeds = UnityEngine.Random.Range(0, VillagerManager.Instance.inventory.Length);
         }
 
-        float exp = 0f;
-        switch (condition)
-        {
-            case 0:
-                exp = 0.2f;
-                break;
-            case 1:
-                exp = 0.25f;
-                break;
-            case 2:
-                exp = 0.34f;
-                break;
-            case 3:
-                exp = 0.5f;
-                break;
-            case 4:
-                exp = 1f;
-                break;
-        }
+        float exp = 0.25f; // 그냥 4일마다 1씩 레벨업
+        //switch (condition)
+        //{
+        //    case 0:
+        //        exp = 0.2f;
+        //        break;
+        //    case 1:
+        //        exp = 0.25f;
+        //        break;
+        //    case 2:
+        //        exp = 0.34f;
+        //        break;
+        //    case 3:
+        //        exp = 0.5f;
+        //        break;
+        //    case 4:
+        //        exp = 1f;
+        //        break;
+        //}
         AddExp(exp);
     }
 
@@ -242,7 +244,7 @@ public class VillagerWay : MonoBehaviour
 
         recruited = true;
         relations = 0;
-        condition = UnityEngine.Random.Range(0, 5);
+        condition = UnityEngine.Random.Range(1, 4);
         currentNeeds = UnityEngine.Random.Range(0, VillagerManager.Instance.inventory.Length);
 
         ResetPos();

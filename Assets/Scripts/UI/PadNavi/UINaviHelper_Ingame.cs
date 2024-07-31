@@ -36,6 +36,7 @@ public class UINaviHelper_Ingame : MonoBehaviour
     public UINavi expel_first;
     public UINavi[] rocket_first;
     public UINavi shopCloseWarning_first;
+    public UINavi sosWarning_first;
     public UINavi gameOverWarning_first;
 
     public UINavi gameOver_first;

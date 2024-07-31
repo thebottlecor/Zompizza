@@ -6,6 +6,7 @@ using DG.Tweening;
 using System.Linq;
 using UnityEngine.UI;
 using TMPro;
+using MTAssets.EasyMinimapSystem;
 
 public class OrderManager : Singleton<OrderManager>
 {
@@ -52,6 +53,9 @@ public class OrderManager : Singleton<OrderManager>
     public RectTransform padKeyIndicators;
     public TextMeshProUGUI fastTravelText;
     public TextMeshProUGUI fastTravelTimeText;
+
+    public MinimapRenderer minimap;
+    public MinimapRenderer worldmap;
 
     public void Init()
     {
@@ -112,6 +116,13 @@ public class OrderManager : Singleton<OrderManager>
         else
         {
             NewOrder();
+        }
+
+        for (int i = 0; i < orderGoals.Count; i++)
+        {
+            minimap.minimapItemsToHightlight.Add(orderGoals[i].minimapItem);
+            worldmap.minimapItemsToHightlight.Add(orderGoals[i].minimapItem);
+            worldmap.minimapItemsToHightlight.Add(orderGoals[i].minimapItem_customer);
         }
     }
     public Ingredient GetRandomIngredient_HighTier()
@@ -611,7 +622,7 @@ public class OrderManager : Singleton<OrderManager>
 
     private void AddOrder_Sub(int goal, SerializableDictionary<Ingredient, int> randInfo_sub, int ingredientTotal, float tier = 0)
     {
-        float dist = (orderGoals[goal].transform.position - pizzeria.transform.position).magnitude;
+        float dist = (orderGoals[goal].transform.position - pizzeria.position).magnitude;
         float km = dist * Constant.distanceScale; // 게임상 거리 200 = 1km
 
         List<PizzaInfo> randPizzas = new List<PizzaInfo>();
@@ -912,7 +923,7 @@ public class OrderManager : Singleton<OrderManager>
 
     private void FastTravelCalc()
     {
-        float dist = (GM.Instance.player.transform.position - pizzeria.transform.position).magnitude;
+        float dist = (GM.Instance.player.transform.position - pizzeria.position).magnitude;
         float km = dist * Constant.distanceScale; // 게임상 거리 200 = 1km
 
         if (km <= 0.5f)

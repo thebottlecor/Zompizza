@@ -83,9 +83,9 @@ public class GameEventManager : Singleton<GameEventManager>
         cat.SetActive(false);
     }
 
-    public void SetEvent(int idx)
+    public bool SetEvent(int idx)
     {
-        if (triggeredEvents[idx]) return;
+        if (triggeredEvents[idx]) return false;
         triggeredEvents[idx] = true;
 
         acceptBtn.gameObject.SetActive(false);
@@ -109,6 +109,8 @@ public class GameEventManager : Singleton<GameEventManager>
             declineBtn.gameObject.SetActive(true);
             UINaviHelper.Instance.SetFirstSelect();
         }));
+
+        return true;
     }
 
     public void AcceptTrigger()
@@ -198,6 +200,7 @@ public class GameEventManager : Singleton<GameEventManager>
         eventPanel.SetActive(false);
         UINaviHelper.Instance.SetFirstSelect();
 
+        VillagerManager.Instance.CreateSOS();
         TutorialManager.Instance.NoMoreEvented();
     }
 

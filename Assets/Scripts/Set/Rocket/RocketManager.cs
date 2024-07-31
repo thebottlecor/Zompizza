@@ -262,7 +262,11 @@ public class RocketManager : Singleton<RocketManager>
         TutorialManager.Instance.RocketWindowHide();
 
         //GM.Instance.NextDay_Late();
-        GM.Instance.NextDay_Midnight();
+        int currentVillager = VillagerManager.Instance.GetRecruitedVillagerCount();
+        if (currentVillager > 0)
+            GM.Instance.NextDay_Midnight();
+        else
+            GM.Instance.NextDay_Late(false);
 
         loading = false;
     }

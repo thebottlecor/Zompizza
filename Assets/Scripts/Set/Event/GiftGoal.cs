@@ -13,15 +13,39 @@ public class GiftGoal : MonoBehaviour
     public GameObject goalEffectObj;
     public GameObject boxObj;
     public SpriteRenderer ingredientSprite;
+    public SpriteRenderer plusSprite;
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Player") && boxObj.activeSelf)
         {
-            Ingredient ingredient = GM.Instance.RandomIngredientGet();
-            ingredientSprite.sprite = DataManager.Instance.uiLib.ingredients[ingredient];
-            UIManager.Instance.UpdateIngredients();
-            UIManager.Instance.OrderUIBtnUpdate();
+            int rand = UnityEngine.Random.Range(0, 10);
+
+            var uiLib = DataManager.Instance.uiLib;
+            if (rand <= 3)
+            {
+                // 40% 재료
+                Ingredient ingredient = GM.Instance.RandomIngredientGet();
+                ingredientSprite.sprite = uiLib.ingredients[ingredient];
+                UIManager.Instance.UpdateIngredients();
+                UIManager.Instance.OrderUIBtnUpdate();
+                plusSprite.sprite = uiLib.plus[1];
+            }
+            else if (rand <= 7)
+            {
+                // 40% 돈
+                GM.Instance.AddGold(200, GM.GetGoldSource.delivery);
+                ingredientSprite.sprite = uiLib.gold;
+                plusSprite.sprite = uiLib.plus[2];
+            }
+            else
+            {
+                // 20% 아이템
+                int itemIdx = VillagerManager.Instance.RandomItemGet();
+                ingredientSprite.sprite = uiLib.villagerItems[itemIdx];
+                plusSprite.sprite = uiLib.plus[0];
+            }
+
             FindEffect();
         }
     }

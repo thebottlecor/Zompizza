@@ -1,15 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MTAssets.EasyMinimapSystem;
 
 public class VillagerManager : Singleton<VillagerManager>
 {
 
     public VillagerSearcher villagerSearcher;
     public VillagerWay[] villagers;
+    public HelpGoal[] helpGoals;
 
     public int[] inventory;
     public VillagerInvenSlot[] invenSlots;
+
+
+    public int currentSosIdx;
+    public float sosTimeLimit;
+    public float sosTimer;
+    public VillagerSosMiniUI miniUI;
+
+    public bool sosShowed; // 다음날 초기화
+
+    public MinimapRenderer minimap;
+    public MinimapRenderer worldmap;
+
 
     private void Start()
     {
@@ -26,6 +40,23 @@ public class VillagerManager : Singleton<VillagerManager>
         {
             invenSlots[i].Init(i);
         }
+
+        for (int i = 0; i < helpGoals.Length; i++)
+        {
+            minimap.minimapItemsToHightlight.Add(helpGoals[i].minimapItem);
+            worldmap.minimapItemsToHightlight.Add(helpGoals[i].minimapItem);
+        }
+
+        ResetStat();
+    }
+
+    private void Update()
+    {
+        if (currentSosIdx >= 0)
+        {
+            sosTimer += Time.deltaTime;
+            miniUI.UpdateTimer();
+        }
     }
 
     public void NextDay()
@@ -34,6 +65,20 @@ public class VillagerManager : Singleton<VillagerManager>
         {
             villagers[i].CalcNeedsMet();
         }
+        for (int i = 0; i < helpGoals.Length; i++)
+        {
+            helpGoals[i].Hide();
+        }
+        if (currentSosIdx >= 0)
+            villagers[currentSosIdx].Expel();
+        ResetStat();
+    }
+
+    private void ResetStat()
+    {
+        sosShowed = false;
+        currentSosIdx = -1;
+        miniUI.Hide();
     }
 
     public bool Give(int currentVillager)
@@ -72,6 +117,15 @@ public class VillagerManager : Singleton<VillagerManager>
 
         return true;
     }
+
+    public int RandomItemGet()
+    {
+        int rand = UnityEngine.Random.Range(0, inventory.Length);
+        inventory[rand] += 1;
+        UpdateSlots();
+        return rand;
+    }
+
     public void UpdateSlots()
     {
         for (int i = 0; i < invenSlots.Length; i++)
@@ -99,5 +153,104 @@ public class VillagerManager : Singleton<VillagerManager>
             }
         }
         GM.Instance.AddGold(villager_income, GM.GetGoldSource.villager);
+    }
+
+    public int GetRemainVillagerCount()
+    {
+        int value = 0;
+
+        for (int i= 0; i < villagers.Length; i++)
+        {
+            if (villagers[i].recruited || villagers[i].expelled)
+            {
+                value++;
+            }
+        }
+        value = villagers.Length - value;
+        return value;
+    }
+    public int GetRecruitedVillagerCount()
+    {
+        int value = 0;
+        for (int i = 0; i < villagers.Length; i++)
+        {
+            if (villagers[i].recruited)
+            {
+                value++;
+            }
+        }
+        return value;
+    }
+    public int RandomSosVillager()
+    {
+        List<VillagerWay> randList = new List<VillagerWay>();
+
+        for (int i = 0; i < villagers.Length; i++)
+        {
+            if (!villagers[i].recruited && !villagers[i].expelled)
+            {
+                randList.Add(villagers[i]);
+            }
+        }
+        randList.Shuffle();
+
+        if (randList.Count > 0)
+            return randList[0].idx;
+        else
+            return -1;
+    }
+
+    public void CreateSOS()
+    {
+        // 복귀 후, 아무 주문이 없을 떄
+        // 강제로 가게를 닫았을 떄
+
+        int day = GM.Instance.day;
+
+        if ((day + 1) % 2 == 0 && !sosShowed) // 짝수날 마다
+        {
+            int recruited = GetRecruitedVillagerCount();
+            int remained = GetRemainVillagerCount();
+
+            if (recruited < 5 && remained > 0)
+            {
+                int who = RandomSosVillager();
+                if (who >= 0)
+                {
+                    sosShowed = true;
+                    UIManager.Instance.shopUI.ShowSosWarning(true);
+                    AudioManager.Instance.PlaySFX_Villager(1, villagers[who].gender);
+
+                    float dist = (helpGoals[who].transform.position - OrderManager.Instance.pizzeria.position).magnitude;
+                    float km = dist * Constant.distanceScale; // 게임상 거리 200 = 1km
+                    sosTimeLimit = Constant.delivery_timeLimit_1km * km;
+
+                    currentSosIdx = who;
+                    miniUI.Init(who);
+                    helpGoals[who].Show();
+                }
+            }
+        }
+    }
+
+    public void Rescue(int idx)
+    {
+        // 주민 구출
+        var villager = villagers[idx];
+        AudioManager.Instance.PlaySFX_Villager(0, villager.gender);
+        AudioManager.Instance.PlaySFX(Sfx.complete);
+        villager.Recruit();
+
+        currentSosIdx = -1;
+        miniUI.Hide();
+    }
+
+    public void FailToRescue()
+    {
+        villagers[currentSosIdx].Expel();
+        // 비명 소리
+
+        currentSosIdx = -1;
+        miniUI.Hide();
     }
 }

@@ -6410,7 +6410,7 @@ MonoBehaviour:
     volumeOffset: 0
     maxPlay: 0
   - clip: {fileID: 8300000, guid: cffe169ec8e22e54a8113e1e6be1348e, type: 3}
-    volumeOffset: 0
+    volumeOffset: -0.5
     maxPlay: 0
 --- !u!1 &3230877239920990169
 GameObject:

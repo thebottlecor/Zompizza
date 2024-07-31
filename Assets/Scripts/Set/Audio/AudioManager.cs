@@ -158,9 +158,9 @@ public class AudioManager : Singleton<AudioManager>
     public void PlaySFX_Villager(int idx, int gender, float volume = 1f)
     {
         if (gender == 0)
-            audioSourceSFX.PlayOneShot(audios_villagers[idx * 2].clip, volume);
+            audioSourceSFX.PlayOneShot(audios_villagers[idx * 2].clip, volume + audios_villagers[idx * 2].volumeOffset);
         else
-            audioSourceSFX.PlayOneShot(audios_villagers[idx * 2 + 1].clip, volume);
+            audioSourceSFX.PlayOneShot(audios_villagers[idx * 2 + 1].clip, volume + audios_villagers[idx * 2 + 1].volumeOffset);
     }
 
     private IEnumerator FrameSoundCheck(Sfx idx)

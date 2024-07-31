@@ -185,7 +185,13 @@ public class UINaviHelper : Singleton<UINaviHelper>
                                 current = ingame.GameEvent_Reconnection();
                             }
                             else if (shop.shopCloseWarningObj.activeSelf)
+                            {
                                 current = ingame.shopCloseWarning_first;
+                            }
+                            else if (shop.sosWarningObj.activeSelf)
+                            {
+                                current = ingame.sosWarning_first;
+                            }
                             else
                                 current = ingame.Shop_Orders_Reconnection();
                             break;

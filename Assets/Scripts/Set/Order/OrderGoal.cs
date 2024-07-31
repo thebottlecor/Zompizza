@@ -20,6 +20,9 @@ public class OrderGoal : MonoBehaviour
 
     private Target target;
 
+    public GameObject[] giftDummy;
+    public GiftGoal[] giftGoals;
+
 
     public static EventHandler<int> PlayerArriveEvent;
 
@@ -66,6 +69,7 @@ public class OrderGoal : MonoBehaviour
         textCanvas.gameObject.SetActive(true);
         goldText.text = $"+{gold}$";
         CoroutineHelper.StartCoroutine(HideText());
+        CoroutineHelper.StartCoroutine(GiftBoxEffect());
 
         EffectUpdate(false);
         AudioManager.Instance.PlaySFX(Sfx.money);
@@ -83,6 +87,52 @@ public class OrderGoal : MonoBehaviour
         yield return CoroutineHelper.WaitForSeconds(1.9f);
 
         textCanvas.gameObject.SetActive(false);
+    }
+
+    private IEnumerator GiftBoxEffect()
+    {
+        int rand = UnityEngine.Random.Range(1, giftGoals.Length + 1);
+        giftGoals.Shuffle();
+
+        Sequence sequence = DOTween.Sequence().SetUpdate(false).SetAutoKill(true);
+        sequence.AppendCallback(() =>
+        {
+            for (int i = 0; i < rand; i++)
+            {
+                giftDummy[i].SetActive(true);
+                Vector3 pos = transform.position;
+                pos.y = 1f;
+                giftDummy[i].transform.position = pos;
+
+                giftDummy[i].transform.DOMoveX(giftGoals[i].transform.position.x, 0.75f).SetEase(Ease.InQuad);
+                giftDummy[i].transform.DOMoveZ(giftGoals[i].transform.position.z, 0.75f).SetEase(Ease.InQuad);
+
+                giftDummy[i].transform.DOMoveY(5f, 0.375f).SetEase(Ease.OutQuad);
+            }
+        });
+        sequence.AppendInterval(0.375f);
+        sequence.AppendCallback(() =>
+        {
+            for (int i = 0; i < rand; i++)
+            {
+                giftDummy[i].transform.DOMoveY(1f, 0.375f).SetEase(Ease.InQuad);
+            }
+        });
+        sequence.AppendInterval(0.375f);
+        sequence.AppendCallback(() =>
+        {
+            for (int i = 0; i < giftDummy.Length; i++)
+            {
+                giftDummy[i].SetActive(false);
+            }
+        });
+
+        yield return CoroutineHelper.WaitForSeconds(0.76f);
+
+        for (int i = 0; i < rand; i++)
+        {
+            giftGoals[i].Show();
+        }
     }
 
 }
