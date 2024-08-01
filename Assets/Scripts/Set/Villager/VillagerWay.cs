@@ -53,7 +53,6 @@ public class VillagerWay : MonoBehaviour
         targetWayPoint = UnityEngine.Random.Range(0, wayPoints.Length);
         dealyToTargetTimer = UnityEngine.Random.Range(0.75f, 3.5f);
         destinationSetter.target = wayPoints[targetWayPoint];
-        ai.isStopped = true;
         ai.canMove = false;
     }
 
@@ -112,23 +111,19 @@ public class VillagerWay : MonoBehaviour
         bool walk = false;
         if (dealyToTargetTimer > 0f)
         {
-            animator.SetBool("Walk", false);
+            animator.SetBool("Walk", walk);
             dealyToTargetTimer -= Time.deltaTime;
             return;
         }
-        ai.isStopped = false;
         ai.canMove = true;
 
-        if (!ai.isStopped)
-        {
-            walk = true;
+        walk = true;
 
-            if (!ai.pathPending)
+        if (!ai.pathPending)
+        {
+            if (ai.remainingDistance <= (ai as FollowerEntity).stopDistance)
             {
-                if (ai.remainingDistance <= (ai as FollowerEntity).stopDistance)
-                {
-                    RandomTarget();
-                }
+                RandomTarget();
             }
         }
 
@@ -142,7 +137,6 @@ public class VillagerWay : MonoBehaviour
         if (on)
         {
             animator.SetBool("Walk", false);
-            ai.isStopped = true;
             ai.canMove = false;
             (ai as FollowerEntity).updateRotation = false;
             StartCoroutine(ResetPos());
@@ -159,6 +153,7 @@ public class VillagerWay : MonoBehaviour
         yield return null;
         yield return null;
         yield return null;
+
         transform.position = midnightFixedPos.position;
         transform.rotation = midnightFixedPos.rotation;
         firstQuat = midnightFixedPos.rotation;

@@ -291,7 +291,7 @@ public class VillagerUI : EventListener
             rectTransform.transform.localPosition = new Vector3(0f, -2000f, 0f);
             canvasGroup.alpha = 0f;
             loading = false;
-            TutorialManager.Instance.ShopWindowHideComplete();
+            TutorialManager.Instance.ManMove_TalkEnd();
             UINaviHelper.Instance.SetFirstSelect();
         }
         else
@@ -303,7 +303,7 @@ public class VillagerUI : EventListener
             canvasGroup.DOFade(0f, hideFast).SetUpdate(true).OnComplete(() =>
             {
                 loading = false;
-                TutorialManager.Instance.ShopWindowHideComplete();
+                TutorialManager.Instance.ManMove_TalkEnd();
                 UINaviHelper.Instance.SetFirstSelect();
             });
         }

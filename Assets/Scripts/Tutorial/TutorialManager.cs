@@ -20,6 +20,7 @@ public class TutorialManager : Singleton<TutorialManager>
     [Space(20f)]
 
     public int step;
+    public bool manModeEntered; // ÁÖ¹Î Æ©Åä 1¹ø¸¸ ¶ßµµ·Ï
 
     public bool training;
     public GameObject blackScreen;
@@ -142,6 +143,7 @@ public class TutorialManager : Singleton<TutorialManager>
         guideTexts[9].text = tm.GetCommons("Tutorial10"); // ¿¬±¸
         guideTexts[10].text = tm.GetCommons("Tutorial11"); // Â÷·®
         guideTexts[11].text = tm.GetCommons("Tutorial12"); // ÁÖ¹Î
+        guideTexts[12].text = tm.GetCommons("Tutorial13"); // ÁÖ¹Î - ´ÙÀ½³¯·Î
     }
 
     private void DriftTextUpdate(bool pad)
@@ -571,6 +573,28 @@ public class TutorialManager : Singleton<TutorialManager>
     {
         guideObjects[10].SetActive(false);
         step = 16;
+    }
+
+    public void ManMove_Enter()
+    {
+        if (!manModeEntered)
+        {
+            guideObjects[11].SetActive(true);
+        }
+    }
+    public void ManMove_TalkEnd()
+    {
+        if (!manModeEntered)
+        {
+            guideObjects[11].SetActive(false);
+            guideObjects[12].SetActive(true);
+            manModeEntered = true;
+        }
+    }
+    public void Midnight_Leave()
+    {
+        guideObjects[11].SetActive(false);
+        guideObjects[12].SetActive(false);
     }
 
     public void TutorialDisalbe()

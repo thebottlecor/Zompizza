@@ -339,6 +339,15 @@ public class ShopUI : EventListener
     {
         orderPanel.SetActive(true);
         explorePanel.SetActive(false);
+
+        // 강제 연구탭 틀어놓아서 애니메이션 정상화시키기
+        for (int i = 0; i < panelButtonPairs.Count; i++)
+        {
+            panelButtonPairs[i].panel.SetActive(false);
+            panelButtonPairs[i].button.SetHighlight(false);
+        }
+        panelButtonPairs[2].panel.SetActive(true);
+        panelButtonPairs[2].button.SetHighlight(true);
     }
 
     private void Update()

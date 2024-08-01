@@ -63,4 +63,5 @@ public class Constant
     // ÁÖ¹Î °ü·Ã
     public const int maxVillager = 5;
     public const int villagerIncome = 500;
+    public const float sos_timeLimit_1km = 1.5f * delivery_timeLimit_1km;
 }

@@ -39,7 +39,7 @@ public class GM : Singleton<GM>
     public void Load(SaveData data)
     {
         day = data.day;
-        timer = data.timer;
+        SetTimer(data.timer);
 
         SetGold(data.gold);
         SetRating(data.rating);
@@ -478,6 +478,12 @@ public class GM : Singleton<GM>
         SetLight(timePercent, hour);
     }
 
+    public void SetTimer(float timer)
+    {
+        this.timer = timer;
+        remainTime = Constant.dayTime - timer;
+    }
+
     public void SetLight(float timePercent, int hour)
     {
         globalLight.color = DataManager.Instance.uiLib.timeLightGradient.Evaluate(timePercent);
@@ -825,6 +831,7 @@ public class GM : Singleton<GM>
     public void NextDay_Midnight()
     {
         loading = false;
+        midNight = true;
 
         accountObj.SetActive(false);
         UINaviHelper.Instance.SetFirstSelect();
@@ -838,10 +845,11 @@ public class GM : Singleton<GM>
         SetLight(1f, 24);
 
         ChangeMan(true);
-        midNight = true;
         UINaviHelper.Instance.ingame.UIUpdate(UINaviHelper.Instance.PadType);
         VillagerManager.Instance.SetMidNight(true);
         timeText.text = dayStr[2];
+
+        TutorialManager.Instance.ManMove_Enter();
 
         darkCanvas.blocksRaycasts = false;
         darkCanvas.interactable = false;
@@ -851,6 +859,8 @@ public class GM : Singleton<GM>
     public void NextDay_Late(bool fromMidnight)
     {
         VillagerManager.Instance.villagerSearcher.Clear();
+
+        TutorialManager.Instance.Midnight_Leave();
 
         //int loanWarning = LoanManager.Instance.NextDayLate();
         int loanWarning = -1;
@@ -917,7 +927,7 @@ public class GM : Singleton<GM>
         }
         sequence.AppendCallback(() =>
         {
-            timer = 0f;
+            SetTimer(0f);
             ChangeMan(false);
             midNight = false;
             UINaviHelper.Instance.ingame.UIUpdate(UINaviHelper.Instance.PadType);

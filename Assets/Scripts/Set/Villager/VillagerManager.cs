@@ -79,6 +79,8 @@ public class VillagerManager : Singleton<VillagerManager>
             var villager = villagers[currentSosIdx];
             villager.Expel();
             AudioManager.Instance.PlaySFX_Villager(2, villager.gender);
+            helpGoals[currentSosIdx].Hide();
+            miniUI.Hide();
         }
     }
 
@@ -247,7 +249,7 @@ public class VillagerManager : Singleton<VillagerManager>
                     float dist = (helpGoals[who].transform.position - OrderManager.Instance.pizzeria.position).magnitude;
                     float km = dist * Constant.distanceScale; // 게임상 거리 200 = 1km
                     sosTimer = 0f;
-                    sosTimeLimit = Constant.delivery_timeLimit_1km * 2f * km;
+                    sosTimeLimit = Constant.sos_timeLimit_1km * km;
 
                     currentSosIdx = who;
                     miniUI.Init(who);
