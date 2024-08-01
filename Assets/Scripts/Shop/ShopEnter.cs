@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using DG.Tweening;
 
 public class ShopEnter : MonoBehaviour
 {
@@ -16,8 +15,9 @@ public class ShopEnter : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            var player = GM.Instance.player;
+            if (GM.Instance.loading) return;
 
+            var player = GM.Instance.player;
             player.StopPlayer();
 
             //Vector3 dir = (transform.position - player.transform.position).normalized;

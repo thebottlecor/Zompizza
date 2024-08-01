@@ -6412,6 +6412,12 @@ MonoBehaviour:
   - clip: {fileID: 8300000, guid: cffe169ec8e22e54a8113e1e6be1348e, type: 3}
     volumeOffset: -0.5
     maxPlay: 0
+  - clip: {fileID: 8300000, guid: 0df0521f2723ddc42b40eb88ed8cf90f, type: 3}
+    volumeOffset: -0.1
+    maxPlay: 0
+  - clip: {fileID: 8300000, guid: d523cf1c5b90a8648991dc4eb464120d, type: 3}
+    volumeOffset: -0.2
+    maxPlay: 0
 --- !u!1 &3230877239920990169
 GameObject:
   m_ObjectHideFlags: 0

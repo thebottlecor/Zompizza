@@ -423,7 +423,7 @@ public class ShopUI : EventListener
         loading = false;
         opened = true;
 
-        if (GM.Instance.closeImage.activeSelf)
+        if (GM.Instance.closeImage.activeSelf && !GM.Instance.midNight)
         {
             bool triggered = false;
             if (GM.Instance.day == 5)
@@ -560,6 +560,7 @@ public class ShopUI : EventListener
             {
                 case 1:
                     StatManager.Instance.UpdateText();
+                    VillagerManager.Instance.UpdateUIs();
                     reviewScroll.verticalNormalizedPosition = 1f;
                     break;
                 case 2:
@@ -703,14 +704,17 @@ public class ShopUI : EventListener
         ExplorationManager.Instance.SetHighTierQuality();
         //ExplorationManager.Instance.SetCost();
 
-        bool triggered = false;
-        if (GM.Instance.day == 5)
+        if (!GM.Instance.midNight)
         {
-            triggered = GameEventManager.Instance.SetEvent(1); // 6일차 가게 "강제로" 닫은 후 이장 이벤트
-        }
-        if (!triggered)
-        {
-            VillagerManager.Instance.CreateSOS();
+            bool triggered = false;
+            if (GM.Instance.day == 5)
+            {
+                triggered = GameEventManager.Instance.SetEvent(1); // 6일차 가게 "강제로" 닫은 후 이장 이벤트
+            }
+            if (!triggered)
+            {
+                VillagerManager.Instance.CreateSOS();
+            }
         }
     }
     #endregion

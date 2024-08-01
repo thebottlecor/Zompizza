@@ -159,6 +159,7 @@ public class GM : Singleton<GM>
     public TextMeshProUGUI raid_Text;
     public TextMeshProUGUI raidDetail_Text;
     public List<int> tenDays_RaidRecords;
+    public bool raided;
 
     public Queue<int> warningQueue;
 
@@ -358,39 +359,56 @@ public class GM : Singleton<GM>
 
         TimeUpdate();
 
+        Return_Indicator_Update();
+    }
+
+    private void Return_Indicator_Update()
+    {
         if (TutorialManager.Instance.training && TutorialManager.Instance.step <= 1)
         {
-            if (returnIndicator.activeSelf)
-            {
-                returnIndicator.SetActive(false);
-            }
+            if (returnIndicator.activeSelf) returnIndicator.SetActive(false);
         }
         else
         {
             if (OrderManager.Instance.currentAcceptance == 0)
             {
-                float dist = (player.transform.position - pizzeriaPos.transform.position).magnitude;
-                if (dist > 100f)
+                var resuced = VillagerManager.Instance.miniUI;
+                if (resuced.gameObject.activeSelf)
                 {
-                    if (!returnIndicator.activeSelf)
+                    if (resuced.pinObjs[1].activeSelf)
                     {
-                        returnIndicator.SetActive(true);
+                        float dist = (player.transform.position - pizzeriaPos.transform.position).magnitude;
+                        if (dist > 100f)
+                        {
+                            if (!returnIndicator.activeSelf) returnIndicator.SetActive(true);
+                        }
+                        else
+                        {
+                            if (returnIndicator.activeSelf) returnIndicator.SetActive(false);
+                            resuced.Hide();
+                        }
+                    }
+                    else
+                    {
+                        if (returnIndicator.activeSelf) returnIndicator.SetActive(false);
                     }
                 }
                 else
                 {
-                    if (returnIndicator.activeSelf)
+                    float dist = (player.transform.position - pizzeriaPos.transform.position).magnitude;
+                    if (dist > 100f)
                     {
-                        returnIndicator.SetActive(false);
+                        if (!returnIndicator.activeSelf) returnIndicator.SetActive(true);
+                    }
+                    else
+                    {
+                        if (returnIndicator.activeSelf) returnIndicator.SetActive(false);
                     }
                 }
             }
             else
             {
-                if (returnIndicator.activeSelf)
-                {
-                    returnIndicator.SetActive(false);
-                }
+                if (returnIndicator.activeSelf) returnIndicator.SetActive(false);
             }
         }
     }
@@ -508,6 +526,7 @@ public class GM : Singleton<GM>
         player.ShakeOffAllZombies();
         ZombiePooler.Instance.ZombieReset();
         //LoanManager.Instance.PayInterest();
+        VillagerManager.Instance.NextDay();
 
         Sequence sequence = DOTween.Sequence().SetUpdate(true).SetAutoKill(true);
         sequence.AppendCallback(() =>
@@ -527,7 +546,7 @@ public class GM : Singleton<GM>
 
             darkCanvas.interactable = true;
 
-            if (day >= 10)
+            if (day >= 10) // µ¥¸ð ½Â¸®
             {
                 if (!CongratulationTriggered)
                 {
@@ -864,6 +883,12 @@ public class GM : Singleton<GM>
             return;
         }
 
+        if (raided)
+        {
+            AudioManager.Instance.PlaySFX(Sfx.raid);
+            raided = false;
+        }
+
         Sequence sequence = DOTween.Sequence().SetUpdate(true).SetAutoKill(true);
         if (fromMidnight)
         {
@@ -914,7 +939,7 @@ public class GM : Singleton<GM>
             {
                 rainObj.SetActive(true);
             }
-            VillagerManager.Instance.NextDay();
+            VillagerManager.Instance.NextDay_Late();
 
             AudioManager.Instance.PlaySFX(Sfx.nextDay);
 
@@ -1222,7 +1247,7 @@ public class GM : Singleton<GM>
         {
             warningQueue.Enqueue(2);
             tenDays_RaidRecords.Add(1);
-            AudioManager.Instance.PlaySFX(Sfx.raid);
+            raided = true;
         }
         else
         {

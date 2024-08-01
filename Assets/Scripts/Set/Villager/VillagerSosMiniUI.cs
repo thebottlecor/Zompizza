@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using DG.Tweening;
 
 public class VillagerSosMiniUI : MonoBehaviour
 {
@@ -13,8 +12,12 @@ public class VillagerSosMiniUI : MonoBehaviour
     public Image timerGauge;
 
     public TextMeshProUGUI timerTMP;
+    public TextMeshProUGUI rescuedTMP;
 
     public Image profileBg;
+
+    public GameObject[] pinObjs;
+    public GameObject[] infoObjs;
 
     UILibrary uiLib => DataManager.Instance.uiLib;
 
@@ -27,11 +30,30 @@ public class VillagerSosMiniUI : MonoBehaviour
 
         profileBg.color = uiLib.miniOrderUI_maskColor;
 
+        rescuedTMP.text = TextManager.Instance.GetCommons("Rescued");
+
+        pinObjs[0].SetActive(true);
+        pinObjs[1].SetActive(false);
+        infoObjs[0].SetActive(true);
+        infoObjs[1].SetActive(false);
+
         gameObject.SetActive(true);
+
+        LayoutRebuilder.ForceRebuildLayoutImmediate(this.transform as RectTransform);
     }
     public void Hide()
     {
         gameObject.SetActive(false);
+    }
+
+    public void RescuedMode()
+    {
+        pinObjs[0].SetActive(false);
+        pinObjs[1].SetActive(true);
+        infoObjs[0].SetActive(false);
+        infoObjs[1].SetActive(true);
+
+        LayoutRebuilder.ForceRebuildLayoutImmediate(this.transform as RectTransform);
     }
 
     public void UpdateTimer()

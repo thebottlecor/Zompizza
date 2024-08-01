@@ -59,7 +59,7 @@ public class VillagerUI : EventListener
         fixedTexts[3].text = tm.GetCommons("Traits");
         fixedTexts[4].text = tm.GetCommons("Inventory");
 
-        fixedStr = new string[5];
+        fixedStr = new string[3];
         fixedStr[0] = tm.GetCommons("Relations");
         fixedStr[1] = tm.GetCommons("Condition");
         fixedStr[2] = tm.GetCommons("Income");

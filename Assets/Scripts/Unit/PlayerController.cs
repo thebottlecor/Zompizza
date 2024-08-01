@@ -93,6 +93,7 @@ public class PlayerController : PlayerControllerData
     public float manRotSpeed;
     public GameObject manObj;
     public Animator manAnim;
+    public AudioSource stepSound;
 
     private void Start()
     {
@@ -664,6 +665,13 @@ public class PlayerController : PlayerControllerData
                 walk = true;
                 run = pressBreak;
             }
+        }
+        if (walk)
+        {
+            stepSound.pitch = run ? 1.9f : 1f; 
+
+            if (!stepSound.isPlaying)
+                stepSound.Play();
         }
         manAnim.SetBool("Walk", walk);
         manAnim.SetBool("Run", run);

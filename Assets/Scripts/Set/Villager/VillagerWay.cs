@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;
 using Pathfinding;
 
 public class VillagerWay : MonoBehaviour
@@ -55,6 +54,7 @@ public class VillagerWay : MonoBehaviour
         dealyToTargetTimer = UnityEngine.Random.Range(0.75f, 3.5f);
         destinationSetter.target = wayPoints[targetWayPoint];
         ai.isStopped = true;
+        ai.canMove = false;
     }
 
     public int Income()
@@ -117,6 +117,7 @@ public class VillagerWay : MonoBehaviour
             return;
         }
         ai.isStopped = false;
+        ai.canMove = true;
 
         if (!ai.isStopped)
         {
@@ -136,13 +137,15 @@ public class VillagerWay : MonoBehaviour
 
     public void MidNight(bool on)
     {
+        if (!gameObject.activeSelf) return;
+
         if (on)
         {
             animator.SetBool("Walk", false);
             ai.isStopped = true;
+            ai.canMove = false;
             (ai as FollowerEntity).updateRotation = false;
-            ResetPos();
-            firstQuat = transform.rotation;
+            StartCoroutine(ResetPos());
             minimapObj.SetActive(true);
         }
         else
@@ -151,10 +154,14 @@ public class VillagerWay : MonoBehaviour
             (ai as FollowerEntity).updateRotation = true;
         }
     }
-    private void ResetPos()
+    private IEnumerator ResetPos()
     {
+        yield return null;
+        yield return null;
+        yield return null;
         transform.position = midnightFixedPos.position;
         transform.rotation = midnightFixedPos.rotation;
+        firstQuat = midnightFixedPos.rotation;
     }
 
 
@@ -201,6 +208,20 @@ public class VillagerWay : MonoBehaviour
             {
                 AddCondition(-1);
             }
+
+            // 요구가 들어지지 않았고, 요구한 물건을 가지고 있지 않다면, 요구한 물건을 제외한 다른 물건으로 요구하는 것이 변경됨
+            if (VillagerManager.Instance.inventory[currentNeeds] == 0)
+            {
+                while (true)
+                {
+                    int other = UnityEngine.Random.Range(0, VillagerManager.Instance.inventory.Length);
+                    if (other != currentNeeds)
+                    {
+                        currentNeeds = other;
+                        break;
+                    }
+                }
+            }
         }
         else
         {
@@ -244,10 +265,11 @@ public class VillagerWay : MonoBehaviour
 
         recruited = true;
         relations = 0;
-        condition = UnityEngine.Random.Range(1, 4);
+        //condition = UnityEngine.Random.Range(1, 4);
+        condition = 2;
         currentNeeds = UnityEngine.Random.Range(0, VillagerManager.Instance.inventory.Length);
 
-        ResetPos();
         gameObject.SetActive(true);
+        StartCoroutine(ResetPos());
     }
 }

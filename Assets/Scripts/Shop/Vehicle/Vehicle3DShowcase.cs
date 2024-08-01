@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
-using DG.Tweening;
 
 public class Vehicle3DShowcase : MonoBehaviour
 {

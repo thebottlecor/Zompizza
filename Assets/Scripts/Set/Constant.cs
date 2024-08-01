@@ -36,8 +36,6 @@ public class Constant
     public const float min_damage = 0f;
 
     // 동시 배달 가능 수 (기본)
-    public const int baseMaxDeliveryAcceptance = 2;
-
     public const int explorationQuantityMax = 30;
 
     public const float remainTime_Percent = 0.5f;
@@ -63,5 +61,6 @@ public class Constant
     public const float friendShip1 = 3f;
 
     // 주민 관련
+    public const int maxVillager = 5;
     public const int villagerIncome = 500;
 }

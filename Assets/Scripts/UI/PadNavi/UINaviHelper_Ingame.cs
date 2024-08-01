@@ -257,15 +257,15 @@ public class UINaviHelper_Ingame : MonoBehaviour
     public UINavi Shop_Management_Reconnection()
     {
         shops_close.ResetConnection();
-        shops_managements[0].ResetConnection();
+        //shops_managements[0].ResetConnection();
 
-        shops_managements[0].up = shops_close;
-        shops_managements[0].down = shops_close;
-        shops_managements[0].right = shops_close;
-        shops_managements[0].left = shops_close;
+        //shops_managements[0].up = shops_close;
+        //shops_managements[0].down = shops_close;
+        //shops_managements[0].right = shops_close;
+        //shops_managements[0].left = shops_close;
 
-        shops_close.up = shops_managements[0];
-        shops_close.down = shops_managements[0];
+        shops_close.up = shops_managements[1];
+        shops_close.down = shops_managements[1];
         shops_close.right = shops_managements[0];
         shops_close.left = shops_managements[0];
 
