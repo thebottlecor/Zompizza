@@ -273,11 +273,12 @@ public class GM : Singleton<GM>
             SetRatingPoint(initRating); // initRating = 0f
         }
 
+        InitPlayer(); // Tutorial보다 위에
+
         //CallAfterStart(gameSaveData);
         //SaveDataLoading = false;
 
         UIManager.Instance.Init();
-
 
         LoadingSceneManager.Instance.logueLoading = false;
 
@@ -295,7 +296,6 @@ public class GM : Singleton<GM>
 
         ResearchManager.Instance.ToggleAllHiddenRecipe(true);
 
-        InitPlayer();
         rainObj.SetActive(false);
 
         footBallPos = footBall.position;
@@ -1427,7 +1427,7 @@ public class GM : Singleton<GM>
     public Ingredient RandomIngredientGet()
     {
         Ingredient ingredient = OrderManager.Instance.GetRandomIngredient_HighTier();
-        ingredients[ingredient] += 3;
+        ingredients[ingredient] += 2;
         return ingredient;
     }
     #endregion

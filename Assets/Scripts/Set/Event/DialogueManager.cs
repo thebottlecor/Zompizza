@@ -40,6 +40,7 @@ public class DialogueManager : Singleton<DialogueManager>
     {
         tmpCompleted = false;
         int count = 0;
+        int typingCount = 0;
 
         while (count != text.Length)
         {
@@ -59,10 +60,11 @@ public class DialogueManager : Singleton<DialogueManager>
                 {
                     dialogueText.text += text[count].ToString();
                     count++;
+                    typingCount++;
                 }
             }
 
-            if (count % 4 == 0)
+            if (typingCount % 4 == 0)
                 AudioManager.Instance.PlaySFX(Sfx.inputFieldStart);
 
             yield return CoroutineHelper.WaitForSecondsRealtime(typingSpeed);

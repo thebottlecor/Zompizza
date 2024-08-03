@@ -13,10 +13,10 @@ public class ShopEnter : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (GM.Instance.loading) return;
+
         if (other.gameObject.CompareTag("Player"))
         {
-            if (GM.Instance.loading) return;
-
             var player = GM.Instance.player;
             player.StopPlayer();
 

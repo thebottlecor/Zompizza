@@ -112,11 +112,6 @@ public class PlayerController : PlayerControllerData
             StopCoroutine(recoverTractionCoroutine);
             recoverTractionCoroutine = null;
         }
-        if (iceCoroutine != null)
-        {
-            StopCoroutine(iceCoroutine);
-            iceCoroutine = null;
-        }
 
         //In this part, we set the 'carRigidbody' value with the Rigidbody attached to this
         //gameObject. Also, we define the center of mass of the car with the Vector3 given
@@ -165,6 +160,8 @@ public class PlayerController : PlayerControllerData
             asymptoteValue = rearRightCollider.sidewaysFriction.asymptoteValue,
             stiffness = rearRightCollider.sidewaysFriction.stiffness
         };
+
+        InstantRecoverIce();
     }
     public void SetSound()
     {
@@ -268,17 +265,17 @@ public class PlayerController : PlayerControllerData
         }
     }
 
-    // 빙판
+    #region 빙판
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == 12) // 빙판
         {
             if (iceCoroutine != null)
                 StopCoroutine(iceCoroutine);
-            iceCoroutine = StartCoroutine(RecoverIce());
+            iceCoroutine = StartCoroutine(TouchIce());
         }
     }
-    private IEnumerator RecoverIce()
+    private IEnumerator TouchIce()
     {
         FLwheelFriction.stiffness = 0f;
         frontLeftCollider.sidewaysFriction = FLwheelFriction;
@@ -294,6 +291,12 @@ public class PlayerController : PlayerControllerData
 
         yield return CoroutineHelper.WaitForSeconds(0.5f);
 
+        RecoverIce();
+
+        iceCoroutine = null;
+    }
+    private void RecoverIce()
+    {
         FLwheelFriction.stiffness = 1f;
         frontLeftCollider.sidewaysFriction = FLwheelFriction;
 
@@ -305,9 +308,17 @@ public class PlayerController : PlayerControllerData
 
         RRwheelFriction.stiffness = 1f;
         rearRightCollider.sidewaysFriction = RRwheelFriction;
-
-        iceCoroutine = null;
     }
+    private void InstantRecoverIce()
+    {
+        if (iceCoroutine != null)
+        {
+            StopCoroutine(iceCoroutine);
+            RecoverIce();
+            iceCoroutine = null;
+        }
+    }
+    #endregion
     public void HitBlink()
     {
         if (hitCoroutine != null)
@@ -343,6 +354,17 @@ public class PlayerController : PlayerControllerData
 
     public void StopPlayer(bool forceRotate = true, bool instance = false)
     {
+        if (decelerateCoroutine != null)
+        {
+            StopCoroutine(decelerateCoroutine);
+            decelerateCoroutine = null;
+        }
+        if (recoverTractionCoroutine != null)
+        {
+            StopCoroutine(recoverTractionCoroutine);
+            recoverTractionCoroutine = null;
+        }
+
         //this.transform.eulerAngles = Vector3.zero;
 
         if (forceRotate)
@@ -379,9 +401,12 @@ public class PlayerController : PlayerControllerData
         localVelocityZ = 0;
 
         isDrifting = false;
-        //if (pressBreak)
-        //    RecoverTraction_Instant();
+        RecoverTraction_Instant();
         DriftCarPS();
+
+        InstantRecoverIce();
+
+        ClearCarPS();
     }
 
 
@@ -488,14 +513,14 @@ public class PlayerController : PlayerControllerData
         if (GM.Instance.stop_control) return;
         if (manObj.activeSelf)
         {
-            if (recoverTractionCoroutine == null)
-                recoverTractionCoroutine = StartCoroutine(RecoverTraction());
+            //if (recoverTractionCoroutine == null)
+            //    recoverTractionCoroutine = StartCoroutine(RecoverTraction());
 
-            if (decelerateCoroutine == null)
-                decelerateCoroutine = StartCoroutine(DecelerateCar());
-            deceleratingCar = true;
+            //if (decelerateCoroutine == null)
+            //    decelerateCoroutine = StartCoroutine(DecelerateCar());
+            //deceleratingCar = true;
 
-            ResetSteeringAngle();
+            //ResetSteeringAngle();
 
             return;
         }
@@ -1098,6 +1123,13 @@ public class PlayerController : PlayerControllerData
             RLWTireSkid.emitting = false;
             RRWTireSkid.emitting = false;
         }
+    }
+    public void ClearCarPS()
+    {
+        RLWParticleSystem.Clear();
+        RRWParticleSystem.Clear();
+        RLWTireSkid.Clear();
+        RRWTireSkid.Clear();
     }
 
     // This function is used to recover the traction of the car when the user has stopped using the car's handbrake.

@@ -322,6 +322,7 @@ public class TutorialManager : Singleton<TutorialManager>
 
     private void Step1_2()
     {
+        AudioManager.Instance.PlaySFX(Sfx.raid);
         oneYearsLaterTMP.text = tm.GetCommons("OutbreakDay");
         oneYearsLaterTMP.rectTransform.localScale = 0.75f * Vector3.one;
         oneYearsLaterTMP.gameObject.SetActive(true);
@@ -352,6 +353,8 @@ public class TutorialManager : Singleton<TutorialManager>
 
     public void Step2_Before()
     {
+        GM.Instance.rainObj.SetActive(false);
+
         oneYearsLaterTMP.text = tm.GetCommons("OneYearLater");
         oneYearsLaterTMP.rectTransform.localScale = Vector3.zero;
         oneYearsLaterTMP.gameObject.SetActive(true);
@@ -386,7 +389,6 @@ public class TutorialManager : Singleton<TutorialManager>
         guideObjects[1].SetActive(true);
         shopGoal.SetActive(true);
         OrderManager.Instance.NewOrder_Tutorial();
-        GM.Instance.rainObj.SetActive(false);
 
         shopGate.alwaysClosed = true;
     }

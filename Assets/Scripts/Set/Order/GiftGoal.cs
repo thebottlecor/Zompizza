@@ -39,7 +39,7 @@ public class GiftGoal : MonoBehaviour
         else if (rand <= 5)
         {
             int tier = ResearchManager.Instance.globalEffect.tier; // 33% Æ¼¾î * 200 µ· 
-            GM.Instance.AddGold(200 * (tier + 1), GM.GetGoldSource.delivery);
+            GM.Instance.AddGold(100 * (tier + 1), GM.GetGoldSource.delivery);
             ingredientSprite.sprite = uiLib.gold;
             plusSprite.sprite = uiLib.plus[2 + tier];
         }

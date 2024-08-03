@@ -116,6 +116,9 @@ public class ExplorationManager : Singleton<ExplorationManager>
         if (GM.Instance.gold < cost) return;
         if (GM.Instance.loading) return;
         if (GM.Instance.midNight) return;
+        if (UIManager.Instance.shopUI.loading) return;
+        if (GameEventManager.Instance.eventPanel.activeSelf) return;
+        if (UIManager.Instance.shopUI.sosWarningObj.activeSelf) return;
 
         TutorialManager.Instance.SendExploration();
 
