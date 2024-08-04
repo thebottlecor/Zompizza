@@ -552,7 +552,7 @@ public class GM : Singleton<GM>
 
             darkCanvas.interactable = true;
 
-            if (day >= 10) // 单葛 铰府
+            if (day >= 9) // 单葛 铰府
             {
                 if (!CongratulationTriggered)
                 {

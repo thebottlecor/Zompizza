@@ -91,7 +91,8 @@ public class OrderGoal : MonoBehaviour
 
     private IEnumerator GiftBoxEffect()
     {
-        int rand = UnityEngine.Random.Range(1, giftGoals.Length + 1);
+        int min = Mathf.Min(giftGoals.Length + 1, 3 + 1);
+        int rand = UnityEngine.Random.Range(1, min);
         giftGoals.Shuffle();
 
         Sequence sequence = DOTween.Sequence().SetUpdate(false).SetAutoKill(true);
