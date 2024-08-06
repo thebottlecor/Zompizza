@@ -25,6 +25,15 @@ public class SteamWishlist : MonoBehaviour
 		if (pCallback.m_bActive != 0)
 		{
 			SteamOverlayActivated = true;
+
+			var um = UIManager.Instance;
+			if (um != null)
+			{
+				if (um.Panels_Inactive)
+				{
+					um.utilUI.OpenSettings();
+				}
+			}
 		}
 		else
 		{

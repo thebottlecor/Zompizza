@@ -46,7 +46,26 @@ public class GiftGoal : MonoBehaviour
         else
         {
             // 33% 아이템
-            int itemIdx = VillagerManager.Instance.RandomItemGet();
+
+            int somethingNeeds = VillagerManager.Instance.GetNeededThings();
+            int itemIdx;
+
+            if (somethingNeeds > -1)
+            {
+                if (UnityEngine.Random.Range(0, 2) == 1) // 50% 확률로 어떤 주민이 필요한 물품이 나옴
+                {
+                    itemIdx = VillagerManager.Instance.ItemGet(somethingNeeds);
+                }
+                else
+                {
+                    itemIdx = VillagerManager.Instance.RandomItemGet();
+                }
+            }
+            else
+            {
+                itemIdx = VillagerManager.Instance.RandomItemGet();
+            }
+
             ingredientSprite.sprite = uiLib.villagerItems[itemIdx];
             plusSprite.sprite = uiLib.plus[0];
         }

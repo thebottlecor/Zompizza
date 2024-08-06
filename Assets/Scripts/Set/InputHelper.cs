@@ -127,6 +127,7 @@ public class InputHelper : MonoBehaviour
         uiNaviHelper.Toggle_AlwaysShow_PadUIs(false);
         if (uiNaviHelper.ingame != null) uiNaviHelper.ingame.Toggle_AlwaysShow_PadUIs(false, uiNaviHelper.PadType);
         if (TutorialManager.Instance != null) TutorialManager.Instance.PadCheck();
+        if (GM.Instance != null) GM.Instance.RunIndicatorUpdate(); // 패드 업데이트
     }
     public void PadConnected()
     {
@@ -141,6 +142,7 @@ public class InputHelper : MonoBehaviour
     {
         var pad = Gamepad.current;
         if (TutorialManager.Instance != null) TutorialManager.Instance.PadCheck();
+        if (GM.Instance != null) GM.Instance.RunIndicatorUpdate(); // 패드 업데이트
         if (pad != null)
         {
             if (pad is UnityEngine.InputSystem.DualShock.DualShockGamepad)

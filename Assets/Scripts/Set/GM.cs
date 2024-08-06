@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using DG.Tweening;
 using System;
 using System.Text;
+using UnityEngine.InputSystem;
 
 public class GM : Singleton<GM>
 {
@@ -180,12 +181,15 @@ public class GM : Singleton<GM>
     public bool midNight;
     public ShopGate[] shopGates;
     public ZombieEnvSound zombieEnvSound;
+    public GameObject runIndicator;
+    public TextMeshProUGUI runIndicatorTMP;
 
     [Space(10f)]
     public GameObject returnIndicator;
     public GameObject rainObj;
 
     public static EventHandler<bool> EndTimeEvent; // true일시 마감
+    private SerializableDictionary<KeyMap, KeyMapping> HotKey => SettingManager.Instance.keyMappings;
     private TextManager tm => TextManager.Instance;
 
     protected override void AddListeners()
@@ -548,28 +552,14 @@ public class GM : Singleton<GM>
         sequence.AppendInterval(0.5f);
         sequence.AppendCallback(() =>
         {
-            VillagerManager.Instance.GetIncome();
-
             darkCanvas.interactable = true;
 
-            if (day >= 9) // 데모 승리
-            {
-                if (!CongratulationTriggered)
-                {
-                    Congratulation(true);
-                    AudioManager.Instance.PlaySFX(Sfx.complete);
-                    UIManager.Instance.shopUI.upgradeDirection.Show(1);
-                }
-            }
-            else
-            {
-                //UpdateAccountUI();
-                //accountObj.SetActive(true);
-                //UINaviHelper.Instance.SetFirstSelect();
+            //UpdateAccountUI();
+            //accountObj.SetActive(true);
+            //UINaviHelper.Instance.SetFirstSelect();
 
-                accountObj.SetActive(true);
-                StartCoroutine(UpdateAccountUI2());
-            }
+            accountObj.SetActive(true);
+            StartCoroutine(UpdateAccountUI2());
         });
 
         footBall.position = footBallPos;
@@ -845,7 +835,8 @@ public class GM : Singleton<GM>
         SetLight(1f, 24);
 
         ChangeMan(true);
-        UINaviHelper.Instance.ingame.UIUpdate(UINaviHelper.Instance.PadType);
+        RunIndicatorUpdate(); // 한밤중 업데이트
+        UINaviHelper.Instance.ingame.UIUpdate(UINaviHelper.Instance.PadType); // 한밤중 업데이트
         VillagerManager.Instance.SetMidNight(true);
         timeText.text = dayStr[2];
 
@@ -883,6 +874,18 @@ public class GM : Singleton<GM>
         //}
         //else
         //    warning_gameOver = false;
+
+
+        if (day >= 9) // 데모 승리
+        {
+            if (!CongratulationTriggered)
+            {
+                Congratulation(true);
+                AudioManager.Instance.PlaySFX(Sfx.complete);
+                UIManager.Instance.shopUI.upgradeDirection.Show(1);
+                return;
+            }
+        }
 
         warning_gameOver = false; // 평점 0점 이하 패배 조건 삭제
 
@@ -930,7 +933,8 @@ public class GM : Singleton<GM>
             SetTimer(0f);
             ChangeMan(false);
             midNight = false;
-            UINaviHelper.Instance.ingame.UIUpdate(UINaviHelper.Instance.PadType);
+            RunIndicatorUpdate(); // 한밤중 => 낮 업데이트
+            UINaviHelper.Instance.ingame.UIUpdate(UINaviHelper.Instance.PadType); // 한밤중 => 낮 업데이트
             VillagerManager.Instance.SetMidNight(false);
             DayStringUpdate();
 
@@ -1233,6 +1237,23 @@ public class GM : Singleton<GM>
             //researchPointsText[i].text = $"{displayResearchPoints:0.#}";
             researchPointsText[i].text = str;
         }
+    }
+
+    public void RunIndicatorUpdate()
+    {
+        if (midNight)
+        {
+            var pad = Gamepad.current;
+            if (pad == null)
+            {
+                runIndicatorTMP.text = $"{tm.GetCommons("Run")} ({HotKey[KeyMap.carBreak].GetName()})";
+                runIndicator.SetActive(true);
+            }
+            else
+                runIndicator.SetActive(false);
+        }
+        else
+            runIndicator.SetActive(false);
     }
     #endregion
 

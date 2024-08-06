@@ -205,18 +205,18 @@ public class VillagerWay : MonoBehaviour
             }
 
             // 요구가 들어지지 않았고, 요구한 물건을 가지고 있지 않다면, 요구한 물건을 제외한 다른 물건으로 요구하는 것이 변경됨
-            if (VillagerManager.Instance.inventory[currentNeeds] == 0)
-            {
-                while (true)
-                {
-                    int other = UnityEngine.Random.Range(0, VillagerManager.Instance.inventory.Length);
-                    if (other != currentNeeds)
-                    {
-                        currentNeeds = other;
-                        break;
-                    }
-                }
-            }
+            //if (VillagerManager.Instance.inventory[currentNeeds] == 0)
+            //{
+            //    while (true)
+            //    {
+            //        int other = UnityEngine.Random.Range(0, VillagerManager.Instance.inventory.Length);
+            //        if (other != currentNeeds)
+            //        {
+            //            currentNeeds = other;
+            //            break;
+            //        }
+            //    }
+            //}
         }
         else
         {

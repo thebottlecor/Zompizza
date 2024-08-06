@@ -300,6 +300,8 @@ public class ShopUI : EventListener
                 pizzaBoys[2].gameObject.SetActive(true);
 
                 shopCloseBtn.gameObject.SetActive(false);
+
+                VillagerManager.Instance.GetIncome();
             }
         }
         else

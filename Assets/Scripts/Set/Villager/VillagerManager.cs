@@ -23,6 +23,7 @@ public class VillagerManager : Singleton<VillagerManager>
     public VillagerSosMiniUI miniUI;
 
     public bool sosShowed; // 다음날 초기화
+    public bool incomeReceived; // 다음날 초기화
 
     public MinimapRenderer minimap;
     public MinimapRenderer worldmap;
@@ -100,6 +101,7 @@ public class VillagerManager : Singleton<VillagerManager>
     private void ResetStat()
     {
         sosShowed = false;
+        incomeReceived = false;
         currentSosIdx = -1;
         miniUI.Hide();
     }
@@ -148,6 +150,12 @@ public class VillagerManager : Singleton<VillagerManager>
         UpdateSlots();
         return rand;
     }
+    public int ItemGet(int idx)
+    {
+        inventory[idx] += 1;
+        UpdateSlots();
+        return idx;
+    }
 
     public void UpdateSlots()
     {
@@ -167,6 +175,10 @@ public class VillagerManager : Singleton<VillagerManager>
 
     public void GetIncome()
     {
+        if (incomeReceived) return;
+
+        incomeReceived = true;
+
         int villager_income = 0;
         for (int i = 0; i < villagers.Length; i++)
         {
@@ -174,6 +186,11 @@ public class VillagerManager : Singleton<VillagerManager>
             {
                 villager_income += villagers[i].Income();
             }
+        }
+
+        if (villager_income > 0)
+        {
+            AudioManager.Instance.PlaySFX(Sfx.money);
         }
         GM.Instance.AddGold(villager_income, GM.GetGoldSource.villager);
     }
@@ -295,5 +312,32 @@ public class VillagerManager : Singleton<VillagerManager>
         {
             villagerManagerObjs[i].UpdateUI();
         }
+    }
+
+    public int GetNeededThings()
+    {
+        List<int> needthings = new List<int>();
+
+        for (int i = 0; i < villagers.Length; i++)
+        {
+            if (villagers[i].recruited && !villagers[i].expelled)
+            {
+                int needs = villagers[i].currentNeeds;
+                if (needs > -1) // 원하는 것이 있음
+                {
+                    if (inventory[needs] == 0) // 그것을 가지고 있지 않음
+                    {
+                        needthings.Add(needs);
+                    }
+                }
+            }
+        }
+
+        if (needthings != null && needthings.Count > 0)
+        {
+            needthings.Shuffle();
+            return needthings[0];
+        }
+        return -1;
     }
 }
