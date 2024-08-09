@@ -13,6 +13,7 @@ public class CameraFollow2 : MonoBehaviour {
 	public float lookSpeed = 5;
 	//Vector3 initialCameraPosition;
 	//Vector3 initialCarPosition;
+	private Vector3 initCP;
 	public Vector3 absoluteInitCameraPosition;
 
 	public Transform camTransform;
@@ -27,6 +28,7 @@ public class CameraFollow2 : MonoBehaviour {
     private void Awake()
     {
 		layerMask = 1 << LayerMask.NameToLayer("EnvironmentObject") | 1 << LayerMask.NameToLayer("EnvironmentRocket");
+		initCP = absoluteInitCameraPosition;
 		uiCam.gameObject.SetActive(false);
 	}
 
@@ -148,5 +150,23 @@ public class CameraFollow2 : MonoBehaviour {
     {
 		yield return CoroutineHelper.WaitForSecondsRealtime(duration);
 		pad.SetMotorSpeeds(0f, 0f);
+    }
+
+	public void DriftCameraMove(bool drifting, float xVel)
+    {
+		if (drifting)
+		{
+			Vector3 newCP = absoluteInitCameraPosition;
+			float newY = Mathf.Lerp(absoluteInitCameraPosition.y, absoluteInitCameraPosition.y - Mathf.Abs(xVel), Time.deltaTime);
+			newY = Mathf.Max(newY, initCP.y * 0.9f);
+			newCP.y = newY;
+			absoluteInitCameraPosition = newCP;
+		}
+		else
+        {
+			Vector3 newCP = absoluteInitCameraPosition;
+			newCP.y = Mathf.Lerp(newCP.y, initCP.y, Time.deltaTime * 8f);
+			absoluteInitCameraPosition = newCP;
+        }
     }
 }

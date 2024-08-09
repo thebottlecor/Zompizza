@@ -1123,6 +1123,8 @@ public class PlayerController : PlayerControllerData
             RLWTireSkid.emitting = false;
             RRWTireSkid.emitting = false;
         }
+
+        cam.DriftCameraMove(isDrifting, localVelocityX);
     }
     public void ClearCarPS()
     {
