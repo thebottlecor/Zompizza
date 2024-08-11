@@ -58,4 +58,13 @@ public class Catway : MonoBehaviour
 
         animator.SetBool("Walk", walk);
     }
+
+    public void Cat_Direction()
+    {
+        transform.position = wayPoints[0].position;
+        targetWayPoint = 1;
+        dealyToTargetTimer = 0f;
+        destinationSetter.target = wayPoints[targetWayPoint];
+        ai.isStopped = true;
+    }
 }

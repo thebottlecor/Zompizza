@@ -9,6 +9,10 @@ public class Act1_Camera : MonoBehaviour
     public CameraFollow2 cameraFollow2;
     public Transform[] innerCameraTarget;
 
+    public GameObject carObj;
+    public GameObject hideRocket;
+    public Catway cat;
+
 
     public float[] interval;
 
@@ -22,6 +26,10 @@ public class Act1_Camera : MonoBehaviour
 
     public void Direction()
     {
+        cat.Cat_Direction();
+        hideRocket.SetActive(false);   
+        carObj.SetActive(false);
+
         Sequence sequence = DOTween.Sequence().SetUpdate(true);
 
         sequence.AppendCallback(() =>
