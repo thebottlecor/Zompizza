@@ -48,17 +48,32 @@ public class GameEventManager : Singleton<GameEventManager>
     {
         tmpCompleted = false;
         int count = 0;
+        int typingCount = 0;
 
         while (count != text.Length)
         {
             if (count < text.Length)
             {
-                dialogueText.text += text[count].ToString();
-                count++;
-            }
+                if (text[count].Equals('<'))
+                {
+                    int index = text.IndexOf('>', count);
+                    if (index >= 0)
+                    {
+                        int length = index - count + 1;
+                        dialogueText.text += text.Substring(count, length);
+                        count += length;
+                    }
+                }
+                else
+                {
+                    dialogueText.text += text[count].ToString();
+                    count++;
+                    typingCount++;
 
-            if (count % 4 == 0)
-                AudioManager.Instance.PlaySFX(Sfx.inputFieldStart);
+                    if (typingCount % 4 == 0)
+                        AudioManager.Instance.PlaySFX(Sfx.inputFieldStart);
+                }
+            }
 
             yield return CoroutineHelper.WaitForSecondsRealtime(typingSpeed);
         }

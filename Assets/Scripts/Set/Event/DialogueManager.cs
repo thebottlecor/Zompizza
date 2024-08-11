@@ -36,6 +36,17 @@ public class DialogueManager : Singleton<DialogueManager>
         Init();
     }
 
+    private void Update()
+    {
+        if (!tmpCompleted) return;
+        if (!nextBtn.gameObject.activeSelf) return;
+
+        if (Input.anyKeyDown)
+        {
+            AcceptTrigger();
+        }
+    }
+
     IEnumerator TextPrint(string text, float delay, Action finishAction)
     {
         tmpCompleted = false;
@@ -61,11 +72,11 @@ public class DialogueManager : Singleton<DialogueManager>
                     dialogueText.text += text[count].ToString();
                     count++;
                     typingCount++;
+
+                    if (typingCount % 4 == 0)
+                        AudioManager.Instance.PlaySFX(Sfx.inputFieldStart);
                 }
             }
-
-            if (typingCount % 4 == 0)
-                AudioManager.Instance.PlaySFX(Sfx.inputFieldStart);
 
             yield return CoroutineHelper.WaitForSecondsRealtime(typingSpeed);
         }
@@ -118,6 +129,7 @@ public class DialogueManager : Singleton<DialogueManager>
     public void AcceptTrigger()
     {
         if (!tmpCompleted) return;
+        if (!nextBtn.gameObject.activeSelf) return;
 
         nextBtn.gameObject.SetActive(false);
         UINaviHelper.Instance.SetFirstSelect();
