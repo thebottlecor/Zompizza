@@ -32,7 +32,7 @@ public class Act6_Capsule : MonoBehaviour
     {
         for (int i = 0; i < animators.Length; i++)
         {
-            animators[i].SetBool("Walk", true);
+            animators[i].SetBool(TextManager.WalkId, true);
         }
     }
 

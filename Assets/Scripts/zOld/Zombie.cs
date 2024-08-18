@@ -59,8 +59,8 @@ public class Zombie : MonoBehaviour
             }
         }
 
-        animator.SetBool("Walk", walk);
-        animator.SetBool("Attack", attack);
+        animator.SetBool(TextManager.WalkId, walk);
+        animator.SetBool(TextManager.AttackId, attack);
 
         // 플레이어에게 Attacked 속성을 붙여서, Attacked * damage 만큼 1초당 받게 하기
     }

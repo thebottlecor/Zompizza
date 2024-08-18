@@ -111,7 +111,7 @@ public class VillagerWay : MonoBehaviour
         bool walk = false;
         if (dealyToTargetTimer > 0f)
         {
-            animator.SetBool("Walk", walk);
+            animator.SetBool(TextManager.WalkId, walk);
             dealyToTargetTimer -= Time.deltaTime;
             return;
         }
@@ -127,7 +127,7 @@ public class VillagerWay : MonoBehaviour
             }
         }
 
-        animator.SetBool("Walk", walk);
+        animator.SetBool(TextManager.WalkId, walk);
     }
 
     public void MidNight(bool on)
@@ -136,7 +136,7 @@ public class VillagerWay : MonoBehaviour
 
         if (on)
         {
-            animator.SetBool("Walk", false);
+            animator.SetBool(TextManager.WalkId, false);
             ai.canMove = false;
             (ai as FollowerEntity).updateRotation = false;
             StartCoroutine(ResetPos());

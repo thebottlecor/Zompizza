@@ -6,8 +6,10 @@ public class ZombiePooler : Singleton<ZombiePooler>
 {
 
     public Transform zombieSpawnParent;
+    public ZombieHordeSpawner[] hordeSpawners;
 
     public GameObject zombieSource;
+    public GameObject zombieSourceHorde;
     public GameObject zombieSourceHeavy;
     public GameObject zombieSourceFast;
     public GameObject zombieSourceRange;
@@ -16,6 +18,9 @@ public class ZombiePooler : Singleton<ZombiePooler>
 
     public int maxZombie = 500;
     public List<ZombieBase> zombiesPool;
+
+    public int maxZombieHorde = 50;
+    public List<ZombieBase> zombieHordePool;
 
     public int maxZombieHeavy = 10;
     public List<ZombieBase> zombiesPoolHeavy;
@@ -67,6 +72,7 @@ public class ZombiePooler : Singleton<ZombiePooler>
     private void Start()
     {
         Pool_Init(ref zombiesPool, maxZombie, zombieSource);
+        Pool_Init(ref zombieHordePool, maxZombieHorde, zombieSourceHorde);
         Pool_Init(ref zombiesPoolHeavy, maxZombieHeavy, zombieSourceHeavy);
         Pool_Init(ref zombiesPoolFast, maxZombieFast, zombieSourceFast);
         Pool_Init(ref zombiesPoolRange, maxZombieRange, zombieSourceRange);
@@ -80,6 +86,9 @@ public class ZombiePooler : Singleton<ZombiePooler>
         constraint.walkable = true;
         constraint.constrainTags = true;
         constraint.tags = (1 << 0);
+
+        hordeSpawners = FindObjectsOfType<ZombieHordeSpawner>(false);
+        ResetHordeSpawner();
     }
 
     private void Pool_Init(ref List<ZombieBase> list, int max, GameObject source)
@@ -190,11 +199,14 @@ public class ZombiePooler : Singleton<ZombiePooler>
     public void ZombieReset()
     {
         ResetSub(zombiesPool);
+        ResetSub(zombieHordePool);
         ResetSub(zombiesPoolHeavy);
         ResetSub(zombiesPoolFast);
         ResetSub(zombiesPoolRange);
         ResetSub(zombiesSubPoolRange);
         ResetSub(zombiesPoolSanta);
+
+        ResetHordeSpawner();
     }
     private void ResetSub<T>(List<T> list) where T : MonoBehaviour
     {
@@ -236,6 +248,35 @@ public class ZombiePooler : Singleton<ZombiePooler>
 
                     continue;
                 }
+
+                zom.transform.position = node;
+
+                int rand = UnityEngine.Random.Range(0, models_Info.Length);
+                zom.meshRenderer.material = models_Info[rand].material;
+                zom.meshRenderer.sharedMesh = models_Info[rand].mesh;
+                zom.StateReset();
+
+                zom.gameObject.SetActive(true);
+
+                count--;
+                if (count <= 0)
+                    break;
+            }
+        }
+    }
+
+    public void SpawnHorde(int count, BoxCollider rect)
+    {
+        if (count <= 0) count = maxZombieHorde;
+
+        int max = maxZombieHorde;
+
+        for (int i = 0; i < max; i++)
+        {
+            var zom = zombieHordePool[i];
+            if (!zom.gameObject.activeSelf)
+            {
+                Vector3 node = GetRandomPos(rect.bounds);
 
                 zom.transform.position = node;
 
@@ -404,12 +445,24 @@ public class ZombiePooler : Singleton<ZombiePooler>
         obj.SetActive(false);
     }
 
-    private Vector3 GetRandomPos(float max)
+    private Vector3 GetRandomPos(float maxAngle)
     {
-        float random = Random.Range(-1f, 1f) * max;
-        var v3 = Quaternion.AngleAxis(random, Vector3.up) * currentTarget.forward;
+        float randomAngle = Random.Range(-1f, 1f) * maxAngle;
+        var v3 = Quaternion.AngleAxis(randomAngle, Vector3.up) * currentTarget.forward;
         Vector3 newPos = currentTarget.transform.position + v3 * spawnDist;
         newPos.y = 0f;
+
+        var node = AstarPath.active.GetNearest(newPos, constraint).position;
+        return node;
+    }
+    private Vector3 GetRandomPos(Bounds bounds)
+    {
+        Vector3 newPos = new Vector3
+        (
+            Random.Range(bounds.min.x, bounds.max.x),
+            0f,
+            Random.Range(bounds.min.z, bounds.max.z)
+        );
 
         var node = AstarPath.active.GetNearest(newPos, constraint).position;
         return node;
@@ -446,5 +499,25 @@ public class ZombiePooler : Singleton<ZombiePooler>
         obj.SetActive(true);
         yield return CoroutineHelper.WaitForSeconds(3f);
         obj.SetActive(false);
+    }
+
+    public void ResetHordeSpawner()
+    {
+        // 매일 호드 스포너의 절반만 랜덤으로 활성화시킴
+
+        for (int i = 0; i < hordeSpawners.Length; i++)
+        {
+            hordeSpawners[i].triggered = false;
+        }
+
+        hordeSpawners.Shuffle();
+
+        int halfDisable = (hordeSpawners.Length / 2);
+        if (halfDisable >= hordeSpawners.Length) return;
+
+        for (int i = 0; i < halfDisable; i++)
+        {
+            hordeSpawners[i].triggered = true;
+        }
     }
 }

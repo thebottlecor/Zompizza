@@ -50,7 +50,7 @@ public class Zombie_Tutorial_Contact : ZombieBase
                 }
             }
         }
-        animator.SetBool("Walk", true);
+        animator.SetBool(TextManager.WalkId, true);
 
         if (contact)
         {

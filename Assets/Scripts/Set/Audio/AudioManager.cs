@@ -223,4 +223,6 @@ public enum Sfx
     raid,
     itemGet,
     Repair,
+    zombieHorde,
+    carAlarm,
 }

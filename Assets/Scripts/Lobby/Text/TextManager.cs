@@ -65,6 +65,11 @@ public class TextManager : Singleton<TextManager>
 
     public CultureInfo defaultCultureInfo = new CultureInfo("en-US");
 
+    public static readonly int WalkId = Animator.StringToHash("Walk");
+    public static readonly int AttackId = Animator.StringToHash("Attack");
+    public static readonly int ContactId = Animator.StringToHash("Contact");
+    public static readonly int RunId = Animator.StringToHash("Run");
+
     protected override void Awake()
     {
         base.Awake();

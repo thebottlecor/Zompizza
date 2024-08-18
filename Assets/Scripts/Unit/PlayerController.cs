@@ -47,7 +47,7 @@ public class PlayerController : PlayerControllerData
     /*
     IMPORTANT: The following variables should not be modified manually since their values are automatically given via script.
     */
-    Rigidbody carRigidbody; // Stores the car's rigidbody.
+    [HideInInspector] public Rigidbody carRigidbody; // Stores the car's rigidbody.
     float steeringAxis; // Used to know whether the steering wheel has reached the maximum value. It goes from -1 to 1.
     float throttleAxis; // Used to know whether the throttle has reached the maximum value. It goes from -1 to 1.
     float driftingAxis;
@@ -698,8 +698,8 @@ public class PlayerController : PlayerControllerData
             if (!stepSound.isPlaying)
                 stepSound.Play();
         }
-        manAnim.SetBool("Walk", walk);
-        manAnim.SetBool("Run", run);
+        manAnim.SetBool(TextManager.WalkId, walk);
+        manAnim.SetBool(TextManager.RunId, run);
     }
 
     public void ShakeOffAllZombies()

@@ -16,7 +16,6 @@ public abstract class ZombieBase : MonoBehaviour
     public SkinnedMeshRenderer meshRenderer;
     public GameObject shadow;
 
-
     public abstract void Hit(Vector3 hitPos, float speed, Vector3 knockbackDir);
 
     public abstract bool CloseContact(Vector3 hitPos);

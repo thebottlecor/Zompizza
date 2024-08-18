@@ -89,10 +89,9 @@ MonoBehaviour:
   meshRenderer: {fileID: 7066969436891953704}
   shadow: {fileID: 5551583242430911235}
   contactingPlayer: 0
-  range: 8
+  range: 64
   isInstall: 1
   isRun: 0
-  seeker: {fileID: 8468248722716590919}
 --- !u!54 &4240378934813003587
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -162,7 +161,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 1073741825
   shape:
-    radius: 0.4
+    radius: 0.6
     height: 2
   movement:
     follower:
@@ -1133,7 +1132,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: 92c93b80307cf90438fcfadd52eab10c, type: 2}
   m_CullingMode: 2
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 

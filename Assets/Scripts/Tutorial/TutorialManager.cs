@@ -424,6 +424,8 @@ public class TutorialManager : Singleton<TutorialManager>
     }
     public void ShopWindowHide()
     {
+        if (step == 100) return;
+
         switch (step)
         {
             case 5:
@@ -444,6 +446,8 @@ public class TutorialManager : Singleton<TutorialManager>
     }
     public void DayChanged()
     {
+        if (step == 100) return;
+
         int day = GM.Instance.day;
         switch (day)
         {
@@ -460,6 +464,8 @@ public class TutorialManager : Singleton<TutorialManager>
     }
     public void NoMoreEvented()
     {
+        if (step == 100) return;
+
         int day = GM.Instance.day;
         switch (day)
         {
@@ -579,6 +585,8 @@ public class TutorialManager : Singleton<TutorialManager>
 
     public void ManMove_Enter()
     {
+        if (step == 100) return;
+
         if (!manModeEntered)
         {
             guideObjects[11].SetActive(true);
@@ -586,6 +594,8 @@ public class TutorialManager : Singleton<TutorialManager>
     }
     public void ManMove_TalkEnd()
     {
+        if (step == 100) return;
+
         if (!manModeEntered)
         {
             guideObjects[11].SetActive(false);

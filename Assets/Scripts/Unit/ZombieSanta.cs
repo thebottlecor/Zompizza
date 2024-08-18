@@ -12,7 +12,7 @@ public class ZombieSanta : ZombieBase
     private float attackTimer;
     private float contactTimer;
 
-    public float range = 3.5f;
+    public float range = 3.5f; // 제곱 raw square magnitude
 
     public bool isRun;
 
@@ -40,8 +40,8 @@ public class ZombieSanta : ZombieBase
         bool walk = false;
         bool attack = false;
 
-        float dist = Vector3.Distance(ZombiePooler.Instance.currentTarget.transform.position, transform.position);
-        if (dist >= 100f)
+        float dist = (ZombiePooler.Instance.currentTarget.transform.position - transform.position).sqrMagnitude;
+        if (dist >= 10000f)
         {
             if (stealSomething)
             {
@@ -98,8 +98,7 @@ public class ZombieSanta : ZombieBase
                         //    }
                         //}
 
-                        if (ai.remainingDistance <= (ai as FollowerEntity).stopDistance 
-                            && dist <= range) // 적당한 거리 (거리에 민감)
+                        if (ai.remainingDistance <= (ai as FollowerEntity).stopDistance && dist <= range) // 적당한 거리 (거리에 민감)
                         {
                             contactingPlayer = true;
                             //transform.LookAt(ZombiePooler.Instance.target);
@@ -115,11 +114,11 @@ public class ZombieSanta : ZombieBase
             }
         }
 
-        animator.SetBool("Walk", walk);
-        animator.SetBool("Attack", attack);
+        animator.SetBool(TextManager.WalkId, walk);
+        animator.SetBool(TextManager.AttackId, attack);
 
         if (isRun)
-            animator.SetBool("Contact", contact);
+            animator.SetBool(TextManager.ContactId, contact);
 
         if (attack)
         {

@@ -75,8 +75,8 @@ public class ZombieTitle : MonoBehaviour
                 walk = true;
             }
 
-            animator.SetBool("Walk", walk);
-            animator.SetBool("Attack", attack);
+            animator.SetBool(TextManager.WalkId, walk);
+            animator.SetBool(TextManager.AttackId, attack);
         }
     }
 }

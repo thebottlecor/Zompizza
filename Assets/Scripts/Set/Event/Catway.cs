@@ -37,7 +37,7 @@ public class Catway : MonoBehaviour
         bool walk = false;
         if (dealyToTargetTimer > 0f)
         {
-            animator.SetBool("Walk", false);
+            animator.SetBool(TextManager.WalkId, false);
             dealyToTargetTimer -= Time.deltaTime;
             return;
         }
@@ -56,7 +56,7 @@ public class Catway : MonoBehaviour
             }
         }
 
-        animator.SetBool("Walk", walk);
+        animator.SetBool(TextManager.WalkId, walk);
     }
 
     public void Cat_Direction()

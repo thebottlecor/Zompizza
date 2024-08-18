@@ -9,10 +9,11 @@ public class Zombie2 : ZombieBase
 {
 
     public bool contactingPlayer;
+    private bool contactingPrev;
     private float attackTimer;
     private float contactTimer;
 
-    public float range = 3.5f;
+    public float range = 3.5f; // 제곱 raw square magnitude
     public bool isInstall;
     private bool installUsed;
 
@@ -36,11 +37,10 @@ public class Zombie2 : ZombieBase
     void Update()
     {
         contactingPlayer = false;
-        bool walk = false;
-        bool attack = false;
 
-        float dist = Vector3.Distance(ZombiePooler.Instance.currentTarget.transform.position, transform.position);
-        if (dist >= 100f)
+        //float dist = Vector3.Distance(ZombiePooler.Instance.currentTarget.transform.position, transform.position);
+        float dist = (ZombiePooler.Instance.currentTarget.transform.position - transform.position).sqrMagnitude;
+        if (dist >= 10000f)
         {
             gameObject.SetActive(false);
             return;
@@ -48,72 +48,25 @@ public class Zombie2 : ZombieBase
 
         if (!dead)
         {
-            //if (!contact)
-            //{
-            //    float dist = Vector3.Distance(ZombiePooler.Instance.target.transform.position, transform.position);
-            //    //if (dist >= 100f) // 그리드 범위는 200f (절반이 100)
-            //    //{
-            //    //    ai.isStopped = true;
-            //    //    ai.canMove = false;
-            //    //    destinationSetter.enabled = false;
-            //    //}
-            //    //else
-            //    //{
-            //    //    ai.isStopped = false;
-            //    //    ai.canMove = true;
-            //    //    destinationSetter.enabled = true;
-            //    //}
-
-            //    if (dist >= 100f)
-            //    {
-            //        this.gameObject.SetActive(false);
-            //        return;
-            //    }
-            //}
-            // 나중에는 좀비들을 리스트 안에 넣고, 더 멀리 떨어진 좀비들은 아예 비활성화 시키자
-
-            walk = true; // 항상 true
-
             if (ZombiePooler.Instance.currentTarget != null)
             {
                 if (!ai.isStopped)
                 {
-                    walk = true;
-
                     if (!ai.pathPending)
                     {
-                        //if (ai.remainingDistance <= (ai as FollowerEntity).stopDistance)
-                        //{
-                        //    if (!ai.hasPath || ai.velocity.magnitude == 0f)
-                        //    {
-                        //        contactingPlayer = true;
-                        //    }
-                        //}
-
-                        if (ai.remainingDistance <= (ai as FollowerEntity).stopDistance 
-                            && dist <= range) // 적당한 거리 (거리에 민감)
+                        if (ai.remainingDistance <= (ai as FollowerEntity).stopDistance && dist <= range) // 적당한 거리 (거리에 민감)
                         {
                             contactingPlayer = true;
-                            //transform.LookAt(ZombiePooler.Instance.target);
                             if (attackTimer < 0.5f) attackTimer = 0.5f; // 근접 공격의 경우, 붙는 것보다 공격속도가 2배 빠름 (어차피 유효타가 적으므로)
                         }
-                    }
-
-                    if (contactingPlayer)
-                    {
-                        attack = true;
                     }
                 }
             }
         }
 
-        animator.SetBool("Walk", walk);
-        animator.SetBool("Attack", attack);
+        SetAttackAnim();
 
-        if (isRun)
-            animator.SetBool("Contact", contact);
-
-        if (attack)
+        if (contactingPlayer)
         {
             if (isInstall)
             {
@@ -191,7 +144,7 @@ public class Zombie2 : ZombieBase
         rigid.isKinematic = true;
         coll.enabled = false;
 
-        contact = true;
+        SetContact(true);
         shadow.SetActive(false);
 
         this.transform.SetParent(ZombiePooler.Instance.currentTarget);
@@ -225,7 +178,7 @@ public class Zombie2 : ZombieBase
         rigid.isKinematic = false;
         coll.enabled = true;
 
-        contact = false;
+        SetContact(false);
 
         Vector3 expPos = transform.position;
 
@@ -252,18 +205,80 @@ public class Zombie2 : ZombieBase
         ai.isStopped = false;
         ai.canMove = false;
 
-        contact = false;
+        SetContact(false);
         installUsed = false;
 
         attackTimer = 0f;
         contactTimer = 0f;
+
+        contactingPrev = false;
+        CoroutineHelper.StartCoroutine(SetWalk());
+    }
+    private IEnumerator SetWalk()
+    {
+        yield return null;
+        // 항상 true
+        animator.SetBool(TextManager.WalkId, true);
     }
 
     public override void DeadHandle()
     {
         base.DeadHandle();
 
+        animator.SetBool(TextManager.WalkId, false);
+
         if (!GM.Instance.EndTime && OrderManager.Instance.IsDelivering())
             GM.Instance.AddGold(1, GM.GetGoldSource.zombie);
+
+        CoroutineHelper.StartCoroutine(Reanimate());
+    }
+
+    private IEnumerator Reanimate()
+    {
+        yield return CoroutineHelper.WaitForSeconds(2.5f);
+        if (gameObject.activeSelf && dead)
+        {
+            while (transform.position.y >= 0.33f)
+            {
+                if (!gameObject.activeSelf || !dead)
+                {
+                    yield break;
+                }
+                yield return null;
+            }
+
+            gameObject.SetActive(false);
+            yield return null;
+
+            StateReset();
+            gameObject.SetActive(true);
+        }
+    }
+
+    protected void SetContact(bool on)
+    {
+        contact = on;
+
+        if (isRun)
+            animator.SetBool(TextManager.ContactId, contact);
+    }
+    protected void SetAttackAnim()
+    {
+        if (contactingPlayer)
+        {
+            if (!contactingPrev)
+            {
+                animator.SetBool(TextManager.AttackId, true);
+                contactingPrev = true;
+            }
+        }
+        else
+        {
+            if (contactingPrev)
+            {
+                animator.SetBool(TextManager.AttackId, false);
+                contactingPrev = false;
+            }
+        }
     }
 }
