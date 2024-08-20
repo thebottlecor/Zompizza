@@ -246,7 +246,7 @@ public class ZombieSanta : ZombieBase
     {
         base.DeadHandle();
 
-        if (!GM.Instance.EndTime && OrderManager.Instance.IsDelivering())
-            GM.Instance.AddGold(1, GM.GetGoldSource.zombie);
+        //if (!GM.Instance.EndTime && OrderManager.Instance.IsDelivering())
+        //    GM.Instance.AddGold(1, GM.GetGoldSource.zombie);
     }
 }

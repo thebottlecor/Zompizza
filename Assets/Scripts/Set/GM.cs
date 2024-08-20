@@ -105,7 +105,7 @@ public class GM : Singleton<GM>
         explore,
         villager,
         upgrade,
-        zombie,
+        //zombie,
         //loan,
     }
     public enum GetRatingSource

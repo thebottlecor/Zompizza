@@ -6,7 +6,10 @@ public class ZombiePooler : Singleton<ZombiePooler>
 {
 
     public Transform zombieSpawnParent;
-    public ZombieHordeSpawner[] hordeSpawners;
+    private HordeSpawner[] hordeSpawners;
+    private RollingStoneSpawner[] rollingStoneSpawner;
+    private FallingTree[] fallingTrees;
+    private SpringJump[] springJumps;
 
     public GameObject zombieSource;
     public GameObject zombieSourceHorde;
@@ -16,27 +19,32 @@ public class ZombiePooler : Singleton<ZombiePooler>
     public GameObject ZombieSubSourceRange;
     public GameObject zombieSourceSanta;
 
+    public GameObject RollingStoneSource;
+
     public int maxZombie = 500;
-    public List<ZombieBase> zombiesPool;
+    private List<ZombieBase> zombiesPool;
 
     public int maxZombieHorde = 50;
-    public List<ZombieBase> zombieHordePool;
+    private List<ZombieBase> zombieHordePool;
 
     public int maxZombieHeavy = 10;
-    public List<ZombieBase> zombiesPoolHeavy;
+    private List<ZombieBase> zombiesPoolHeavy;
 
     public int maxZombieFast = 10;
-    public List<ZombieBase> zombiesPoolFast;
+    private List<ZombieBase> zombiesPoolFast;
 
     public int maxZombieRange = 5;
-    public List<ZombieBase> zombiesPoolRange;
-    public List<GameObject> zombiesSubPoolRange;
+    private List<ZombieBase> zombiesPoolRange;
+    private List<GameObject> zombiesSubPoolRange;
 
     public int maxZombieSanta = 1;
-    public List<ZombieBase> zombiesPoolSanta;
+    private List<ZombieBase> zombiesPoolSanta;
 
     public int maxHitEffect = 10;
-    public List<GameObject> hitEffectPool;
+    private List<GameObject> hitEffectPool;
+
+    public int maxRollingStone = 5;
+    private List<RollingStone> rollingStonePool;
 
     [Header("전역 설정")]
     public Transform currentTarget;
@@ -47,7 +55,6 @@ public class ZombiePooler : Singleton<ZombiePooler>
     public float height;
 
     [Header("스폰 설정")]
-    public Vector3 spawnOffset;
     public float spawnDist;
     public int spawnCount = 1;
     public int spawnCountRandomAdd = 0;
@@ -80,6 +87,7 @@ public class ZombiePooler : Singleton<ZombiePooler>
         Pool_Init(ref zombiesPoolSanta, maxZombieSanta, zombieSourceSanta);
 
         Pool_Init(ref hitEffectPool, maxHitEffect, DataManager.Instance.effectLib.hitEffects);
+        Pool_Init(ref rollingStonePool, maxRollingStone, RollingStoneSource);
 
         constraint = Pathfinding.NNConstraint.None;
         constraint.constrainWalkability = true;
@@ -87,8 +95,11 @@ public class ZombiePooler : Singleton<ZombiePooler>
         constraint.constrainTags = true;
         constraint.tags = (1 << 0);
 
-        hordeSpawners = FindObjectsOfType<ZombieHordeSpawner>(false);
-        ResetHordeSpawner();
+        hordeSpawners = FindObjectsOfType<HordeSpawner>(false);
+        rollingStoneSpawner = FindObjectsOfType<RollingStoneSpawner>(false);
+        fallingTrees = FindObjectsOfType<FallingTree>(false);
+        springJumps = FindObjectsOfType<SpringJump>(false);
+        ResetSpawners();
     }
 
     private void Pool_Init(ref List<ZombieBase> list, int max, GameObject source)
@@ -98,6 +109,16 @@ public class ZombiePooler : Singleton<ZombiePooler>
         {
             var newZombie = Instantiate(source, zombieSpawnParent).GetComponent<ZombieBase>();
             newZombie.Init(currentTarget);
+            newZombie.gameObject.SetActive(false);
+            list.Add(newZombie);
+        }
+    }
+    private void Pool_Init<T>(ref List<T> list, int max, GameObject source) where T : MonoBehaviour
+    {
+        list = new List<T>(max);
+        for (int i = 0; i < max; i++)
+        {
+            var newZombie = Instantiate(source, zombieSpawnParent).GetComponent<T>();
             newZombie.gameObject.SetActive(false);
             list.Add(newZombie);
         }
@@ -206,7 +227,10 @@ public class ZombiePooler : Singleton<ZombiePooler>
         ResetSub(zombiesSubPoolRange);
         ResetSub(zombiesPoolSanta);
 
-        ResetHordeSpawner();
+        ResetSub(rollingStonePool);
+
+        ResetSpawners();
+
     }
     private void ResetSub<T>(List<T> list) where T : MonoBehaviour
     {
@@ -248,35 +272,6 @@ public class ZombiePooler : Singleton<ZombiePooler>
 
                     continue;
                 }
-
-                zom.transform.position = node;
-
-                int rand = UnityEngine.Random.Range(0, models_Info.Length);
-                zom.meshRenderer.material = models_Info[rand].material;
-                zom.meshRenderer.sharedMesh = models_Info[rand].mesh;
-                zom.StateReset();
-
-                zom.gameObject.SetActive(true);
-
-                count--;
-                if (count <= 0)
-                    break;
-            }
-        }
-    }
-
-    public void SpawnHorde(int count, BoxCollider rect)
-    {
-        if (count <= 0) count = maxZombieHorde;
-
-        int max = maxZombieHorde;
-
-        for (int i = 0; i < max; i++)
-        {
-            var zom = zombieHordePool[i];
-            if (!zom.gameObject.activeSelf)
-            {
-                Vector3 node = GetRandomPos(rect.bounds);
 
                 zom.transform.position = node;
 
@@ -455,7 +450,7 @@ public class ZombiePooler : Singleton<ZombiePooler>
         var node = AstarPath.active.GetNearest(newPos, constraint).position;
         return node;
     }
-    private Vector3 GetRandomPos(Bounds bounds)
+    public Vector3 GetRandomPos(Bounds bounds)
     {
         Vector3 newPos = new Vector3
         (
@@ -475,7 +470,7 @@ public class ZombiePooler : Singleton<ZombiePooler>
     {
         if (hitEffectCooldown > 0f) return;
 
-        pos.y = 2f;
+        pos.y += 2f;
 
         for (int i = 0; i < maxHitEffect; i++)
         {
@@ -501,13 +496,19 @@ public class ZombiePooler : Singleton<ZombiePooler>
         obj.SetActive(false);
     }
 
-    public void ResetHordeSpawner()
+    public void ResetSpawners()
+    {
+        ResetHordeSpawner();
+        ResetRollingStoneSpawner();
+        ResetFallingTree();
+    }
+    private void ResetHordeSpawner()
     {
         // 매일 호드 스포너의 절반만 랜덤으로 활성화시킴
 
         for (int i = 0; i < hordeSpawners.Length; i++)
         {
-            hordeSpawners[i].triggered = false;
+            hordeSpawners[i].ResetStat();
         }
 
         hordeSpawners.Shuffle();
@@ -518,6 +519,75 @@ public class ZombiePooler : Singleton<ZombiePooler>
         for (int i = 0; i < halfDisable; i++)
         {
             hordeSpawners[i].triggered = true;
+        }
+    }
+    private void ResetRollingStoneSpawner()
+    {
+        for (int i = 0; i < rollingStoneSpawner.Length; i++)
+        {
+            rollingStoneSpawner[i].ResetStat();
+        }
+    }
+    private void ResetFallingTree()
+    {
+        for (int i = 0; i < fallingTrees.Length; i++)
+        {
+            fallingTrees[i].ResetStat();
+        }
+    }
+
+    public void SpawnHorde(int count, BoxCollider rect)
+    {
+        if (count <= 0) count = maxZombieHorde;
+
+        int max = maxZombieHorde;
+
+        for (int i = 0; i < max; i++)
+        {
+            var zom = zombieHordePool[i];
+            if (!zom.gameObject.activeSelf)
+            {
+                Vector3 node = GetRandomPos(rect.bounds);
+
+                zom.transform.position = node;
+
+                int rand = UnityEngine.Random.Range(0, models_Info.Length);
+                zom.meshRenderer.material = models_Info[rand].material;
+                zom.meshRenderer.sharedMesh = models_Info[rand].mesh;
+                zom.StateReset();
+
+                zom.gameObject.SetActive(true);
+
+                count--;
+                if (count <= 0)
+                    break;
+            }
+        }
+    }
+
+    public void SpawnRollingStone(int count, BoxCollider rect)
+    {
+        if (count <= 0) count = maxZombieHorde;
+
+        int max = maxRollingStone;
+
+        for (int i = 0; i < max; i++)
+        {
+            var zom = rollingStonePool[i];
+            if (!zom.gameObject.activeSelf)
+            {
+                Vector3 node = GetRandomPos(rect.bounds);
+
+                zom.transform.position = node;
+
+                zom.gameObject.SetActive(true);
+
+                zom.PushToPlayer();
+
+                count--;
+                if (count <= 0)
+                    break;
+            }
         }
     }
 }

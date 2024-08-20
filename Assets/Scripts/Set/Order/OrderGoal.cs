@@ -76,7 +76,7 @@ public class OrderGoal : MonoBehaviour
         AudioManager.Instance.PlaySFX(Sfx.complete);
         var source = DataManager.Instance.effectLib.dollarBoomEffect;
         Vector3 pos = this.transform.position;
-        pos.y = 4f;
+        pos.y += 4f;
         var obj = Instantiate(source, pos, Quaternion.identity);
         Destroy(obj, 5f);
         Hide();
@@ -102,7 +102,7 @@ public class OrderGoal : MonoBehaviour
             {
                 giftDummy[i].SetActive(true);
                 Vector3 pos = transform.position;
-                pos.y = 1f;
+                pos.y += 1f;
                 giftDummy[i].transform.position = pos;
 
                 giftDummy[i].transform.DOMoveX(giftGoals[i].transform.position.x, 0.75f).SetEase(Ease.InQuad);

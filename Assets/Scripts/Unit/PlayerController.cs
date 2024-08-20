@@ -570,6 +570,7 @@ public class PlayerController : PlayerControllerData
 
             ////Debug.Log(Input.GetAxis("Vertical"));
             ////Debug.Log(Input.GetAxis("Mouse X"));
+            ///
 
             if (forward)
             {
@@ -1113,7 +1114,7 @@ public class PlayerController : PlayerControllerData
             RRWParticleSystem.Stop();
         }
 
-        if ((isTractionLocked || Mathf.Abs(localVelocityX) > 5f) && Mathf.Abs(carSpeed) > 12f)
+        if ((isTractionLocked || Mathf.Abs(localVelocityX) > 5f) && Mathf.Abs(carSpeed) > 12f && transform.position.y < 0.5f)
         {
             RLWTireSkid.emitting = true;
             RRWTireSkid.emitting = true;

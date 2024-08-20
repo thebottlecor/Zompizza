@@ -225,4 +225,7 @@ public enum Sfx
     Repair,
     zombieHorde,
     carAlarm,
+    fallingTree,
+    rollingStone,
+    springJump,
 }

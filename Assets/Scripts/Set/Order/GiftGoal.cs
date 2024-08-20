@@ -93,7 +93,7 @@ public class GiftGoal : MonoBehaviour
         AudioManager.Instance.PlaySFX(Sfx.itemGet);
         var source = DataManager.Instance.effectLib.appleBlastEffect;
         Vector3 pos = this.transform.position;
-        pos.y = 2f;
+        pos.y += 2f;
         var obj = Instantiate(source, pos, Quaternion.identity);
         Destroy(obj, 2f);
         Hide();

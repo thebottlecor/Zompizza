@@ -46,7 +46,7 @@ public class HiddenRecipeGoal : MonoBehaviour
         AudioManager.Instance.PlaySFX(Sfx.visionRecipeFound);
         var source = DataManager.Instance.effectLib.goldCoinBlastEffect;
         Vector3 pos = this.transform.position;
-        pos.y = 4f;
+        pos.y += 4f;
         var obj = Instantiate(source, pos, Quaternion.identity);
         Destroy(obj, 5f);
 

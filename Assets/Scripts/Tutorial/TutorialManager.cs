@@ -28,7 +28,6 @@ public class TutorialManager : Singleton<TutorialManager>
 
     [Header("특수 : 튜토리얼")]
     public Zombie_Tutorial_Contact[] tutorialZombie;
-    public GameObject trainingCenterSpawnBlock;
     public GameObject trainingCenter;
     public GameObject prologueObj;
     public Transform trainingCenterPos;
@@ -283,7 +282,6 @@ public class TutorialManager : Singleton<TutorialManager>
 
     private void Step1()
     {
-        trainingCenterSpawnBlock.SetActive(false);
         var scanGraph = AstarPath.active.data.recastGraph;
         ZombiePooler.Instance.astarPath.Scan(scanGraph);
         StartCoroutine(SpawnDelay());

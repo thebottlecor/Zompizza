@@ -227,8 +227,8 @@ public class Zombie2 : ZombieBase
 
         animator.SetBool(TextManager.WalkId, false);
 
-        if (!GM.Instance.EndTime && OrderManager.Instance.IsDelivering())
-            GM.Instance.AddGold(1, GM.GetGoldSource.zombie);
+        //if (!GM.Instance.EndTime && OrderManager.Instance.IsDelivering())
+        //    GM.Instance.AddGold(1, GM.GetGoldSource.zombie);
 
         CoroutineHelper.StartCoroutine(Reanimate());
     }

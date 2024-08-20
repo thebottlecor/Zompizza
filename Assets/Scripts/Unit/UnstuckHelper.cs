@@ -54,7 +54,7 @@ public class UnstuckHelper : MonoBehaviour
                 break;
             }
 
-            var others = Physics.OverlapSphere(node, radius, 1 << LayerMask.NameToLayer("PathfindingBlock"));
+            var others = Physics.OverlapSphere(node, radius, 1 << LayerMask.NameToLayer("PathfindingBlock") | 1 << LayerMask.NameToLayer("Ramp"));
             
             //for (int i = 0; i < 360; i++)
             //{
