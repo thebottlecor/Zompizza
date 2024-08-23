@@ -96,8 +96,8 @@ MonoBehaviour:
     lightingModel: 0
     texturingModel: 1
     splatsModel: 1
-    origin: {x: -630, y: -2.515, z: -630}
-    tileSize: {x: 100, y: 5, z: 250}
+    origin: {x: -900, y: -2.515, z: -900}
+    tileSize: {x: 900, y: 5, z: 900}
     tileCountX: 2
     tileCountZ: 2
     groupId: 0
