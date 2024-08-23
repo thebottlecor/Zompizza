@@ -22,6 +22,8 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: TerrainMaterial_db2fe2f6-5a6e-46f9-8d44-8f9eba0fe7b8
   m_Shader: {fileID: 4800000, guid: 393b4ce2c53aaa243a4d40cf0b012ec0, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -30,6 +32,7 @@ Material:
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -38,18 +41,15 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ColorBlend:
-        m_Texture: {fileID: -4315321166537815149, guid: 9213dfcf6003cb44f87e44d234a793a0,
-          type: 2}
+        m_Texture: {fileID: -4315321166537815149, guid: 9213dfcf6003cb44f87e44d234a793a0, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ColorByHeight:
-        m_Texture: {fileID: -5310262744341438001, guid: 9213dfcf6003cb44f87e44d234a793a0,
-          type: 2}
+        m_Texture: {fileID: -5310262744341438001, guid: 9213dfcf6003cb44f87e44d234a793a0, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ColorByNormal:
-        m_Texture: {fileID: -2491679776055610173, guid: 9213dfcf6003cb44f87e44d234a793a0,
-          type: 2}
+        m_Texture: {fileID: -2491679776055610173, guid: 9213dfcf6003cb44f87e44d234a793a0, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
@@ -69,12 +69,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 312323268460719155, guid: 9213dfcf6003cb44f87e44d234a793a0,
-          type: 2}
+        m_Texture: {fileID: 312323268460719155, guid: 9213dfcf6003cb44f87e44d234a793a0, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
-        m_Texture: {fileID: 2800000, guid: 47a91f8808e6f334a84f127655c54663, type: 3}
+        m_Texture: {fileID: 3689732380071167900, guid: 9213dfcf6003cb44f87e44d234a793a0, type: 2}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _OcclusionMap:

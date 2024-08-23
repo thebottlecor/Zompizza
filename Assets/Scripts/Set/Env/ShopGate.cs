@@ -18,18 +18,29 @@ public class ShopGate : MonoBehaviour
     private bool sfxPlayed;
 
     [Header("개발자 설정값")]
-    public Vector3 closedPos;
-    public Vector3 openPos;
+    private Vector3 closedPos;
+    private Vector3 closedPos_Right;
 
-    public Vector3 closedPos_Right;
-    public Vector3 openPos_Right;
+    public float openMove = 8.5f;
 
-    public Vector3 targetPos_Left;
-    public Vector3 targetPos_Right;
+    private Vector3 openPos;
+    private Vector3 openPos_Right;
+
+    private Vector3 targetPos_Left;
+    private Vector3 targetPos_Right;
 
     Vector3 vel = Vector3.zero;
     Vector3 vel2 = Vector3.zero;
     public float smoothTime = 0.1f;
+
+    private void Start()
+    {
+        closedPos = movingChild.position;
+        closedPos_Right = movingChild_Right.position;
+
+        openPos = closedPos + new Vector3(0f, 0f, openMove);
+        openPos_Right = closedPos_Right + new Vector3(0f, 0f, -1f * openMove);
+    }
 
     void Update()
     {

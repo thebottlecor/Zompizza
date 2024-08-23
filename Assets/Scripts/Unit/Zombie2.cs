@@ -238,7 +238,7 @@ public class Zombie2 : ZombieBase
         yield return CoroutineHelper.WaitForSeconds(2.5f);
         if (gameObject.activeSelf && dead)
         {
-            while (transform.position.y >= 0.33f)
+            while (transform.position.y >= Constant.spawnPosY)
             {
                 if (!gameObject.activeSelf || !dead)
                 {

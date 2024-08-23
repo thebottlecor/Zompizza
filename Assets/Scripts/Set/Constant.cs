@@ -64,4 +64,8 @@ public class Constant
     public const int maxVillager = 5;
     public const int villagerIncome = 500;
     public const float sos_timeLimit_1km = 1.5f * delivery_timeLimit_1km;
+
+    // 높이 관련
+
+    public const float spawnPosY = 3.5f;
 }

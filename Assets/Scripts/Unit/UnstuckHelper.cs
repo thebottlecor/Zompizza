@@ -81,7 +81,7 @@ public class UnstuckHelper : MonoBehaviour
             Vector3 otherPos = node + randDir;
 
             node = AstarPath.active.GetNearest(otherPos, Pathfinding.NNConstraint.Walkable).position;
-            node.y = 0f;
+            //node.y = 0f;
         }
     }
 }

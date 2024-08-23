@@ -71,11 +71,11 @@ MonoBehaviour:
     autoTangent: 1
     raycastLayers:
       serializedVersion: 2
-      m_Bits: 55
+      m_Bits: 64
     showTransformGizmos: 0
     livePreview:
       rampMaker: 1
-      pathPainter: 0
+      pathPainter: 1
       foliageSpawner: 1
       foliageRemover: 0
       objectSpawner: 1
@@ -96,8 +96,8 @@ MonoBehaviour:
     lightingModel: 0
     texturingModel: 1
     splatsModel: 1
-    origin: {x: -1590, y: 0, z: -1510}
-    tileSize: {x: 100, y: 10, z: 250}
+    origin: {x: -630, y: -2.515, z: -630}
+    tileSize: {x: 100, y: 5, z: 250}
     tileCountX: 2
     tileCountZ: 2
     groupId: 0

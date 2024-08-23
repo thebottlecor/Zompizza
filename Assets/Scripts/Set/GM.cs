@@ -315,8 +315,8 @@ public class GM : Singleton<GM>
         st.Append(tm.GetCommons("Explore")).AppendLine();
         st.Append(tm.GetCommons("Villager")).AppendLine();
         //st.Append(tm.GetCommons("Upgrade")).AppendLine();
-        st.Append(tm.GetCommons("Spaceship")).AppendLine();
-        st.Append(tm.GetCommons("Zombie"));
+        st.Append(tm.GetCommons("Spaceship"));
+        //st.Append(tm.GetCommons("Zombie"));
         //.AppendLine();
         //st.Append(tm.GetCommons("Loan")).AppendLine();
 

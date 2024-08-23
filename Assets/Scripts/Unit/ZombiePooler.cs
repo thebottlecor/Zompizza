@@ -445,9 +445,10 @@ public class ZombiePooler : Singleton<ZombiePooler>
         float randomAngle = Random.Range(-1f, 1f) * maxAngle;
         var v3 = Quaternion.AngleAxis(randomAngle, Vector3.up) * currentTarget.forward;
         Vector3 newPos = currentTarget.transform.position + v3 * spawnDist;
-        newPos.y = 0f;
+        newPos.y = Constant.spawnPosY;
 
         var node = AstarPath.active.GetNearest(newPos, constraint).position;
+        node.y = Constant.spawnPosY;
         return node;
     }
     public Vector3 GetRandomPos(Bounds bounds)
@@ -455,11 +456,12 @@ public class ZombiePooler : Singleton<ZombiePooler>
         Vector3 newPos = new Vector3
         (
             Random.Range(bounds.min.x, bounds.max.x),
-            0f,
+            Constant.spawnPosY,
             Random.Range(bounds.min.z, bounds.max.z)
         );
 
         var node = AstarPath.active.GetNearest(newPos, constraint).position;
+        node.y = Constant.spawnPosY;
         return node;
     }
 
