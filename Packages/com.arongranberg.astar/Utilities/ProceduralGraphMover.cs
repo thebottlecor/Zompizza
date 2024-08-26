@@ -126,7 +126,8 @@ namespace Pathfinding {
 				// For grid graphs, one unit along the X and Z axes in graph space equals the distance between two nodes.
 				// The Y axis still uses world units
 				var graphCenterInGraphSpace = gg.transform.InverseTransform(gg.center);
-				var targetPositionInGraphSpace = gg.transform.InverseTransform(target.position);
+				Vector3 targetPos = new Vector3(target.position.x, 0f, target.position.z);
+				var targetPositionInGraphSpace = gg.transform.InverseTransform(targetPos);
 
 				// Check the distance in graph space
 				// We only care about the X and Z axes since the Y axis is the "height" coordinate of the nodes (in graph space)
@@ -170,7 +171,8 @@ namespace Pathfinding {
 			} 
 			else if (graph is RecastGraph rg) 
 			{
-				var delta = RecastGraphTileShift(rg, target.position);
+				Vector3 targetPos = new Vector3(target.position.x, 0f, target.position.z);
+				var delta = RecastGraphTileShift(rg, targetPos);
 				if (delta.x != 0 || delta.y != 0) 
 				{
 					updatingGraph = true;
@@ -191,9 +193,10 @@ namespace Pathfinding {
 			List<(IGraphUpdatePromise, IEnumerator<JobHandle>)> promises = new List<(IGraphUpdatePromise, IEnumerator<JobHandle>)>();
 			AstarPath.active.AddWorkItem(new AstarWorkItem(
 				ctx => {
-				// Find the direction that we want to move the graph in.
-				// Calculate this in graph space (where a distance of one is the size of one node)
-				Vector3 dir = graph.transform.InverseTransformVector(target.position - graph.center);
+					// Find the direction that we want to move the graph in.
+					// Calculate this in graph space (where a distance of one is the size of one node)
+					Vector3 targetPos = new Vector3(target.position.x, 0f, target.position.z);
+					Vector3 dir = graph.transform.InverseTransformVector(targetPos - graph.center);
 
 				// Snap to a whole number of nodes to offset in each direction
 				int dx = Mathf.RoundToInt(dir.x);

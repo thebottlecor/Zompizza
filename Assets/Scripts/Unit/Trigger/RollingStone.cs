@@ -22,6 +22,7 @@ public class RollingStone : MonoBehaviour
         float scale = transform.localScale.y;
 
         rigid.velocity = Vector3.zero;
+        rigid.angularVelocity = Vector3.zero;
         rigid.AddExplosionForce(power, transform.position + coll.center * scale - dir * (coll.radius * scale + 0.1f), 0.2f);
     }
 

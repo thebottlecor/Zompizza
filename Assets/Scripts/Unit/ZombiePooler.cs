@@ -448,7 +448,14 @@ public class ZombiePooler : Singleton<ZombiePooler>
         newPos.y = Constant.spawnPosY;
 
         var node = AstarPath.active.GetNearest(newPos, constraint).position;
-        node.y = Constant.spawnPosY;
+        node.y += 0.1f;
+        return node;
+    }
+    public Vector3 GetReAnimatedPos(Transform self)
+    {
+        Vector3 newPos = self.position;
+        var node = AstarPath.active.GetNearest(newPos, constraint).position;
+        node.y += 0.1f;
         return node;
     }
     public Vector3 GetRandomPos(Bounds bounds)
@@ -461,7 +468,7 @@ public class ZombiePooler : Singleton<ZombiePooler>
         );
 
         var node = AstarPath.active.GetNearest(newPos, constraint).position;
-        node.y = Constant.spawnPosY;
+        node.y += 0.1f;
         return node;
     }
 

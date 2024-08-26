@@ -77,7 +77,7 @@ MonoBehaviour:
       rampMaker: 1
       pathPainter: 1
       foliageSpawner: 1
-      foliageRemover: 0
+      foliageRemover: 1
       objectSpawner: 1
       objectRemover: 0
   billboardTools:

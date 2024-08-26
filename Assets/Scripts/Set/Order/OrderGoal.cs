@@ -136,4 +136,15 @@ public class OrderGoal : MonoBehaviour
         }
     }
 
+    [ContextMenu("거리 표시")]
+    private void ShowDist()
+    {
+        var gm = FindObjectOfType<GM>();
+        float dist = (transform.position - gm.pizzeriaPos.position).magnitude;
+        float km = dist * Constant.distanceScale; // 게임상 거리 200 = 1km
+
+        float timeLimit = (Constant.delivery_timeLimit_1km * km);
+
+        Debug.Log($" 거리 : {km:0.##}km\n                     시간 : {timeLimit:F0}s");
+    }
 }

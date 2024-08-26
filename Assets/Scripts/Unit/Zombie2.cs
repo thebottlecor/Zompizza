@@ -250,6 +250,7 @@ public class Zombie2 : ZombieBase
             gameObject.SetActive(false);
             yield return null;
 
+            transform.position = ZombiePooler.Instance.GetReAnimatedPos(transform);
             StateReset();
             gameObject.SetActive(true);
         }

@@ -162,7 +162,7 @@ MonoBehaviour:
   version: 1073741825
   shape:
     radius: 0.55
-    height: 2
+    height: 1.5
   movement:
     follower:
       rotationSpeed: 600
@@ -180,7 +180,7 @@ MonoBehaviour:
     positionSmoothing: 0
     groundMask:
       serializedVersion: 2
-      m_Bits: 4294967295
+      m_Bits: 64
     movementPlaneSource: 0
     isStopped: 0
   managedState:

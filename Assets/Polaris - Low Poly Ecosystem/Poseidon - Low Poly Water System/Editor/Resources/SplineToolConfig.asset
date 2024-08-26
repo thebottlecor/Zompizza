@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86645776c4e1905439fdfc64c6cc0794, type: 3}
   m_Name: SplineToolConfig
   m_EditorClassIdentifier: 
-  raycastLayer: 0
+  raycastLayer: 6
   yOffset: 1
   autoTangent: 1
