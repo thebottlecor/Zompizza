@@ -12,15 +12,31 @@ public class TransparentObject : MonoBehaviour
 
 	private SpecialTransparent specialTransparent;
 
+	private Material prevMaterial;
+	private Material transMaterial;
+
 	public void Init(float timer, bool specialObj)
     {
 		this.timer = timer;
 		this.specialObj = specialObj;
 
-		if (specialObj) 
+		if (specialObj)
 			specialTransparent = GetComponent<SpecialTransparent>();
-		else 
+		else
+		{
 			meshes = GetComponentsInChildren<MeshRenderer>();
+			prevMaterial = meshes[0].sharedMaterial;
+			if (prevMaterial == DataManager.Instance.materialLib.baseMaterial2)
+            {
+				transMaterial = DataManager.Instance.materialLib.transparentMaterial2;
+            }
+			//else if (prevMaterial == DataManager.Instance.materialLib.baseMaterial)
+			else
+			{
+				transMaterial = DataManager.Instance.materialLib.transparentMaterial;
+
+			}
+		}
 
 		BecomeTransparent();
     }
@@ -43,7 +59,8 @@ public class TransparentObject : MonoBehaviour
 		{
 			for (int i = 0; i < meshes.Length; i++)
 			{
-				meshes[i].material = DataManager.Instance.materialLib.transparentMaterial;
+				meshes[i].sharedMaterial = transMaterial;
+				meshes[i].shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
 			}
 		}
 		else
@@ -57,7 +74,8 @@ public class TransparentObject : MonoBehaviour
 		{
 			for (int i = 0; i < meshes.Length; i++)
 			{
-				meshes[i].material = DataManager.Instance.materialLib.baseMaterial;
+				meshes[i].sharedMaterial = prevMaterial;
+				meshes[i].shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
 			}
 		}
 		else

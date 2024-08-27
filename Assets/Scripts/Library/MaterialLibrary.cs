@@ -13,4 +13,7 @@ public class MaterialLibrary : ScriptableObject
     public Material hitMaterial;
     public Material transparentMaterial;
 
+    public Material baseMaterial2;
+    public Material transparentMaterial2;
+
 }

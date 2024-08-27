@@ -15,3 +15,5 @@ MonoBehaviour:
   baseMaterial: {fileID: 2100000, guid: 965e421d30d6a2a419dfd5b3597456b8, type: 2}
   hitMaterial: {fileID: 2100000, guid: 5d980ec565fef264db2103cab8556faa, type: 2}
   transparentMaterial: {fileID: 2100000, guid: 840a151e2b1f2c9489f4f269d27ce2fe, type: 2}
+  baseMaterial2: {fileID: 2100000, guid: a74066172cf19cd4bacae3c6600a7217, type: 2}
+  transparentMaterial2: {fileID: 2100000, guid: 54129625e280d924ea10e656b5840e9b, type: 2}
