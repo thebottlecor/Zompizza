@@ -927,11 +927,11 @@ public class ShopUI : EventListener
             //{
             //    if (GM.Instance.gold >= cost)
             //    {
-            //        st.AppendFormat("<sprite=2> {0} : {1}$", tm.GetCommons("Costs"), cost);
+            //        st.AppendFormat("<sprite=2> {0} : {1}G", tm.GetCommons("Costs"), cost);
             //    }
             //    else
             //    {
-            //        st.AppendFormat("<sprite=2> {0} : <color=#A91111>{1}$</color>", tm.GetCommons("Costs"), cost);
+            //        st.AppendFormat("<sprite=2> {0} : <color=#A91111>{1}G</color>", tm.GetCommons("Costs"), cost);
             //    }
             //}
 

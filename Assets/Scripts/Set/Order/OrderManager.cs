@@ -15,6 +15,14 @@ public class OrderManager : Singleton<OrderManager>
 
     public List<OrderInfo> orderList;
 
+    public PizzaDirection pizzaDirection;
+    public OvenMiniGame ovenMiniGame;
+    //public MoneyDirection moneyDirection;
+
+    public SerializableDictionary<OrderInfo, OrderMiniUI> orderMiniUIPair;
+
+
+    // 저장 정보
     // 호감도 관련, 손님 개별 평점 평균을 위한 정보
     [Serializable]
     public struct CustomerInfo
@@ -28,12 +36,8 @@ public class OrderManager : Singleton<OrderManager>
         }
     }
     public SerializableDictionary<int, CustomerInfo> customersInfos;
-
-    public PizzaDirection pizzaDirection;
-    public OvenMiniGame ovenMiniGame;
-    //public MoneyDirection moneyDirection;
-
-    public SerializableDictionary<OrderInfo, OrderMiniUI> orderMiniUIPair;
+    // 어제 '수락'을 했던 주문들 => 다음날 주문에서 제외
+    public List<int> yesterdayOrders;
 
     public static EventHandler<int> OrderRemovedEvent;
 
@@ -104,6 +108,7 @@ public class OrderManager : Singleton<OrderManager>
 
             customersInfos.Add(new SerializableDictionary<int, CustomerInfo>.Pair { Key = i, Value = new CustomerInfo() }); 
         }
+        yesterdayOrders = new List<int>();
 
         orderMiniUIPair = new SerializableDictionary<OrderInfo, OrderMiniUI>();
         orderList = new List<OrderInfo>();
@@ -318,8 +323,33 @@ public class OrderManager : Singleton<OrderManager>
     public void NewOrder()
     {
         // 데모용 2일:2개 / 3일 : 3개 / 4일 : 4개 ~~
-        //List<int> rand = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-        List<int> rand = new List<int> { 0, 1, 2, 3, 4, 5, 6, 8 };
+        List<int> rand = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        //List<int> rand = new List<int> { 0, 1, 2, 3, 4, 5, 6, 8 };
+
+
+        int day = GM.Instance.day;
+        if (day >= 3)
+        {
+            // 거리가 긴 주문들 순차적으로 추가 (경찰 0)
+        }
+        if (day >= 6)
+        {
+            // 거리가 긴 주문들 순차적으로 추가 (해커 2)
+        }
+
+        for (int i = rand.Count - 1; i >= 0; i--)
+        {
+            if (yesterdayOrders.Count == 0) break;
+            if (rand.Count <= 2) break; // 최소 주문 2개
+
+            if (yesterdayOrders.Contains(rand[i]))
+            {
+                rand.RemoveAt(i);
+                yesterdayOrders.Remove(rand[i]);
+            }
+        }
+        yesterdayOrders.Clear();
+
         rand.Shuffle();
 
         int extraOrder = ResearchManager.Instance.globalEffect.order_max;
@@ -441,7 +471,7 @@ public class OrderManager : Singleton<OrderManager>
 
     public void NewOrder_Tutorial()
     {
-        // 튜토리얼 - 노인
+        // 튜토리얼 - (노인 4)
         SerializableDictionary<Ingredient, int> randInfo_sub = new SerializableDictionary<Ingredient, int>();
         ingredients_Tier1.Shuffle();
         randInfo_sub.Add(new SerializableDictionary<Ingredient, int>.Pair { Key = ingredients_Tier1[0], Value = 1 });
@@ -746,6 +776,8 @@ public class OrderManager : Singleton<OrderManager>
     {
         if (orderMiniUIPair.ContainsKey(info))
             orderMiniUIPair[info].gameObject.SetActive(true);
+
+        yesterdayOrders.Add(info.customerIdx);
 
         // 재료 소모
         for (int i = 0; i < info.pizzas.Count; i++)

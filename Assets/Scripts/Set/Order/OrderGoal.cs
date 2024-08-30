@@ -67,7 +67,7 @@ public class OrderGoal : MonoBehaviour
     public void SuccessEffect(int gold, float rating)
     {
         textCanvas.gameObject.SetActive(true);
-        goldText.text = $"+{gold}$";
+        goldText.text = $"+{gold}G";
         CoroutineHelper.StartCoroutine(HideText());
         CoroutineHelper.StartCoroutine(GiftBoxEffect());
 

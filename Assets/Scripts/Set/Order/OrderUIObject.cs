@@ -78,9 +78,9 @@ public class OrderUIObject : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         }
 
         if (info.bouns_friendship > 0)
-            st.AppendFormat("{0} : {1}<size=90%><color=#550742>(+{2})</color></size>$", tm.GetCommons("Rewards"), info.rewards - info.bouns_friendship, info.bouns_friendship);
+            st.AppendFormat("{0} : {1}<size=90%><color=#550742>(+{2})</color></size>G", tm.GetCommons("Rewards"), info.rewards - info.bouns_friendship, info.bouns_friendship);
         else
-            st.AppendFormat("{0} : {1}$", tm.GetCommons("Rewards"), info.rewards);
+            st.AppendFormat("{0} : {1}G", tm.GetCommons("Rewards"), info.rewards);
         st.AppendLine();
 
         // 글자로 풀어서 표시

@@ -139,9 +139,9 @@ public class RocketManager : Singleton<RocketManager>
             else
             {
                 if (cost[currentStep] > GM.Instance.gold)
-                    currentCostTMP.text = $"<color=#AB5239><sprite=2> {tm.GetCommons("Costs")} {cost[currentStep]}$</color>";
+                    currentCostTMP.text = $"<color=#AB5239><sprite=2> {tm.GetCommons("Costs")} {cost[currentStep]}G</color>";
                 else
-                    currentCostTMP.text = $"<sprite=2> {tm.GetCommons("Costs")} {cost[currentStep]}$";
+                    currentCostTMP.text = $"<sprite=2> {tm.GetCommons("Costs")} {cost[currentStep]}G";
             }
         }
         else

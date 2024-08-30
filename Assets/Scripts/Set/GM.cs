@@ -1139,7 +1139,7 @@ public class GM : Singleton<GM>
 
     private void ShowGoldText()
     {
-        string str = $"{displayGold}$";
+        string str = $"{displayGold}G";
 
         for (int i = 0; i < goldText.Length; i++)
             goldText[i].text = str;

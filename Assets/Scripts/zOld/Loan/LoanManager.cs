@@ -40,7 +40,7 @@ public class LoanManager : Singleton<LoanManager>
         interestRate = 0.05f;
         expireDay = 10;
 
-        interestText.text = $"{tm.GetCommons("Interest")} : <color=#CF3838>{Interest}$</color>";
+        interestText.text = $"{tm.GetCommons("Interest")} : <color=#CF3838>{Interest}G</color>";
         expireDayText.text = $"{tm.GetCommons("Expire")} <color=#CF3838>{string.Format(tm.GetCommons("Day"), expireDay)}</color>";
 
         loanWarningBtn_Text.text = tm.GetCommons("Close");
@@ -62,7 +62,7 @@ public class LoanManager : Singleton<LoanManager>
             if (remainPay > 0)
             {
                 AddDebt(remainPay);
-                interestText.text = $"{tm.GetCommons("Interest")} : <color=#CF3838>{Interest}$</color>";
+                interestText.text = $"{tm.GetCommons("Interest")} : <color=#CF3838>{Interest}G</color>";
             }
         }
     }
@@ -98,7 +98,7 @@ public class LoanManager : Singleton<LoanManager>
         }
         else
         {
-            loanWarningDetail_Text.text = string.Format(tm.GetCommons("LoanWarning"), $"<sprite=2>{debt}$", $"<color=#5600FF>{expireDay}</color>");
+            loanWarningDetail_Text.text = string.Format(tm.GetCommons("LoanWarning"), $"<sprite=2>{debt}G", $"<color=#5600FF>{expireDay}</color>");
 
             loanWarningRect.localScale = 0.01f * Vector3.one;
             loanWarningRect.DOScale(new Vector3(1f, 1f, 1f), 0.5f).SetEase(Ease.OutElastic).SetUpdate(true);
@@ -116,7 +116,7 @@ public class LoanManager : Singleton<LoanManager>
             //GM.Instance.AddGold(-1 * realRepay, GM.GetGoldSource.loan);
             AddDebt(-1 * realRepay);
 
-            interestText.text = $"{tm.GetCommons("Interest")} : <color=#CF3838>{Interest}$</color>";
+            interestText.text = $"{tm.GetCommons("Interest")} : <color=#CF3838>{Interest}G</color>";
 
             AudioManager.Instance.PlaySFX(Sfx.money);
             AudioManager.Instance.PlaySFX(Sfx.complete);
@@ -139,7 +139,7 @@ public class LoanManager : Singleton<LoanManager>
         {
             displayDebt = x;
 
-            debtText.text = $"{tm.GetCommons("Debt")} : <color=#FF7575>{displayDebt}$</color>";
+            debtText.text = $"{tm.GetCommons("Debt")} : <color=#FF7575>{displayDebt}G</color>";
 
         }).SetEase(Ease.OutCirc).SetUpdate(true);
         debt = target;
@@ -152,7 +152,7 @@ public class LoanManager : Singleton<LoanManager>
         displayDebt = value;
         debt = value;
 
-        debtText.text = $"{tm.GetCommons("Debt")} : <color=#FF7575>{displayDebt}$</color>";
+        debtText.text = $"{tm.GetCommons("Debt")} : <color=#FF7575>{displayDebt}G</color>";
 
         loanObject.SetActive(debt > 0);
         loanCompleteObject.SetActive(debt <= 0);

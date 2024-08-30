@@ -99,7 +99,7 @@ public class ExplorationManager : Singleton<ExplorationManager>
         float temp = value * (1f + ResearchManager.Instance.globalEffect.explore_cost);
         cost = (int)temp;
 
-        costText.text = $"{tm.GetCommons("Costs")} : {cost}$";
+        costText.text = $"{tm.GetCommons("Costs")} : {cost}G";
 
         UpdateBtn();
     }
