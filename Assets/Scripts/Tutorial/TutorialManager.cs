@@ -52,8 +52,8 @@ public class TutorialManager : Singleton<TutorialManager>
 
     public void Init()
     {
-        trainingCenter.SetActive(false);
-        prologueObj.SetActive(false);
+        //trainingCenter.SetActive(false);
+        //prologueObj.SetActive(false);
 
         step = 0;
 
@@ -86,7 +86,7 @@ public class TutorialManager : Singleton<TutorialManager>
 
         if (debug_TutorialDisable)
         {
-            TutorialSkip();
+            TutorialSkip(true);
             step = 100;
             return;
         }
@@ -104,7 +104,7 @@ public class TutorialManager : Singleton<TutorialManager>
         }
         if (debug_skipToReturn)
         {
-            TutorialSkip();
+            TutorialSkip(true);
             training = true;
             GM.Instance.timer = Constant.dayTime;
             Step9();
@@ -221,10 +221,13 @@ public class TutorialManager : Singleton<TutorialManager>
         UIManager.Instance.ToggleDrivingInfo(false);
     }
 
-    public void TutorialSkip()
+    public void TutorialSkip(bool hide)
     {
-        trainingCenter.SetActive(false);
-        prologueObj.SetActive(false);
+        if (hide)
+        {
+            trainingCenter.SetActive(false);
+            prologueObj.SetActive(false);
+        }
         var player = GM.Instance.player;
         player.StopPlayer(instance:true);
         player.transform.position = GM.Instance.pizzeriaPos.position;
@@ -282,8 +285,8 @@ public class TutorialManager : Singleton<TutorialManager>
 
     private void Step1()
     {
-        var scanGraph = AstarPath.active.data.recastGraph;
-        ZombiePooler.Instance.astarPath.Scan(scanGraph);
+        //var scanGraph = AstarPath.active.data.recastGraph;
+        //ZombiePooler.Instance.astarPath.Scan(scanGraph);
         StartCoroutine(SpawnDelay());
 
         var pad = Gamepad.current;
@@ -330,7 +333,7 @@ public class TutorialManager : Singleton<TutorialManager>
 
         StartCoroutine(BlackScreen(1.75f, null));
 
-        TutorialSkip();
+        TutorialSkip(false);
         prologueObj.SetActive(true);
         AudioManager.Instance.ToggleMute(true);
 
@@ -374,7 +377,7 @@ public class TutorialManager : Singleton<TutorialManager>
             GM.Instance.TimeUpdate();
         }));
 
-        TutorialSkip();
+        TutorialSkip(true);
         training = true;
         step = 2;
 
@@ -607,22 +610,22 @@ public class TutorialManager : Singleton<TutorialManager>
         guideObjects[12].SetActive(false);
     }
 
-    public void TutorialDisalbe()
-    {
-        step = 100;
-        shopGate.alwaysClosed = false;
-        UIManager.Instance.shopUI.shopCloseBtn.enabled = true;
-        TutorialSkip();
+    //public void TutorialDisalbe()
+    //{
+    //    step = 100;
+    //    shopGate.alwaysClosed = false;
+    //    UIManager.Instance.shopUI.shopCloseBtn.enabled = true;
+    //    TutorialSkip();
 
-        for (int i = 0; i < guideObjects.Length; i++)
-        {
-            guideObjects[i].SetActive(false);
-        }
-        for (int i =0; i < indicators.Length; i++)
-        {
-            indicators[i].SetActive(false);
-        }
-        shopGoal.SetActive(false);
-        returnGoal.SetActive(false);
-    }
+    //    for (int i = 0; i < guideObjects.Length; i++)
+    //    {
+    //        guideObjects[i].SetActive(false);
+    //    }
+    //    for (int i =0; i < indicators.Length; i++)
+    //    {
+    //        indicators[i].SetActive(false);
+    //    }
+    //    shopGoal.SetActive(false);
+    //    returnGoal.SetActive(false);
+    //}
 }

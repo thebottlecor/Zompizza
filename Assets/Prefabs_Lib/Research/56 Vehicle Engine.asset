@@ -21,7 +21,7 @@ MonoBehaviour:
   cost: 1000
   increaseCost: 1000
   researchPoint: 30
-  increaseRP: 30
+  increaseRP: 50
   rating_require: 0
   increaseRating_require: 0
   needResearch: []

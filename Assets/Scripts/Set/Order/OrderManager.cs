@@ -175,17 +175,21 @@ public class OrderManager : Singleton<OrderManager>
                 if (overTime <= 0f)
                 {
                     float remainPercent = Mathf.Abs(overTime) / timeLimit;
-                    if (remainPercent >= Constant.remainTime_Percent) // 남은 시간이 33% 이상
+                    if (remainPercent >= Constant.remainTime_Percent) // 남은 시간이 50% 이상
                         timeRating = Constant.remainTimeRating1;
                     else
                     {
+                        // 2점 ~ 0.5점 사이
                         timeRating = Constant.Point05((Constant.remainTimeRating2 - Constant.remainTimeRating3) / Constant.remainTime_Percent * remainPercent + Constant.remainTimeRating3);
                     }
                 }
                 else
                 {
-                    float overPercent = Mathf.Min(1f, overTime / timeLimit); // 1이면 최대
-                    timeRating = Constant.Point05(Constant.remainTimeRating4 * overPercent);
+                    //float overPercent = Mathf.Min(1f, overTime / timeLimit); // 1이면 최대
+                    //timeRating = Constant.Point05(Constant.remainTimeRating4 * overPercent);
+
+                    // 원래는 0점 ~ -2.5점 사이
+                    timeRating = 0f;
                 }
 
                 float hpRating;
@@ -201,7 +205,10 @@ public class OrderManager : Singleton<OrderManager>
                 }
                 else
                 {
-                    hpRating = Constant.Point05((-1f * Constant.remainHpRating4 / Constant.remainHP_Percent) * hpPercent + Constant.remainHpRating4);
+                    //hpRating = Constant.Point05((-1f * Constant.remainHpRating4 / Constant.remainHP_Percent) * hpPercent + Constant.remainHpRating4);
+
+                    // 원래는 0점 ~ -2.5점 사이
+                    hpRating = 0f;
                 }
 
                 float resultRating = timeRating + hpRating;
@@ -323,18 +330,28 @@ public class OrderManager : Singleton<OrderManager>
     public void NewOrder()
     {
         // 데모용 2일:2개 / 3일 : 3개 / 4일 : 4개 ~~
-        List<int> rand = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        //List<int> rand = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        List<int> rand = new List<int> { 1, 4, 5, 6, 8 };
         //List<int> rand = new List<int> { 0, 1, 2, 3, 4, 5, 6, 8 };
 
 
         int day = GM.Instance.day;
+        if (day >= 2)
+        {
+            rand.Add(7); // 떠돌이
+            rand.Add(9); // 배관공
+        }
         if (day >= 3)
         {
-            // 거리가 긴 주문들 순차적으로 추가 (경찰 0)
+            rand.Add(3); // 운동선수
         }
-        if (day >= 6)
+        if (day >= 4)
         {
-            // 거리가 긴 주문들 순차적으로 추가 (해커 2)
+            rand.Add(2); // 해커
+        }
+        if (day >= 5)
+        {
+            rand.Add(0); // 경찰
         }
 
         for (int i = rand.Count - 1; i >= 0; i--)
@@ -677,7 +694,7 @@ public class OrderManager : Singleton<OrderManager>
         else if (averageRating >= Constant.friendShip1) friendshipBonus = (int)(0.1f * rewards);
         rewards += friendshipBonus;
 
-        float timeLimit = (Constant.delivery_timeLimit_1km * km) * (1f + ResearchManager.Instance.globalEffect.customer_timelimit);
+        float timeLimit = (Constant.delivery_timeLimit_1km * km) * (1f + ResearchManager.Instance.globalEffect.customer_timelimit) + Constant.delivery_timeLimit_base;
 
         OrderInfo newOrder = new OrderInfo
         {
@@ -944,7 +961,9 @@ public class OrderManager : Singleton<OrderManager>
 
         var player = GM.Instance.player;
         player.StopPlayer(instance: true);
-        player.transform.position = GM.Instance.pizzeriaPos.position;
+        Vector3 pos = GM.Instance.pizzeriaPos.position;
+        pos.y += 2.5f;
+        player.transform.position = pos;
         player.cam.ForceUpdate();
         player.ShakeOffAllZombies();
 

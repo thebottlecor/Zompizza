@@ -262,11 +262,11 @@ public class OvenMiniGame : EventListener
         switch (grade)
         {
             case 0:
-                pizzaHp = 0.9f;
+                pizzaHp = 0.5f;
                 textIdx = 0;
                 break;
             case 1:
-                pizzaHp = 0.97f;
+                pizzaHp = 0.99f;
                 textIdx = 1;
                 break;
             case 2:

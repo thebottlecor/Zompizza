@@ -266,7 +266,7 @@ public class VillagerManager : Singleton<VillagerManager>
                     float dist = (helpGoals[who].transform.position - OrderManager.Instance.pizzeria.position).magnitude;
                     float km = dist * Constant.distanceScale; // 게임상 거리 200 = 1km
                     sosTimer = 0f;
-                    sosTimeLimit = Constant.sos_timeLimit_1km * km;
+                    sosTimeLimit = Constant.sos_timeLimit_1km * km + Constant.delivery_timeLimit_base;
 
                     currentSosIdx = who;
                     miniUI.Init(who);
