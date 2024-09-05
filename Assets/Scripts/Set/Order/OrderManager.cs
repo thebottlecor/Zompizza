@@ -329,13 +329,29 @@ public class OrderManager : Singleton<OrderManager>
     [ContextMenu("새로운 주문")]
     public void NewOrder()
     {
+        int day = GM.Instance.day;
+        int minOrderCount = 0;
+        int extraOrder = ResearchManager.Instance.globalEffect.order_max;
+        switch (day)
+        {
+            case 0:
+            case 1:
+                minOrderCount = 2;
+                break;
+            case 2:
+                minOrderCount = 3;
+                break;
+            default:
+                minOrderCount = 4;
+                break;
+        }
+        minOrderCount += extraOrder;
+
         // 데모용 2일:2개 / 3일 : 3개 / 4일 : 4개 ~~
         //List<int> rand = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-        List<int> rand = new List<int> { 1, 4, 5, 6, 8 };
         //List<int> rand = new List<int> { 0, 1, 2, 3, 4, 5, 6, 8 };
+        List<int> rand = new List<int> { 1, 4, 5, 6, 8 };
 
-
-        int day = GM.Instance.day;
         if (day >= 2)
         {
             rand.Add(7); // 떠돌이
@@ -357,57 +373,19 @@ public class OrderManager : Singleton<OrderManager>
         for (int i = rand.Count - 1; i >= 0; i--)
         {
             if (yesterdayOrders.Count == 0) break;
-            if (rand.Count <= 2) break; // 최소 주문 2개
+            if (rand.Count <= minOrderCount) break; // 최소 주문만큼만
 
             if (yesterdayOrders.Contains(rand[i]))
             {
-                rand.RemoveAt(i);
                 yesterdayOrders.Remove(rand[i]);
+                rand.RemoveAt(i);
             }
         }
         yesterdayOrders.Clear();
 
         rand.Shuffle();
 
-        int extraOrder = ResearchManager.Instance.globalEffect.order_max;
-
-        switch (GM.Instance.day)
-        {
-            case 0:
-            case 1:
-                rand = rand.Take(2 + extraOrder).ToList();
-                break;
-            case 2:
-                rand = rand.Take(3 + extraOrder).ToList();
-                break;
-            //case 3:
-            //    rand = rand.Take(4).ToList();
-            //    break;
-            //case 4:
-            //    rand = rand.Take(5).ToList();
-            //    break;
-            default:
-                rand = rand.Take(4 + extraOrder).ToList();
-                break;
-                //default:
-                //    {
-                //        // 이제부터 전날 평점에 영향받음
-                //        float previousRating = GM.Instance.RatingDailyChange;
-                //        int maxOrder = 1;
-                //        if (previousRating >= 10f)
-                //            maxOrder = 6;
-                //        else if (previousRating >= 8f)
-                //            maxOrder = 5;
-                //        else if (previousRating >= 6f)
-                //            maxOrder = 4;
-                //        else if (previousRating >= 4f)
-                //            maxOrder = 3;
-                //        else if (previousRating >= 2f)
-                //            maxOrder = 2;
-                //        rand = rand.Take(maxOrder).ToList();
-                //    }
-                //    break;
-        }
+        rand = rand.Take(minOrderCount).ToList();
 
         //bool hasMinimumRes = GM.Instance.HasIngredient >= Constant.customer_max_ingredient;
 
