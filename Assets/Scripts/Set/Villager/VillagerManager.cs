@@ -249,7 +249,7 @@ public class VillagerManager : Singleton<VillagerManager>
 
         if (day >= 9) return; // 데모는 10일 때 막음
 
-        if ((day + 1) % 2 == 0 && !sosShowed) // 짝수날 마다
+        if ((day + 1) % 4 == 0 && !sosShowed) // 짝수날 마다 => 4의 배수마다 (09.11
         {
             int recruited = GetRecruitedVillagerCount();
             int remained = GetRemainVillagerCount();
