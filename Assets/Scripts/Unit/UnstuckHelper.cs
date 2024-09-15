@@ -1,21 +1,69 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UnstuckHelper : MonoBehaviour
+public class UnstuckHelper : EventListener
 {
 
     private float cooldown;
     [SerializeField] private Button unstuckButton;
+    [SerializeField] private TextMeshProUGUI unstuckTMP;
+
+    private int blockLayer;
+    private string unstuckStr;
+
+    protected override void AddListeners()
+    {
+        TextManager.TextChangedEvent += OnTextChanged;
+    }
+
+    protected override void RemoveListeners()
+    {
+        TextManager.TextChangedEvent -= OnTextChanged;
+    }
+
+    private void OnTextChanged(object sender, EventArgs e)
+    {
+        unstuckStr = TextManager.Instance.GetCommons("Unstuck");
+        if (unstuckButton.interactable)
+        {
+            unstuckTMP.text = unstuckStr;
+        }
+    }
+
+    private void Start()
+    {
+        blockLayer = 1 << LayerMask.NameToLayer("PathfindingBlock") | 1 << LayerMask.NameToLayer("Ramp");
+        //unstuckStr = TextManager.Instance.GetCommons("Unstuck");
+        //unstuckTMP.text = unstuckStr;
+    }
 
     private void Update()
     {
-        if (unstuckButton != null)
-            unstuckButton.interactable = cooldown <= 0f;
-
         if (cooldown > 0f)
             cooldown -= Time.deltaTime;
+
+        if (unstuckButton != null)
+        {
+            bool prevState = unstuckButton.interactable;
+
+            unstuckButton.interactable = cooldown <= 0f;
+
+            if (!unstuckButton.interactable)
+            {
+                unstuckTMP.text = $"{unstuckStr}\n({cooldown:F0})";
+            }
+            else 
+            {
+                if (!prevState)
+                {
+                    unstuckTMP.text = unstuckStr;
+                }
+            }
+        }
     }
 
     public void Unstuck()
@@ -29,7 +77,7 @@ public class UnstuckHelper : MonoBehaviour
 
         if (player == null) return;
 
-        cooldown = 10f;
+        cooldown = 5f;
         player.StopPlayer(false);
 
         //var node = AstarPath.active.GetNearest(player.transform.position, Pathfinding.NNConstraint.Walkable).position;
@@ -54,7 +102,7 @@ public class UnstuckHelper : MonoBehaviour
                 break;
             }
 
-            var others = Physics.OverlapSphere(node, radius, 1 << LayerMask.NameToLayer("PathfindingBlock") | 1 << LayerMask.NameToLayer("Ramp"));
+            var others = Physics.OverlapSphere(node, radius, blockLayer);
             
             //for (int i = 0; i < 360; i++)
             //{

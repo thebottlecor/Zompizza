@@ -718,7 +718,7 @@ public class ShopUI : EventListener
         if (!GM.Instance.midNight)
         {
             bool triggered = false;
-            if (GM.Instance.day == 5)
+            if (GM.Instance.day == 5) // 6일차 가게 "강제로" 닫은 후 이장 이벤트
             {
                 triggered = GameEventManager.Instance.SetEvent(1); // 6일차 가게 "강제로" 닫은 후 이장 이벤트
             }

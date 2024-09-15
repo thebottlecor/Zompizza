@@ -245,11 +245,11 @@ public class VillagerManager : Singleton<VillagerManager>
         // 복귀 후, 아무 주문이 없을 떄
         // 강제로 가게를 닫았을 떄
 
-        int day = GM.Instance.day;
+        int day = GM.Instance.day; // 짝수날 마다 => 4의 배수마다 (09.11) SOS
 
         if (day >= 9) return; // 데모는 10일 때 막음
 
-        if ((day + 1) % 4 == 0 && !sosShowed) // 짝수날 마다 => 4의 배수마다 (09.11
+        if ((day + 1) % 4 == 0 && !sosShowed) // 짝수날 마다 => 4의 배수마다 (09.11)
         {
             int recruited = GetRecruitedVillagerCount();
             int remained = GetRemainVillagerCount();

@@ -19,7 +19,7 @@ public class Zombie2 : ZombieBase
 
     public bool isRun;
 
-    protected IAstarAI ai;
+    public FollowerEntity ai;
     protected AIDestinationSetter destinationSetter;
 
     public static EventHandler<float> DamageEvent;
@@ -28,9 +28,7 @@ public class Zombie2 : ZombieBase
     {
         rigid = GetComponent<Rigidbody>();
 
-        ai = GetComponent<IAstarAI>();
         destinationSetter = GetComponent<AIDestinationSetter>();
-
         destinationSetter.target = target;
     }
 

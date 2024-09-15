@@ -25,6 +25,7 @@ public class UILibrary : ScriptableObject
     public Gradient pizaaHpGradient;
 
     public Gradient timeLightGradient;
+    public Gradient timeLightGradient_Bloodmoon;
 
 
     public Sprite[] customerProfile;

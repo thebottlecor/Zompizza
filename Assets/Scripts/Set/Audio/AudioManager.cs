@@ -228,4 +228,5 @@ public enum Sfx
     fallingTree,
     rollingStone,
     springJump,
+    bloodmoon,
 }

@@ -184,6 +184,9 @@ public class GM : Singleton<GM>
     public GameObject runIndicator;
     public TextMeshProUGUI runIndicatorTMP;
 
+    [Header("블러드문")]
+    public bool bloodMoon;
+
     [Space(10f)]
     public GameObject returnIndicator;
     public GameObject rainObj;
@@ -490,7 +493,10 @@ public class GM : Singleton<GM>
 
     public void SetLight(float timePercent, int hour)
     {
-        globalLight.color = DataManager.Instance.uiLib.timeLightGradient.Evaluate(timePercent);
+        if (bloodMoon)
+            globalLight.color = DataManager.Instance.uiLib.timeLightGradient_Bloodmoon.Evaluate(timePercent);
+        else
+            globalLight.color = DataManager.Instance.uiLib.timeLightGradient.Evaluate(timePercent);
         Vector3 lightAngle = globalLight.transform.localEulerAngles;
         lightAngle.y = (lightAngleY.y - lightAngleY.x) * timePercent + lightAngleY.x;
 
@@ -948,14 +954,13 @@ public class GM : Singleton<GM>
         sequence.Append(darkCanvas.DOFade(0f, 0.25f));
         sequence.AppendCallback(() =>
         {
-            // 임시 비 효과
-            if (day == 3 || day == 8)
-            {
-                rainObj.SetActive(true);
-            }
             VillagerManager.Instance.NextDay_Late();
 
-            AudioManager.Instance.PlaySFX(Sfx.nextDay);
+            SpecialDay();
+            if (bloodMoon)
+                AudioManager.Instance.PlaySFX(Sfx.bloodmoon);
+            else
+                AudioManager.Instance.PlaySFX(Sfx.nextDay);
 
             darkCanvas.blocksRaycasts = false;
             darkCanvas.interactable = false;
@@ -1001,6 +1006,21 @@ public class GM : Singleton<GM>
             SaveManager.Instance.ZompizzaAutoSave();
         });
         sequence.Append(darkCanvas.DOFade(0f, 0.5f));
+    }
+
+    // 고정된 날짜에 진행되는 무언가 => 세이브 로드와 상관없음 => 따라서 세이브 로드 후 메소드 실행시켜 주어야 함
+    public void SpecialDay()
+    {
+        // 임시 비 효과
+        if (day == 3 || day == 8)
+        {
+            rainObj.SetActive(true);
+        }
+        bloodMoon = false;
+        if (day == 4) // 블러드문
+        {
+            bloodMoon = true;
+        }
     }
 
     public void GameOver()

@@ -207,7 +207,7 @@ public class TutorialManager : Singleton<TutorialManager>
     {
         trainingCenter.SetActive(true);
         var player = GM.Instance.player;
-        player.StopPlayer(false);
+        player.StopPlayer(true);
         player.transform.position = trainingCenterPos.position;
         player.cam.ForceUpdate();
         training = true;

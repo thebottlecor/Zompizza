@@ -7,7 +7,7 @@ public abstract class ZombieBase : MonoBehaviour
     protected Rigidbody rigid;
 
     [SerializeField] protected Collider coll;
-    [SerializeField] protected Animator animator;
+    public Animator animator;
 
     public bool dead;
     public bool isHeavy;

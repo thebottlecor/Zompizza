@@ -73,6 +73,10 @@ public class ZombiePooler : Singleton<ZombiePooler>
         public Material material;
         public Mesh mesh;
     }
+    public RuntimeAnimatorController normalController;
+    public RuntimeAnimatorController runController;
+    private float baseZombieSpeed;
+    private float baseZombieHordeSpeed;
 
     private Pathfinding.NNConstraint constraint;
 
@@ -100,6 +104,9 @@ public class ZombiePooler : Singleton<ZombiePooler>
         fallingTrees = FindObjectsOfType<FallingTree>(false);
         springJumps = FindObjectsOfType<SpringJump>(false);
         ResetSpawners();
+
+        baseZombieSpeed = (zombiesPool[0] as Zombie2).ai.maxSpeed;
+        baseZombieHordeSpeed = (zombieHordePool[0] as Zombie2).ai.maxSpeed;
     }
 
     private void Pool_Init(ref List<ZombieBase> list, int max, GameObject source)
@@ -280,6 +287,20 @@ public class ZombiePooler : Singleton<ZombiePooler>
                 zom.meshRenderer.sharedMesh = models_Info[rand].mesh;
                 zom.StateReset();
 
+                Zombie2 zombie2 = (zom as Zombie2);
+                if (GM.Instance.bloodMoon)
+                {
+                    zom.animator.runtimeAnimatorController = runController;
+                    zombie2.ai.maxSpeed = baseZombieSpeed * 1.55f;
+                    zombie2.isRun = true;
+                }
+                else
+                {
+                    zom.animator.runtimeAnimatorController = normalController;
+                    zombie2.ai.maxSpeed = baseZombieSpeed;
+                    zombie2.isRun = false;
+                }
+
                 zom.gameObject.SetActive(true);
 
                 count--;
@@ -418,7 +439,7 @@ public class ZombiePooler : Singleton<ZombiePooler>
     }
     public void SpawnRangeSub(Vector3 pos)
     {
-        pos.y = 0.01f;
+        pos.y += 0.01f;
         // 크기에 따라 수동 조정
         pos.x += 4f;
         pos.z += 4f;
@@ -564,6 +585,20 @@ public class ZombiePooler : Singleton<ZombiePooler>
                 zom.meshRenderer.material = models_Info[rand].material;
                 zom.meshRenderer.sharedMesh = models_Info[rand].mesh;
                 zom.StateReset();
+
+                Zombie2 zombie2 = (zom as Zombie2);
+                if (GM.Instance.bloodMoon)
+                {
+                    zom.animator.runtimeAnimatorController = runController;
+                    zombie2.ai.maxSpeed = baseZombieHordeSpeed * 1.55f;
+                    zombie2.isRun = true;
+                }
+                else
+                {
+                    zom.animator.runtimeAnimatorController = normalController;
+                    zombie2.ai.maxSpeed = baseZombieHordeSpeed;
+                    zombie2.isRun = false;
+                }
 
                 zom.gameObject.SetActive(true);
 

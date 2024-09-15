@@ -16,7 +16,7 @@ public class ZombieSanta : ZombieBase
 
     public bool isRun;
 
-    protected IAstarAI ai;
+    public FollowerEntity ai;
     protected AIDestinationSetter destinationSetter;
 
     public GameObject pizzaBox;
@@ -28,9 +28,7 @@ public class ZombieSanta : ZombieBase
     {
         rigid = GetComponent<Rigidbody>();
 
-        ai = GetComponent<IAstarAI>();
         destinationSetter = GetComponent<AIDestinationSetter>();
-
         destinationSetter.target = target;
     }
 

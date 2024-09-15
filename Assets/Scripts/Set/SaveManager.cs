@@ -85,7 +85,7 @@ public struct Save2DArray<T>
 public class SaveManager : Singleton<SaveManager>
 {
 
-    public readonly int version = 42;
+    public readonly int version = 51;
 
 
     public override void CallAfterAwake()

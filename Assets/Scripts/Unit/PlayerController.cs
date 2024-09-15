@@ -222,7 +222,7 @@ public class PlayerController : PlayerControllerData
                         float crashDrag = this.crashDrag;
                         if (zombie.isHeavy && !zombie.dead)
                         {
-                            crashDrag *= 200f * 2f * speedPercent;
+                            crashDrag *= 200f * 3f * speedPercent;
                             beforeCollisionSpeed = MaxSpeed; // 헤비와 부딪히면 무조건 충돌 판정
                             isCollision = true;
                         }
@@ -277,6 +277,8 @@ public class PlayerController : PlayerControllerData
     }
     private IEnumerator TouchIce()
     {
+        Debug.Log("ICE!");
+
         FLwheelFriction.stiffness = 0f;
         frontLeftCollider.sidewaysFriction = FLwheelFriction;
 
@@ -297,6 +299,8 @@ public class PlayerController : PlayerControllerData
     }
     private void RecoverIce()
     {
+        Debug.Log("ICE Recover");
+
         FLwheelFriction.stiffness = 1f;
         frontLeftCollider.sidewaysFriction = FLwheelFriction;
 

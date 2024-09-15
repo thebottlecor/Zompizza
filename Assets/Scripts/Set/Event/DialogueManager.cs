@@ -27,6 +27,7 @@ public class DialogueManager : Singleton<DialogueManager>
     public Sprite[] profileSprites;
 
     private int[] maxDialouge = new int[2] { 0, 1 };
+    private int[][] profileIdx = new int[2][] { new int[] { 0, 0 }, new int[] { 1, 2, 3 } };
 
     private TextManager tm => TextManager.Instance;
 
@@ -114,7 +115,8 @@ public class DialogueManager : Singleton<DialogueManager>
         currentEvent = idx;
         currentStep = 0;
 
-        profile.sprite = profileSprites[idx];
+        //profile.sprite = profileSprites[idx];
+        profile.sprite = profileSprites[profileIdx[idx][0]];
 
         nameText.text = tm.GetCommons($"{idx}Dialogue_name");
         dialogueText.text = string.Empty;
@@ -138,6 +140,7 @@ public class DialogueManager : Singleton<DialogueManager>
 
         string text = tm.GetCommons($"{currentEvent}Dialogue_text{currentStep + 1}");
         currentStep++;
+        profile.sprite = profileSprites[profileIdx[currentEvent][currentStep]];
         if (currentStep > maxDialouge[currentEvent])
         {
             StartCoroutine(TextPrint(text, 1.5f, () =>

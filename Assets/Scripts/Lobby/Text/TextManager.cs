@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using UnityEngine;
@@ -69,6 +70,8 @@ public class TextManager : Singleton<TextManager>
     public static readonly int AttackId = Animator.StringToHash("Attack");
     public static readonly int ContactId = Animator.StringToHash("Contact");
     public static readonly int RunId = Animator.StringToHash("Run");
+
+    public static EventHandler TextChangedEvent;
 
     protected override void Awake()
     {
@@ -145,5 +148,8 @@ public class TextManager : Singleton<TextManager>
         SettingManager.Instance.UpdateTexts();
         UINaviHelper.Instance.UpdateTexts();
         //SaveManager.Instance.UpdateTexts();
+
+        if (TextChangedEvent != null)
+            TextChangedEvent(null, null);
     }
 }
