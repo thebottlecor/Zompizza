@@ -36,6 +36,7 @@ public class CameraFollow2 : MonoBehaviour {
 	[Range(0.5f, 3.5f)] public float forwardDistance = 3;
 	private float accelerationEffect;
 
+	public ParticleSystem speedlineEffect;
 	public PlayerController playerController;
 
 	private Vector3 newPos;
@@ -49,6 +50,7 @@ public class CameraFollow2 : MonoBehaviour {
 		layerMask = 1 << LayerMask.NameToLayer("EnvironmentObject") | 1 << LayerMask.NameToLayer("EnvironmentRocket");
 		initCP = absoluteInitCameraPosition;
 		uiCam.gameObject.SetActive(false);
+		ChangeMode(true);
 	}
 
     void Start()
@@ -76,6 +78,7 @@ public class CameraFollow2 : MonoBehaviour {
         {
 			secondMode = false;
 			camTransform.localPosition = new Vector3(0f, 0f, 0f);
+			speedlineEffect.gameObject.SetActive(false);
         }
 		ResetShake();
 	}
@@ -99,11 +102,11 @@ public class CameraFollow2 : MonoBehaviour {
 			//float car_move = Mathf.Abs(Vector3.Distance(transform.position, secondModeTarget.position) * secondSpeed);
 			//transform.position = Vector3.MoveTowards(transform.position, secondModeTarget.position, car_move * Time.deltaTime);
 
-			float gForce = playerController.gForce;
+			//float gForce = playerController.gForce;
 
 			newPos = carTransform.position - (carTransform.forward * cameraPos.x) + (carTransform.up * cameraPos.y);
 			// smotherened G force value
-			accelerationEffect = Mathf.Lerp(accelerationEffect, gForce * 3.5f, 2f * Time.deltaTime);
+			//accelerationEffect = Mathf.Lerp(accelerationEffect, gForce * 3.5f, 2f * Time.deltaTime);
 			accelerationEffect = 0f;
 			transform.position = Vector3.Lerp(transform.position, focusPoint.position, lerpTime * Time.deltaTime);
 
@@ -112,6 +115,21 @@ public class CameraFollow2 : MonoBehaviour {
 
 			camTransform.localRotation = Quaternion.Lerp(camTransform.localRotation, Quaternion.Euler(-accelerationEffect, 0, 0), 5f * Time.deltaTime);
 			transform.LookAt(carTransform);
+
+			float speed = playerController.carSpeed;
+			if (speed > 60f)
+            {
+				if (!speedlineEffect.gameObject.activeSelf)
+					speedlineEffect.gameObject.SetActive(true);
+
+				var emission = speedlineEffect.emission;
+				emission.rateOverTime = 2f * speed - 80f;
+			}
+			else
+            {
+				if (speedlineEffect.gameObject.activeSelf)
+					speedlineEffect.gameObject.SetActive(false);
+			}
         }
 	}
 

@@ -1495,10 +1495,10 @@ public class GM : Singleton<GM>
         }
         else
         {
+            player.manMode = false;
             ChangeVehicle(currentVehicle);
             player.manObj.SetActive(false);
             player.cam.mainCam.fieldOfView = 25f;
-            player.manMode = false;
         }
     }
 

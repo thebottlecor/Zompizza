@@ -92,7 +92,8 @@ public class PlayerControllerData : EventListener
 
     public void SetData(PlayerController player)
     {
-        gameObject.SetActive(true);
+        if (!player.manMode)
+            gameObject.SetActive(true);
 
         player.maxLoad = maxLoad;
 

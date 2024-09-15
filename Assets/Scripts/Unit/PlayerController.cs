@@ -469,8 +469,8 @@ public class PlayerController : PlayerControllerData
         upBreak = !pressBreak;
     }
 
-    public float gForce;
-    private float lastFrameVel;
+    //public float gForce;
+    //private float lastFrameVel;
 
     private void CalcSpeed()
     {
@@ -481,9 +481,9 @@ public class PlayerController : PlayerControllerData
         // Save the local velocity of the car in the z axis. Used to know if the car is going forward or backwards.
         localVelocityZ = transform.InverseTransformDirection(carRigidbody.velocity).z;
 
-        float currentVel = carRigidbody.velocity.magnitude;
-        gForce = (currentVel - lastFrameVel) / (Time.deltaTime * Physics.gravity.magnitude);
-        lastFrameVel = currentVel;
+        //float currentVel = carRigidbody.velocity.magnitude;
+        //gForce = (currentVel - lastFrameVel) / (Time.deltaTime * Physics.gravity.magnitude);
+        //lastFrameVel = currentVel;
     }
 
     void Update()

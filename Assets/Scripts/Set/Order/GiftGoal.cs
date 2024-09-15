@@ -84,7 +84,7 @@ public class GiftGoal : MonoBehaviour
         goalEffectObj.SetActive(true);
 
         float dist = (GM.Instance.player.transform.position - transform.position).magnitude;
-        if (dist <= 5f)
+        if (dist <= 7.5f)
             ShowCheck();
     }
 
