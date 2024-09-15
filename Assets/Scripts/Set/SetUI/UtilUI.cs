@@ -128,6 +128,7 @@ public class UtilUI : EventListener
         um.padUIs.SetActive(false);
         OrderManager.Instance.fastTravelBtnParnet.SetActive(false);
         WorldMapManager.Instance.OpenFullscreenMap();
+        UINaviHelper.Instance.inputHelper.GuidePadCheck();
 
         SelectSubPanel(activeSubPanel);
 

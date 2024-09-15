@@ -34,6 +34,7 @@ public class UINaviHelper : Singleton<UINaviHelper>
 
     [Header("항상 보여지는 인디케이터")]
     public PadKeyIndicator[] alwaysShow_PadUIs;
+    public PadKeyIndicator[] keyGuide_PadUIs;
     public TextMeshProUGUI[] virtualCursorTMP;
 
     protected override void AddListeners()
@@ -561,9 +562,9 @@ public class UINaviHelper : Singleton<UINaviHelper>
             scrollMoveDir = new Vector3(0f, 0f, input.y).normalized;
             virtualCursorDir = new Vector3(input.x, input.y).normalized;
 
-            if (input.x > 0) 
+            if (input.x > 0)
                 sliderDir = 1f;
-            else if (input.x < 0) 
+            else if (input.x < 0)
                 sliderDir = -1f;
         }
     }
@@ -645,6 +646,25 @@ public class UINaviHelper : Singleton<UINaviHelper>
             for (int i = 0; i < alwaysShow_PadUIs.Length; i++)
             {
                 alwaysShow_PadUIs[i].gameObject.SetActive(false);
+            }
+        }
+    }
+
+    public void Toggle_Guide_PadUIs(bool on)
+    {
+        if (on)
+        {
+            for (int i = 0; i < keyGuide_PadUIs.Length; i++)
+            {
+                keyGuide_PadUIs[i].UIUpdate(PadType);
+                keyGuide_PadUIs[i].gameObject.SetActive(true);
+            }
+        }
+        else
+        {
+            for (int i = 0; i < keyGuide_PadUIs.Length; i++)
+            {
+                keyGuide_PadUIs[i].gameObject.SetActive(false);
             }
         }
     }

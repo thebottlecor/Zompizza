@@ -28,10 +28,13 @@ public class PadKeyIndicator : MonoBehaviour
                     tmp.text = tm.GetKeyMaps(KeyMap.worldMap);
                     break;
                 case PadKeyCode.B_Right:
-                    if (GM.Instance.midNight) // ÇÑ¹ãÁß ´×°Õ¸ðµå
+                    if (GM.Instance != null && GM.Instance.midNight) // ÇÑ¹ãÁß ´×°Õ¸ðµå
                         tmp.text = tm.GetCommons("Run");
                     else
                         tmp.text = tm.GetKeyMaps(KeyMap.carBreak);
+                    break;
+                case PadKeyCode.L1:
+                    tmp.text = tm.GetKeyMaps(KeyMap.changePOV);
                     break;
                 case PadKeyCode.L2:
                     tmp.text = tm.GetKeyMaps(KeyMap.carBackward);

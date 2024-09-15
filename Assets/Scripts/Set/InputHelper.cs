@@ -125,6 +125,7 @@ public class InputHelper : MonoBehaviour
         // 패드 없음 - 비활성화
         uiNaviHelper.PadDisconnected();
         uiNaviHelper.Toggle_AlwaysShow_PadUIs(false);
+        uiNaviHelper.Toggle_Guide_PadUIs(false);
         if (uiNaviHelper.ingame != null) uiNaviHelper.ingame.Toggle_AlwaysShow_PadUIs(false, uiNaviHelper.PadType);
         if (TutorialManager.Instance != null) TutorialManager.Instance.PadCheck();
         if (GM.Instance != null) GM.Instance.RunIndicatorUpdate(); // 패드 업데이트
@@ -165,7 +166,25 @@ public class InputHelper : MonoBehaviour
         // 패드 없음 - 비활성화
         uiNaviHelper.PadDisconnected();
         uiNaviHelper.Toggle_AlwaysShow_PadUIs(false);
+        uiNaviHelper.Toggle_Guide_PadUIs(false);
         if (uiNaviHelper.ingame != null) uiNaviHelper.ingame.Toggle_AlwaysShow_PadUIs(false, uiNaviHelper.PadType);
+    }
+    public void GuidePadCheck()
+    {
+        var pad = Gamepad.current;
+        if (pad != null)
+        {
+            if (pad is UnityEngine.InputSystem.DualShock.DualShockGamepad)
+            {
+                uiNaviHelper.UIUpdate(0);
+            }
+            else
+            {
+                // 나머지는 Xbox UI로 통일
+                uiNaviHelper.UIUpdate(1);
+            }
+            uiNaviHelper.Toggle_Guide_PadUIs(true);
+        }
     }
 }
 

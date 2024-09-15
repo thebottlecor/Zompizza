@@ -27,6 +27,8 @@ public enum KeyMap
 
     enterStore,
 
+    changePOV,
+
     LAST,
 }
 
@@ -48,6 +50,7 @@ public class KeySaveData
         new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.worldMapZoomOut, Value = KeyCode.PageUp },
 
         new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.enterStore, Value = KeyCode.E },
+        new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.changePOV, Value = KeyCode.Tab },
     };
 }
 [Serializable]
@@ -130,6 +133,7 @@ public class SettingManager : Singleton<SettingManager>
         KeyMap.worldMapZoomOut,
 
         KeyMap.enterStore,
+        KeyMap.changePOV
     };
     // keyOrder 순서에 맞춰서 InputSystemKeymappingBase 데이터 넣기
     [SerializeField] private List<InputSystemKeymappingBase> inputSystemKeymappings;
@@ -188,7 +192,7 @@ public class SettingManager : Singleton<SettingManager>
     {
         StringBuilder st = new StringBuilder().AppendFormat("{0}/Config/keys.json", Application.persistentDataPath);
         keySave = JsonHelper.LoadJsonFile<KeySaveData>(st.ToString(), false);
-        if (keySave == null)
+        if (keySave == null || keySave.keyCodes.Count != keyOrder.Count)
         {
             keySave = new KeySaveData();
 
@@ -494,6 +498,7 @@ public class SettingManager : Singleton<SettingManager>
 
         SelectSubPanel(activeSubPanel);
         ShowSubSettingPanel(0);
+        UINaviHelper.Instance.inputHelper.GuidePadCheck();
 
         settingCanvasGroup.alpha = 0f;
         settingRectTransform.transform.localPosition = new Vector3(0f, 1000f, 0f);

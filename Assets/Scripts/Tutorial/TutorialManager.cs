@@ -117,6 +117,8 @@ public class TutorialManager : Singleton<TutorialManager>
     public void UpdateText()
     {
         StringBuilder st = new StringBuilder();
+        st.AppendFormat("<color=#51FF55>{0}</color> - {1}", tm.GetKeyMaps(KeyMap.changePOV), sm.keyMappings[KeyMap.changePOV].GetName());
+        st.AppendLine();
         st.AppendFormat("{0} - {1}", tm.GetKeyMaps(KeyMap.carForward), sm.keyMappings[KeyMap.carForward].GetName());
         st.AppendLine();
         st.AppendFormat("{0} - {1}", tm.GetKeyMaps(KeyMap.carBackward), sm.keyMappings[KeyMap.carBackward].GetName());
@@ -421,6 +423,8 @@ public class TutorialManager : Singleton<TutorialManager>
             indicators[1].SetActive(true);
             indicators[6].SetActive(false);
             step = 5;
+
+            training = false; // 피자 만든 후 트레이닝 해제
         }
     }
     public void ShopWindowHide()
@@ -528,9 +532,6 @@ public class TutorialManager : Singleton<TutorialManager>
             indicators[5].SetActive(true);
             UIManager.Instance.shopUI.shopCloseBtn.enabled = true;
             step = 10;
-
-            // 탐색 때 트레이닝 해제
-            training = false;
         }
     }
     public void Spaceship()

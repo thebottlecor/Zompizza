@@ -148,6 +148,7 @@ public class TextManager : Singleton<TextManager>
         SettingManager.Instance.UpdateTexts();
         UINaviHelper.Instance.UpdateTexts();
         //SaveManager.Instance.UpdateTexts();
+        UINaviHelper.Instance.inputHelper.GuidePadCheck();
 
         if (TextChangedEvent != null)
             TextChangedEvent(null, null);

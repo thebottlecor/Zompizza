@@ -166,12 +166,14 @@ public class UIManager : Singleton<UIManager>
     {
         InputHelper.EscapeEvent += OnESC;
         InputHelper.WorldmapEvent += OnWorldmap;
+        InputHelper.TabMoveEvent += OnTabMove;
         InputHelper.EnterStoreEvent += OnShopEnter;
     }
     protected override void RemoveListeners()
     {
         InputHelper.EscapeEvent -= OnESC;
         InputHelper.WorldmapEvent -= OnWorldmap;
+        InputHelper.TabMoveEvent -= OnTabMove;
         InputHelper.EnterStoreEvent -= OnShopEnter;
     }
 
@@ -221,6 +223,25 @@ public class UIManager : Singleton<UIManager>
         if (Panels_Inactive)
         {
             utilUI.OpenWorldMap();
+        }
+    }
+
+    private void OnTabMove(object sender, InputAction.CallbackContext e) // 주행중 카메라 시점 변경
+    {
+        if (!Interacting(e)) return;
+
+        if (Panels_Inactive)
+        {
+            float value = e.ReadValue<float>();
+
+            if (value > 0)
+            {
+
+            }
+            else if (value < 0)
+            {
+                GM.Instance.player.cam.ChangeMode();
+            }
         }
     }
 
