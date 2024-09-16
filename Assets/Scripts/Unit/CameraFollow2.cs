@@ -123,7 +123,7 @@ public class CameraFollow2 : MonoBehaviour {
 					speedlineEffect.gameObject.SetActive(true);
 
 				var emission = speedlineEffect.emission;
-				emission.rateOverTime = 2f * speed - 80f;
+				emission.rateOverTime = Mathf.Min(2f * speed - 80f, 120f);
 			}
 			else
             {
