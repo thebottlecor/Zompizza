@@ -205,7 +205,7 @@ public class UIManager : Singleton<UIManager>
                 shopUI.ShowOrder();
             }
         }
-        else if (vs.talkObj.activeSelf)
+        else if (vs.talkObj.activeSelf) // 주민과 대화
         {
             if (Panels_Inactive)
             {

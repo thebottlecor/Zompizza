@@ -330,10 +330,12 @@ public class VillagerUI : EventListener
         expelWarningObj.SetActive(on);
         UINaviHelper.Instance.SetFirstSelect();
     }
-    public void Expel()
+    public void Expel() // 직접 추방
     {
         var expel = VillagerManager.Instance.villagers[currentVillagerIdx];
         expel.Expel();
+
+        VillagerManager.Instance.villagerSearcher.Clear();
 
         ShowExpelWarning(false);
         HideUI();

@@ -222,7 +222,8 @@ public class PlayerController : PlayerControllerData
                         float crashDrag = this.crashDrag;
                         if (zombie.isHeavy && !zombie.dead)
                         {
-                            crashDrag *= 200f * 3f * speedPercent;
+                            if (playerDot >= 0) // 전진일 경우만 헤비 좀비에게 튕겨남
+                                crashDrag *= 200f * 2f * speedPercent;
                             beforeCollisionSpeed = MaxSpeed; // 헤비와 부딪히면 무조건 충돌 판정
                             isCollision = true;
                         }

@@ -261,41 +261,60 @@ public class ResearchManager : Singleton<ResearchManager>
 
     public void UpdatePizzeria()
     {
+        int changed = 0;
         int tier = globalEffect.tier;
 
         if (tier >= 1)
         {
-            tier_Add[0].SetActive(true);
-            tier_Remove[0].SetActive(false);
+            changed += SetVisbility(tier_Add[0], true);
+            changed += SetVisbility(tier_Remove[0], false);
         }
 
         int expand = globalEffect.pizzeriaExpand;
         
         if (expand >= 1)
         {
-            pizzeriaExpands_Add[0].SetActive(true);
-            pizzeriaExpands_Remove[0].SetActive(false);
+            changed += SetVisbility(pizzeriaExpands_Add[0], true);
+            changed += SetVisbility(pizzeriaExpands_Remove[0], false);
         }
         if (expand >= 2)
         {
-            pizzeriaExpands_Add[1].SetActive(true);
-            pizzeriaExpands_Remove[1].SetActive(false);
+            changed += SetVisbility(pizzeriaExpands_Add[1], true);
+            changed += SetVisbility(pizzeriaExpands_Remove[1], false);
         }
         if (expand >= 3)
         {
-            pizzeriaExpands_Add[2].SetActive(true);
-            pizzeriaExpands_Remove[2].SetActive(false);
+            changed += SetVisbility(pizzeriaExpands_Add[2], true);
+            changed += SetVisbility(pizzeriaExpands_Remove[2], false);
         }
 
         int raidDefense = globalEffect.raidDefense;
 
         if (raidDefense >= 1)
         {
-            raidDefenses_Add[0].SetActive(true);
-            raidDefenses_Remove[0].SetActive(false);
+            changed += SetVisbility(raidDefenses_Add[0], true);
+            changed += SetVisbility(raidDefenses_Remove[0], false);
         }
 
-        AstarPath.active.Scan();
+        if (changed > 0)
+        {
+            var graph = AstarPath.active.data.graphs[1];
+            AstarPath.active.Scan(graph);
+        }
+    }
+    private int SetVisbility(GameObject obj, bool on)
+    {
+        if (on && !obj.activeSelf)
+        {
+            obj.SetActive(true); 
+            return 1;
+        }
+        if (!on && obj.activeSelf)
+        {
+            obj.SetActive(false);
+            return 1;
+        }
+        return 0;
     }
 
     public void ToggleAllHiddenRecipe(bool on)
@@ -343,6 +362,7 @@ public class ResearchManager : Singleton<ResearchManager>
             {
                 researchLines[i].InitVisual();
             }
+
             UpdatePizzeria();
             UIManager.Instance.UpdateIngredientsTier();
 
