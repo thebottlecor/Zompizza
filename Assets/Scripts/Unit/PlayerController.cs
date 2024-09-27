@@ -95,6 +95,13 @@ public class PlayerController : PlayerControllerData
     public Animator manAnim;
     public AudioSource stepSound;
 
+    public int waterCount;
+    private float waterTimer;
+    private int currentPizza;
+    public AudioSource waterSplashSound;
+
+    public GameObject installDeco;
+
     private void Start()
     {
         carRigidbody = gameObject.GetComponent<Rigidbody>();
@@ -266,20 +273,34 @@ public class PlayerController : PlayerControllerData
         }
     }
 
-    #region 빙판
+    #region 빙판 & 물
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == 12) // 빙판
+        if (other.gameObject.layer == 4) // 물
+        {
+            waterCount++;
+        }
+        else if (other.gameObject.layer == 12) // 빙판
         {
             if (iceCoroutine != null)
                 StopCoroutine(iceCoroutine);
             iceCoroutine = StartCoroutine(TouchIce());
         }
     }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.layer == 4) // 물
+        {
+            waterCount--;
+            if (waterCount <= 0)
+            {
+                waterCount = 0;
+                waterTimer = 0f;
+            }
+        }
+    }
     private IEnumerator TouchIce()
     {
-        Debug.Log("ICE!");
-
         FLwheelFriction.stiffness = 0f;
         frontLeftCollider.sidewaysFriction = FLwheelFriction;
 
@@ -300,8 +321,6 @@ public class PlayerController : PlayerControllerData
     }
     private void RecoverIce()
     {
-        Debug.Log("ICE Recover");
-
         FLwheelFriction.stiffness = 1f;
         frontLeftCollider.sidewaysFriction = FLwheelFriction;
 
@@ -355,6 +374,7 @@ public class PlayerController : PlayerControllerData
         {
             pizzaBoxes[i].SetActive(true);
         }
+        currentPizza = box;
     }
 
     public void StopPlayer(bool forceRotate = true, bool instance = false)
@@ -645,6 +665,20 @@ public class PlayerController : PlayerControllerData
 
         // We call the method AnimateWheelMeshes() in order to match the wheel collider movements with the 3D meshes of the wheels.
         AnimateWheelMeshes();
+
+        if (waterCount > 0 && currentPizza > 0) // 물속이면 초당 피자가 데미지 받음
+        {
+            waterTimer += Time.deltaTime;
+            if (waterTimer >= 1f)
+            {
+                waterTimer = 0f;
+                if (DamageEvent != null)
+                    DamageEvent(null, Constant.water_damage * UnityEngine.Random.Range(0.75f, 1.25f));
+
+                if (!waterSplashSound.isPlaying)
+                    waterSplashSound.Play();
+            }
+        }
 
         StatManager.Instance.carMileage += Mathf.Abs(carSpeed) * 0.00001f;
     }

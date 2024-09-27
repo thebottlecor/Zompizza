@@ -37,6 +37,9 @@ public class TutorialManager : Singleton<TutorialManager>
     public GameObject controlPadObj;
     public TextMeshProUGUI driftText;
     public GameObject driftPadObj;
+    public TextMeshProUGUI installText;
+    public TextMeshProUGUI installPadObjTMP;
+    public GameObject installPadObj;
 
     public GameObject[] guideObjects;
     public TextMeshProUGUI[] guideTexts;
@@ -73,6 +76,8 @@ public class TutorialManager : Singleton<TutorialManager>
         controlPadObj.SetActive(false);
         driftText.gameObject.SetActive(false);
         driftPadObj.SetActive(false);
+        installText.gameObject.SetActive(false);
+        installPadObj.SetActive(false);
         for (int i = 0; i < guideObjects.Length; i++)
         {
             guideObjects[i].SetActive(false);
@@ -164,6 +169,22 @@ public class TutorialManager : Singleton<TutorialManager>
         }
         driftText.text = st2.ToString();
     }
+    private void InstallTextUpdate(bool pad)
+    {
+        StringBuilder st2 = new StringBuilder();
+        if (pad)
+        {
+            //st2.Append(" ");
+            //st2.AppendLine();
+            //st2.AppendFormat(tm.GetCommons("Tutorial00"), tm.GetKeyMaps(KeyMap.enterStore));
+            installPadObjTMP.text = tm.GetCommons("Install");
+        }
+        else
+        {
+            st2.AppendFormat("{0} - {1}", tm.GetCommons("Install"), sm.keyMappings[KeyMap.enterStore].GetName());
+        }
+        installText.text = st2.ToString();
+    }
 
     public void ToggleDriftGuide(bool on)
     {
@@ -178,6 +199,21 @@ public class TutorialManager : Singleton<TutorialManager>
         {
             driftPadObj.SetActive(false);
             driftText.gameObject.SetActive(false);
+        }
+    }
+    public void ToggleInstallGuide(bool on)
+    {
+        if (on)
+        {
+            var pad = Gamepad.current;
+            installPadObj.SetActive(pad != null);
+            InstallTextUpdate(pad != null);
+            installText.gameObject.SetActive(true);
+        }
+        else
+        {
+            installPadObj.SetActive(false);
+            installText.gameObject.SetActive(false);
         }
     }
 

@@ -89,7 +89,7 @@ public class UnstuckHelper : EventListener
 
         //float radius = Mathf.Sqrt(Mathf.Pow(0.5f * coll.height, 2) + Mathf.Pow(coll.radius, 2));
 
-        float radius = coll.height * 0.5f;
+        float radius = coll.height * 0.5f + 0.1f;
         int maxTry = 1000;
 
         while (true)
@@ -119,6 +119,7 @@ public class UnstuckHelper : EventListener
 
             if (others.Length == 1)
             {
+                node.y = 3f;
                 player.transform.position = node;
                 break;
             }

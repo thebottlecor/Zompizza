@@ -31,62 +31,8 @@ Transform:
   m_Children:
   - {fileID: 7969611773730365580}
   - {fileID: 8204296780366818977}
-  - {fileID: 3655742522170320980}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &3584746793692228445
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3655742522170320980}
-  - component: {fileID: 3824564643113694395}
-  m_Layer: 0
-  m_Name: ArrivePos
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &3655742522170320980
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3584746793692228445}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -112.6, y: 15.2, z: -18.8}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 130699883135910604}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &3824564643113694395
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3584746793692228445}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 2, y: 3, z: 14.08}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8231245854799721076
 GameObject:
   m_ObjectHideFlags: 0
@@ -114,7 +60,7 @@ Transform:
   m_GameObject: {fileID: 8231245854799721076}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 2.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -133,9 +79,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   triggered: 0
-  spawnPos: {fileID: 3824564643113694395}
-  jumpForce: 500
-  yForce: 10000
+  spawnPos: {fileID: 0}
+  jumpForce: 250
+  yForce: 15000
 --- !u!65 &2115570918624125350
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -237,7 +183,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1771350060947929967, guid: fe8773b9edddda249b7d3cc0f5425a2a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1771350060947929967, guid: fe8773b9edddda249b7d3cc0f5425a2a, type: 3}
       propertyPath: m_LocalPosition.z

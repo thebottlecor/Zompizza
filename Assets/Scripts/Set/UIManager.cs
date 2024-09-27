@@ -32,6 +32,7 @@ public class UIManager : Singleton<UIManager>
     public GameObject talkInfo;
     public GameObject timeInfo;
     public GameObject padUIs;
+    public GameObject installUIs;
     public GameObject orderIndicator;
 
     [Header("¿Á∑·√¢")]
@@ -119,6 +120,8 @@ public class UIManager : Singleton<UIManager>
             if (GM.Instance.midNight) return;
 
             speedInfo.SetActive(true);
+            if (!GM.Instance.pizzeriaStay)
+                installUIs.SetActive(true);
         }
         else
         {
@@ -127,6 +130,7 @@ public class UIManager : Singleton<UIManager>
             timeInfo.SetActive(false);
             talkInfo.SetActive(false);
             speedInfo.SetActive(false);
+            installUIs.SetActive(false);
         }
     }
 
@@ -212,6 +216,14 @@ public class UIManager : Singleton<UIManager>
                 int idx = vs.GetVillagerIdx();
                 if (idx >= 0)
                     villagerUI.OpenUI(idx);
+            }
+        }
+        else if (GM.Instance.install)
+        {
+            if (!GM.Instance.pizzeriaStay && installUIs.activeSelf)
+            {
+                GM.Instance.InstallFuck(false);
+                GM.Instance.InstallFuck2();
             }
         }
     }

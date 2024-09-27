@@ -18,12 +18,14 @@ public class SpringJump : BaseSpawner
         {
             //triggered = true;
 
-            var arrivePos = ZombiePooler.Instance.GetRandomPos(spawnPos.bounds);
+            //var arrivePos = ZombiePooler.Instance.GetRandomPos(spawnPos.bounds);
 
             var pusher = GM.Instance.player.carRigidbody;
 
-            Vector3 dir = (arrivePos - pusher.transform.position);
-            dir.y = 0f;
+            //Vector3 dir = (arrivePos - pusher.transform.position);
+            //dir.y = 0f;
+
+            Vector3 dir = pusher.transform.forward * 50f;
 
             StartCoroutine(Jump(pusher, dir));
         }

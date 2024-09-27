@@ -191,6 +191,10 @@ public class GM : Singleton<GM>
     public GameObject returnIndicator;
     public GameObject rainObj;
 
+    public bool pizzeriaStay;
+    public bool install;
+    public GameObject installJumpObj;
+
     public static EventHandler<bool> EndTimeEvent; // true일시 마감
     private SerializableDictionary<KeyMap, KeyMapping> HotKey => SettingManager.Instance.keyMappings;
     private TextManager tm => TextManager.Instance;
@@ -529,6 +533,7 @@ public class GM : Singleton<GM>
 
     public void NextDay()
     {
+        InstallFuck(false);
         rainObj.SetActive(false);
         zombieEnvSound.Mute(true);
         for (int i = 0; i < shopGates.Length; i++)
@@ -1021,6 +1026,35 @@ public class GM : Singleton<GM>
         {
             bloodMoon = true;
         }
+
+        if ((day + 1) % 2 == 0)
+        {
+            InstallFuck(true);
+        }
+        else
+        {
+            InstallFuck(false);
+        }
+    }
+    public void InstallFuck(bool on)
+    {
+        if (on)
+        {
+            install = true;
+            TutorialManager.Instance.ToggleInstallGuide(true);
+            player.installDeco.SetActive(true);
+        }
+        else
+        {
+            install = false;
+            TutorialManager.Instance.ToggleInstallGuide(false);
+            player.installDeco.SetActive(false);
+        }
+    }
+    public void InstallFuck2()
+    {
+        if (player.transform.position.y > 2.5f) return;
+        Instantiate(installJumpObj, player.transform.position + player.transform.forward * 5f, Quaternion.identity);
     }
 
     public void GameOver()

@@ -34,6 +34,7 @@ public class Constant
     public const float delivery_Impossible_accepted_rating = -1.5f;
 
     public const float crash_damage = 0.05f;
+    public const float water_damage = 0.01f;
     public const float zombie_damage = 0.01f;
     public const float min_damage = 0f;
 
