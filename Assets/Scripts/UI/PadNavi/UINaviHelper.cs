@@ -29,6 +29,14 @@ public class UINaviHelper : Singleton<UINaviHelper>
     public UINavi title_settings_close;
     private int currentDropdownItem;
 
+    [Header("타이틀 - 세이브 저장값")]
+    public UINavi[] title_saveSlots;
+    public UINavi[] title_saveFiles;
+    public UINavi title_save_delete_sure_first;
+    public UINavi title_save_delete;
+    public UINavi title_save_tutorial;
+    public UINavi title_save_close;
+
     [Header("인게임 - 옵션 저장값")]
     [HideInInspector] public UINaviHelper_Ingame ingame;
 
@@ -96,6 +104,55 @@ public class UINaviHelper : Singleton<UINaviHelper>
                         break;
                 }
                 uiMoveCheckFunc = Check_Title_Setting;
+            }
+            else if (SaveManager.Instance != null && SaveManager.Instance.IsActive)
+            {
+                var save = SaveManager.Instance;
+                if (save.saveUIs[0].activeSelf)
+                {
+                    current = title_saveSlots[0];
+                    title_save_close.ResetConnection();
+                    title_save_tutorial.ResetConnection();
+                    title_save_delete.ResetConnection();
+                    title_save_close.left = title_save_tutorial;
+                    title_save_close.right = title_save_tutorial;
+                    title_save_tutorial.right = title_save_close;
+                    title_save_tutorial.left = title_save_close;
+                    title_save_close.up = title_saveSlots[0];
+                    title_save_tutorial.up = title_saveSlots[0];
+                }
+                else if (save.saveUIs[1].activeSelf)
+                {
+                    if (save.saveDeleteWarningObj.activeSelf)
+                    {
+                        current = title_save_delete_sure_first;
+                    }
+                    else
+                    {
+                        current = title_saveFiles[0];
+                    }
+                    title_save_close.ResetConnection();
+                    title_save_delete.ResetConnection();
+                    title_save_tutorial.ResetConnection();
+                    title_save_close.left = title_save_delete;
+                    title_save_close.right = title_save_delete;
+                    title_save_delete.right = title_save_close;
+                    title_save_delete.left = title_save_close;
+                    title_save_delete.down = title_saveFiles[0];
+                    title_save_close.down = title_saveFiles[0];
+                    UINavi lastOne = title_saveFiles[0];
+                    for (int i = title_saveFiles.Length - 1; i >= 0; i--)
+                    {
+                        if (title_saveFiles[i].gameObject.activeSelf)
+                        {
+                            lastOne = title_saveFiles[i];
+                            break;
+                        }
+                    }
+                    title_save_delete.up = lastOne;
+                    title_save_close.up = lastOne;
+                }
+                uiMoveCheckFunc = Check_Title_Save;
             }
             else
             {
@@ -299,6 +356,12 @@ public class UINaviHelper : Singleton<UINaviHelper>
         var set = SettingManager.Instance;
         return (GM.Instance == null) && (set != null && !set.opened && !set.loading);
     }
+    private bool Check_Title_Save()
+    {
+        if (inputHelper.disconnectedPanel.activeSelf) return false;
+        var set = SaveManager.Instance;
+        return (GM.Instance == null) && (set != null && set.opened && !set.loading);
+    }
     private bool Check_Title_Setting()
     {
         if (inputHelper.disconnectedPanel.activeSelf) return false;
@@ -452,9 +515,21 @@ public class UINaviHelper : Singleton<UINaviHelper>
         if (UIManager.Instance != null)
             UIManager.Instance.OnESC(null, e);
 
-        SettingManager.Instance.HideSettings();
-        if (SettingManager.Instance != null)
-            SettingManager.Instance.ButtonSound();
+        var set = SettingManager.Instance;
+        if (set != null && set.IsActive)
+        {
+            set.HideSettings();
+            set.ButtonSound();
+        }
+        var save = SaveManager.Instance;
+        if (save != null && save.IsActive)
+        {
+            if (save.saveDeleteWarningObj.activeSelf)
+                save.ShowSaveDeleteWarning(false);
+            else
+                save.HideSaveSlots();
+            if (set != null) set.ButtonSound();
+        }
     }
 
     private void OnUIMove(object sender, InputAction.CallbackContext e)

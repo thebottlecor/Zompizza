@@ -60,6 +60,18 @@ public class OrderManager : Singleton<OrderManager>
     public MinimapRenderer minimap;
     public MinimapRenderer worldmap;
 
+    protected override void Awake()
+    {
+        base.Awake();
+        customersInfos = new SerializableDictionary<int, CustomerInfo>();
+        for (int i = 0; i < orderGoals.Count; i++)
+        {
+            orderGoals[i].Init(i);
+
+            customersInfos.Add(new SerializableDictionary<int, CustomerInfo>.Pair { Key = i, Value = new CustomerInfo() });
+        }
+    }
+
     public void Init()
     {
         ingredients_Tier1 = new List<Ingredient>();
@@ -101,13 +113,6 @@ public class OrderManager : Singleton<OrderManager>
             }
         }
 
-        customersInfos = new SerializableDictionary<int, CustomerInfo>();
-        for (int i = 0; i < orderGoals.Count; i++)
-        {
-            orderGoals[i].Init(i);
-
-            customersInfos.Add(new SerializableDictionary<int, CustomerInfo>.Pair { Key = i, Value = new CustomerInfo() }); 
-        }
         yesterdayOrders = new List<int>();
 
         orderMiniUIPair = new SerializableDictionary<OrderInfo, OrderMiniUI>();
@@ -219,7 +224,7 @@ public class OrderManager : Singleton<OrderManager>
                 int rewards = info.rewards;
 
                 GM.Instance.AddGold(rewards, GM.GetGoldSource.delivery);
-                UIManager.Instance.shopUI.AddReview(info, timeRating, hpRating);
+                UIManager.Instance.shopUI.AddReview(GM.Instance.day, info.customerIdx, info.goal, timeRating, hpRating);
 
                 orderGoals[gIndex].SuccessEffect(rewards, resultRating);
 
@@ -306,7 +311,7 @@ public class OrderManager : Singleton<OrderManager>
                 // 배달 실패
                 float fail = Constant.remainTimeRating4 + Constant.remainHpRating4;
                 GM.Instance.AddRating(fail, GM.GetRatingSource.notComplete); // 산타
-                UIManager.Instance.shopUI.AddReview(info, Constant.remainTimeRating4, Constant.remainHpRating4);
+                UIManager.Instance.shopUI.AddReview(GM.Instance.day, info.customerIdx, info.goal, Constant.remainTimeRating4, Constant.remainHpRating4);
 
                 orderGoals[info.goal].Hide();
 
@@ -886,7 +891,7 @@ public class OrderManager : Singleton<OrderManager>
             {
                 // 미완료 리뷰 남기기 -5점
                 GM.Instance.AddRating(Constant.delivery_Not_completed_rating, GM.GetRatingSource.notComplete);
-                UIManager.Instance.shopUI.AddReview(orderList[i], -10000f, Constant.delivery_Not_completed_rating); // 구분 기능 -1000 => -5는 점수
+                UIManager.Instance.shopUI.AddReview(GM.Instance.day, orderList[i].customerIdx, orderList[i].goal, -10000f, Constant.delivery_Not_completed_rating); // 구분 기능 -1000 => -5는 점수
             }
 
             orderMiniUIPair[orderList[i]].Hide();
@@ -917,7 +922,7 @@ public class OrderManager : Singleton<OrderManager>
         //}
 
         //GM.Instance.AddRating(0f, GM.GetRatingSource.notAccepted);
-        UIManager.Instance.shopUI.AddReview(info, 0f, 0f);
+        UIManager.Instance.shopUI.AddReview(GM.Instance.day, info.customerIdx, info.goal, 0f, 0f);
     }
 
 

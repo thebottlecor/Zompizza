@@ -30,9 +30,6 @@ public class Lobby : Singleton<Lobby>
     public GameObject lobbyUIObjects;
 
     public LanguagePanel languagePanel;
-    private LobbyCloseButton[] lobbyCloseButtons;
-
-    public EditorSettingLib settingLib;
 
     public bool SaveDataLoading { get; private set; }
 
@@ -42,7 +39,6 @@ public class Lobby : Singleton<Lobby>
     {
         base.Awake();
         DontDestroyOnLoad(this.gameObject);
-        lobbyCloseButtons = FindObjectsOfType<LobbyCloseButton>(true);
 
         LobbyUISwitch(true);
         CallAfterAwake();
@@ -137,12 +133,22 @@ public class Lobby : Singleton<Lobby>
                 return;
             }
 
-            if (!SettingManager.Instance.IsActive)
+            if (SaveManager.Instance.saveDeleteWarningObj.activeSelf)
             {
-                SettingManager.Instance.OpenPanel(0);
+                SaveManager.Instance.ShowSaveDeleteWarning(false);
+            }
+            else if (SaveManager.Instance.IsActive)
+            {
+                SaveManager.Instance.HideSaveSlots();
+            }
+            else if (SettingManager.Instance.IsActive)
+            {
+                SettingManager.Instance.HideSettings();
             }
             else
-                CloseAllPanel();
+            {
+                SettingManager.Instance.OpenSettings();
+            }
         }
     }
     private void OnBack(object sender, InputAction.CallbackContext e)
@@ -157,11 +163,8 @@ public class Lobby : Singleton<Lobby>
 
     public void CloseAllPanel()
     {
+        SaveManager.Instance.HideSaveSlots();
         SettingManager.Instance.HideSettings();
-        for (int i = 0; i < lobbyCloseButtons.Length; i++)
-        {
-            lobbyCloseButtons[i].Close();
-        }
     }
 
     public void QuitGame()
@@ -173,28 +176,29 @@ public class Lobby : Singleton<Lobby>
 #endif
     }
 
-    public void LoadGameStart(string saveName)
-    {
-        CloseAllPanel();
-        LobbyUISwitch(false);
-        GameStartInfo gameStartInfo = new GameStartInfo
-        {
-            saveName = saveName,
-        };
-        LoadingSceneManager.Instance.LobbyStart(gameStartInfo, settingLib.sceneName);
-    }
+    //public void LoadGameStart(string saveName)
+    //{
+    //    CloseAllPanel();
+    //    LobbyUISwitch(false);
+    //    GameStartInfo gameStartInfo = new GameStartInfo
+    //    {
+    //        slotNum = -1,
+    //        saveName = saveName,
+    //    };
+    //    LoadingSceneManager.Instance.LobbyStart(gameStartInfo, settingLib.sceneName);
+    //}
 
-    public void TEMP_GameSTART() // 현재 데모 버전 시작 버튼
-    {
-        CloseAllPanel();
-        LobbyUISwitch(false);
-        GameStartInfo gameStartInfo = new GameStartInfo
-        {
-            saveName = string.Empty,
-            tutorial = true,
-        };
-        LoadingSceneManager.Instance.LobbyStart(gameStartInfo, settingLib.sceneName);
-    }
+    //public void TEMP_GameSTART() // 현재 데모 버전 시작 버튼
+    //{
+    //    CloseAllPanel();
+    //    LobbyUISwitch(false);
+    //    GameStartInfo gameStartInfo = new GameStartInfo
+    //    {
+    //        slotNum = -1,
+    //        tutorial = true,
+    //    };
+    //    LoadingSceneManager.Instance.LobbyStart(gameStartInfo, settingLib.sceneName);
+    //}
 
     public void MenuButtonSound()
     {
@@ -347,8 +351,7 @@ public class Lobby : Singleton<Lobby>
 
         GameStartInfo gameStartInfo = new GameStartInfo
         {
-            cityName = cityNameInputField.text,
-            mapSeed = mapseed,
+            pizzeriaName = cityNameInputField.text,
 
             resourceDensity = resourceDensityDropdown.value - 1,
             disasterIntensity = disasterIntensityDropdown.value - 1,
@@ -357,9 +360,9 @@ public class Lobby : Singleton<Lobby>
 
             tutorial = tutorialToggle.isOn,
 
-            saveName = string.Empty,
+            slotNum = -1,
         };
-        LoadingSceneManager.Instance.LobbyStart(gameStartInfo, settingLib.sceneName);
+        LoadingSceneManager.Instance.LobbyStart(gameStartInfo, SaveManager.Instance.settingLib.sceneName);
     }
 
     public int newGameCount;
@@ -376,8 +379,7 @@ public class Lobby : Singleton<Lobby>
 public struct GameStartInfo
 {
     // NewGame (플레이어 설정)
-    public string cityName;
-    public int mapSeed;
+    public string pizzeriaName;
 
     public int resourceDensity;
     public int disasterIntensity;
@@ -387,5 +389,6 @@ public struct GameStartInfo
     public bool tutorial;
 
     // LoadGame (세이브 파일 불러오기)
+    public int slotNum;
     public string saveName;
 }

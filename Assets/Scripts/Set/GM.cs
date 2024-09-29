@@ -50,6 +50,7 @@ public class GM : Singleton<GM>
     }
 
     public bool stop_control;
+    public int slotNum;
 
     public int day;
     public float timer;
@@ -252,11 +253,14 @@ public class GM : Singleton<GM>
         if (LoadingSceneManager.Instance != null)
         {
             startInfo = LoadingSceneManager.Instance.StartInfo;
+            slotNum = startInfo.slotNum;
         }
 
-        if (SaveManager.Instance != null && !startInfo.saveName.Equals(string.Empty))
+        bool saveLoad = false;
+        if (SaveManager.Instance != null && !startInfo.saveName.Equals(string.Empty) && (startInfo.slotNum >= 1 && startInfo.slotNum <= 3))
         {
-            gameSaveData = SaveManager.Instance.LoadSaveData(startInfo.saveName);
+            saveLoad = true;
+            gameSaveData = SaveManager.Instance.LoadSaveData(startInfo.slotNum, startInfo.saveName);
 
             // 리턴된 gameSaveData로 값 적용하기
 
@@ -298,14 +302,18 @@ public class GM : Singleton<GM>
         DayStringUpdate();
         ResearchManager.Instance.Init();
         //LoanManager.Instance.Init();
-        UIManager.Instance.shopUI.Init();
-        TutorialManager.Instance.Init();
+        UIManager.Instance.shopUI.Init(saveLoad, gameSaveData);
+        TutorialManager.Instance.Init(startInfo.tutorial);
         OrderManager.Instance.Init();
 
         // 저장 불러오기시 주의
         GiftBoxHide();
 
         ResearchManager.Instance.ToggleAllHiddenRecipe(true);
+        if (saveLoad)
+        {
+            RocketManager.Instance.Load(gameSaveData.gm.rocket);
+        }
 
         rainObj.SetActive(false);
 
@@ -543,7 +551,7 @@ public class GM : Singleton<GM>
 
         accountText[0].text = string.Format(tm.GetCommons("Day"), day + 1);
         day++;
-        UIManager.Instance.shopUI.DayFirstReview();
+        UIManager.Instance.shopUI.DayFirstReview(day);
         player.ShakeOffAllZombies();
         ZombiePooler.Instance.ZombieReset();
         //LoanManager.Instance.PayInterest();
@@ -889,13 +897,13 @@ public class GM : Singleton<GM>
 
         if (day >= 9) // 데모 승리
         {
-            if (!CongratulationTriggered)
-            {
-                Congratulation(true);
-                AudioManager.Instance.PlaySFX(Sfx.complete);
-                UIManager.Instance.shopUI.upgradeDirection.Show(1);
-                return;
-            }
+            //if (!CongratulationTriggered)
+            //{
+            //    Congratulation(true);
+            //    AudioManager.Instance.PlaySFX(Sfx.complete);
+            //    UIManager.Instance.shopUI.upgradeDirection.Show(1);
+            //    return;
+            //}
         }
 
         warning_gameOver = false; // 평점 0점 이하 패배 조건 삭제
@@ -1008,7 +1016,7 @@ public class GM : Singleton<GM>
                 shopGates[i].alwaysClosed = false;
             }
 
-            SaveManager.Instance.ZompizzaAutoSave();
+            SaveManager.Instance.ZompizzaAutoSave(day);
         });
         sequence.Append(darkCanvas.DOFade(0f, 0.5f));
     }

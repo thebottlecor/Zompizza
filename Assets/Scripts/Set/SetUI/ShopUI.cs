@@ -130,12 +130,15 @@ public class ShopUI : EventListener
     private UIManager um => UIManager.Instance;
     private UILibrary uiLib => DataManager.Instance.uiLib;
 
-    public void Init()
+    public void Init(bool saveLoad, GameSaveData data)
     {
         reviewDayObjects = new List<ReviewDayObject>();
         reviewObjects = new List<Review>();
 
-        DayFirstReview();
+        if (!saveLoad)
+            DayFirstReview(0);
+        else
+            LoadReviewData(data.reviews.datas);
         CreateUpgradeUI();
     }
 
@@ -572,6 +575,7 @@ public class ShopUI : EventListener
                 case 1:
                     StatManager.Instance.UpdateText();
                     VillagerManager.Instance.UpdateUIs();
+                    RocketManager.Instance.UpdateShopUI();
                     reviewScroll.verticalNormalizedPosition = 1f;
                     break;
                 case 2:
@@ -658,33 +662,62 @@ public class ShopUI : EventListener
     }
 
 
-    public void DayFirstReview()
+    public void DayFirstReview(int day)
     {
         var obj = Instantiate(reviewObject_Day_Source, reviewObject_Parent);
         ReviewDayObject reviewDay = obj.GetComponent<ReviewDayObject>();
-        reviewDay.Init(GM.Instance.day);
+        reviewDay.Init(day);
 
         reviewDayObjects.Add(reviewDay);
         reviewDay.transform.SetAsFirstSibling();
     }
 
-    public void AddReview(OrderInfo info, float time, float hp)
+    public void AddReview(int day, int customerIdx, int goal, float time, float hp)
     {
-        int day = GM.Instance.day;
-
         var obj = Instantiate(reviewObject_Source, reviewObject_Parent);
         ReviewObject reviewObj = obj.GetComponent<ReviewObject>();
-        float rating = reviewObj.Init(day, info.customerIdx, time, hp);
+        float rating = reviewObj.Init(day, customerIdx, time, hp, goal);
 
         reviewObjects.Add(reviewObj);
 
         reviewObj.transform.SetAsFirstSibling();
         reviewDayObjects[day].transform.SetAsFirstSibling();
 
-        var cInfo = OrderManager.Instance.customersInfos[info.goal];
+        var cInfo = OrderManager.Instance.customersInfos[goal];
         cInfo.totalOrder++;
         cInfo.totalRating += rating;
-        OrderManager.Instance.customersInfos[info.goal] = cInfo;
+        OrderManager.Instance.customersInfos[goal] = cInfo;
+    }
+    private void LoadReviewData(List<ReviewData> datas)
+    {
+        int day = -1;
+        for (int i = 0; i < datas.Count; i++)
+        {
+            if (datas[i].day > day)
+            {
+                DayFirstReview(datas[i].day);
+                day = datas[i].day;
+            }
+            AddReviewByLoad(datas[i]);
+        }
+        int currentDay = GM.Instance.day;
+        if (currentDay > day)
+        {
+            DayFirstReview(currentDay);
+        }
+    }
+    private void AddReviewByLoad(ReviewData data)
+    {
+        AddReview(data.day, data.customerIdx, data.goal, data.time, data.hp);
+    }
+    public List<ReviewData> SaveReviewData()
+    {
+        List<ReviewData> datas = new List<ReviewData>();
+        for (int i = 0; i < reviewObjects.Count; i++)
+        {
+            datas.Add((reviewObjects[i] as ReviewObject).GetReviewData());
+        }
+        return datas;
     }
 
     public void OrderLoadCountTextUpdate()

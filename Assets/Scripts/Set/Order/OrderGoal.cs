@@ -41,10 +41,11 @@ public class OrderGoal : MonoBehaviour
     public void Init(int idx)
     {
         index = idx;
-        minimapItem.spriteColor = DataManager.Instance.uiLib.customerPinColor[idx];
+
+        if (DataManager.Instance != null)
+            minimapItem.spriteColor = DataManager.Instance.uiLib.customerPinColor[idx];
 
         target = GetComponent<Target>();
-
         target.targetColor = minimapItem.spriteColor;
     }
 

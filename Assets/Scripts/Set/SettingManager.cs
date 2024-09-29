@@ -496,6 +496,7 @@ public class SettingManager : Singleton<SettingManager>
         scrollEffect.enabled = true;
         loading = true;
 
+        Lobby.Instance.CloseAllPanel();
         SelectSubPanel(activeSubPanel);
         ShowSubSettingPanel(0);
         UINaviHelper.Instance.inputHelper.GuidePadCheck();

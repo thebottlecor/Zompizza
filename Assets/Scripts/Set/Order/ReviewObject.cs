@@ -13,14 +13,33 @@ public class ReviewObject : Review
     public TextMeshProUGUI context;
 
     private int day;
+    private float time;
+    private float hp;
     private int customerIdx;
+    private int goal;
+
     private float timeRating; // -5 ~ 5 사이
     private float hpRating; // -5 ~ 5 사이
 
-    public float Init(int day, int idx, float time, float hp)
+    public ReviewData GetReviewData()
+    {
+        return new ReviewData
+        {
+            day = day,
+            time = time,
+            hp = hp,
+            customerIdx = customerIdx,
+            goal = goal
+        };
+    }
+
+    public float Init(int day, int idx, float time, float hp, int goal)
     {
         this.day = day;
+        this.time = time;
+        this.hp = hp;
         customerIdx = idx;
+        this.goal = goal;
 
         timeRating = time;
         hpRating = hp;

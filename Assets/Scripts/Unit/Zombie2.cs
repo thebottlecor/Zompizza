@@ -216,7 +216,8 @@ public class Zombie2 : ZombieBase
     {
         yield return null;
         // Ç×»ó true
-        animator.SetBool(TextManager.WalkId, true);
+        if (animator != null)
+            animator.SetBool(TextManager.WalkId, true);
     }
 
     public override void DeadHandle()

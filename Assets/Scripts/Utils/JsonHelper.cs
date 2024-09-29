@@ -10,9 +10,35 @@ public class JsonHelper
 {
     private static readonly string serialize = "7d19b3d1cd745946915a3cd5a9b0441bf6a676230d5029dbb275d750e1db13d2ba278bb3e7eed2ea25e16bdb7981f113d586b4a84e344e0f33f1cce275bb21f54bba5c9700d3ceed1712e3142";
 
-    public static void GetJsonFileNames(string folderName, List<string> fileNamesList)
+    public static int GetJsonFileCount(string createPath, string folderName)
     {
-        DirectoryInfo di = new DirectoryInfo(folderName);
+        DirectoryInfo di = new DirectoryInfo(createPath + "/" + folderName);
+        if (di.Exists == false)
+        {
+            return 0;
+        }
+
+        int count = 0;
+
+        foreach (FileInfo f in di.GetFiles())
+        {
+            if (f.Extension.ToLower().CompareTo(".json") == 0)
+            {
+                string strInFileName = f.Name;
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public static void GetJsonFileNames(string createPath, string folderName, ref List<string> fileNamesList)
+    {
+        DirectoryInfo di = new DirectoryInfo(createPath + "/" + folderName);
+        if (di.Exists == false)
+        {
+            return;
+        }
+
         foreach (FileInfo f in di.GetFiles())
         {
             if (f.Extension.ToLower().CompareTo(".json") == 0)
@@ -36,6 +62,21 @@ public class JsonHelper
         byte[] data = Encoding.UTF8.GetBytes(jsonData);
         fileStream.Write(data, 0, data.Length);
         fileStream.Close();
+    }
+
+    public static bool CheckFile(string createPath, string fileName, string folderName)
+    {
+        DirectoryInfo di = new DirectoryInfo(createPath + "/" + folderName);
+        if (di.Exists == false) return false;
+        fileName += ".json";
+        foreach (FileInfo f in di.GetFiles())
+        {
+            if (f.Name.Equals(fileName))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static T LoadJsonFile<T>(string path, bool crypt) where T : class

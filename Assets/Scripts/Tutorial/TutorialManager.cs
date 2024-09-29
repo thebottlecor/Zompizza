@@ -53,7 +53,7 @@ public class TutorialManager : Singleton<TutorialManager>
     private TextManager tm => TextManager.Instance;
     private SettingManager sm => SettingManager.Instance;
 
-    public void Init()
+    public void Init(bool tutorialOn)
     {
         //trainingCenter.SetActive(false);
         //prologueObj.SetActive(false);
@@ -89,7 +89,7 @@ public class TutorialManager : Singleton<TutorialManager>
         shopGoal.SetActive(false);
         returnGoal.SetActive(false);
 
-        if (debug_TutorialDisable)
+        if (debug_TutorialDisable || !tutorialOn)
         {
             TutorialSkip(true);
             step = 100;

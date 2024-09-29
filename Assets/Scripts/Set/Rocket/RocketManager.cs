@@ -4,9 +4,30 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
+using System;
 
 public class RocketManager : Singleton<RocketManager>
 {
+    [Serializable]
+    public struct SaveData
+    {
+        public int currentStep;
+    }
+
+    public SaveData Save()
+    {
+        SaveData data = new SaveData
+        {
+            currentStep = this.currentStep,
+        };
+        return data;
+    }
+
+    public void Load(SaveData data)
+    {
+        currentStep = data.currentStep;
+        UpdateModels();
+    }
 
     public TextMeshProUGUI countdownTMP;
     public TextMeshProUGUI projectTMP;
@@ -52,9 +73,17 @@ public class RocketManager : Singleton<RocketManager>
     public GameObject[] effects2;
     public GameObject[] effects3;
 
+    [Header("ShopUIs")]
+    public TextMeshProUGUI projectTMP2;
+    public Slider progressBar2;
+    public TextMeshProUGUI progressTMP2;
+    public TextMeshProUGUI currentStepsTMP2;
+    public TextMeshProUGUI currentCostTMP2;
+
     private void Start()
     {
         projectTMP.text = tm.GetCommons("SpaceshipProject");
+        projectTMP2.text = tm.GetCommons("SpaceshipProject");
         spaceTMP.text = tm.GetCommons("Spaceship");
 
         developTMP.text = tm.GetCommons("Develop");
@@ -122,6 +151,26 @@ public class RocketManager : Singleton<RocketManager>
 
         progressTMP.text = $"{tm.GetCommons("Progression")} {currentProgress * 100f:F0}%";
     }
+
+    public void UpdateShopUI()
+    {
+        float currentProgress = (float)currentStep / MaxStep;
+        if (currentProgress <= 0f) currentProgress = 0.01f;
+        progressBar2.value = currentProgress;
+        progressTMP2.text = $"{tm.GetCommons("Progression")} {currentProgress * 100f:F0}%";
+
+        if (!Completed)
+        {
+            currentStepsTMP2.text = $"({tm.GetCommons("Step")} {currentStep + 1} / {MaxStep}) {tm.GetSpaceships(currentStep)}";
+            currentCostTMP2.text = $"<sprite=2> {tm.GetCommons("Costs")} {cost[currentStep]}G";
+        }
+        else
+        {
+            currentStepsTMP2.text = tm.GetCommons("Completed");
+            currentCostTMP2.text = string.Empty;
+        }
+    }
+
     private void UpdateStepUI()
     {
         if (!Completed)

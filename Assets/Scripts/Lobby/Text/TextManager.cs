@@ -91,7 +91,7 @@ public class TextManager : Singleton<TextManager>
         }
         else
         {
-            if (System.Enum.TryParse(typeof(Language), config.language, out object result))
+            if (System.Enum.TryParse(typeof(Language), config.lan, out object result))
             {
                 SetLanguage((Language)result);
             }

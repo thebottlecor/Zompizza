@@ -36,10 +36,9 @@ public class ForceStart : MonoBehaviour
 
         GameStartInfo gameStartInfo = new GameStartInfo
         {
-            cityName = "Pixel Colony",
-            mapSeed = 0,
+            pizzeriaName = "Zompizza",
+            slotNum = 1,
             saveName = string.Empty,
-
             tutorial = false,
         };
         Debug.Log("·ÎµùµÇ´Â ¾À : " + editorSettingLib.sceneName);
