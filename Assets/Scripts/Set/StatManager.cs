@@ -3,9 +3,103 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class StatManager : Singleton<StatManager>
 {
+
+    [Serializable]
+    public struct SaveData
+    {
+        public int acceptedOrders;
+        public int completedOrders;
+
+        public int totalEarn;
+        public float totalRating;
+
+        public float carMileage;
+
+        public int totalDeliveryOnTime;
+        public float averageDeliveryTime;
+        public float totalDeliveryHp;
+        public float averageDeliveryHp;
+
+        public int foundVisionRecipes;
+
+        public int todayEarn;
+        public int highestEarningDay;
+        public int highestEarningValue;
+
+        public float todayRating;
+        public int highestRatingDay;
+        public float highestRatingValue;
+
+        public int carCrash;
+        public int hitZombies;
+    }
+
+    public SaveData Save()
+    {
+        SaveData data = new SaveData
+        {
+            acceptedOrders = this.acceptedOrders,
+            completedOrders = this.completedOrders,
+
+            totalEarn = this.totalEarn,
+            totalRating = this.totalRating,
+
+            carMileage = this.carMileage,
+
+            totalDeliveryOnTime = this.totalDeliveryOnTime,
+            averageDeliveryTime = this.averageDeliveryTime,
+            totalDeliveryHp = this.totalDeliveryHp,
+            averageDeliveryHp = this.averageDeliveryHp,
+
+            foundVisionRecipes = this.foundVisionRecipes,
+
+            todayEarn = this.todayEarn,
+            highestEarningDay = this.highestEarningDay,
+            highestEarningValue = this.highestEarningValue,
+
+            todayRating = this.todayRating,
+            highestRatingDay = this.highestRatingDay,
+            highestRatingValue = this.highestRatingValue,
+
+            carCrash = this.carCrash,
+            hitZombies = this.hitZombies,
+        };
+        return data;
+    }
+
+    public void Load(SaveData data)
+    {
+        acceptedOrders = data.acceptedOrders;
+        completedOrders = data.completedOrders;
+
+        totalEarn = data.totalEarn;
+        totalRating = data.totalRating;
+
+        carMileage = data.carMileage;
+
+        totalDeliveryOnTime = data.totalDeliveryOnTime;
+        averageDeliveryTime = data.averageDeliveryTime;
+        totalDeliveryHp = data.totalDeliveryHp;
+        averageDeliveryHp = data.averageDeliveryHp;
+
+        foundVisionRecipes = data.foundVisionRecipes;
+
+        todayEarn = data.todayEarn;
+        highestEarningDay = data.highestEarningDay;
+        highestEarningValue = data.highestEarningValue;
+
+        todayRating = data.todayRating;
+        highestRatingDay = data.highestRatingDay;
+        highestRatingValue = data.highestRatingValue;
+
+        carCrash = data.carCrash;
+        hitZombies = data.hitZombies;
+    }
+
     public int acceptedOrders;
     public int completedOrders;
 

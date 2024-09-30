@@ -11,14 +11,16 @@ public class ResearchManager : Singleton<ResearchManager>
     {
         public SerializableDictionary<int, int> researchedCount;
     }
-    public SaveData SetSaveData()
+    public SaveData Save()
     {
         SaveData data = new();
         data.researchedCount = researchedCount;
         return data;
     }
-    public void GetSaveData(SaveData data)
+    public void Load(SaveData data)
     {
+        if (data.researchedCount == null || data.researchedCount.Count == 0) return;
+
         researchedCount = data.researchedCount;
 
         foreach (var info in ResearchInfo) // 새로 추가된 연구 데이터 삽입
@@ -143,11 +145,12 @@ public class ResearchManager : Singleton<ResearchManager>
     [Space(20f)]
     [SerializeField] private List<ResearchLine> researchLines;
 
-    [Space(10f)]
+    [Header("수동 업데이트 필요!")]
+    public int[] tierResearches; // 수동으로 업데이트 필요!
     [SerializeField] private List<HiddenRecipeGoal> hiddenRecipeGoals;
     public int HiddenRecipeCount => hiddenRecipeGoals.Count;
 
-    [Space(10f)]
+    [Space(20f)]
     [SerializeField] private List<GameObject> tier_Add;
     [SerializeField] private List<GameObject> tier_Remove;
     [SerializeField] private List<GameObject> pizzeriaExpands_Add;
@@ -372,8 +375,13 @@ public class ResearchManager : Singleton<ResearchManager>
     }
     public void AutoResearch_For_Tier() // 티어 자동 업그레이드
     {
-        int idx = 0;
-        ResearchUnlock(idx);
+        for (int i = 0; i < tierResearches.Length; i++)
+        {
+            if (ResearchUnlock(tierResearches[i]))
+            {
+
+            }
+        }
     }
 
     public void ResearchUnlock_Force(int idx)

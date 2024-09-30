@@ -32,7 +32,7 @@ public class SaveFileUI : MonoBehaviour
 
         if (!JsonHelper.CheckFile(Application.persistentDataPath, saveName, $"Saves/Slot {slotNum}")) return;
 
-        Debug.Log("Load :: " + saveName);
+        //Debug.Log("Load :: " + saveName);
 
         Lobby.Instance.CloseAllPanel();
         Lobby.Instance.LobbyUISwitch(false);

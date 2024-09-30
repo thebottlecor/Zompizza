@@ -34,6 +34,7 @@ public class RocketManager : Singleton<RocketManager>
     public TextMeshProUGUI spaceTMP;
     public TextMeshProUGUI developTMP;
     public TextMeshProUGUI skipTMP;
+    public TextMeshProUGUI lanuchTMP;
 
     public Slider progressBar;
     public TextMeshProUGUI progressTMP;
@@ -47,6 +48,9 @@ public class RocketManager : Singleton<RocketManager>
     public GameObject rocketCam;
 
     public GameObject panel;
+
+    public Animator darkPanelAnim;
+    public Image darkPanelImage;
 
     public int currentStep = 0;
     public const int MaxStep = 10;
@@ -68,6 +72,7 @@ public class RocketManager : Singleton<RocketManager>
 
     public Button developBtn;
     public Button skipBtn;
+    public GameObject launchBtn;
 
     public GameObject[] effects;
     public GameObject[] effects2;
@@ -87,6 +92,7 @@ public class RocketManager : Singleton<RocketManager>
         spaceTMP.text = tm.GetCommons("Spaceship");
 
         developTMP.text = tm.GetCommons("Develop");
+        lanuchTMP.text = tm.GetCommons("Launch");
 
         HidePanel();
         UpdateModels();
@@ -126,14 +132,11 @@ public class RocketManager : Singleton<RocketManager>
             effects3[i].SetActive(false);
         }
 
-        if (cost[currentStep] >= int.MaxValue - 100) // 데모 개발 중지
-        {
-            developBtn.gameObject.SetActive(false);
-        }
-        else
-            developBtn.gameObject.SetActive(true);
+        developBtn.gameObject.SetActive(!Completed);
+
         skipTMP.text = tm.GetCommons("Skip");
-        skipBtn.gameObject.SetActive(true);
+        skipBtn.gameObject.SetActive(GM.Instance.day != Countdown);
+        launchBtn.SetActive(GM.Instance.day == Countdown);
 
         GM.Instance.SetLight(0f, 0); // 로켓 밝게 보이게 낮으로 조정
 
@@ -167,7 +170,7 @@ public class RocketManager : Singleton<RocketManager>
         else
         {
             currentStepsTMP2.text = tm.GetCommons("Completed");
-            currentCostTMP2.text = string.Empty;
+            currentCostTMP2.text = tm.GetCommons("CompletedWait");
         }
     }
 
@@ -181,17 +184,22 @@ public class RocketManager : Singleton<RocketManager>
             partsImage.sprite = DataManager.Instance.uiLib.spaceshipParts[currentStep];
             //partsImage.color = Color.white;
 
-            if (cost[currentStep] >= int.MaxValue - 100) // 데모 개발 중지
-            {
-                currentCostTMP.text = tm.GetCommons("DemoInvalid2");
-            }
+            //if (cost[currentStep] >= int.MaxValue - 100) // 데모 개발 중지
+            //{
+            //    currentCostTMP.text = tm.GetCommons("DemoInvalid2");
+            //}
+            //else
+            //{
+            //    if (cost[currentStep] > GM.Instance.gold)
+            //        currentCostTMP.text = $"<color=#AB5239><sprite=2> {tm.GetCommons("Costs")} {cost[currentStep]}G</color>";
+            //    else
+            //        currentCostTMP.text = $"<sprite=2> {tm.GetCommons("Costs")} {cost[currentStep]}G";
+            //}
+
+            if (cost[currentStep] > GM.Instance.gold)
+                currentCostTMP.text = $"<color=#AB5239><sprite=2> {tm.GetCommons("Costs")} {cost[currentStep]}G</color>";
             else
-            {
-                if (cost[currentStep] > GM.Instance.gold)
-                    currentCostTMP.text = $"<color=#AB5239><sprite=2> {tm.GetCommons("Costs")} {cost[currentStep]}G</color>";
-                else
-                    currentCostTMP.text = $"<sprite=2> {tm.GetCommons("Costs")} {cost[currentStep]}G";
-            }
+                currentCostTMP.text = $"<sprite=2> {tm.GetCommons("Costs")} {cost[currentStep]}G";
         }
         else
         {
@@ -208,7 +216,7 @@ public class RocketManager : Singleton<RocketManager>
     {
         if (loading) return;
         if (Completed) return;
-        if (cost[currentStep] >= int.MaxValue - 100) return; // 데모 개발 중지
+        //if (cost[currentStep] >= int.MaxValue - 100) return; // 데모 개발 중지
         if (GM.Instance.gold < cost[currentStep])
         {
             AudioManager.Instance.PlaySFX(Sfx.deny);
@@ -239,6 +247,7 @@ public class RocketManager : Singleton<RocketManager>
 
             developBtn.gameObject.SetActive(false);
             skipBtn.gameObject.SetActive(false);
+            launchBtn.SetActive(false);
             UINaviHelper.Instance.SetFirstSelect();
         });
         sequence.AppendInterval(0.15f);
@@ -300,19 +309,58 @@ public class RocketManager : Singleton<RocketManager>
             // 연출 후 닫기
             loading = false;
             skipTMP.text = tm.GetCommons("Close");
-            skipBtn.gameObject.SetActive(true);
+            skipBtn.gameObject.SetActive(GM.Instance.day != Countdown);
+            launchBtn.SetActive(GM.Instance.day == Countdown);
             UINaviHelper.Instance.SetFirstSelect();
         });
     }
     public void Skip()
     {
         if (loading) return;
-        HidePanel();
         TutorialManager.Instance.RocketWindowHide();
+
+        if (GM.Instance.day == Countdown)
+        {
+            Sequence sequence = DOTween.Sequence().SetUpdate(true).SetAutoKill(true);
+            sequence.AppendCallback(() =>
+            {
+                // 연출 (뚝딱뚝딱 뭉게뭉게)
+                loading = true;
+
+                darkPanelAnim.enabled = true;
+                developBtn.gameObject.SetActive(false);
+                skipBtn.gameObject.SetActive(false);
+                launchBtn.SetActive(false);
+                UINaviHelper.Instance.SetFirstSelect();
+            });
+            sequence.AppendInterval(0.15f);
+            sequence.AppendCallback(() =>
+            {
+                AudioManager.Instance.ToggleMute(true);
+                AudioManager.Instance.PlaySFX(Sfx.rocketAlarm);
+                AudioManager.Instance.PlaySFX(Sfx.rocketCountdown);
+            });
+            sequence.AppendInterval(5.2f);
+            sequence.AppendCallback(() =>
+            {
+                SkipMethod();
+            });
+        }
+        else
+        {
+            SkipMethod();
+        }
+    }
+
+    private void SkipMethod()
+    {
+        darkPanelAnim.enabled = false;
+        darkPanelImage.color = Color.black;
+        HidePanel();
 
         //GM.Instance.NextDay_Late();
         int currentVillager = VillagerManager.Instance.GetRecruitedVillagerCount();
-        if (currentVillager > 0)
+        if (GM.Instance.day < Countdown && currentVillager > 0)
             GM.Instance.NextDay_Midnight();
         else
             GM.Instance.NextDay_Late(false);

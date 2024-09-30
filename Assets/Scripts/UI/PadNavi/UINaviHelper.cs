@@ -209,9 +209,28 @@ public class UINaviHelper : Singleton<UINaviHelper>
                                 else if (RocketManager.Instance.panel.activeSelf)
                                 {
                                     if (ingame.rocket_first[0].gameObject.activeSelf)
+                                    {
                                         current = ingame.rocket_first[0];
+                                        ingame.rocket_first[0].ResetConnection();
+                                        if (ingame.rocket_first[1].gameObject.activeSelf)
+                                        {
+                                            ingame.rocket_first[0].left = ingame.rocket_first[1];
+                                            ingame.rocket_first[0].right = ingame.rocket_first[1];
+                                        }
+                                        else if (ingame.rocket_first[2].gameObject.activeSelf)
+                                        {
+                                            ingame.rocket_first[0].left = ingame.rocket_first[2];
+                                            ingame.rocket_first[0].right = ingame.rocket_first[2];
+                                        }
+                                    }
                                     else if (ingame.rocket_first[1].gameObject.activeSelf)
+                                    {
                                         current = ingame.rocket_first[1];
+                                    }
+                                    else if (ingame.rocket_first[2].gameObject.activeSelf)
+                                    {
+                                        current = ingame.rocket_first[2];
+                                    }
                                     else
                                     {
                                         // null

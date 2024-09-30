@@ -86,7 +86,7 @@ public struct Save2DArray<T>
 public class SaveManager : Singleton<SaveManager>
 {
 
-    public readonly int version = 61;
+    public readonly int version = 100;
 
 
     public override void CallAfterAwake()
@@ -118,11 +118,20 @@ public class SaveManager : Singleton<SaveManager>
         {
             data = GM.Instance.Save(),
             rocket = RocketManager.Instance.Save(),
+            stat = StatManager.Instance.Save(),
         };
 
+        gameSaveData.research = new ResearchSaveData
+        {
+            data = ResearchManager.Instance.Save(),
+        };
         gameSaveData.reviews = new ReviewTotalData
         {
-            datas = UIManager.Instance.shopUI.SaveReviewData(),
+            data = UIManager.Instance.shopUI.Save(),
+        };
+        gameSaveData.villager = new VillagerData
+        {
+            data = VillagerManager.Instance.Save(),
         };
 
         //
@@ -187,11 +196,6 @@ public class SaveManager : Singleton<SaveManager>
         config.vsync = sm.vsync;
         config.resolution_width = sm.settingResolution.x;
         config.resolution_height = sm.settingResolution.y;
-
-        config.cameraSpeed = sm.cameraSpeed;
-        config.invertZoom = sm.invertZoom;
-        config.edgeScrolling = sm.edgeScrolling;
-        config.autosave = sm.autosave;
 
         string jsonData = JsonHelper.ObjectToJson(config);
         JsonHelper.CreateJsonFile(Application.persistentDataPath, "config", "Config", jsonData, false);
@@ -293,6 +297,9 @@ public class SaveManager : Singleton<SaveManager>
         }
         else
         {
+            Lobby.Instance.newGameCount++;
+            SavePlayer();
+
             // ∫Û ΩΩ∑‘ - ªı ∞‘¿” Ω√¿€
             Lobby.Instance.CloseAllPanel();
             Lobby.Instance.LobbyUISwitch(false);
@@ -408,6 +415,7 @@ public class GameSaveData
     public ReviewTotalData reviews;
     public ResearchSaveData research;
     public AchievementData achieve;
+    public VillagerData villager;
 }
 
 [Serializable]
@@ -473,6 +481,7 @@ public struct GMSaveData
     public CustomDifficultyData customDifficulty;
     public TutorialData tutorial;
     public RocketManager.SaveData rocket;
+    public StatManager.SaveData stat;
 }
 [Serializable]
 public struct CustomDifficultyData
@@ -491,7 +500,12 @@ public struct TutorialData
 [Serializable]
 public struct ResearchSaveData
 {
-    //public ResearchManager.SaveData data;
+    public ResearchManager.SaveData data;
+}
+[Serializable]
+public struct VillagerData
+{
+    public VillagerManager.SaveData data;
 }
 
 [Serializable]
@@ -503,7 +517,7 @@ public struct AchievementData
 [Serializable]
 public struct ReviewTotalData
 {
-    public List<ReviewData> datas;
+    public List<ReviewData> data;
 }
 [Serializable]
 public struct ReviewData
@@ -537,10 +551,5 @@ public class ConfigData
     public bool vsync = false;
     public int resolution_width = 1920;
     public int resolution_height = 1080;
-
-    public float cameraSpeed = 1f;
-    public bool invertZoom = false;
-    public bool edgeScrolling = true;
-    public bool autosave = true;
 }
 #endregion

@@ -20,6 +20,14 @@ public class GM : Singleton<GM>
         public float researchPoint;
 
         public SerializableDictionary<Ingredient, int> ingredients;
+
+        public int currentVehicle;
+        public bool[] unlockedVehicles;
+
+        public int vehicleMilestone;
+        public int tierUpMilestone;
+
+        public List<SavePosition> installJumpPostions;
     }
     public SaveData Save()
     {
@@ -33,6 +41,14 @@ public class GM : Singleton<GM>
             researchPoint = this.researchPoint,
 
             ingredients = this.ingredients,
+
+            currentVehicle = this.currentVehicle,
+            unlockedVehicles = this.unlockedVehicles,
+
+            vehicleMilestone = UIManager.Instance.vehicleMilestone,
+            tierUpMilestone = UIManager.Instance.tierUpMilestone,
+
+            installJumpPostions = this.installJumpPostions,
         };
 
         return data;
@@ -47,6 +63,32 @@ public class GM : Singleton<GM>
         SetRatingPoint(data.researchPoint);
 
         ingredients = data.ingredients;
+
+        currentVehicle = data.currentVehicle;
+        if (data.unlockedVehicles != null)
+        {
+            if (data.unlockedVehicles.Length < unlockedVehicles.Length)
+            {
+                for (int i = 0; i < data.unlockedVehicles.Length; i++)
+                {
+                    unlockedVehicles[i] = data.unlockedVehicles[i];
+                }
+            }
+            else
+                unlockedVehicles = data.unlockedVehicles;
+        }
+        unlockedVehicles[0] = true; // 무조건
+        if (currentVehicle < 0 || currentVehicle >= unlockedVehicles.Length) currentVehicle = 0;
+        ChangeVehicle(currentVehicle);
+
+        UIManager.Instance.vehicleMilestone = data.vehicleMilestone;
+        UIManager.Instance.tierUpMilestone = data.tierUpMilestone;
+
+        installJumpPostions = data.installJumpPostions;
+        for (int i = 0; i < installJumpPostions.Count; i++)
+        {
+            Instantiate(installJumpObj, installJumpPostions[i], Quaternion.identity); // 세이브에서 불러옴
+        }
     }
 
     public bool stop_control;
@@ -67,6 +109,7 @@ public class GM : Singleton<GM>
 
     public PlayerController player;
     public Transform pizzeriaPos;
+    public Transform shopEnterPos;
 
     private int displayGold;
     public TextMeshProUGUI[] goldText;
@@ -167,16 +210,10 @@ public class GM : Singleton<GM>
 
     [Header("차량 변경")]
     public int currentVehicle;
-    public PlayerControllerData[] controllerData;
     public bool[] unlockedVehicles;
+    public PlayerControllerData[] controllerData;
     public int[] costVehicles;
     public float[] ratingVehicles;
-
-    [Header("선물 상자")]
-    public GiftGoal[] giftGoals;
-    [Header("축구공")]
-    private Vector3 footBallPos;
-    public Transform footBall;
 
     [Header("한밤중")]
     public bool midNight;
@@ -192,9 +229,17 @@ public class GM : Singleton<GM>
     public GameObject returnIndicator;
     public GameObject rainObj;
 
+    [Space(10f)]
+    public Transform footBall;
+    private Vector3 footBallPos;
+
+    [Space(10f)]
     public bool pizzeriaStay;
     public bool install;
     public GameObject installJumpObj;
+    private List<SavePosition> installJumpPostions;
+
+    public bool lastLaunch;
 
     public static EventHandler<bool> EndTimeEvent; // true일시 마감
     private SerializableDictionary<KeyMap, KeyMapping> HotKey => SettingManager.Instance.keyMappings;
@@ -227,6 +272,7 @@ public class GM : Singleton<GM>
             Ingredient key = (Ingredient)temp;
             ingredients.Add(new SerializableDictionary<Ingredient, int>.Pair(key, 0));
         }
+        installJumpPostions = new List<SavePosition>();
 
         dayOne_Gold = new SerializableDictionary<GetGoldSource, int>();
         dayOne_Rating = new SerializableDictionary<GetRatingSource, float>();
@@ -286,9 +332,9 @@ public class GM : Singleton<GM>
             float initRating = 0f;
             SetRating(initRating); // initRating = 0f
             SetRatingPoint(initRating); // initRating = 0f
-        }
 
-        InitPlayer(); // Tutorial보다 위에
+            InitPlayer(); // Tutorial보다 위에
+        }
 
         //CallAfterStart(gameSaveData);
         //SaveDataLoading = false;
@@ -305,18 +351,26 @@ public class GM : Singleton<GM>
         UIManager.Instance.shopUI.Init(saveLoad, gameSaveData);
         TutorialManager.Instance.Init(startInfo.tutorial);
         OrderManager.Instance.Init();
+        VillagerManager.Instance.Init(saveLoad, gameSaveData);
 
-        // 저장 불러오기시 주의
+        // 저장 불러오기시 주의 >> 매일 아침에만 저장하니 이제 신경쓰지 않아도 됨 09.30
         GiftBoxHide();
 
-        ResearchManager.Instance.ToggleAllHiddenRecipe(true);
         if (saveLoad)
         {
             RocketManager.Instance.Load(gameSaveData.gm.rocket);
+            StatManager.Instance.Load(gameSaveData.gm.stat);
+            ResearchManager.Instance.Load(gameSaveData.research.data);
+
+            SpecialDay();
+            player.transform.position = shopEnterPos.position;
+            ShowWarningQueue(); // 세이브 로드할 경우 아침 이벤트 재생시키기
         }
-
-        rainObj.SetActive(false);
-
+        else
+        {
+            rainObj.SetActive(false);
+        }
+        ResearchManager.Instance.ToggleAllHiddenRecipe(true);
         footBallPos = footBall.position;
     }
 
@@ -820,21 +874,33 @@ public class GM : Singleton<GM>
         dayOne_Gold = new SerializableDictionary<GetGoldSource, int>();
         dayOne_Rating = new SerializableDictionary<GetRatingSource, float>();
 
-        if (RocketManager.Instance.Completed)
+        if (day == RocketManager.Countdown) // 엔딩 직전 무조건 발사 화면으로
         {
-            //NextDay_Late();
-            int currentVillager = VillagerManager.Instance.GetRecruitedVillagerCount();
-            if (currentVillager > 0)
-                NextDay_Midnight();
-            else
-                NextDay_Late(false);
+            ShowRocketPanel();
         }
         else
         {
-            RocketManager.Instance.ShowPanel();
-            accountObj.SetActive(false);
-            UINaviHelper.Instance.SetFirstSelect();
+            if (RocketManager.Instance.Completed)
+            {
+                //NextDay_Late();
+                int currentVillager = VillagerManager.Instance.GetRecruitedVillagerCount();
+                if (currentVillager > 0)
+                    NextDay_Midnight();
+                else
+                    NextDay_Late(false);
+            }
+            else
+            {
+                ShowRocketPanel();
+            }
         }
+    }
+
+    private void ShowRocketPanel()
+    {
+        RocketManager.Instance.ShowPanel();
+        accountObj.SetActive(false);
+        UINaviHelper.Instance.SetFirstSelect();
     }
 
     public void NextDay_Midnight()
@@ -846,7 +912,7 @@ public class GM : Singleton<GM>
         UINaviHelper.Instance.SetFirstSelect();
         var shopUI = UIManager.Instance.shopUI;
         shopUI.HideUI(true);
-        shopUI.ForceMidnightUIUpdate();
+        shopUI.ForceMidnightUIUpdate(false);
         UIManager.Instance.speedInfo.SetActive(false);
 
         player.transform.position = pizzeriaPos.position;
@@ -868,6 +934,12 @@ public class GM : Singleton<GM>
 
     public void NextDay_Late(bool fromMidnight)
     {
+        if (fromMidnight && lastLaunch) // 마지막 날엔 탐색 X => 바로 우주선으로
+        {
+            NextDay();
+            return;
+        }
+
         VillagerManager.Instance.villagerSearcher.Clear();
 
         TutorialManager.Instance.Midnight_Leave();
@@ -895,7 +967,7 @@ public class GM : Singleton<GM>
         //    warning_gameOver = false;
 
 
-        if (day >= 9) // 데모 승리
+        if (day >= 9) // 9일 => 10일 데모 승리
         {
             //if (!CongratulationTriggered)
             //{
@@ -904,6 +976,18 @@ public class GM : Singleton<GM>
             //    UIManager.Instance.shopUI.upgradeDirection.Show(1);
             //    return;
             //}
+        }
+        if (day >= RocketManager.Countdown) // 30일 => 31일 게임 끝
+        {
+            // 엔딩 처리
+            Debug.Log("엔딩");
+            if (!CongratulationTriggered)
+            {
+                Congratulation(true);
+                AudioManager.Instance.PlaySFX(Sfx.complete);
+                UIManager.Instance.shopUI.upgradeDirection.Show(1);
+                return;
+            }
         }
 
         warning_gameOver = false; // 평점 0점 이하 패배 조건 삭제
@@ -986,11 +1070,11 @@ public class GM : Singleton<GM>
 
             if (showWarning)
             {
-                warningQueue.Enqueue(0);
+                warningQueue.Enqueue(0); // 평점 위험
             }
             if (loanWarning == 1)
             {
-                warningQueue.Enqueue(1);
+                warningQueue.Enqueue(1); // 빚 
             }
 
             TutorialManager.Instance.DayChanged();
@@ -1007,7 +1091,7 @@ public class GM : Singleton<GM>
 
             if (RivalManager.Instance.NextDay())
             {
-                warningQueue.Enqueue(3);
+                warningQueue.Enqueue(3); // 경쟁업체 평점
             }
             //ShowRatingText();
             zombieEnvSound.Mute(false);
@@ -1025,12 +1109,12 @@ public class GM : Singleton<GM>
     public void SpecialDay()
     {
         // 임시 비 효과
-        if (day == 3 || day == 8)
+        if (day == 3 || day == 8 || day == 11 || day == 14 || day == 17 || day == 21 || day == 24 || day == 27)
         {
             rainObj.SetActive(true);
         }
         bloodMoon = false;
-        if (day == 4) // 블러드문
+        if (day == 4 || day == 9 || day == 14 || day == 19 || day == 24 || day == 28) // 블러드문
         {
             bloodMoon = true;
         }
@@ -1062,7 +1146,9 @@ public class GM : Singleton<GM>
     public void InstallFuck2()
     {
         if (player.transform.position.y > 2.5f) return;
-        Instantiate(installJumpObj, player.transform.position + player.transform.forward * 5f, Quaternion.identity);
+        Vector3 pos = player.transform.position + player.transform.forward * 5f;
+        Instantiate(installJumpObj, pos, Quaternion.identity); // 플레이어가 직접 설치
+        installJumpPostions.Add(pos);
     }
 
     public void GameOver()
@@ -1338,7 +1424,7 @@ public class GM : Singleton<GM>
 
         if (CheckRaid())
         {
-            warningQueue.Enqueue(2);
+            warningQueue.Enqueue(2); // 습격
             tenDays_RaidRecords.Add(1);
             raided = true;
         }
@@ -1582,13 +1668,16 @@ public class GM : Singleton<GM>
     }
     public int Auto_ButVehicle() // 차량 자동 구매
     {
-        int idx = 1;
-        if (CanBuyVehicle(idx))
+        int result = -1;
+        for (int i = 1; i < unlockedVehicles.Length; i++)
         {
-            unlockedVehicles[idx] = true;
-            return idx;
+            if (CanBuyVehicle(i))
+            {
+                unlockedVehicles[i] = true;
+                result = i;
+            }
         }
-        return -1;
+        return result;
     }
     #endregion
 

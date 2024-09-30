@@ -38,6 +38,10 @@ public class HiddenRecipeGoal : MonoBehaviour
             gameObject.SetActive(true);
             goalEffectObj.SetActive(true);
         }
+        else
+        {
+            Hide();
+        }
     }
 
     private void FindEffect()

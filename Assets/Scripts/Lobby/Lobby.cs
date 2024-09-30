@@ -33,6 +33,8 @@ public class Lobby : Singleton<Lobby>
 
     public bool SaveDataLoading { get; private set; }
 
+    public int newGameCount;
+
     private SerializableDictionary<KeyMap, KeyMapping> HotKey => SettingManager.Instance.keyMappings;
 
     protected override void Awake()
@@ -207,62 +209,30 @@ public class Lobby : Singleton<Lobby>
 
     [Header("Fixed Texts")]
     [SerializeField] private TextMeshProUGUI newGameTMP;
-    [SerializeField] private TextMeshProUGUI loadGameTMP;
     [SerializeField] private TextMeshProUGUI settingsTMP;
     [SerializeField] private TextMeshProUGUI exitTMP;
     [SerializeField] private TextMeshProUGUI versionTMP;
     [SerializeField] private TextMeshProUGUI creditPanelTMP;
+    [SerializeField] private TextMeshProUGUI creditBtnTMP;
 
-    [SerializeField] private TextMeshProUGUI newGamePanelTMP;
-    [SerializeField] private TextMeshProUGUI gameStartTMP;
-    [SerializeField] private TextMeshProUGUI islandNameTMP;
-    //[SerializeField] private TextMeshProUGUI mapseedTMP;
-    //[SerializeField] private TextMeshProUGUI resourceDensityTMP;
-    //[SerializeField] private TextMeshProUGUI disasterIntensityTMP;
-    //[SerializeField] private TextMeshProUGUI initialPopulationTMP;
-    //[SerializeField] private TextMeshProUGUI initialResourceTMP;
     [SerializeField] private TextMeshProUGUI settings_titleTMP;
     [SerializeField] private TextMeshProUGUI wishlistNowTMP;
 
     public void UpdateTexts()
     {
         var tm = TextManager.Instance;
-        newGameTMP.text = tm.GetCommons("NewGame");
-        //loadGameTMP.text = tm.GetCommons("Load");
+        newGameTMP.text = tm.GetCommons("Start");
         settingsTMP.text = tm.GetCommons("Menu");
         exitTMP.text = tm.GetCommons("Exit");
         versionTMP.text = string.Format("v{0:0.00}", (SaveManager.Instance.version / 100f));
         creditPanelTMP.text = tm.GetCommons("Credits");
-
-        //resourceDensityDropdown.options[0].text = tm.GetCommons("Little");
-        //resourceDensityDropdown.options[1].text = tm.GetCommons("Default");
-        //resourceDensityDropdown.options[2].text = tm.GetCommons("More");
-        //startResourcesDropdown.options[0].text = tm.GetCommons("Little");
-        //startResourcesDropdown.options[1].text = tm.GetCommons("Default");
-        //startResourcesDropdown.options[2].text = tm.GetCommons("More");
-        //startPopulationDropdown.options[0].text = Constant.startingMember0.ToString();
-        //startPopulationDropdown.options[1].text = Constant.startingMember.ToString();
-        //startPopulationDropdown.options[2].text = Constant.startingMember2.ToString();
-        //disasterIntensityDropdown.options[0].text = tm.GetCommons("Off");
-        //disasterIntensityDropdown.options[1].text = tm.GetCommons("Default");
-        //disasterIntensityDropdown.options[2].text = tm.GetCommons("Frequent");
-
-        //newGamePanelTMP.text = tm.GetCommons("NewGame");
-        //gameStartTMP.text = tm.GetCommons("Start");
-        //islandNameTMP.text = tm.GetCommons("IslandName");
-
-        //mapseedTMP.text = tm.GetCommons("MapSeed");
-        //resourceDensityTMP.text = tm.GetCommons("ResourceDensity");
-        //disasterIntensityTMP.text = tm.GetCommons("Disasters");
-        //initialPopulationTMP.text = tm.GetCommons("InitialPopulation");
-        //initialResourceTMP.text = tm.GetCommons("InitialResources");
-
-        //tutorialTMP.text = tm.GetCommons("Tutorial");
+        creditBtnTMP.text = tm.GetCommons("Credits");
 
         settings_titleTMP.text = tm.GetCommons("Settings");
         wishlistNowTMP.text = tm.GetCommons("WishlistNow2");
     }
 
+    /*
     #region NewGame
     [Header("New Game")]
     public Canvas newGameCanvas;
@@ -365,7 +335,6 @@ public class Lobby : Singleton<Lobby>
         LoadingSceneManager.Instance.LobbyStart(gameStartInfo, SaveManager.Instance.settingLib.sceneName);
     }
 
-    public int newGameCount;
     [SerializeField] private Toggle tutorialToggle;
     [SerializeField] private TextMeshProUGUI tutorialTMP;
 
@@ -374,6 +343,7 @@ public class Lobby : Singleton<Lobby>
         tutorialToggle.isOn = on;
     }
     #endregion
+    */
 }
 
 public struct GameStartInfo

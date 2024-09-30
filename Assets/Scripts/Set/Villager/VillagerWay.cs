@@ -2,9 +2,58 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Pathfinding;
+using System;
 
 public class VillagerWay : MonoBehaviour
 {
+    [Serializable]
+    public struct SaveData
+    {
+        public bool recruited;
+        public bool expelled;
+
+        public int relations; 
+        public float relationExp; 
+        public int condition;
+        public int currentNeeds;
+    }
+
+    public SaveData Save()
+    {
+        SaveData data = new SaveData
+        {
+            recruited = this.recruited,
+            expelled = this.expelled,
+
+            relations = this.relations,
+            relationExp = this.relationExp,
+            condition = this.condition,
+            currentNeeds = this.currentNeeds,
+        };
+        return data;
+    }
+
+    public void Load(SaveData data)
+    {
+        recruited = data.recruited;
+        expelled = data.expelled;
+
+        if (expelled)
+        {
+            Expel();
+        }
+        else if (recruited)
+        {
+            gameObject.SetActive(true);
+            StartCoroutine(ResetPos());
+        }
+
+        relations = data.relations;
+        relationExp = data.relationExp;
+        condition = data.condition;
+        currentNeeds = data.currentNeeds;
+    }
+
 
     public bool recruited;
     public bool expelled;
@@ -35,7 +84,7 @@ public class VillagerWay : MonoBehaviour
     public int idx;
     public int gender;
 
-    private void Start()
+    public void Init()
     {
         ai = GetComponent<IAstarAI>();
         destinationSetter = GetComponent<AIDestinationSetter>();
@@ -45,7 +94,6 @@ public class VillagerWay : MonoBehaviour
         RandomTarget();
 
         gameObject.SetActive(false);
-        //Recruit();
     }
 
     public void RandomTarget()
@@ -84,6 +132,7 @@ public class VillagerWay : MonoBehaviour
 
     void Update()
     {
+        if (ai == null) return;
         if (expelled) return;
         if (!recruited) return;
 
@@ -258,7 +307,6 @@ public class VillagerWay : MonoBehaviour
         recruited = true;
         expelled = false;
 
-        recruited = true;
         relations = 0;
         //condition = UnityEngine.Random.Range(1, 4);
         condition = 2;

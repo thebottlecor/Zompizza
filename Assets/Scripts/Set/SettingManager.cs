@@ -593,11 +593,6 @@ public class SettingManager : Singleton<SettingManager>
         //subSettingPanelTMP[6].text = tm.GetCommons("Unstuck");
         subSettingPanelTMP[7].text = tm.GetCommons("SendFeedback");
 
-        cameraSpeedTMP.text = string.Format(tm.defaultCultureInfo, tm.GetCommons("CameraSpeed"), cameraSpeed);
-        invertZoomTMP.text = tm.GetCommons("InvertZoom");
-        edgeScrollingTMP.text = tm.GetCommons("EdgeScrolling");
-        autosaveTMP.text = tm.GetCommons("Autosave");
-
         settingPanelCloseTMP.text = tm.GetCommons("Back");
 
         KeySetting_TextUpdate();
@@ -622,45 +617,6 @@ public class SettingManager : Singleton<SettingManager>
     public void SetSFXVolume(float value)
     {
         AudioManager.Instance.SetSFXVolume(value);
-        SaveManager.Instance.SaveConfig();
-    }
-    #endregion
-
-    #region 카메라 설정
-    public float cameraSpeed { get; private set; }
-    public Slider cameraSpeedSlider;
-    public bool invertZoom { get; private set; }
-    [SerializeField] private Toggle invertZoomToggle;
-    public bool edgeScrolling { get; private set; }
-    [SerializeField] private Toggle edgeScrollingToggle;
-    public bool autosave { get; private set; }
-    [SerializeField] private Toggle autosaveToggle;
-
-    [SerializeField] private TextMeshProUGUI cameraSpeedTMP;
-    [SerializeField] private TextMeshProUGUI invertZoomTMP;
-    [SerializeField] private TextMeshProUGUI edgeScrollingTMP;
-    [SerializeField] private TextMeshProUGUI autosaveTMP;
-
-    public void SetCameraSpeed(float value)
-    {
-        cameraSpeed = value;
-        cameraSpeedTMP.text = string.Format(tm.defaultCultureInfo, tm.GetCommons("CameraSpeed"), cameraSpeed);
-        SaveManager.Instance.SaveConfig();
-    }
-
-    public void SetInvertZoom(bool on)
-    {
-        invertZoom = on;
-        SaveManager.Instance.SaveConfig();
-    }
-    public void SetEdgeScrolling(bool on)
-    {
-        edgeScrolling = on;
-        SaveManager.Instance.SaveConfig();
-    }
-    public void SetAutosave(bool on)
-    {
-        autosave = on;
         SaveManager.Instance.SaveConfig();
     }
     #endregion
@@ -691,11 +647,6 @@ public class SettingManager : Singleton<SettingManager>
     {
         if (config != null)
         {
-            cameraSpeedSlider.value = Mathf.Clamp(config.cameraSpeed, 0.5f, 1.5f);
-            invertZoomToggle.isOn = config.invertZoom;
-            edgeScrollingToggle.isOn = config.edgeScrolling;
-            autosaveToggle.isOn = config.autosave;
-
             fullScreenDropdown.value = config.fullScreen;
             SetFullScreen(config.fullScreen);
 
@@ -732,11 +683,6 @@ public class SettingManager : Singleton<SettingManager>
         }
         else
         {
-            cameraSpeedSlider.value = 1f;
-            invertZoomToggle.isOn = false;
-            edgeScrollingToggle.isOn = true;
-            autosaveToggle.isOn = true;
-
             fullScreenDropdown.value = 0;
             SetFullScreen(0);
 

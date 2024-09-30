@@ -4,9 +4,57 @@ using UnityEngine;
 using MTAssets.EasyMinimapSystem;
 using TMPro;
 using UnityEngine.UI;
+using System;
 
 public class VillagerManager : Singleton<VillagerManager>
 {
+    [Serializable]
+    public struct SaveData
+    {
+        public int[] inventory;
+        public List<VillagerWay.SaveData> villagers;
+    }
+
+    public SaveData Save()
+    {
+        List<VillagerWay.SaveData> villagerData = new List<VillagerWay.SaveData>();
+        for (int i = 0; i < villagers.Length; i++)
+        {
+            villagerData.Add(villagers[i].Save());
+        }
+
+        SaveData data = new SaveData
+        {
+            inventory = this.inventory,
+            villagers = villagerData,
+        };
+        return data;
+    }
+
+    public void Load(SaveData data)
+    {
+        if (data.villagers != null)
+        {
+            int max = Mathf.Min(data.villagers.Count, villagers.Length);
+            for (int i = 0; i < max; i++)
+            {
+                villagers[i].Load(data.villagers[i]);
+            }
+        }
+        if (data.inventory != null)
+        {
+            if (data.inventory.Length < inventory.Length)
+            {
+                for (int i = 0; i < data.inventory.Length; i++)
+                {
+                    inventory[i] = data.inventory[i];
+                }
+            }
+            else
+                inventory = data.inventory;
+        }
+        UpdateSlots();
+    }
 
     public VillagerSearcher villagerSearcher;
     public VillagerWay[] villagers;
@@ -17,7 +65,7 @@ public class VillagerManager : Singleton<VillagerManager>
     public VillagerInvenSlot[] invenSlots;
 
 
-    public int currentSosIdx;
+    public int currentSosIdx = -1;
     public float sosTimeLimit;
     public float sosTimer;
     public VillagerSosMiniUI miniUI;
@@ -34,7 +82,7 @@ public class VillagerManager : Singleton<VillagerManager>
 
 
 
-    private void Start()
+    public void Init(bool saveLoad, GameSaveData data)
     {
         inventory = new int[10];
          
@@ -62,6 +110,16 @@ public class VillagerManager : Singleton<VillagerManager>
         }
 
         ResetStat();
+
+        for (int i = 0; i < villagers.Length; i++)
+        {
+            villagers[i].Init();
+        }
+
+        if (saveLoad)
+        {
+            Load(data.villager.data);
+        }
     }
 
     private void Update()

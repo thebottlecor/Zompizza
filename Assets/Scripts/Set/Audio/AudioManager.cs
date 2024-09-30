@@ -229,4 +229,6 @@ public enum Sfx
     rollingStone,
     springJump,
     bloodmoon,
+    rocketAlarm,
+    rocketCountdown,
 }

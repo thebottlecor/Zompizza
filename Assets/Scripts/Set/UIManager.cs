@@ -43,6 +43,8 @@ public class UIManager : Singleton<UIManager>
 
     [Header("Æ¼¾î¾÷")]
     public int tierUpMilestone;
+    public int vehicleMilestone;
+    public GameObject[] vehicleImages;
     public GameObject tierUpEffect;
     public GameObject vehicleUpEffect;
     public GameObject tierUpPanel;
@@ -379,11 +381,22 @@ public class UIManager : Singleton<UIManager>
     public void VehicleUnlock()
     {
         int newVehicle = GM.Instance.Auto_ButVehicle();
-
-        if (newVehicle > 0)
+        int totalVehicle = 0;
+        var array = GM.Instance.unlockedVehicles;
+        for (int i = 1; i < array.Length; i++)
         {
-            ExplorationManager.Instance.SetHighTierQuality();
+            if (array[i]) totalVehicle++;
+        }
 
+        if (vehicleMilestone < totalVehicle)
+        {
+            for (int i = 0; i < vehicleImages.Length; i++)
+            {
+                vehicleImages[i].SetActive(false);
+            }
+            vehicleImages[newVehicle - 1].SetActive(true);
+
+            vehicleMilestone = totalVehicle;
             vehicleUpEffect.SetActive(true);
 
             StringBuilder st = new StringBuilder();

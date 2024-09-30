@@ -138,7 +138,7 @@ public class ShopUI : EventListener
         if (!saveLoad)
             DayFirstReview(0);
         else
-            LoadReviewData(data.reviews.datas);
+            Load(data.reviews.data);
         CreateUpgradeUI();
     }
 
@@ -181,8 +181,6 @@ public class ShopUI : EventListener
         loanText.text = tm.GetCommons("Loan");
 
         rivalText.text = tm.GetCommons("Rival");
-
-        midnightStartText.text = tm.GetCommons("ShopOpen");
     }
 
     protected override void AddListeners()
@@ -289,22 +287,34 @@ public class ShopUI : EventListener
 
         if (e) // 마감
         {
-            if (!explorePanel.activeSelf)
+            if (GM.Instance.day == RocketManager.Countdown - 1) // 마지막 날엔 탐색 X
             {
-                orderPanel.SetActive(false);
-                explorePanel.SetActive(true);
-                midnightPanel.SetActive(false);
-                ExplorationManager.Instance.SetHighTierQuality();
+                if (!midnightPanel.activeSelf)
+                {
+                    ForceMidnightUIUpdate(true);
+                    GM.Instance.lastLaunch = true;
+                    VillagerManager.Instance.GetIncome();
+                }
+            }
+            else
+            {
+                if (!explorePanel.activeSelf)
+                {
+                    orderPanel.SetActive(false);
+                    explorePanel.SetActive(true);
+                    midnightPanel.SetActive(false);
+                    ExplorationManager.Instance.SetHighTierQuality();
 
-                buttonTexts[0].text = tm.GetCommons("Explore");
+                    buttonTexts[0].text = tm.GetCommons("Explore");
 
-                pizzaBoys[0].gameObject.SetActive(false);
-                pizzaBoys[1].gameObject.SetActive(false);
-                pizzaBoys[2].gameObject.SetActive(true);
+                    pizzaBoys[0].gameObject.SetActive(false);
+                    pizzaBoys[1].gameObject.SetActive(false);
+                    pizzaBoys[2].gameObject.SetActive(true);
 
-                shopCloseBtn.gameObject.SetActive(false);
+                    shopCloseBtn.gameObject.SetActive(false);
 
-                VillagerManager.Instance.GetIncome();
+                    VillagerManager.Instance.GetIncome();
+                }
             }
         }
         else
@@ -325,13 +335,22 @@ public class ShopUI : EventListener
             }
         }
     }
-    public void ForceMidnightUIUpdate()
+    public void ForceMidnightUIUpdate(bool lastDay)
     {
         orderPanel.SetActive(false);
         explorePanel.SetActive(false); 
         midnightPanel.SetActive(true);
 
-        buttonTexts[0].text = tm.GetCommons("ShopOpen");
+        if (lastDay)
+        {
+            buttonTexts[0].text = tm.GetCommons("Launch");
+            midnightStartText.text = tm.GetCommons("SpaceshipProject");
+        }
+        else
+        {
+            buttonTexts[0].text = tm.GetCommons("ShopOpen");
+            midnightStartText.text = tm.GetCommons("ShopOpen");
+        }
 
         pizzaBoys[0].gameObject.SetActive(false);
         pizzaBoys[1].gameObject.SetActive(false);
@@ -672,6 +691,19 @@ public class ShopUI : EventListener
         reviewDay.transform.SetAsFirstSibling();
     }
 
+    [ContextMenu("날짜 건너뛰기 조정")]
+    public void TEST()
+    {
+        int testDay = GM.Instance.day;
+        for (int i = 0; i <= testDay; i++)
+        {
+            if (reviewDayObjects.Count <= i)
+            {
+                DayFirstReview(i);
+            }
+        }
+    }
+
     public void AddReview(int day, int customerIdx, int goal, float time, float hp)
     {
         var obj = Instantiate(reviewObject_Source, reviewObject_Parent);
@@ -688,7 +720,7 @@ public class ShopUI : EventListener
         cInfo.totalRating += rating;
         OrderManager.Instance.customersInfos[goal] = cInfo;
     }
-    private void LoadReviewData(List<ReviewData> datas)
+    private void Load(List<ReviewData> datas)
     {
         int day = -1;
         for (int i = 0; i < datas.Count; i++)
@@ -710,14 +742,14 @@ public class ShopUI : EventListener
     {
         AddReview(data.day, data.customerIdx, data.goal, data.time, data.hp);
     }
-    public List<ReviewData> SaveReviewData()
+    public List<ReviewData> Save()
     {
-        List<ReviewData> datas = new List<ReviewData>();
+        List<ReviewData> data = new List<ReviewData>();
         for (int i = 0; i < reviewObjects.Count; i++)
         {
-            datas.Add((reviewObjects[i] as ReviewObject).GetReviewData());
+            data.Add((reviewObjects[i] as ReviewObject).GetReviewData());
         }
-        return datas;
+        return data;
     }
 
     public void OrderLoadCountTextUpdate()
