@@ -382,10 +382,7 @@ public class SaveManager : Singleton<SaveManager>
 
     public void ZompizzaAutoSave(int day)
     {
-        // 테스트
-
         int slotNum = GM.Instance.slotNum;
-        Debug.Log($"Save Slot {slotNum} : Day {day}");
         SaveWithDay(slotNum, day); // 좀피 슬롯식 세이브
     }
 

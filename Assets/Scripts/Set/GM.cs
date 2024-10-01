@@ -239,6 +239,7 @@ public class GM : Singleton<GM>
     public GameObject installJumpObj;
     private List<SavePosition> installJumpPostions;
 
+    public AutosavingTMP savingTMP;
     public bool lastLaunch;
 
     public static EventHandler<bool> EndTimeEvent; // true일시 마감
@@ -598,6 +599,7 @@ public class GM : Singleton<GM>
         InstallFuck(false);
         rainObj.SetActive(false);
         zombieEnvSound.Mute(true);
+        savingTMP.Toggle(false);
         for (int i = 0; i < shopGates.Length; i++)
         {
             shopGates[i].alwaysClosed = true;
@@ -1017,6 +1019,10 @@ public class GM : Singleton<GM>
                 UINaviHelper.Instance.SetFirstSelect();
             });
             sequence.Append(darkCanvas.DOFade(1f, 0.5f));
+            sequence.AppendCallback(() =>
+            {
+                savingTMP.Toggle(true);
+            });
             sequence.AppendInterval(1.25f);
         }
         else
@@ -1027,12 +1033,14 @@ public class GM : Singleton<GM>
                 darkCanvas.interactable = false;
                 darkCanvas.blocksRaycasts = true;
                 loading = true;
+                savingTMP.Toggle(true);
                 UINaviHelper.Instance.SetFirstSelect();
             });
             sequence.AppendInterval(0.5f);
         }
         sequence.AppendCallback(() =>
         {
+            savingTMP.Toggle(false);
             SetTimer(0f);
             ChangeMan(false);
             midNight = false;

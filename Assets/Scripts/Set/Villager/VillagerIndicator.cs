@@ -9,6 +9,16 @@ public class VillagerIndicator : MonoBehaviour
 
     void Update()
     {
-        transform.eulerAngles = fixedAngle;
+        bool mode2 = GM.Instance.player.cam.secondMode;
+
+        if (mode2) // 새로운 시점
+        {
+            transform.LookAt(GM.Instance.player.cam.transform);
+        }
+        else // 기존 시점
+        {
+            transform.eulerAngles = fixedAngle;
+        }
+
     }
 }
