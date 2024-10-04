@@ -239,6 +239,11 @@ public class GM : Singleton<GM>
     public GameObject installJumpObj;
     private List<SavePosition> installJumpPostions;
 
+    [Space(10f)]
+    public GameObject vomitEffect;
+    private Coroutine voimtCoroutine;
+
+    [Space(10f)]
     public AutosavingTMP savingTMP;
     public bool lastLaunch;
 
@@ -1689,7 +1694,7 @@ public class GM : Singleton<GM>
     }
     #endregion
 
-    #region 선물 상자
+    #region 기타
     public void GiftBoxHide() // 해가 뜬 후 배달 위치의 박스들 모두 숨기기
     {
         var orderGoals = OrderManager.Instance.orderGoals;
@@ -1701,6 +1706,22 @@ public class GM : Singleton<GM>
                 orderGoals[i].giftGoals[n].Hide();
             }
         }
+    }
+
+    public void SetVomit()
+    {
+        if (voimtCoroutine != null)
+        {
+            StopCoroutine(voimtCoroutine);
+        }
+        voimtCoroutine = StartCoroutine(Vomitted());
+    }
+    private IEnumerator Vomitted()
+    {
+        vomitEffect.SetActive(true);
+        yield return CoroutineHelper.WaitForSeconds(3f);
+        vomitEffect.SetActive(false);
+        voimtCoroutine = null;
     }
     #endregion
 }

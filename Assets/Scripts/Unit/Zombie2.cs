@@ -17,6 +17,9 @@ public class Zombie2 : ZombieBase
     public bool isInstall;
     private bool installUsed;
 
+    public bool isVomit;
+    private bool isVomitted;
+
     public bool isRun;
 
     public FollowerEntity ai;
@@ -72,6 +75,16 @@ public class Zombie2 : ZombieBase
                 {
                     installUsed = true;
                     ZombiePooler.Instance.SpawnRangeSub(transform.position);
+                    AudioManager.Instance.PlaySFX(Sfx.zombieInstall);
+                }
+            }
+            else if (isVomit)
+            {
+                if (!isVomitted)
+                {
+                    isVomitted = true;
+                    GM.Instance.SetVomit();
+                    AudioManager.Instance.PlaySFX(Sfx.zombieVomit);
                 }
             }
             else
@@ -205,6 +218,7 @@ public class Zombie2 : ZombieBase
 
         SetContact(false);
         installUsed = false;
+        isVomitted = false;
 
         attackTimer = 0f;
         contactTimer = 0f;

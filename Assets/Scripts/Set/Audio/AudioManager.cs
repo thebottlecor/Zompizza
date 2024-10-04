@@ -231,4 +231,6 @@ public enum Sfx
     bloodmoon,
     rocketAlarm,
     rocketCountdown,
+    zombieInstall,
+    zombieVomit,
 }

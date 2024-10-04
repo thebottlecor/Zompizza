@@ -18,6 +18,7 @@ public class ZombiePooler : Singleton<ZombiePooler>
     public GameObject zombieSourceRange;
     public GameObject ZombieSubSourceRange;
     public GameObject zombieSourceSanta;
+    public GameObject zombieSourceVomit;
 
     public GameObject RollingStoneSource;
 
@@ -32,6 +33,9 @@ public class ZombiePooler : Singleton<ZombiePooler>
 
     public int maxZombieFast = 10;
     private List<ZombieBase> zombiesPoolFast;
+
+    public int maxZombieVomit = 5;
+    private List<ZombieBase> zombiesPoolVomit;
 
     public int maxZombieRange = 5;
     private List<ZombieBase> zombiesPoolRange;
@@ -59,10 +63,11 @@ public class ZombiePooler : Singleton<ZombiePooler>
     public int spawnCount = 1;
     public int spawnCountRandomAdd = 0;
     private float timer;
-    private float timer2;
-    private float timer3;
-    private float timer4;
-    private float timer5;
+    private float timerFast;
+    private float timerRange;
+    private float timerHeavy;
+    private float timerVomit;
+    private float timerSanta;
     public AstarPath astarPath;
 
     [Header("Á»ºñ ¸ðµ¨")]
@@ -89,6 +94,7 @@ public class ZombiePooler : Singleton<ZombiePooler>
         Pool_Init(ref zombiesPoolRange, maxZombieRange, zombieSourceRange);
         Pool_Init(ref zombiesSubPoolRange, maxZombieRange, ZombieSubSourceRange);
         Pool_Init(ref zombiesPoolSanta, maxZombieSanta, zombieSourceSanta);
+        Pool_Init(ref zombiesPoolVomit, maxZombieVomit, zombieSourceVomit);
 
         Pool_Init(ref hitEffectPool, maxHitEffect, DataManager.Instance.effectLib.hitEffects);
         Pool_Init(ref rollingStonePool, maxRollingStone, RollingStoneSource);
@@ -177,30 +183,30 @@ public class ZombiePooler : Singleton<ZombiePooler>
             //if (day > 0)
             if (day > 1)
             {
-                timer2 += Time.deltaTime;
-                if (timer2 >= 10f)
+                timerFast += Time.deltaTime;
+                if (timerFast >= 10f)
                 {
-                    timer2 = 0f;
+                    timerFast = 0f;
                     SpawnFast(1);
                 }
             }
             //if (day > 2)
             if (day > 3)
             {
-                timer4 += Time.deltaTime;
-                if (timer4 >= 10f)
+                timerRange += Time.deltaTime;
+                if (timerRange >= 10f)
                 {
-                    timer4 = 0f;
+                    timerRange = 0f;
                     SpawnRange(1);
                 }
             }
             //if (day > 4)
             if (day > 5)
             {
-                timer3 += Time.deltaTime;
-                if (timer3 >= 10f)
+                timerHeavy += Time.deltaTime;
+                if (timerHeavy >= 10f)
                 {
-                    timer3 = 0f;
+                    timerHeavy = 0f;
                     SpawnHeavy(1);
                 }
             }
@@ -211,6 +217,16 @@ public class ZombiePooler : Singleton<ZombiePooler>
             //    {
             //        timer5 = 0f;
             //        SpawnSanta(1);
+            //    }
+            //}
+
+            //if (day > 7)
+            //{
+            //    timerVomit += Time.deltaTime;
+            //    if (timerVomit >= 10f)
+            //    {
+            //        timerVomit = 0f;
+            //        SpawnVomit(1);
             //    }
             //}
         }
@@ -236,6 +252,7 @@ public class ZombiePooler : Singleton<ZombiePooler>
         ResetSub(zombiesPoolRange);
         ResetSub(zombiesSubPoolRange);
         ResetSub(zombiesPoolSanta);
+        ResetSub(zombiesPoolVomit);
 
         ResetSub(rollingStonePool);
 
@@ -350,6 +367,37 @@ public class ZombiePooler : Singleton<ZombiePooler>
         for (int i = 0; i < maxZombieFast; i++)
         {
             var zom = zombiesPoolFast[i];
+            if (!zom.gameObject.activeSelf)
+            {
+                Vector3 node = GetRandomPos(10f);
+
+                float dist = (currentTarget.position - node).magnitude;
+
+                if (dist < spawnDist * 0.75f)
+                {
+                    count--;
+                    if (count <= 0)
+                        break;
+
+                    continue;
+                }
+
+                zom.transform.position = node;
+                zom.StateReset();
+
+                zom.gameObject.SetActive(true);
+
+                count--;
+                if (count <= 0)
+                    break;
+            }
+        }
+    }
+    private void SpawnVomit(int count)
+    {
+        for (int i = 0; i < maxZombieVomit; i++)
+        {
+            var zom = zombiesPoolVomit[i];
             if (!zom.gameObject.activeSelf)
             {
                 Vector3 node = GetRandomPos(10f);
