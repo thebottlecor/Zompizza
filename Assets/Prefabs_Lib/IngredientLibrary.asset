@@ -32,27 +32,27 @@ MonoBehaviour:
         tier: 1
     - Key: 4
       Value:
-        valid: 0
+        valid: 1
         tier: 2
     - Key: 5
       Value:
-        valid: 0
+        valid: 1
         tier: 2
     - Key: 6
       Value:
-        valid: 0
+        valid: 1
         tier: 3
     - Key: 7
       Value:
-        valid: 0
+        valid: 1
         tier: 3
     - Key: 8
       Value:
-        valid: 0
+        valid: 1
         tier: 4
     - Key: 9
       Value:
-        valid: 0
+        valid: 1
         tier: 4
     - Key: 10
       Value:
@@ -82,27 +82,27 @@ MonoBehaviour:
         tier: 1
     - Key: 16
       Value:
-        valid: 0
+        valid: 1
         tier: 2
     - Key: 17
       Value:
-        valid: 0
+        valid: 1
         tier: 2
     - Key: 18
       Value:
-        valid: 0
+        valid: 1
         tier: 3
     - Key: 19
       Value:
-        valid: 0
+        valid: 1
         tier: 3
     - Key: 20
       Value:
-        valid: 0
+        valid: 1
         tier: 4
     - Key: 21
       Value:
-        valid: 0
+        valid: 1
         tier: 4
     - Key: 22
       Value:
@@ -132,27 +132,27 @@ MonoBehaviour:
         tier: 1
     - Key: 28
       Value:
-        valid: 0
+        valid: 1
         tier: 2
     - Key: 29
       Value:
-        valid: 0
+        valid: 1
         tier: 2
     - Key: 30
       Value:
-        valid: 0
+        valid: 1
         tier: 3
     - Key: 31
       Value:
-        valid: 0
+        valid: 1
         tier: 3
     - Key: 32
       Value:
-        valid: 0
+        valid: 1
         tier: 4
     - Key: 33
       Value:
-        valid: 0
+        valid: 1
         tier: 4
     - Key: 34
       Value:
