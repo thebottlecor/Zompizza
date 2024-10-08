@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pizzaRecipeUpgrades:
   - {fileID: 11400000, guid: 9ead68186c5b6bf48b6639bda12c4ced, type: 2}
-  - {fileID: 11400000, guid: 9ead68186c5b6bf48b6639bda12c4ced, type: 2}
-  - {fileID: 11400000, guid: 9ead68186c5b6bf48b6639bda12c4ced, type: 2}
-  - {fileID: 11400000, guid: 9ead68186c5b6bf48b6639bda12c4ced, type: 2}
+  - {fileID: 11400000, guid: 73da65db52a296c49b5a22d37d51e1fe, type: 2}
+  - {fileID: 11400000, guid: df89b0cf3a131804f850bc455e774a0b, type: 2}
+  - {fileID: 11400000, guid: 83ec284e9b6a1744d804437b6b36de00, type: 2}
   researchInfos:
   - {fileID: 11400000, guid: 9ead68186c5b6bf48b6639bda12c4ced, type: 2}
   - {fileID: 11400000, guid: 1cf06c4009d7e2d4595dd00232f68dcd, type: 2}
@@ -62,5 +62,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3ecfacb0a13bfe24995d253ea5050f01, type: 2}
   - {fileID: 11400000, guid: f7b363a81810459459299a8b9a5a7167, type: 2}
   - {fileID: 11400000, guid: 3d056f1d7d8aac54ca458fefa4c619ad, type: 2}
+  - {fileID: 11400000, guid: 73da65db52a296c49b5a22d37d51e1fe, type: 2}
+  - {fileID: 11400000, guid: df89b0cf3a131804f850bc455e774a0b, type: 2}
+  - {fileID: 11400000, guid: 83ec284e9b6a1744d804437b6b36de00, type: 2}
   - {fileID: 11400000, guid: 2c0cc1d20b962154d94818ec9837ac0b, type: 2}
   - {fileID: 11400000, guid: 3b5e82a1599a5d543a25e60d12377cd0, type: 2}

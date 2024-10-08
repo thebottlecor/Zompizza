@@ -220,11 +220,11 @@ public class UIManager : Singleton<UIManager>
                     villagerUI.OpenUI(idx);
             }
         }
-        else if (GM.Instance.install)
+        else if (GM.Instance.installJumpEnable)
         {
             if (!GM.Instance.pizzeriaStay && installUIs.activeSelf)
             {
-                GM.Instance.InstallFuck(false);
+                GM.Instance.InstallJumpDae(false);
                 GM.Instance.InstallFuck2();
             }
         }

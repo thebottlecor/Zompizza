@@ -27,6 +27,8 @@ public class GM : Singleton<GM>
         public int vehicleMilestone;
         public int tierUpMilestone;
 
+        public float[] rivalRating;
+
         public List<SavePosition> installJumpPostions;
     }
     public SaveData Save()
@@ -47,6 +49,8 @@ public class GM : Singleton<GM>
 
             vehicleMilestone = UIManager.Instance.vehicleMilestone,
             tierUpMilestone = UIManager.Instance.tierUpMilestone,
+
+            rivalRating = RivalManager.Instance.rating,
 
             installJumpPostions = this.installJumpPostions,
         };
@@ -83,6 +87,8 @@ public class GM : Singleton<GM>
 
         UIManager.Instance.vehicleMilestone = data.vehicleMilestone;
         UIManager.Instance.tierUpMilestone = data.tierUpMilestone;
+
+        RivalManager.Instance.rating = data.rivalRating;
 
         installJumpPostions = data.installJumpPostions;
         for (int i = 0; i < installJumpPostions.Count; i++)
@@ -235,7 +241,7 @@ public class GM : Singleton<GM>
 
     [Space(10f)]
     public bool pizzeriaStay;
-    public bool install;
+    public bool installJumpEnable;
     public GameObject installJumpObj;
     private List<SavePosition> installJumpPostions;
 
@@ -296,7 +302,7 @@ public class GM : Singleton<GM>
 
         tenDays_RaidRecords = new List<int>();
         unlockedVehicles = new bool[controllerData.Length];
-
+        RivalManager.Instance.Init();
         //
 
         GameSaveData gameSaveData = null;
@@ -307,6 +313,7 @@ public class GM : Singleton<GM>
             startInfo = LoadingSceneManager.Instance.StartInfo;
             slotNum = startInfo.slotNum;
         }
+
 
         bool saveLoad = false;
         if (SaveManager.Instance != null && !startInfo.saveName.Equals(string.Empty) && (startInfo.slotNum >= 1 && startInfo.slotNum <= 3))
@@ -321,8 +328,6 @@ public class GM : Singleton<GM>
         else
         {
             // 게임 초기화
-
-            //cityName = startInfo.cityName;
 
             day = 0;
 
@@ -355,7 +360,11 @@ public class GM : Singleton<GM>
         ResearchManager.Instance.Init();
         //LoanManager.Instance.Init();
         UIManager.Instance.shopUI.Init(saveLoad, gameSaveData);
-        TutorialManager.Instance.Init(startInfo.tutorial);
+
+        bool tutoOn = startInfo.tutorial;
+        if (saveLoad) tutoOn = false;
+        TutorialManager.Instance.Init(tutoOn);
+
         OrderManager.Instance.Init();
         VillagerManager.Instance.Init(saveLoad, gameSaveData);
 
@@ -366,11 +375,15 @@ public class GM : Singleton<GM>
         {
             RocketManager.Instance.Load(gameSaveData.gm.rocket);
             StatManager.Instance.Load(gameSaveData.gm.stat);
+            GameEventManager.Instance.Load(gameSaveData.gm.eventData);
             ResearchManager.Instance.Load(gameSaveData.research.data);
 
             SpecialDay();
             player.transform.position = shopEnterPos.position;
             ShowWarningQueue(); // 세이브 로드할 경우 아침 이벤트 재생시키기
+
+            pizzeriaStay = true;
+            UIManager.Instance.installUIs.SetActive(false);
         }
         else
         {
@@ -601,7 +614,7 @@ public class GM : Singleton<GM>
 
     public void NextDay()
     {
-        InstallFuck(false);
+        InstallJumpDae(false);
         rainObj.SetActive(false);
         zombieEnvSound.Mute(true);
         savingTMP.Toggle(false);
@@ -974,16 +987,16 @@ public class GM : Singleton<GM>
         //    warning_gameOver = false;
 
 
-        if (day >= 9) // 9일 => 10일 데모 승리
-        {
-            //if (!CongratulationTriggered)
-            //{
-            //    Congratulation(true);
-            //    AudioManager.Instance.PlaySFX(Sfx.complete);
-            //    UIManager.Instance.shopUI.upgradeDirection.Show(1);
-            //    return;
-            //}
-        }
+        //if (day >= 9) // 9일 => 10일 데모 승리
+        //{
+        //    //if (!CongratulationTriggered)
+        //    //{
+        //    //    Congratulation(true);
+        //    //    AudioManager.Instance.PlaySFX(Sfx.complete);
+        //    //    UIManager.Instance.shopUI.upgradeDirection.Show(1);
+        //    //    return;
+        //    //}
+        //}
         if (day >= RocketManager.Countdown) // 30일 => 31일 게임 끝
         {
             // 엔딩 처리
@@ -1121,6 +1134,7 @@ public class GM : Singleton<GM>
     // 고정된 날짜에 진행되는 무언가 => 세이브 로드와 상관없음 => 따라서 세이브 로드 후 메소드 실행시켜 주어야 함
     public void SpecialDay()
     {
+        int day = this.day; // 비 or 블러드문
         // 임시 비 효과
         if (day == 3 || day == 8 || day == 11 || day == 14 || day == 17 || day == 21 || day == 24 || day == 27)
         {
@@ -1134,24 +1148,24 @@ public class GM : Singleton<GM>
 
         if ((day + 1) % 2 == 0)
         {
-            InstallFuck(true);
+            InstallJumpDae(true);
         }
         else
         {
-            InstallFuck(false);
+            InstallJumpDae(false);
         }
     }
-    public void InstallFuck(bool on)
+    public void InstallJumpDae(bool on)
     {
         if (on)
         {
-            install = true;
+            installJumpEnable = true;
             TutorialManager.Instance.ToggleInstallGuide(true);
             player.installDeco.SetActive(true);
         }
         else
         {
-            install = false;
+            installJumpEnable = false;
             TutorialManager.Instance.ToggleInstallGuide(false);
             player.installDeco.SetActive(false);
         }
@@ -1248,6 +1262,12 @@ public class GM : Singleton<GM>
                 case 2: GameEventManager.Instance.SetEvent(0); // 3일차 아침 고아원 원장 이벤트
                     break;
                 case 8: GameEventManager.Instance.SetEvent(2); // 9일차 아침 고양이 이벤트
+                    break;
+                case 14: GameEventManager.Instance.SetEvent(4); // 15일차 아침 고아원 원장 이벤트
+                    break;
+                case 20: GameEventManager.Instance.SetEvent(6); // 21일차 아침 신부님 이벤트
+                    break;
+                case 26: GameEventManager.Instance.SetEvent(8); // 27일차 아침 미스터리맨 이벤트
                     break;
                 default: TutorialManager.Instance.NoMoreEvented(); // 이벤트가 없거나, 있으면 이벤트 후에 튜토 활성화
                     break;

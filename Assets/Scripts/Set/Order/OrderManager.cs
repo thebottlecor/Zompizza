@@ -334,9 +334,9 @@ public class OrderManager : Singleton<OrderManager>
     [ContextMenu("새로운 주문")]
     public void NewOrder()
     {
-        int day = GM.Instance.day;
-        int minOrderCount = 0;
+        int day = GM.Instance.day; // 중요 날짜별 주문 추가!!!!!!!!!!!!!!!!!
         int extraOrder = ResearchManager.Instance.globalEffect.order_max;
+        int minOrderCount;
         switch (day)
         {
             case 0:
@@ -374,6 +374,10 @@ public class OrderManager : Singleton<OrderManager>
         {
             rand.Add(0); // 경찰
         }
+        //**** 중요 날짜별 새로운 주문 추가
+
+
+        ////
 
         for (int i = rand.Count - 1; i >= 0; i--)
         {
@@ -665,6 +669,9 @@ public class OrderManager : Singleton<OrderManager>
 
         // 티어별 보상 // 2티어면 2배 보상
         rewards = (int)((tier + 1f) * (1f + ResearchManager.Instance.globalEffect.goldGet) * rewards);
+
+        if (GameEventManager.Instance.ninjaPriceUp) // 첫번째 닌자 치킨의 제안 수락시 10% 가격 상승
+            rewards += (int)(0.1f * rewards);
 
         // 호감도에 따른 보너스
         int friendshipBonus = 0;

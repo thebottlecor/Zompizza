@@ -119,6 +119,7 @@ public class SaveManager : Singleton<SaveManager>
             data = GM.Instance.Save(),
             rocket = RocketManager.Instance.Save(),
             stat = StatManager.Instance.Save(),
+            eventData = GameEventManager.Instance.Save(),
         };
 
         gameSaveData.research = new ResearchSaveData
@@ -479,6 +480,7 @@ public struct GMSaveData
     public TutorialData tutorial;
     public RocketManager.SaveData rocket;
     public StatManager.SaveData stat;
+    public GameEventManager.SaveData eventData;
 }
 [Serializable]
 public struct CustomDifficultyData

@@ -124,6 +124,7 @@ public class Lobby : Singleton<Lobby>
     private void OnESC(object sender, InputAction.CallbackContext e)
     {
         if (GM.Instance != null) return; // 인게임 씬에서는 단축키 막음
+        if (!lobbyUIObjects.activeSelf) return;
         if (LoadingSceneManager.Instance.logueLoading) return; // 프롤로그나 에필로그 중에는 단축키 막음
         if (LoadingSceneManager.Instance.IsSceneLoading) return; // 로딩 중 단축키 막음
 

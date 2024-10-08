@@ -7,6 +7,41 @@ using System;
 
 public class GameEventManager : Singleton<GameEventManager>
 {
+    [Serializable]
+    public struct SaveData
+    {
+        public float friendshipFixed;
+        public bool hasCat;
+        public bool ninjaPriceUp;
+        public bool fatherOffering;
+        public bool mysteryAid;
+        public int humanityPoint; 
+    }
+    public SaveData Save()
+    {
+        SaveData data = new()
+        {
+            friendshipFixed = this.friendshipFixed,
+            hasCat = this.hasCat,
+            ninjaPriceUp = this.ninjaPriceUp,
+            fatherOffering = this.fatherOffering,
+            mysteryAid = this.mysteryAid,
+            humanityPoint = this.humanityPoint,
+        };
+        return data;
+    }
+    public void Load(SaveData data)
+    {
+        friendshipFixed = data.friendshipFixed;
+
+        hasCat = data.hasCat;
+        cat.SetActive(true);
+
+        ninjaPriceUp = data.ninjaPriceUp;
+        fatherOffering = data.fatherOffering;
+        mysteryAid = data.mysteryAid;
+        humanityPoint = data.humanityPoint;
+    }
 
     public int currentEvent = -1;
     private bool[] triggeredEvents;
@@ -28,8 +63,13 @@ public class GameEventManager : Singleton<GameEventManager>
     private bool tmpCompleted;
 
     // 이벤트에 의한 일회성 호감도 고정
-    public float friendshipFixed;
-    public bool hasCat;
+    public float friendshipFixed; 
+    public bool hasCat; 
+    public bool ninjaPriceUp; 
+    public bool fatherOffering;
+    public bool mysteryAid;
+    public int humanityPoint;  // 최대 인류애점수 8점
+
     public GameObject cat;
 
     public AudioClip[] audioClips;
@@ -40,7 +80,7 @@ public class GameEventManager : Singleton<GameEventManager>
 
     private void Start()
     {
-        triggeredEvents = new bool[3];
+        triggeredEvents = new bool[9];
         Init();
     }
 
@@ -146,9 +186,13 @@ public class GameEventManager : Singleton<GameEventManager>
         switch (currentEvent)
         {
             case 0:
-                text = string.Format(tm.GetCommons($"{currentEvent}Event_accept"), value);
-                break;
             case 1:
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+            case 8:
                 text = string.Format(tm.GetCommons($"{currentEvent}Event_accept"), value);
                 break;
         }
@@ -164,31 +208,71 @@ public class GameEventManager : Singleton<GameEventManager>
         switch (currentEvent)
         {
             case 0:
-                {
-                    AudioManager.Instance.PlaySFX(audioClips[0]);
-                    int max = Mathf.Min(1, GM.Instance.HasIngredient);
-                    GM.Instance.IngredientSteal(max);
-                    UIManager.Instance.UpdateIngredients();
-                    UIManager.Instance.OrderUIBtnUpdate();
-                    return max;
-                }
+                return Event_Grandma(1);
             case 1:
-                {
-                    AudioManager.Instance.PlaySFX(audioClips[2]);
-                    int max = Mathf.Min(1000, GM.Instance.gold);
-                    GM.Instance.AddGold(-1 * max, GM.GetGoldSource.villager);
-                    friendshipFixed = 5f;
-                    return -1 * max;
-                }
+                return Event_Oldman(1000);
             case 2:
                 {
                     hasCat = true;
                     cat.SetActive(true);
+                    humanityPoint++; // 고양이 입양
                     AudioManager.Instance.PlaySFX(audioClips[4]);
                 }
                 break;
+            case 3:
+                {
+                    ninjaPriceUp = true;
+                    GM.Instance.AddRating(-5f, GM.GetRatingSource.delivery); // 첫번째 치킨 닌자
+                    AudioManager.Instance.PlaySFX(audioClips[3]);
+                    return 10;
+                }
+            case 4:
+                return Event_Grandma(5);
+            case 5:
+                return Event_Oldman(3000);
+            case 6:
+                {
+                    fatherOffering = true;
+                    humanityPoint++; // 신부님 기부
+                    AudioManager.Instance.PlaySFX(audioClips[2]);
+                    return 500;
+                }
+            case 7:
+                {
+                    int money = 10000;
+                    GM.Instance.AddGold(money, GM.GetGoldSource.delivery); // 두번째 치킨 닌자
+                    GM.Instance.AddRating(-10f, GM.GetRatingSource.delivery); // 두번째 치킨 닌자
+                    AudioManager.Instance.PlaySFX(audioClips[3]);
+                    return money;
+                }
+            case 8:
+                {
+                    mysteryAid = true;
+                    return 2 + humanityPoint * 1;
+                }
         }
         return int.MaxValue;
+    }
+
+    private int Event_Oldman(int money)
+    {
+        AudioManager.Instance.PlaySFX(audioClips[2]);
+        int max = Mathf.Min(money, GM.Instance.gold);
+        GM.Instance.AddGold(-1 * max, GM.GetGoldSource.villager);
+        friendshipFixed = 5f;
+        humanityPoint++; // 첫번째 기부
+        return -1 * max;
+    }
+
+    private int Event_Grandma(int ingredient)
+    {
+        AudioManager.Instance.PlaySFX(audioClips[0]);
+        int max = Mathf.Min(ingredient, GM.Instance.HasIngredient);
+        GM.Instance.IngredientSteal(max);
+        UIManager.Instance.UpdateIngredients();
+        UIManager.Instance.OrderUIBtnUpdate();
+        humanityPoint++; // 첫번째 고아원
+        return max;
     }
 
     public void DeclineTrigger()
@@ -224,14 +308,30 @@ public class GameEventManager : Singleton<GameEventManager>
         switch (currentEvent)
         {
             case 0:
+            case 4:
                 AudioManager.Instance.PlaySFX(audioClips[1]);
                 break;
             case 1:
+            case 5:
                 friendshipFixed = 1f;
                 AudioManager.Instance.PlaySFX(audioClips[3]);
                 break;
             case 2:
                 AudioManager.Instance.PlaySFX(audioClips[5]);
+                break;
+            case 3:
+                GM.Instance.AddRating(10f, GM.GetRatingSource.delivery); // 첫번째 치킨 닌자 - 거절
+                humanityPoint++; // 첫번째 치킨 닌자 - 거절
+                AudioManager.Instance.PlaySFX(audioClips[2]);
+                break;
+            case 6:
+                AudioManager.Instance.PlaySFX(audioClips[3]);
+                break;
+            case 7:
+                humanityPoint++; // 두번째 치킨 닌자 - 거절
+                AudioManager.Instance.PlaySFX(audioClips[2]);
+                break;
+            case 8:
                 break;
         }
     }
@@ -239,6 +339,24 @@ public class GameEventManager : Singleton<GameEventManager>
     public void NextDay()
     {
         friendshipFixed = 0f;
+    }
+    public void OfferingDaily()
+    {
+        if (fatherOffering)
+        {
+            int value = Mathf.Min(500, GM.Instance.gold);
+            GM.Instance.AddGold(-1 * value, GM.GetGoldSource.villager); // 신부님 매일 기부
+        }
+    }
+    public float MysteryAidEffect()
+    {
+        if (mysteryAid)
+        {
+            float baseValue = 0.02f;
+            baseValue += humanityPoint * 0.01f;
+            return (1f - baseValue);
+        }
+        return 1f;
     }
 
 }

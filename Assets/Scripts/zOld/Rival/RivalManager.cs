@@ -29,11 +29,6 @@ public class RivalManager : Singleton<RivalManager>
         public float rating;
     }
 
-    private void Start()
-    {
-        Init();
-    }
-
     public void Init()
     {
         weeklyRankingTMP.text = TextManager.Instance.GetCommons("WeeklyChoice");
@@ -45,8 +40,18 @@ public class RivalManager : Singleton<RivalManager>
         rating[0] += UnityEngine.Random.Range(10, 21) * 0.5f;
         rating[1] += UnityEngine.Random.Range(10, 21) * 0.5f;
 
-        if ((GM.Instance.day + 1) % 7 == 0)
+        int day = GM.Instance.day; // ¶óÀÌ¹ú µ¥ÀÌ
+
+        bool rivalDay = day == 6 || day == 13 || day == 21 || day == 28;
+
+        if (rivalDay)
         {
+            if (day >= 28) // ¸ê¸ÁÁ÷Àü µÑ´Ù ¸ê¸Á
+            {
+                rating[0] = 0f;
+                rating[1] = 0f;
+            }
+
             SetRanking();
             return true;
         }
@@ -66,6 +71,7 @@ public class RivalManager : Singleton<RivalManager>
         };
 
         float total = player + rating[0] + rating[1];
+        if (total < 1f) total = 1f;
 
         var result = rankings.OrderByDescending(i => i.rating);
 
@@ -73,7 +79,9 @@ public class RivalManager : Singleton<RivalManager>
         foreach (var i in result)
         {
             if (ranking == 0 && i.idx == 2) playerWin = true;
-            rankingObjs[ranking].Init(i.idx, ranking, i.rating, i.rating / total);
+            float percent = i.rating / total;
+            if (i.rating <= 0f) percent = 0f;
+            rankingObjs[ranking].Init(i.idx, ranking, i.rating, percent);
             ranking++;
         }
     }

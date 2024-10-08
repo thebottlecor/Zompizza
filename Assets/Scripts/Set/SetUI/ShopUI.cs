@@ -314,6 +314,7 @@ public class ShopUI : EventListener
                     shopCloseBtn.gameObject.SetActive(false);
 
                     VillagerManager.Instance.GetIncome();
+                    GameEventManager.Instance.OfferingDaily();
                 }
             }
         }
@@ -459,9 +460,21 @@ public class ShopUI : EventListener
         if (GM.Instance.closeImage.activeSelf && !GM.Instance.midNight)
         {
             bool triggered = false;
-            if (GM.Instance.day == 5)
+            int day = GM.Instance.day; // 가게 닫은 후 이벤트들
+            switch (day)
             {
-                triggered = GameEventManager.Instance.SetEvent(1); // 6일차 가게 닫은 후 이장 이벤트
+                case 5:
+                    triggered = GameEventManager.Instance.SetEvent(1); // 6일차 가게 닫은 후 이장 이벤트
+                    break;
+                case 11:
+                    triggered = GameEventManager.Instance.SetEvent(3); // 12일차 가게 닫은 후 치킨 닌자 이벤트
+                    break;
+                case 17:
+                    triggered = GameEventManager.Instance.SetEvent(5); // 18일차 가게 닫은 후 이장 이벤트
+                    break;
+                case 23:
+                    triggered = GameEventManager.Instance.SetEvent(7); // 18일차 가게 닫은 후 이장 이벤트
+                    break;
             }
 
             if (!triggered && !GM.Instance.midNight)
@@ -783,9 +796,21 @@ public class ShopUI : EventListener
         if (!GM.Instance.midNight)
         {
             bool triggered = false;
-            if (GM.Instance.day == 5) // 6일차 가게 "강제로" 닫은 후 이장 이벤트
+            int day = GM.Instance.day; // 가게 "강제로" 닫은 후 이벤트들
+            switch (day)
             {
-                triggered = GameEventManager.Instance.SetEvent(1); // 6일차 가게 "강제로" 닫은 후 이장 이벤트
+                case 5:
+                    triggered = GameEventManager.Instance.SetEvent(1); // 6일차 가게 "강제로" 닫은 후 이장 이벤트
+                    break;
+                case 11:
+                    triggered = GameEventManager.Instance.SetEvent(3); // 12일차 가게 "강제로" 닫은 후 치킨 닌자 이벤트
+                    break;
+                case 17:
+                    triggered = GameEventManager.Instance.SetEvent(5); // 18일차 가게 "강제로" 닫은 후 이장 이벤트
+                    break;
+                case 23:
+                    triggered = GameEventManager.Instance.SetEvent(7); // 18일차 가게 "강제로" 닫은 후 이장 이벤트
+                    break;
             }
             if (!triggered)
             {
@@ -1091,6 +1116,10 @@ public class ShopUI : EventListener
         {
             AudioManager.Instance.PlaySFX(Sfx.deny);
         }
+    }
+    public void UpdateResearchUI(int idx)
+    {
+        researchUIs[idx].UpdateUI();
     }
     #endregion
 

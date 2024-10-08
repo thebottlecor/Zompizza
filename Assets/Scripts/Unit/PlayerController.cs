@@ -225,23 +225,26 @@ public class PlayerController : PlayerControllerData
                     {
                         //Debug.Log("속도 방향과 충돌 방향 일치 -> 힘 전달 " + carRigidbody.velocity.magnitude);
 
-                        float playerDot = Vector3.Dot(carVel, transform.forward); // 차앞 방향과 속도 내적
-                        float crashDrag = this.crashDrag;
-                        if (zombie.isHeavy && !zombie.dead)
+                        if (GM.Instance.currentVehicle != 5) // 전투트럭은 좀비 충돌에 따른 패널티 없음
                         {
-                            if (playerDot >= 0) // 전진일 경우만 헤비 좀비에게 튕겨남
-                                crashDrag *= 200f * 2f * speedPercent;
-                            beforeCollisionSpeed = MaxSpeed; // 헤비와 부딪히면 무조건 충돌 판정
-                            isCollision = true;
-                        }
+                            float playerDot = Vector3.Dot(carVel, transform.forward); // 차앞 방향과 속도 내적
+                            float crashDrag = this.crashDrag;
+                            if (zombie.isHeavy && !zombie.dead)
+                            {
+                                if (playerDot >= 0) // 전진일 경우만 헤비 좀비에게 튕겨남
+                                    crashDrag *= 200f * 2f * speedPercent;
+                                beforeCollisionSpeed = MaxSpeed; // 헤비와 부딪히면 무조건 충돌 판정
+                                isCollision = true;
+                            }
 
-                        if (playerDot >= 0)
-                        {
-                            carRigidbody.AddForce(-1f * crashDrag * transform.forward, ForceMode.Impulse);
-                        }
-                        else
-                        {
-                            carRigidbody.AddForce(crashDrag * transform.forward, ForceMode.Impulse);
+                            if (playerDot >= 0)
+                            {
+                                carRigidbody.AddForce(-1f * crashDrag * transform.forward, ForceMode.Impulse);
+                            }
+                            else
+                            {
+                                carRigidbody.AddForce(crashDrag * transform.forward, ForceMode.Impulse);
+                            }
                         }
 
                         AudioManager.Instance.PlaySFX(Sfx.zombieCrash);

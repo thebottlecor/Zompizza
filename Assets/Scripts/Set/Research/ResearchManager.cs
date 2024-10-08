@@ -379,7 +379,7 @@ public class ResearchManager : Singleton<ResearchManager>
         {
             if (ResearchUnlock(tierResearches[i]))
             {
-
+                UIManager.Instance.shopUI.UpdateResearchUI(tierResearches[i]);
             }
         }
     }

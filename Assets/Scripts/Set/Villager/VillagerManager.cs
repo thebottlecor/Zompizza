@@ -305,9 +305,9 @@ public class VillagerManager : Singleton<VillagerManager>
 
         int day = GM.Instance.day; // 짝수날 마다 => 4의 배수마다 (09.11) SOS
 
-        if (day >= 9) return; // 데모는 10일 때 막음
+        bool sosDay = day == 3 || day == 7 || day == 10 || day == 15 || day == 19 || day == 22 || day == 27;
 
-        if ((day + 1) % 4 == 0 && !sosShowed) // 짝수날 마다 => 4의 배수마다 (09.11)
+        if (sosDay && !sosShowed) // 짝수날 마다 => 4의 배수마다 (09.11)
         {
             int recruited = GetRecruitedVillagerCount();
             int remained = GetRemainVillagerCount();
