@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   idx: 46
   main: 0
-  tier: 0
+  tier: 3
   romanNum: 4
   group: 0
   max: 1
@@ -35,18 +35,13 @@ MonoBehaviour:
     explore_cost: 0
     explore_get_bonus: 0
     tier: 4
-    meat_tier: 0
-    vegetable_tier: 0
-    herb_tier: 0
-    production_tier: 0
-    production_bonus: 0
+    villager_bonus: 0
     pizzeriaExpand: 0
     raidDefense: 0
     customer_timelimit: 0
     customer_max_tier: 0
     customer_max_amount: 0
     order_max: 0
-    customer_max_type: 0
     maxSpeed: 0
     damageReduce: 0
     acceleration: 0

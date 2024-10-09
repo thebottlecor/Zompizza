@@ -15,13 +15,7 @@ public struct ResearchEffect
 
     public int tier;
 
-    // 미완 **
-    public int meat_tier;
-    public int vegetable_tier;
-    public int herb_tier;
-    public int production_tier;
-    public float production_bonus;
-    // 미완 **
+    public float villager_bonus;
 
     public int pizzeriaExpand;
 
@@ -31,8 +25,6 @@ public struct ResearchEffect
     public int customer_max_tier;
     public int customer_max_amount;
     public int order_max;
-    // 미완
-    public int customer_max_type;
 
     public int maxSpeed;
     public float damageReduce;
@@ -126,50 +118,10 @@ public struct ResearchEffect
         }
     }
 
-    public void Showmeat_tier(StringBuilder st)
+    public void Showvillager_bonus(StringBuilder st)
     {
         var tm = TextManager.Instance;
-        var value = meat_tier;
-        if (value > 0)
-        {
-            st.Append(tm.GetCommons("UpgradeEffect6"));
-            st.AppendLine();
-        }
-    }
-    public void Showvegetable_tier(StringBuilder st)
-    {
-        var tm = TextManager.Instance;
-        var value = vegetable_tier;
-        if (value > 0)
-        {
-            st.Append(tm.GetCommons("UpgradeEffect7"));
-            st.AppendLine();
-        }
-    }
-    public void Showherb_tier(StringBuilder st)
-    {
-        var tm = TextManager.Instance;
-        var value = herb_tier;
-        if (value > 0)
-        {
-            st.Append(tm.GetCommons("UpgradeEffect8"));
-            st.AppendLine();
-        }
-    }
-    public void Showproduction_tier(StringBuilder st)
-    {
-        var tm = TextManager.Instance;
-        var value = production_tier;
-        if (value > 0)
-        {
-            st.AppendFormat(tm.GetCommons("UpgradeEffect9"), value);
-            st.AppendLine();
-        }
-    }
-    public void Showproduction_bonus(StringBuilder st)
-    {
-        var tm = TextManager.Instance;
-        var value = production_bonus;
+        var value = villager_bonus;
         if (value != 0f)
         {
             string sub;
@@ -177,7 +129,7 @@ public struct ResearchEffect
                 sub = string.Format(tm.defaultCultureInfo, "+{0:0.#}%", value * 100f);
             else
                 sub = string.Format(tm.defaultCultureInfo, "{0:0.#}%", value * 100f);
-            st.AppendFormat(tm.GetCommons("UpgradeEffect10"), sub);
+            st.AppendFormat(tm.GetCommons("UpgradeEffect10b"), sub);
             st.AppendLine();
         }
     }
@@ -256,21 +208,6 @@ public struct ResearchEffect
             else
                 sub = string.Format("{0}", value);
             st.AppendFormat(tm.GetCommons("UpgradeEffect20"), sub);
-            st.AppendLine();
-        }
-    }
-    public void Showcustomer_max_type(StringBuilder st)
-    {
-        var tm = TextManager.Instance;
-        var value = customer_max_type;
-        if (value != 0)
-        {
-            string sub;
-            if (value > 0)
-                sub = string.Format("+{0}", value);
-            else
-                sub = string.Format("{0}", value);
-            st.AppendFormat(tm.GetCommons("UpgradeEffect16"), sub);
             st.AppendLine();
         }
     }
@@ -412,23 +349,11 @@ public class ResearchInfo : ScriptableObject
             explore_cost = effect.explore_cost + global.explore_cost,
             explore_get_bonus = effect.explore_get_bonus + global.explore_get_bonus,
 
-            //tier = effect.tier + global.tier,
-
-            meat_tier = effect.meat_tier + global.meat_tier,
-            vegetable_tier = effect.vegetable_tier + global.vegetable_tier,
-            herb_tier = effect.herb_tier + global.herb_tier,
-            //production_tier = effect.production_tier + global.production_tier,
-            production_bonus = effect.production_bonus + global.production_bonus,
-
-            //pizzeriaExpand = effect.pizzeriaExpand + global.pizzeriaExpand,
-
-            //raidDefense = effect.raidDefense + global.raidDefense,
+            villager_bonus = effect.villager_bonus + global.villager_bonus,
 
             customer_timelimit = effect.customer_timelimit + global.customer_timelimit,
-            //customer_max_tier = effect.customer_max_tier + global.customer_max_tier,
             customer_max_amount = effect.customer_max_amount + global.customer_max_amount,
             order_max = effect.order_max + global.order_max,
-            customer_max_type = effect.customer_max_type + global.customer_max_type,
 
             maxSpeed = effect.maxSpeed + global.maxSpeed,
             damageReduce = effect.damageReduce + global.damageReduce,
@@ -439,11 +364,6 @@ public class ResearchInfo : ScriptableObject
             temp.tier = effect.tier;
         else
             temp.tier = global.tier;
-
-        if (effect.production_tier > global.production_tier)
-            temp.production_tier = effect.production_tier;
-        else
-            temp.production_tier = global.production_tier;
 
         if (effect.pizzeriaExpand > global.pizzeriaExpand)
             temp.pizzeriaExpand = effect.pizzeriaExpand;

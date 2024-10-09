@@ -315,57 +315,81 @@ public class UINaviHelper_Ingame : MonoBehaviour
     }
     private UINavi Shop_VehicleSelect()
     {
-        UINavi first = shops_vehicles[4];
+        //UINavi first = shops_vehicles[4];
 
-        first.ResetConnection();
-        first.down = shops_vehicles[2];
-        first.right = shops_vehicles[5];
+        //first.ResetConnection();
+        //first.down = shops_vehicles[2];
+        //first.right = shops_vehicles[5];
 
-        shops_vehicles[5].ResetConnection();
-        shops_vehicles[5].down = shops_vehicles[1];
-        shops_vehicles[5].left = first;
+        //shops_vehicles[5].ResetConnection();
+        //shops_vehicles[5].down = shops_vehicles[1];
+        //shops_vehicles[5].left = first;
+
+        //shops_vehicles[0].ResetConnection();
+        //shops_vehicles[0].up = first;
+        //shops_vehicles[0].down = shops_close;
+        //shops_vehicles[0].right = first;
+        //shops_vehicles[0].left = shops_vehicles[5];
+
+        //shops_vehicles[1].ResetConnection();
+        //shops_vehicles[1].up = first;
+        //shops_vehicles[1].left = shops_vehicles[2];
+        //shops_vehicles[1].down = shops_vehicles[3];
+
+        //shops_vehicles[2].ResetConnection();
+        //shops_vehicles[2].up = shops_vehicles[5];
+        //shops_vehicles[2].right = shops_vehicles[1];
+        //shops_vehicles[2].down = shops_vehicles[3];
+
+        //shops_vehicles[3].ResetConnection();
+        //shops_vehicles[3].up = shops_vehicles[2];
+        //shops_vehicles[3].left = shops_vehicles[2];
+        //shops_vehicles[3].right = shops_vehicles[1];
+        //shops_vehicles[3].down = shops_close;
+
+        //shops_close.ResetConnection();
+        //shops_close.up = shops_vehicles[3];
+        //shops_close.down = first;
+
+        //if (shops_vehicles[0].gameObject.activeSelf && shops_vehicles[0].gameObject.activeInHierarchy)
+        //{
+        //    first.left = shops_vehicles[0];
+        //    shops_vehicles[5].right = shops_vehicles[0];
+
+        //    shops_vehicles[2].left = shops_vehicles[0];
+        //    shops_vehicles[1].right = shops_vehicles[0];
+
+        //    shops_close.left = shops_vehicles[0];
+        //    shops_close.right = shops_vehicles[0];
+        //}
+        //else
+        //{
+
+        //}
+
+        UINavi first = shops_vehicles[3];
 
         shops_vehicles[0].ResetConnection();
-        shops_vehicles[0].up = first;
-        shops_vehicles[0].down = shops_close;
-        shops_vehicles[0].right = first;
-        shops_vehicles[0].left = shops_vehicles[5];
+        shops_vehicles[4].ResetConnection();
+        shops_vehicles[5].ResetConnection();
 
         shops_vehicles[1].ResetConnection();
-        shops_vehicles[1].up = first;
         shops_vehicles[1].left = shops_vehicles[2];
         shops_vehicles[1].down = shops_vehicles[3];
 
         shops_vehicles[2].ResetConnection();
-        shops_vehicles[2].up = shops_vehicles[5];
         shops_vehicles[2].right = shops_vehicles[1];
         shops_vehicles[2].down = shops_vehicles[3];
 
         shops_vehicles[3].ResetConnection();
-        shops_vehicles[3].up = shops_vehicles[2];
+        shops_vehicles[3].up = shops_vehicles[1];
         shops_vehicles[3].left = shops_vehicles[2];
         shops_vehicles[3].right = shops_vehicles[1];
         shops_vehicles[3].down = shops_close;
 
         shops_close.ResetConnection();
         shops_close.up = shops_vehicles[3];
-        shops_close.down = first;
 
-        if (shops_vehicles[0].gameObject.activeSelf && shops_vehicles[0].gameObject.activeInHierarchy)
-        {
-            first.left = shops_vehicles[0];
-            shops_vehicles[5].right = shops_vehicles[0];
-
-            shops_vehicles[2].left = shops_vehicles[0];
-            shops_vehicles[1].right = shops_vehicles[0];
-
-            shops_close.left = shops_vehicles[0];
-            shops_close.right = shops_vehicles[0];
-        }
-        else
-        {
-
-        }
         return first;
     }
 

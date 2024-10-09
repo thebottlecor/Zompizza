@@ -15,12 +15,12 @@ MonoBehaviour:
   idx: 12
   main: 0
   tier: 2
-  romanNum: 1
+  romanNum: 0
   group: 0
   max: 1
   cost: 2000
   increaseCost: 4000
-  researchPoint: 0
+  researchPoint: 120
   increaseRP: 0
   rating_require: 0
   increaseRating_require: 0
@@ -31,23 +31,18 @@ MonoBehaviour:
   effect:
     goldGet: 0
     ratingGet: 0
-    explore_max_pay: 10
-    explore_cost: -0.05
+    explore_max_pay: 20
+    explore_cost: -0.1
     explore_get_bonus: 0
     tier: 0
-    meat_tier: 0
-    vegetable_tier: 0
-    herb_tier: 0
-    production_tier: 0
-    production_bonus: 0
+    villager_bonus: 0
     pizzeriaExpand: 0
     raidDefense: 0
     customer_timelimit: 0
     customer_max_tier: 0
     customer_max_amount: 0
     order_max: 0
-    customer_max_type: 0
     maxSpeed: 0
     damageReduce: 0
     acceleration: 0
-  icon: {fileID: -1004100448, guid: 70a332bb4041ce447b99d72b8d122cda, type: 3}
+  icon: {fileID: 1112661140, guid: 70a332bb4041ce447b99d72b8d122cda, type: 3}

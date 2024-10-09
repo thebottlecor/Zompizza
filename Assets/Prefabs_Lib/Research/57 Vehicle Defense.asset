@@ -26,7 +26,7 @@ MonoBehaviour:
   increaseRating_require: 0
   needResearch: []
   hidden: 0
-  invalid: 0
+  invalid: 1
   effect:
     goldGet: 0
     ratingGet: 0

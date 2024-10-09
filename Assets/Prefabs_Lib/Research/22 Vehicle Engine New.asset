@@ -10,22 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 03e322c7226a3fa4bb30ed04530f4c83, type: 3}
-  m_Name: 28 Production - Efficiency
+  m_Name: 22 Vehicle Engine New
   m_EditorClassIdentifier: 
-  idx: 28
+  idx: 22
   main: 0
-  tier: 2
+  tier: 1
   romanNum: 0
   group: 0
   max: 1
-  cost: 6000
-  increaseCost: 4000
-  researchPoint: 0
+  cost: 0
+  increaseCost: 0
+  researchPoint: 30
   increaseRP: 0
   rating_require: 0
   increaseRating_require: 0
-  needResearch:
-  - {fileID: 11400000, guid: 08bc49b9074d0664e8c056c9c1eee62f, type: 2}
+  needResearch: []
   hidden: 0
   invalid: 0
   effect:
@@ -35,19 +34,14 @@ MonoBehaviour:
     explore_cost: 0
     explore_get_bonus: 0
     tier: 0
-    meat_tier: 0
-    vegetable_tier: 0
-    herb_tier: 0
-    production_tier: 0
-    production_bonus: 0.05
+    villager_bonus: 0
     pizzeriaExpand: 0
     raidDefense: 0
     customer_timelimit: 0
     customer_max_tier: 0
     customer_max_amount: 0
     order_max: 0
-    customer_max_type: 0
-    maxSpeed: 0
+    maxSpeed: 5
     damageReduce: 0
-    acceleration: 0
-  icon: {fileID: -388227028, guid: 70a332bb4041ce447b99d72b8d122cda, type: 3}
+    acceleration: 0.05
+  icon: {fileID: -377823705, guid: f6257e4801019a04989d75770b8da00e, type: 3}

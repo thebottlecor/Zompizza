@@ -125,7 +125,7 @@ public class VillagerWay : MonoBehaviour
                 modify = 2.0f;
                 break;
         }
-        value = (int)(value * modify);
+        value = (int)(value * modify * (1f + ResearchManager.Instance.globalEffect.villager_bonus));
         if (value < 0) value = 0;
         return value;
     }

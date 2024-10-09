@@ -10,22 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 03e322c7226a3fa4bb30ed04530f4c83, type: 3}
-  m_Name: 35 Merchant Expand 2
+  m_Name: 29 Vehicle Defense 3
   m_EditorClassIdentifier: 
-  idx: 35
+  idx: 29
   main: 0
-  tier: 4
+  tier: 3
   romanNum: 2
   group: 0
   max: 1
-  cost: 4000
+  cost: 6000
   increaseCost: 4000
-  researchPoint: 0
+  researchPoint: 140
   increaseRP: 0
   rating_require: 0
   increaseRating_require: 0
   needResearch:
-  - {fileID: 11400000, guid: edfa7873f0b737b498977f536310a6fd, type: 2}
+  - {fileID: 11400000, guid: 4da664cb2c2a65a49b69e088bc3cc01d, type: 2}
   hidden: 0
   invalid: 0
   effect:
@@ -35,19 +35,14 @@ MonoBehaviour:
     explore_cost: 0
     explore_get_bonus: 0
     tier: 0
-    meat_tier: 0
-    vegetable_tier: 0
-    herb_tier: 0
-    production_tier: 0
-    production_bonus: 0
+    villager_bonus: 0
     pizzeriaExpand: 0
     raidDefense: 0
     customer_timelimit: 0
     customer_max_tier: 0
     customer_max_amount: 0
     order_max: 0
-    customer_max_type: 0
     maxSpeed: 0
-    damageReduce: 0
+    damageReduce: 0.05
     acceleration: 0
-  icon: {fileID: 1112661140, guid: 70a332bb4041ce447b99d72b8d122cda, type: 3}
+  icon: {fileID: -455087142, guid: f6257e4801019a04989d75770b8da00e, type: 3}

@@ -180,8 +180,7 @@ public class ZombiePooler : Singleton<ZombiePooler>
         if (!playerInBase)
         {
             int day = GM.Instance.day;
-            //if (day > 0)
-            if (day > 1)
+            if (day > 4)
             {
                 timerFast += Time.deltaTime;
                 if (timerFast >= 10f)
@@ -190,8 +189,7 @@ public class ZombiePooler : Singleton<ZombiePooler>
                     SpawnFast(1);
                 }
             }
-            //if (day > 2)
-            if (day > 3)
+            if (day > 9)
             {
                 timerRange += Time.deltaTime;
                 if (timerRange >= 10f)
@@ -200,8 +198,7 @@ public class ZombiePooler : Singleton<ZombiePooler>
                     SpawnRange(1);
                 }
             }
-            //if (day > 4)
-            if (day > 5)
+            if (day > 14)
             {
                 timerHeavy += Time.deltaTime;
                 if (timerHeavy >= 10f)
@@ -210,25 +207,28 @@ public class ZombiePooler : Singleton<ZombiePooler>
                     SpawnHeavy(1);
                 }
             }
-            //if (day > 6)
-            //{
-            //    timer5 += Time.deltaTime;
-            //    if (timer5 >= 15f)
-            //    {
-            //        timer5 = 0f;
-            //        SpawnSanta(1);
-            //    }
-            //}
-
-            //if (day > 7)
-            //{
-            //    timerVomit += Time.deltaTime;
-            //    if (timerVomit >= 10f)
-            //    {
-            //        timerVomit = 0f;
-            //        SpawnVomit(1);
-            //    }
-            //}
+            if (day > 19)
+            {
+                timerVomit += Time.deltaTime;
+                if (timerVomit >= 10f)
+                {
+                    timerVomit = 0f;
+                    SpawnVomit(1);
+                }
+            }
+            if (day > 24)
+            {
+                // À§¼º Æø°Ý ? // Æ÷º´ Æø°Ý ?
+            }
+            if (day > 28)
+            {
+                timerSanta += Time.deltaTime;
+                if (timerSanta >= 30f)
+                {
+                    timerSanta = 0f;
+                    SpawnSanta(1);
+                }
+            }
         }
     }
 

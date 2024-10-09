@@ -616,7 +616,7 @@ public class ShopUI : EventListener
                     break;
                 case 3:
                     ResetVehicleUI();
-                    SelectUpgrade(GetMainResearch_Vehicle().idx);
+                    //SelectUpgrade(GetMainResearch_Vehicle().idx);
                     break;
             }
 
@@ -1030,11 +1030,11 @@ public class ShopUI : EventListener
             {
                 if (GM.Instance.researchPoint >= rp)
                 {
-                    st.AppendFormat("{0} : <sprite=7> {1:0.#}", tm.GetCommons("Costs"), rp);
+                    st.AppendFormat("{0} <sprite=7> {1:0.#}", tm.GetCommons("Costs"), rp);
                 }
                 else
                 {
-                    st.AppendFormat("{0} : <sprite=7> <color=#A91111>{1:0.#}</color>", tm.GetCommons("Costs"), rp);
+                    st.AppendFormat("{0} <sprite=7> <color=#A91111>{1:0.#}</color>", tm.GetCommons("Costs"), rp);
                 }
             }
         }
@@ -1054,11 +1054,7 @@ public class ShopUI : EventListener
 
         info.effect.Showtier(st);
 
-        info.effect.Showmeat_tier(st);
-        info.effect.Showvegetable_tier(st);
-        info.effect.Showherb_tier(st);
-        info.effect.Showproduction_tier(st);
-        info.effect.Showproduction_bonus(st);
+        info.effect.Showvillager_bonus(st);
 
         info.effect.ShowpizzeriaExpand(st);
 
@@ -1068,7 +1064,6 @@ public class ShopUI : EventListener
         info.effect.Showcustomer_max_tier(st);
         info.effect.Showorder_max(st);
         info.effect.Showcustomer_max_amount(st);
-        info.effect.Showcustomer_max_type(st);
 
         info.effect.ShowmaxSpeed(st);
         info.effect.ShowdamageReduce(st);

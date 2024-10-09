@@ -20,7 +20,7 @@ MonoBehaviour:
   max: 1
   cost: 6000
   increaseCost: 4000
-  researchPoint: 0
+  researchPoint: 140
   increaseRP: 0
   rating_require: 0
   increaseRating_require: 0
@@ -35,18 +35,13 @@ MonoBehaviour:
     explore_cost: 0
     explore_get_bonus: 0
     tier: 0
-    meat_tier: 0
-    vegetable_tier: 0
-    herb_tier: 0
-    production_tier: 0
-    production_bonus: 0
+    villager_bonus: 0
     pizzeriaExpand: 3
     raidDefense: 0
     customer_timelimit: 0
     customer_max_tier: 0
     customer_max_amount: 0
     order_max: 0
-    customer_max_type: 0
     maxSpeed: 0
     damageReduce: 0
     acceleration: 0

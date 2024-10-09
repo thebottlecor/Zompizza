@@ -31,9 +31,6 @@ public class TextManager : Singleton<TextManager>
     Dictionary<Ingredient, Dictionary<string, object>> ingredients;
     public string GetIngredient(Ingredient idx) => ingredients[idx][language.ToString()].ToString();
 
-    Dictionary<int, Dictionary<string, object>> recipes;
-    public string GetRecipes(int idx) => recipes[idx][language.ToString()].ToString();
-
     Dictionary<int, Dictionary<string, object>> researches;
     public string GetResearch(int idx) => researches[idx][language.ToString()].ToString();
 
@@ -133,7 +130,6 @@ public class TextManager : Singleton<TextManager>
         this.language = language;
 
         ingredients = CSVReader.ReadCSV<Ingredient>("TextManager - resource.csv");
-        recipes = CSVReader.ReadCSV<int>("TextManager - recipe.csv");
         researches = CSVReader.ReadCSV<int>("TextManager - research.csv");
         commons = CSVReader.ReadCSV<string>("TextManager - common.csv");
         keymaps = CSVReader.ReadCSV<KeyMap>("TextManager - keymap.csv");
@@ -147,7 +143,6 @@ public class TextManager : Singleton<TextManager>
         Lobby.Instance.UpdateTexts();
         SettingManager.Instance.UpdateTexts();
         UINaviHelper.Instance.UpdateTexts();
-        //SaveManager.Instance.UpdateTexts();
         UINaviHelper.Instance.inputHelper.GuidePadCheck();
 
         if (TextChangedEvent != null)

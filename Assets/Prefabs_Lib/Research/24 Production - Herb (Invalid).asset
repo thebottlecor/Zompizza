@@ -10,24 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 03e322c7226a3fa4bb30ed04530f4c83, type: 3}
-  m_Name: 33 Merchant
+  m_Name: 24 Production - Herb (Invalid)
   m_EditorClassIdentifier: 
-  idx: 33
+  idx: 24
   main: 0
-  tier: 0
+  tier: 1
   romanNum: 0
   group: 0
   max: 1
-  cost: 4000
+  cost: 6000
   increaseCost: 4000
   researchPoint: 0
   increaseRP: 0
   rating_require: 0
   increaseRating_require: 0
   needResearch:
-  - {fileID: 11400000, guid: 08bc49b9074d0664e8c056c9c1eee62f, type: 2}
+  - {fileID: 11400000, guid: 056f3917cf101da4281964d7da1a2743, type: 2}
   hidden: 0
-  invalid: 0
+  invalid: 1
   effect:
     goldGet: 0
     ratingGet: 0
@@ -37,7 +37,7 @@ MonoBehaviour:
     tier: 0
     meat_tier: 0
     vegetable_tier: 0
-    herb_tier: 0
+    herb_tier: 1
     production_tier: 0
     production_bonus: 0
     pizzeriaExpand: 0
@@ -50,4 +50,4 @@ MonoBehaviour:
     maxSpeed: 0
     damageReduce: 0
     acceleration: 0
-  icon: {fileID: 1112661140, guid: 70a332bb4041ce447b99d72b8d122cda, type: 3}
+  icon: {fileID: 561391949, guid: 70a332bb4041ce447b99d72b8d122cda, type: 3}
