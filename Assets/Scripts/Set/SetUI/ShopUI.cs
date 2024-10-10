@@ -473,7 +473,7 @@ public class ShopUI : EventListener
                     triggered = GameEventManager.Instance.SetEvent(5); // 18일차 가게 닫은 후 이장 이벤트
                     break;
                 case 23:
-                    triggered = GameEventManager.Instance.SetEvent(7); // 18일차 가게 닫은 후 이장 이벤트
+                    triggered = GameEventManager.Instance.SetEvent(7); // 24일차 가게 닫은 후 치킨 닌자 이벤트
                     break;
             }
 
@@ -809,7 +809,7 @@ public class ShopUI : EventListener
                     triggered = GameEventManager.Instance.SetEvent(5); // 18일차 가게 "강제로" 닫은 후 이장 이벤트
                     break;
                 case 23:
-                    triggered = GameEventManager.Instance.SetEvent(7); // 18일차 가게 "강제로" 닫은 후 이장 이벤트
+                    triggered = GameEventManager.Instance.SetEvent(7); // 24일차 가게 "강제로" 닫은 후 치킨 닌자 이벤트
                     break;
             }
             if (!triggered)

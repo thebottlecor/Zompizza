@@ -1690,6 +1690,7 @@ public class GM : Singleton<GM>
         {
             // 성공 연출
             AudioManager.Instance.PlaySFX(Sfx.complete);
+            UIManager.Instance.vehicleMilestone++;
             unlockedVehicles[idx] = true;
             return true;
         }

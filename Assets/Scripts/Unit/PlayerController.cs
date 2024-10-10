@@ -193,10 +193,31 @@ public class PlayerController : PlayerControllerData
         {
             meshRenderers[i].material = DataManager.Instance.materialLib.baseMaterial;
         }
+        ToggleBackLight(false);
 
         UpdateBox(OrderManager.Instance.GetCurrentPizzaBox());
 
         UIManager.Instance.shopUI.OrderLoadCountTextUpdate();
+    }
+    public void ToggleBackLight(bool on)
+    {
+        if (backLights != null)
+        {
+            if (on)
+            {
+                for (int i = 0; i < backLights.Length; i++)
+                {
+                    if (!backLights[i].activeSelf) backLights[i].SetActive(true);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < backLights.Length; i++)
+                {
+                    if (backLights[i].activeSelf) backLights[i].SetActive(false);
+                }
+            }
+        }
     }
 
     void OnCollisionEnter(Collision collision)
@@ -653,6 +674,34 @@ public class PlayerController : PlayerControllerData
             if (!left && !right && steeringAxis != 0f)
             {
                 ResetSteeringAngle();
+            }
+
+            if (backward)
+            {
+                ToggleBackLight(true);
+            }
+            else
+            {
+                if (right && !left)
+                {
+                    if (backLights != null && backLights.Length == 2)
+                    {
+                        if (!backLights[0].activeSelf) backLights[0].SetActive(true);
+                        if (backLights[1].activeSelf) backLights[1].SetActive(false);
+                    }
+                }
+                else if (left && !right)
+                {
+                    if (backLights != null && backLights.Length == 2)
+                    {
+                        if (backLights[0].activeSelf) backLights[0].SetActive(false);
+                        if (!backLights[1].activeSelf) backLights[1].SetActive(true);
+                    }
+                }
+                else
+                {
+                    ToggleBackLight(false);
+                }
             }
         }
 

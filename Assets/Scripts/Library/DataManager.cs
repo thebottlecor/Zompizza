@@ -9,7 +9,6 @@ public class DataManager : Singleton<DataManager>
     public IngredientLibrary ingredientLib;
     public UILibrary uiLib;
     public MaterialLibrary materialLib;
-    public CursorLibrary cursorLib;
     public EffectLibrary effectLib;
 
     public ResearchLibrary researchLib;

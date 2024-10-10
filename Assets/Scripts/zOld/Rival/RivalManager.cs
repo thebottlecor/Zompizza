@@ -46,10 +46,13 @@ public class RivalManager : Singleton<RivalManager>
 
         if (rivalDay)
         {
-            if (day >= 28) // ¸ê¸ÁÁ÷Àü µÑ´Ù ¸ê¸Á
+            if (day >= 21) // ¹ö°Å ÇÁ¸°¼¼½º ¸ê¸Á
+            {
+                rating[1] = 0f;
+            }
+            if (day >= 28) // ¸ê¸ÁÁ÷Àü ´ÑÀÚÄ¡Å² ¸ê¸Á
             {
                 rating[0] = 0f;
-                rating[1] = 0f;
             }
 
             SetRanking();

@@ -46,6 +46,7 @@ public class PlayerControllerData : EventListener
 
     public MeshRenderer[] meshRenderers;
     public GameObject[] pizzaBoxes;
+    public GameObject[] backLights;
 
     [Space(20)]
     public AudioSource carEngineSound; // This variable stores the sound of the car engine.
@@ -120,6 +121,7 @@ public class PlayerControllerData : EventListener
 
         player.meshRenderers = meshRenderers;
         player.pizzaBoxes = pizzaBoxes;
+        player.backLights = backLights;
 
         player.carEngineSound = carEngineSound;
         player.tireScreechSound = tireScreechSound;

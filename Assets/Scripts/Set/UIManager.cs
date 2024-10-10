@@ -397,6 +397,7 @@ public class UIManager : Singleton<UIManager>
             vehicleImages[newVehicle - 1].SetActive(true);
 
             vehicleMilestone = totalVehicle;
+            vehicleUpEffect.transform.position = new Vector3(-100f, 100f, 0f);
             vehicleUpEffect.SetActive(true);
 
             StringBuilder st = new StringBuilder();
@@ -425,6 +426,15 @@ public class UIManager : Singleton<UIManager>
             ExplorationManager.Instance.SetHighTierQuality();
 
             tierUpMilestone = tier;
+            if (vehicleUpEffect.activeSelf)
+            {
+                vehicleUpEffect.transform.position = new Vector3(-102f, 100f, 0f);
+                tierUpEffect.transform.position = new Vector3(-98f, 100f, 0f);
+            }
+            else
+            {
+                tierUpEffect.transform.position = new Vector3(-100f, 100f, 0f);
+            }
             tierUpEffect.SetActive(true);
 
             StringBuilder st = new StringBuilder();
