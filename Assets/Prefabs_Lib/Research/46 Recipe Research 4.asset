@@ -22,7 +22,7 @@ MonoBehaviour:
   increaseCost: 0
   researchPoint: 0
   increaseRP: 0
-  rating_require: 120
+  rating_require: 160
   increaseRating_require: 0
   needResearch:
   - {fileID: 11400000, guid: df89b0cf3a131804f850bc455e774a0b, type: 2}

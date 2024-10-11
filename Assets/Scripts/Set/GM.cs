@@ -244,6 +244,7 @@ public class GM : Singleton<GM>
     public bool installJumpEnable;
     public GameObject installJumpObj;
     private List<SavePosition> installJumpPostions;
+    public GameObject ninjaChicken;
 
     [Space(10f)]
     public GameObject vomitEffect;
@@ -1144,6 +1145,12 @@ public class GM : Singleton<GM>
         if (day == 4 || day == 9 || day == 14 || day == 19 || day == 24 || day == 28) // 블러드문
         {
             bloodMoon = true;
+        }
+
+        ninjaChicken.SetActive(false);
+        if (day == 11 || day == 14 || day == 17 || day == 20 || day == 23 || day == 26)
+        {
+            ninjaChicken.SetActive(true);
         }
 
         if ((day + 1) % 2 == 0)

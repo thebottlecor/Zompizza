@@ -20,7 +20,7 @@ MonoBehaviour:
   max: 1
   cost: 2000
   increaseCost: 4000
-  researchPoint: 130
+  researchPoint: 90
   increaseRP: 0
   rating_require: 0
   increaseRating_require: 0

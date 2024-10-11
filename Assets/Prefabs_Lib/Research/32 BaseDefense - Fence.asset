@@ -20,9 +20,9 @@ MonoBehaviour:
   max: 1
   cost: 4000
   increaseCost: 4000
-  researchPoint: 0
+  researchPoint: 150
   increaseRP: 0
-  rating_require: 250
+  rating_require: 0
   increaseRating_require: 0
   needResearch:
   - {fileID: 11400000, guid: 8747e87ab0718854ca49cdc2e2aed2e8, type: 2}
