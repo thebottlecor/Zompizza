@@ -1161,6 +1161,22 @@ public class GM : Singleton<GM>
         {
             InstallJumpDae(false);
         }
+
+        if (day > 19)
+        {
+            ZombiePooler.Instance.spawnCount = 4;
+            ZombiePooler.Instance.spawnCountRandomAdd = 1;
+        }
+        else if (day > 9)
+        {
+            ZombiePooler.Instance.spawnCount = 3;
+            ZombiePooler.Instance.spawnCountRandomAdd = 1;
+        }
+        else // 초보자 배려 구간
+        {
+            ZombiePooler.Instance.spawnCount = 2;
+            ZombiePooler.Instance.spawnCountRandomAdd = 0;
+        }
     }
     public void InstallJumpDae(bool on)
     {

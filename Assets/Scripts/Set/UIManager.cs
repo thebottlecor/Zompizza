@@ -19,6 +19,10 @@ public class UIManager : Singleton<UIManager>
     public bool isDirecting;
     public bool changingResolution;
 
+    public GameObject uiCam;
+    public GameObject minimapCam;
+    public GameObject worldmapCam;
+
     public List<OrderUIObject> orderUIObjects;
 
     [Header("운행중 배달 정보")]
@@ -112,6 +116,10 @@ public class UIManager : Singleton<UIManager>
     {
         if (on)
         {
+            uiCam.SetActive(false);
+            minimapCam.SetActive(true);
+            worldmapCam.SetActive(false);
+
             if (TutorialManager.Instance.training && TutorialManager.Instance.step <= 1) return;
 
             WorldMapManager.Instance.OpenMinimap();
@@ -127,6 +135,9 @@ public class UIManager : Singleton<UIManager>
         }
         else
         {
+            uiCam.SetActive(true);
+            minimapCam.SetActive(false);
+            worldmapCam.SetActive(true);
             WorldMapManager.Instance.CloseMinimap();
             orderMiniUIParent.SetActive(false);
             timeInfo.SetActive(false);

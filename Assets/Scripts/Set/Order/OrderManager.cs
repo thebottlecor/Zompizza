@@ -181,12 +181,30 @@ public class OrderManager : Singleton<OrderManager>
                 {
                     float remainPercent = Mathf.Abs(overTime) / timeLimit;
                     if (remainPercent >= Constant.remainTime_Percent) // 남은 시간이 50% 이상
+                    {
                         timeRating = Constant.remainTimeRating1;
+                    }
+                    else if (remainPercent >= 0.4f)
+                    {
+                        timeRating = 2f;
+                    }
+                    else if (remainPercent >= 0.3f)
+                    {
+                        timeRating = 1.5f;
+                    }
+                    else if (remainPercent >= 0.2f)
+                    {
+                        timeRating = 1f;
+                    }
                     else
                     {
-                        // 2점 ~ 0.5점 사이
-                        timeRating = Constant.Point05((Constant.remainTimeRating2 - Constant.remainTimeRating3) / Constant.remainTime_Percent * remainPercent + Constant.remainTimeRating3);
+                        timeRating = 0.5f;
                     }
+                    //else
+                    //{
+                    //    // 2점 ~ 0.5점 사이
+                    //    //timeRating = Constant.Point05((Constant.remainTimeRating2 - Constant.remainTimeRating3) / Constant.remainTime_Percent * remainPercent + Constant.remainTimeRating3);
+                    //}
                 }
                 else
                 {
@@ -203,18 +221,39 @@ public class OrderManager : Singleton<OrderManager>
                 {
                     hpRating = Constant.remainHpRating1;
                 }
-                else if (hpPercent >= Constant.remainHP_Percent)
+                else if (hpPercent >= 0.9f)
                 {
-                    hpRating = Constant.Point05(((Constant.remainHpRating2 - Constant.remainHpRating3) / (1f - Constant.remainHP_Percent)) * hpPercent +
-                        ((-Constant.remainHP_Percent * Constant.remainHpRating2) + Constant.remainHpRating3) / (1f - Constant.remainHP_Percent));
+                    hpRating = 2f;
+                }
+                else if (hpPercent >= 0.8f)
+                {
+                    hpRating = 1.5f;
+                }
+                else if (hpPercent >= 0.7f)
+                {
+                    hpRating = 1f;
+                }
+                else if (hpPercent >= 0.5f)
+                {
+                    hpRating = 0.5f;
                 }
                 else
                 {
-                    //hpRating = Constant.Point05((-1f * Constant.remainHpRating4 / Constant.remainHP_Percent) * hpPercent + Constant.remainHpRating4);
-
-                    // 원래는 0점 ~ -2.5점 사이
                     hpRating = 0f;
                 }
+
+                //else if (hpPercent >= Constant.remainHP_Percent)
+                //{
+                //    hpRating = Constant.Point05(((Constant.remainHpRating2 - Constant.remainHpRating3) / (1f - Constant.remainHP_Percent)) * hpPercent +
+                //        ((-Constant.remainHP_Percent * Constant.remainHpRating2) + Constant.remainHpRating3) / (1f - Constant.remainHP_Percent));
+                //}
+                //else
+                //{
+                //    //hpRating = Constant.Point05((-1f * Constant.remainHpRating4 / Constant.remainHP_Percent) * hpPercent + Constant.remainHpRating4);
+
+                //    // 원래는 0점 ~ -2.5점 사이
+                //    hpRating = 0f;
+                //}
 
                 float resultRating = timeRating + hpRating;
                 if (resultRating > 0f) resultRating *= (1f + ResearchManager.Instance.globalEffect.ratingGet);
@@ -248,7 +287,7 @@ public class OrderManager : Singleton<OrderManager>
 
         if (currentAcceptance == 0)
         {
-            FastTravelShow();
+            FastTravelShow(); // 주문 없을 때
         }
 
         UIManager.Instance.OrderUIBtnUpdate();
@@ -935,7 +974,7 @@ public class OrderManager : Singleton<OrderManager>
 
     private float travelTime;
 
-    private void FastTravelShow()
+    public void FastTravelShow()
     {
         if (GM.Instance.day <= 0) return;
 

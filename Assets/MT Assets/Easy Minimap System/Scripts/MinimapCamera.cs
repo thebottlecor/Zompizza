@@ -417,6 +417,11 @@ namespace MTAssets.EasyMinimapSystem
                 tempCamera.allowMSAA = false;
                 tempCamera.allowDynamicResolution = false;
 
+                if (this.gameObject.name.Equals("Player_Minimap"))
+                    UIManager.Instance.minimapCam = tempCameraObj;
+                else
+                    UIManager.Instance.worldmapCam = tempCameraObj;
+
                 //Add the activity monitor to the camera
                 ActivityMonitor activityMonitor = tempCameraObj.AddComponent<ActivityMonitor>();
                 activityMonitor.responsibleScriptComponentForThis = this;
@@ -447,8 +452,8 @@ namespace MTAssets.EasyMinimapSystem
                 return;
 
             //If the Minimap Camera created by this component is disabled, enable it
-            if (tempCameraObj.activeSelf == false)
-                tempCameraObj.SetActive(true);
+            //if (tempCameraObj.activeSelf == false)
+            //    tempCameraObj.SetActive(true);
 
             //Update the preferences of camera, if has changed
             if (tempCamera.orthographicSize != fieldOfView)

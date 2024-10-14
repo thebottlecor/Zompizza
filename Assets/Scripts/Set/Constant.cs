@@ -67,7 +67,7 @@ public class Constant
     // 주민 관련
     public const int maxVillager = 5;
     public const int villagerIncome = 500;
-    public const float sos_timeLimit_1km = 55f; //1.5f * delivery_timeLimit_1km; (기존 35초일때 52.5)
+    public const float sos_timeLimit_1km = 60f; //1.5f * delivery_timeLimit_1km; (기존 35초일때 52.5)
 
     // 높이 관련
 

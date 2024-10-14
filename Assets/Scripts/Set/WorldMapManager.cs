@@ -125,7 +125,7 @@ public class WorldMapManager : Singleton<WorldMapManager>
         if (customerPos.z == -1000)
         {
             // 처음 열 때 플레이어 위치로 고정
-            worldMapCamera.transform.position = minimapItemsTarget.position;
+            worldMapCamera.transform.position = GM.Instance.player.transform.position;
         }
         else
         {
