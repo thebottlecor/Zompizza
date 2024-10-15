@@ -27,6 +27,7 @@ public class GM : Singleton<GM>
         public int vehicleMilestone;
         public int tierUpMilestone;
 
+        public List<int> tenDays_RaidRecords;
         public float[] rivalRating;
 
         public List<SavePosition> installJumpPostions;
@@ -50,6 +51,7 @@ public class GM : Singleton<GM>
             vehicleMilestone = UIManager.Instance.vehicleMilestone,
             tierUpMilestone = UIManager.Instance.tierUpMilestone,
 
+            tenDays_RaidRecords = this.tenDays_RaidRecords,
             rivalRating = RivalManager.Instance.rating,
 
             installJumpPostions = this.installJumpPostions,
@@ -88,6 +90,7 @@ public class GM : Singleton<GM>
         UIManager.Instance.vehicleMilestone = data.vehicleMilestone;
         UIManager.Instance.tierUpMilestone = data.tierUpMilestone;
 
+        tenDays_RaidRecords = data.tenDays_RaidRecords;
         RivalManager.Instance.rating = data.rivalRating;
 
         installJumpPostions = data.installJumpPostions;
