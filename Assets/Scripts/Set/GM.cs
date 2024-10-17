@@ -301,8 +301,8 @@ public class GM : Singleton<GM>
         //nextDayBtn.onClick.AddListener(() => { NextDay_Late(); });
         nextDayBtn.onClick.AddListener(() => { Show_SpaceshipProject(); });
         gameOverBtn_ToLobby.onClick.AddListener(() => { LoadingSceneManager.Instance.ToLobby(); });
-        //congratulationBtn_ToLobby.onClick.AddListener(() => { LoadingSceneManager.Instance.ToLobby(); });
-        congratulationBtn_ToLobby.onClick.AddListener(() => { LoadingSceneManager.Instance.EpilogueStart(); });
+        //congratulationBtn_ToLobby.onClick.AddListener(() => { LoadingSceneManager.Instance.EpilogueStart(); });
+        congratulationBtn_ToLobby.onClick.AddListener(() => { LoadingSceneManager.Instance.ToLobby(); });
 
         tenDays_RaidRecords = new List<int>();
         unlockedVehicles = new bool[controllerData.Length];
@@ -436,7 +436,8 @@ public class GM : Singleton<GM>
         raidBtn_Text.text = tm.GetCommons("RaidClose");
 
         congratulationsText[0].text = tm.GetCommons("Congratulations");
-        congratulationsText[1].text = tm.GetCommons("CompleteRating");
+        //congratulationsText[1].text = tm.GetCommons("CompleteRating");
+        congratulationsText[1].text = tm.GetCommons("CompleteRocket");
         //congratulationsBtn_Text.text = tm.GetCommons("Resume");
         congratulationsBtn_Text.text = $"> {tm.GetCommons("Menu")} <";
     }
@@ -1003,25 +1004,33 @@ public class GM : Singleton<GM>
         //}
         if (day >= RocketManager.Countdown) // 30일 => 31일 게임 끝
         {
-            // 엔딩 처리
-            Debug.Log("엔딩");
-            if (!CongratulationTriggered)
+            if (RocketManager.Instance.Completed)
             {
-                Congratulation(true);
-                AudioManager.Instance.PlaySFX(Sfx.complete);
-                UIManager.Instance.shopUI.upgradeDirection.Show(1);
+                // 엔딩 처리
+                if (!CongratulationTriggered)
+                {
+                    Congratulation(true);
+                    AudioManager.Instance.PlaySFX(Sfx.complete);
+                    UIManager.Instance.shopUI.upgradeDirection.Show(1);
+                    return;
+                }
+            }
+            else
+            {
+                gameOverText[1].text = tm.GetCommons("Gameover4");
+                GameOver();
                 return;
             }
         }
 
         warning_gameOver = false; // 평점 0점 이하 패배 조건 삭제
 
-        if (loanWarning == 0)
-        {
-            gameOverText[1].text = tm.GetCommons("Gameover3");
-            GameOver();
-            return;
-        }
+        //if (loanWarning == 0)
+        //{
+        //    gameOverText[1].text = tm.GetCommons("Gameover3");
+        //    GameOver();
+        //    return;
+        //}
 
         if (raided)
         {
@@ -1165,12 +1174,22 @@ public class GM : Singleton<GM>
             InstallJumpDae(false);
         }
 
-        if (day > 19)
+        if (day > 25)
+        {
+            ZombiePooler.Instance.spawnCount = 4;
+            ZombiePooler.Instance.spawnCountRandomAdd = 2;
+        }
+        else if (day > 19)
         {
             ZombiePooler.Instance.spawnCount = 4;
             ZombiePooler.Instance.spawnCountRandomAdd = 1;
         }
-        else if (day > 9)
+        else if (day > 13)
+        {
+            ZombiePooler.Instance.spawnCount = 3;
+            ZombiePooler.Instance.spawnCountRandomAdd = 2;
+        }
+        else if (day > 5)
         {
             ZombiePooler.Instance.spawnCount = 3;
             ZombiePooler.Instance.spawnCountRandomAdd = 1;
@@ -1220,6 +1239,8 @@ public class GM : Singleton<GM>
         {
             if (CongratulationTriggered) return;
             CongratulationTriggered = true;
+
+            if (SteamHelper.Instance != null) SteamHelper.Instance.AchieveWin();
 
             darkCanvas.alpha = 1f;
             darkCanvas.blocksRaycasts = true;

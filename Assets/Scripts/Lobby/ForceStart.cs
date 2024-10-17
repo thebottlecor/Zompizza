@@ -39,7 +39,7 @@ public class ForceStart : MonoBehaviour
             pizzeriaName = "Zompizza",
             slotNum = 1,
             saveName = string.Empty,
-            tutorial = false,
+            tutorial = true,
         };
         Debug.Log("·ÎµùµÇ´Â ¾À : " + editorSettingLib.sceneName);
         LoadingSceneManager.Instance.LobbyStart(gameStartInfo, editorSettingLib.sceneName);

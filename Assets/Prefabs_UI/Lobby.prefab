@@ -3334,6 +3334,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4535559183752090463}
   - component: {fileID: 6360003134436311885}
+  - component: {fileID: 5407195499969162044}
   m_Layer: 0
   m_Name: SteamManager
   m_TagString: Untagged
@@ -3366,6 +3367,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ef4bffeda13d7a748973ff9204401c07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5407195499969162044
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1331912130497252008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 116754687e02b96408ce10b8aee76860, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1485398556782056224
@@ -4886,7 +4899,6 @@ MonoBehaviour:
   ingredientLib: {fileID: 11400000, guid: 90823d787449d1344996406e7495237e, type: 2}
   uiLib: {fileID: 11400000, guid: 11c54c42de837984c94b234960f2d33a, type: 2}
   materialLib: {fileID: 11400000, guid: a05134f48e1ac634690c50f70e7d7821, type: 2}
-  cursorLib: {fileID: 11400000, guid: 1223258829c43354e9b244178b3ad8c1, type: 2}
   effectLib: {fileID: 11400000, guid: d02c3656d26cdbb4d9d92fe6d541fe63, type: 2}
   researchLib: {fileID: 11400000, guid: 36359bd0f362fec4db980e1146001752, type: 2}
 --- !u!1 &2507890894523905929
