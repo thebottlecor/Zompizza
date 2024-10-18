@@ -146,6 +146,21 @@ public class OrderGoal : MonoBehaviour
 
         float timeLimit = (Constant.delivery_timeLimit_1km * km) + Constant.delivery_timeLimit_base;
 
-        Debug.Log($" 거리 : {km:0.##}km\n                     시간 : {timeLimit:F0}s");
+        Debug.Log($"거리 : {km:0.##}km\n                     시간 : {timeLimit:F0}s");
+    }
+    public float GetDist(Transform pos)
+    {
+        float dist = (transform.position - pos.position).magnitude;
+        float km = dist * Constant.distanceScale; // 게임상 거리 200 = 1km
+        return km;
+    }
+    public void ShowDist2(Transform pos)
+    {
+        float dist = (transform.position - pos.position).magnitude;
+        float km = dist * Constant.distanceScale; // 게임상 거리 200 = 1km
+
+        float timeLimit = (Constant.delivery_timeLimit_1km * km) + Constant.delivery_timeLimit_base;
+
+        Debug.Log($"{transform.parent.gameObject.name} 거리 : {km:0.##}km\n시간 : {timeLimit:F0}s");
     }
 }

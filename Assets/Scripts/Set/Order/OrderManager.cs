@@ -395,28 +395,81 @@ public class OrderManager : Singleton<OrderManager>
         //List<int> rand = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
         //List<int> rand = new List<int> { 0, 1, 2, 3, 4, 5, 6, 8 };
         List<int> rand = new List<int> { 1, 4, 5, 6, 8 };
-
-        if (day >= 2)
-        {
-            rand.Add(7); // 떠돌이
-            rand.Add(9); // 배관공
-        }
-        if (day >= 3)
-        {
-            rand.Add(3); // 운동선수
-        }
-        if (day >= 4)
-        {
-            rand.Add(2); // 해커
-        }
-        if (day >= 5)
-        {
-            rand.Add(0); // 경찰
-        }
         //**** 중요 날짜별 새로운 주문 추가
+        {
+            if (day >= 2)
+            {
+                rand.Add(7); // 떠돌이
+                rand.Add(9); // 배관공
+            }
+            if (day >= 3)
+            {
+                rand.Add(3); // 운동선수
+            }
+            if (day >= 4)
+            {
+                rand.Add(2); // 해커
+            }
+            if (day >= 5)
+            {
+                rand.Add(0); // 경찰
+                rand.Add(28); // 달리기 선수
+            }
 
+            if (day >= 7)
+            {
+                rand.Add(14); // 자경단원
+            }
+            if (day >= 8)
+            {
+                rand.Add(10); // 시장
+            }
+            if (day >= 9)
+            {
+                rand.Add(24); // 경비원
+                rand.Add(18); // 신부님
+            }
 
-        ////
+            if (day >= 11)
+            {
+                rand.Add(19); // 목장주인
+                rand.Add(16); // 스카웃
+            }
+            if (day >= 12)
+            {
+                rand.Add(26); // 벨보이
+                rand.Add(30); // CEO
+            }
+            if (day >= 13)
+            {
+                rand.Add(11); // 회사원
+                rand.Add(25); // 용접공
+            }
+            if (day >= 14)
+            {
+                rand.Add(23); // 파일럿
+                rand.Add(22); // 공원관리인
+                rand.Add(13); // 생존주의자
+            }
+
+            if (day >= 16)
+            {
+                rand.Add(12); // 검역관
+                rand.Add(17); // 죄수
+            }
+            if (day >= 17)
+            {
+                rand.Add(20); // 소방관
+                rand.Add(21); // 양조자
+            }
+
+            if (day >= 19)
+            {
+                rand.Add(15); // 의사
+                rand.Add(27); // 관광객
+                rand.Add(29); // 조선공
+            }
+        }
 
         for (int i = rand.Count - 1; i >= 0; i--)
         {
