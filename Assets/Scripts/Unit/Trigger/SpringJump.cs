@@ -36,9 +36,12 @@ public class SpringJump : BaseSpawner
         //pusher.velocity = Vector3.zero;
         //pusher.angularVelocity = Vector3.zero;
 
-        GM.Instance.player.StopPlayer(false, true);
+        var player = GM.Instance.player;
+        player.StopPlayer(false, true);
 
         yield return null;
+
+        player.ShakeOffAllZombies();
 
         pusher.AddForce(dir * jumpForce + Vector3.up * yForce, ForceMode.Impulse);
 

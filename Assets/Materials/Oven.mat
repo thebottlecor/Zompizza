@@ -98,7 +98,7 @@ Material:
     - _ColorRampBlend: 1
     - _ColorRampLuminosity: 0
     - _ColorRampOutline: 0
-    - _ColorSwapBlend: 0
+    - _ColorSwapBlend: 0.505595
     - _ColorSwapBlueLuminosity: 0
     - _ColorSwapGreenLuminosity: 0
     - _ColorSwapRedLuminosity: 0

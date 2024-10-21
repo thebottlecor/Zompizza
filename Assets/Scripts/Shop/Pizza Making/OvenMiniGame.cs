@@ -67,7 +67,6 @@ public class OvenMiniGame : EventListener
     private bool specialCombo;
     private int normalCombo; // -1 해당 x  0부터 1종,2종,3종
 
-    private SerializableDictionary<KeyMap, KeyMapping> HotKey => SettingManager.Instance.keyMappings;
     private TextManager tm => TextManager.Instance;
 
     private void UpdateComboTexts()

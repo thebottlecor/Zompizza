@@ -35,7 +35,7 @@ public class GameEventManager : Singleton<GameEventManager>
         friendshipFixed = data.friendshipFixed;
 
         hasCat = data.hasCat;
-        cat.SetActive(true);
+        cat.SetActive(hasCat);
 
         ninjaPriceUp = data.ninjaPriceUp;
         fatherOffering = data.fatherOffering;
@@ -78,10 +78,16 @@ public class GameEventManager : Singleton<GameEventManager>
 
     private TextManager tm => TextManager.Instance;
 
-    private void Start()
+    public void Init()
     {
         triggeredEvents = new bool[9];
-        Init();
+        currentEvent = -1;
+        tmpCompleted = false;
+
+        acceptBtnText.text = tm.GetCommons("EventAccept");
+        declineBtnText.text = tm.GetCommons("EventDecline");
+
+        cat.SetActive(false);
     }
 
     IEnumerator TextPrint(string text, float delay, Action finishAction)
@@ -124,18 +130,6 @@ public class GameEventManager : Singleton<GameEventManager>
         tmpCompleted = true;
 
         finishAction();
-    }
-
-
-    public void Init()
-    {
-        currentEvent = -1;
-        tmpCompleted = false;
-
-        acceptBtnText.text = tm.GetCommons("EventAccept");
-        declineBtnText.text = tm.GetCommons("EventDecline");
-
-        cat.SetActive(false);
     }
 
     public bool SetEvent(int idx)

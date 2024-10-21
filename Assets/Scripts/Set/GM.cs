@@ -375,6 +375,7 @@ public class GM : Singleton<GM>
 
         // 저장 불러오기시 주의 >> 매일 아침에만 저장하니 이제 신경쓰지 않아도 됨 09.30
         GiftBoxHide();
+        GameEventManager.Instance.Init();
 
         if (saveLoad)
         {
