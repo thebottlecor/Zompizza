@@ -174,7 +174,8 @@ public class PlayerController : PlayerControllerData
     {
         if (carEngineSound != null)
         {
-            initialCarEngineSoundPitch = carEngineSound.pitch;
+            carEngineSound.pitch = 0.75f;
+            initialCarEngineSoundPitch = 0.75f;
         }
         if (soundCoroutine != null)
         {
@@ -337,7 +338,7 @@ public class PlayerController : PlayerControllerData
         RRwheelFriction.stiffness = 0f;
         rearRightCollider.sidewaysFriction = RRwheelFriction;
 
-        yield return CoroutineHelper.WaitForSeconds(0.5f);
+        yield return CoroutineHelper.WaitForSeconds(1f);
 
         RecoverIce();
 
@@ -345,16 +346,16 @@ public class PlayerController : PlayerControllerData
     }
     private void RecoverIce()
     {
-        FLwheelFriction.stiffness = 1f;
+        FLwheelFriction.stiffness = sideStiffness;
         frontLeftCollider.sidewaysFriction = FLwheelFriction;
 
-        FRwheelFriction.stiffness = 1f;
+        FRwheelFriction.stiffness = sideStiffness;
         frontRightCollider.sidewaysFriction = FRwheelFriction;
 
-        RLwheelFriction.stiffness = 1f;
+        RLwheelFriction.stiffness = sideStiffness;
         rearLeftCollider.sidewaysFriction = RLwheelFriction;
 
-        RRwheelFriction.stiffness = 1f;
+        RRwheelFriction.stiffness = sideStiffness;
         rearRightCollider.sidewaysFriction = RRwheelFriction;
     }
     private void InstantRecoverIce()

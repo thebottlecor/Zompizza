@@ -29,6 +29,7 @@ public class PlayerControllerData : EventListener
     public int maxSteeringAngle = 35; // The maximum angle that the tires can reach while rotating the steering wheel.
     [Range(0.1f, 1f)]
     public float steeringSpeed = 0.5f; // How fast the steering wheel turns.
+    public float sideStiffness = 1.25f;
     [Space(10)]
     [Range(100, 600)]
     public int brakeForce = 400; // The strength of the wheel brakes.
@@ -138,6 +139,8 @@ public class PlayerControllerData : EventListener
         player.frontRightCollider = frontRightCollider;
         player.rearLeftCollider = rearLeftCollider;
         player.rearRightCollider = rearRightCollider;
+
+        player.sideStiffness = sideStiffness;
 
         player.SetTierPhysics();
         player.SetSound();

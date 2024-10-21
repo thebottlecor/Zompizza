@@ -27,7 +27,7 @@ MonoBehaviour:
   needResearch:
   - {fileID: 11400000, guid: a4c239f2734b5c541b4ae4b126bc9712, type: 2}
   hidden: 0
-  invalid: 0
+  invalid: 1
   effect:
     goldGet: 0
     ratingGet: 0
@@ -40,7 +40,7 @@ MonoBehaviour:
     raidDefense: 0
     customer_timelimit: 0
     customer_max_tier: 0
-    customer_max_amount: 2
+    customer_max_amount: 0
     order_max: 1
     maxSpeed: 0
     damageReduce: 0

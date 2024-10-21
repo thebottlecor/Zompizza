@@ -205,7 +205,6 @@ public class VillagerUI : EventListener
         }
 
         scrollEffect.enabled = true;
-        um.OffAll_Ingredient_Highlight();
         GM.Instance.stop_control = true;
         Time.timeScale = 0f;
         loading = true;

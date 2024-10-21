@@ -8,8 +8,11 @@ public class IngredientUI : MonoBehaviour
 {
 
     public Image icon;
-    public TextMeshProUGUI detail;
+    public TextMeshProUGUI nameText;
+    public TextMeshProUGUI stackText;
     public GameObject highlight;
+
+    public GameObject[] buttons;
 
     public Ingredient info;
 
@@ -45,18 +48,104 @@ public class IngredientUI : MonoBehaviour
 
         UpdateDetailUI();
     }
-    
+
     public void UpdateDetailUI()
     {
         if (valid)
-            detail.text = $"{TextManager.Instance.GetIngredient(info)}\nx{GM.Instance.ingredients[info]}";
+        {
+            nameText.text = $"{TextManager.Instance.GetIngredient(info)}";
+            UpdateStack_ComboMode();
+        }
         else
-            detail.text = string.Empty;
+        {
+            nameText.text = string.Empty;
+            stackText.text = string.Empty;
+
+            for (int i = 0; i < buttons.Length; i++)
+            {
+                buttons[i].SetActive(false);
+            }
+        }
     }
 
     public void ToggleHighlight(bool on)
     {
         highlight.SetActive(on);
+    }
+
+    public void UpdateStack_ComboMode()
+    {
+        if (OrderManager.Instance.comboMode)
+        {
+            var inputs = OrderManager.Instance.ovenMiniGame.inputs;
+            if (inputs.ContainsKey(info))
+                stackText.text = $"({inputs[info]}/{GM.Instance.ingredients[info]})";
+            else
+                stackText.text = $"(0/{GM.Instance.ingredients[info]})";
+
+            for (int i = 0; i < buttons.Length; i++)
+            {
+                buttons[i].SetActive(true);
+            }
+        }
+        else
+        {
+            stackText.text = $"x{GM.Instance.ingredients[info]}";
+
+            for (int i = 0; i < buttons.Length; i++)
+            {
+                buttons[i].SetActive(false);
+            }
+        }
+    }
+
+    public void Input()
+    {
+        if (!OrderManager.Instance.comboMode) return;
+        if (!valid)
+        {
+            AudioManager.Instance.PlaySFX(Sfx.deny);
+            return;
+        }
+
+        var oven = OrderManager.Instance.ovenMiniGame;
+        var inputs = oven.inputs;
+        if (!inputs.ContainsKey(info))
+            inputs.Add(new SerializableDictionary<Ingredient, int>.Pair(info, 0));
+
+        if (GM.Instance.ingredients[info] > inputs[info] && !oven.IsMaxInput)
+        {
+            if (inputs.ContainsKey(info))
+                inputs[info] += 1;
+            AudioManager.Instance.PlaySFX(Sfx.buttons);
+        }
+        else
+            AudioManager.Instance.PlaySFX(Sfx.deny);
+
+        oven.UpdateValueTexts();
+        UpdateStack_ComboMode();
+    }
+    public void Cancel()
+    {
+        if (!OrderManager.Instance.comboMode) return;
+        if (!valid)
+        {
+            AudioManager.Instance.PlaySFX(Sfx.deny);
+            return;
+        }
+
+        var inputs = OrderManager.Instance.ovenMiniGame.inputs;
+        if (inputs.ContainsKey(info))
+        {
+            if (inputs[info] > 0)
+                inputs[info] -= 1;
+        }
+        else
+            inputs.Add(new SerializableDictionary<Ingredient, int>.Pair(info, 0));
+        AudioManager.Instance.PlaySFX(Sfx.inputFieldEnd);
+
+        OrderManager.Instance.ovenMiniGame.UpdateValueTexts();
+        UpdateStack_ComboMode();
     }
 
 }

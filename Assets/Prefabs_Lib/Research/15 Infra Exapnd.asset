@@ -20,7 +20,7 @@ MonoBehaviour:
   max: 1
   cost: 2000
   increaseCost: 4000
-  researchPoint: 100
+  researchPoint: 120
   increaseRP: 0
   rating_require: 0
   increaseRating_require: 0
@@ -32,7 +32,7 @@ MonoBehaviour:
     goldGet: 0
     ratingGet: 0
     explore_max_pay: 0
-    explore_cost: -0.05
+    explore_cost: -0.1
     explore_get_bonus: 0
     tier: 0
     villager_bonus: 0

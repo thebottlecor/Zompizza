@@ -20,7 +20,7 @@ public class UINavi : MonoBehaviour
 
     public RectTransform focusRect;
 
-    public void Highlight(int padType, DataManager data)
+    public virtual void Highlight(int padType, DataManager data)
     {
         if (anim != null && this.gameObject.activeInHierarchy)
         {
@@ -45,7 +45,7 @@ public class UINavi : MonoBehaviour
             padUI.gameObject.SetActive(true);
         }
     }
-    public void DeHighlight()
+    public virtual void DeHighlight()
     {
         if (anim != null && this.gameObject.activeInHierarchy)
             anim.Play("Normal");
@@ -55,7 +55,7 @@ public class UINavi : MonoBehaviour
         {
             if (self.transform.childCount == 4)
                 (self as TMP_Dropdown).Hide();
-        }    
+        }
     }
 
     public void ResetConnection()

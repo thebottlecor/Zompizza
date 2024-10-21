@@ -48,11 +48,11 @@ MonoBehaviour:
         tier: 3
     - Key: 8
       Value:
-        valid: 1
+        valid: 0
         tier: 4
     - Key: 9
       Value:
-        valid: 1
+        valid: 0
         tier: 4
     - Key: 10
       Value:
@@ -98,11 +98,11 @@ MonoBehaviour:
         tier: 3
     - Key: 20
       Value:
-        valid: 1
+        valid: 0
         tier: 4
     - Key: 21
       Value:
-        valid: 1
+        valid: 0
         tier: 4
     - Key: 22
       Value:
@@ -148,11 +148,11 @@ MonoBehaviour:
         tier: 3
     - Key: 32
       Value:
-        valid: 1
+        valid: 0
         tier: 4
     - Key: 33
       Value:
-        valid: 1
+        valid: 0
         tier: 4
     - Key: 34
       Value:
@@ -162,3 +162,43 @@ MonoBehaviour:
       Value:
         valid: 0
         tier: 5
+  ComboSpecial1:
+    array:
+    - Key: 0
+      Value: 0
+    - Key: 2
+      Value: 0
+    - Key: 4
+      Value: 0
+    - Key: 6
+      Value: 0
+  ComboSpecial2:
+    array:
+    - Key: 1
+      Value: 0
+    - Key: 3
+      Value: 0
+    - Key: 5
+      Value: 0
+    - Key: 7
+      Value: 0
+  ComboSpecial6:
+    array:
+    - Key: 12
+      Value: 0
+    - Key: 14
+      Value: 0
+    - Key: 16
+      Value: 0
+    - Key: 18
+      Value: 0
+  ComboSpecial7:
+    array:
+    - Key: 24
+      Value: 0
+    - Key: 26
+      Value: 0
+    - Key: 28
+      Value: 0
+    - Key: 30
+      Value: 0

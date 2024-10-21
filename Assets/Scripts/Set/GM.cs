@@ -364,12 +364,13 @@ public class GM : Singleton<GM>
         ResearchManager.Instance.Init();
         //LoanManager.Instance.Init();
         UIManager.Instance.shopUI.Init(saveLoad, gameSaveData);
+        OrderManager.Instance.Init();
 
         bool tutoOn = startInfo.tutorial;
         if (saveLoad) tutoOn = false;
         TutorialManager.Instance.Init(tutoOn);
+        OrderManager.Instance.AfterInit();
 
-        OrderManager.Instance.Init();
         VillagerManager.Instance.Init(saveLoad, gameSaveData);
 
         // 저장 불러오기시 주의 >> 매일 아침에만 저장하니 이제 신경쓰지 않아도 됨 09.30
@@ -416,7 +417,8 @@ public class GM : Singleton<GM>
 
         StringBuilder st2 = new StringBuilder();
         st2.Append(tm.GetCommons("Delivery")).AppendLine();
-        st2.Append(tm.GetCommons("NotCompleted")).AppendLine();
+        //st2.Append(tm.GetCommons("NotCompleted")).AppendLine();
+        st2.Append(tm.GetCommons("Etc")).AppendLine();
         //st2.Append(tm.GetCommons("NotAccepted")).AppendLine();
 
         profitText[2].text = st2.ToString();
@@ -619,7 +621,7 @@ public class GM : Singleton<GM>
 
     public void NextDay()
     {
-        InstallJumpDae(false);
+        EnableJumpRampInstall(false);
         rainObj.SetActive(false);
         zombieEnvSound.Mute(true);
         savingTMP.Toggle(false);
@@ -1167,11 +1169,11 @@ public class GM : Singleton<GM>
 
         if ((day + 1) % 2 == 0)
         {
-            InstallJumpDae(true);
+            EnableJumpRampInstall(true);
         }
         else
         {
-            InstallJumpDae(false);
+            EnableJumpRampInstall(false);
         }
 
         if (day > 25)
@@ -1200,7 +1202,7 @@ public class GM : Singleton<GM>
             ZombiePooler.Instance.spawnCountRandomAdd = 0;
         }
     }
-    public void InstallJumpDae(bool on)
+    public void EnableJumpRampInstall(bool on)
     {
         if (on)
         {
@@ -1215,7 +1217,7 @@ public class GM : Singleton<GM>
             player.installDeco.SetActive(false);
         }
     }
-    public void InstallFuck2()
+    public void InstallJumpRamp()
     {
         if (player.transform.position.y > 2.5f) return;
         Vector3 pos = player.transform.position + player.transform.forward * 5f;
@@ -1676,7 +1678,7 @@ public class GM : Singleton<GM>
     public Ingredient RandomIngredientGet()
     {
         Ingredient ingredient = OrderManager.Instance.GetRandomIngredient_HighTier();
-        ingredients[ingredient] += 2;
+        ingredients[ingredient] += 1;
         return ingredient;
     }
     #endregion
@@ -1699,10 +1701,12 @@ public class GM : Singleton<GM>
                 controllerData[i].gameObject.SetActive(false);
             }
             player.cam.mainCam.fieldOfView = 20f;
+            player.carRigidbody.constraints = RigidbodyConstraints.FreezeRotation;
             player.manMode = true;
         }
         else
         {
+            player.carRigidbody.constraints = RigidbodyConstraints.None;
             player.manMode = false;
             ChangeVehicle(currentVehicle);
             player.manObj.SetActive(false);

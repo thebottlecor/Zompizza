@@ -13,15 +13,22 @@ public class OrderInfo
     public int customerIdx;
 
     // 주문한 피자
-    public List<PizzaInfo> pizzas;
+    //public List<PizzaInfo> pizzas;
 
     // 주문 배달 장소의 인덱스 정보 (OrderManager 참조)
     public int goal;
     // 주문 배달 장소와의 거리
     public float km;
 
+    public int comboSpecial; // 주문자의 취향 (0은 없는 경우)
+
     // 배달 성공시 받는 금액
     public int rewards;
+
+    //
+    // inputs과 rewards는 가변적!
+    //
+
     // 호감도에 따른 보너스로 받은 금액 표시용 (실제 받는 돈은 rewards에 이미 포함됨)
     public int bouns_friendship;
 

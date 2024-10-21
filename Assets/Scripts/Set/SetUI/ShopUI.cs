@@ -210,7 +210,7 @@ public class ShopUI : EventListener
         /// <ser cref="UINaviHelper.SetFirstSelect"/>
         /// </summary>
 
-        if (um.isDirecting || um.changingResolution) return;
+        if (um.changingResolution) return;
         if (GM.Instance.loading) return;
 
         if (!opened || loading) return;
@@ -229,6 +229,26 @@ public class ShopUI : EventListener
         if (TutorialManager.Instance.blackScreen.activeSelf) return;
 
         float value = e.ReadValue<float>();
+
+        if (um.isDirecting)
+        {
+            if (makingPanel.activeSelf && OrderManager.Instance.ovenMiniGame.inputPanel.activeSelf)
+            {
+                var navi = UINaviHelper.Instance.current;
+                if (navi != null && navi is UINaviTwin)
+                {
+                    if (e.performed)
+                    {
+                        var ing = (navi as UINaviTwin).ing;
+                        if (value > 0)
+                            ing.Input();
+                        else if (value < 0)
+                            ing.Cancel();
+                    }
+                }
+            }
+            return;
+        }
 
         if (e.performed)
         {
@@ -301,6 +321,7 @@ public class ShopUI : EventListener
                 if (!explorePanel.activeSelf)
                 {
                     orderPanel.SetActive(false);
+                    OrderManager.Instance.bonusObj.SetActive(false);
                     explorePanel.SetActive(true);
                     midnightPanel.SetActive(false);
                     ExplorationManager.Instance.SetHighTierQuality();
@@ -339,6 +360,7 @@ public class ShopUI : EventListener
     public void ForceMidnightUIUpdate(bool lastDay)
     {
         orderPanel.SetActive(false);
+        OrderManager.Instance.bonusObj.SetActive(false);
         explorePanel.SetActive(false); 
         midnightPanel.SetActive(true);
 
@@ -430,6 +452,7 @@ public class ShopUI : EventListener
 
         scrollEffect.enabled = true;
         um.OffAll_Ingredient_Highlight();
+        OrderManager.Instance.ovenMiniGame.HideHighlight();
         GM.Instance.stop_control = true;
         Time.timeScale = 0f;
         loading = true;
@@ -575,6 +598,8 @@ public class ShopUI : EventListener
 
     public void SelectSubPanel(int idx)
     {
+        if (um.isDirecting) return;
+
         if (idx != 3)
         {
             HideAllVehicle();
@@ -598,8 +623,8 @@ public class ShopUI : EventListener
         }
         else
         {
-            if (um.isDirecting) 
-                OrderManager.Instance.pizzaDirection.StopSequence();
+            //if (um.isDirecting) 
+            //    OrderManager.Instance.pizzaDirection.StopSequence();
             ExplorationManager.Instance.HideUI_ResultPanel_Instant();
 
             switch (idx)
@@ -655,7 +680,7 @@ public class ShopUI : EventListener
         GM.Instance.player.UpdateBox(count);
 
         if (info != null)
-            count -= info.pizzas.Count;
+            count -= 1;
 
         if (GM.Instance.midNight)
         {

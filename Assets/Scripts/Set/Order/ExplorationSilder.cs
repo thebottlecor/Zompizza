@@ -11,6 +11,7 @@ public class ExplorationSilder : MonoBehaviour
     public Slider slider;
     public TextMeshProUGUI percentText;
 
+    [SerializeField] private bool count;
     [SerializeField] private bool intValue;
 
     private Action<float> changedAction;
@@ -28,17 +29,21 @@ public class ExplorationSilder : MonoBehaviour
 
     private void ValueChanged(float a)
     {
-        if (intValue)
-            percentText.text = $"{a+1:F0}";
+        if (count)
+            percentText.text = $"{a:F0}{TextManager.Instance.GetCommons("Count")}";
+        else if (intValue)
+            percentText.text = $"{a + 1:F0}";
         else
-            percentText.text = $"{a*10f:F0}%";
+            percentText.text = $"{a * 10f:F0}%";
 
         changedAction(a);
     }
 
     public void UpdateUI()
     {
-        if (intValue)
+        if (count)
+            percentText.text = $"{slider.value:F0}{TextManager.Instance.GetCommons("Count")}";
+        else if (intValue)
             percentText.text = $"{slider.value + 1:F0}";
         else
             percentText.text = $"{slider.value * 10f:F0}%";

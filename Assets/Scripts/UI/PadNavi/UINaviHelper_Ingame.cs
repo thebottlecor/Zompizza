@@ -18,6 +18,7 @@ public class UINaviHelper_Ingame : MonoBehaviour
     public UINavi[] shops_first;
     public UINavi[] shops_orders_explores;
     public UINavi[] shops_orders_midnight;
+    public UINavi[] shops_orders_making;
     public UINavi[] shops_managements;
     public UINavi[] shops_upgrades;
     public List<UINavi> shops_vehicles;
@@ -144,6 +145,18 @@ public class UINaviHelper_Ingame : MonoBehaviour
 
             return shops_orders_explores[0];
         }
+        else if (shops.makingPanel.activeSelf)
+        {
+            var oven = OrderManager.Instance.ovenMiniGame;
+            if (oven.inputPanel.activeSelf)
+            {
+                return shops_orders_making[0];
+            }
+            else
+            {
+                return null;
+            }
+        }
         else if (shops.orderPanel.activeSelf)
         {
             UINavi first = null;
@@ -249,7 +262,7 @@ public class UINaviHelper_Ingame : MonoBehaviour
         }
         else
         {
-            // 오븐 요리중
+            // 오븐 요리중 (데모에서 10.21 현재는 해당없음) 
             return null;
         }
     }

@@ -39,7 +39,7 @@ MonoBehaviour:
     pizzeriaExpand: 0
     raidDefense: 0
     customer_timelimit: 0.05
-    customer_max_tier: 1
+    customer_max_tier: 0
     customer_max_amount: 0
     order_max: 0
     maxSpeed: 0

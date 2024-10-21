@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03e322c7226a3fa4bb30ed04530f4c83, type: 3}
+  m_Name: 21 H gold
+  m_EditorClassIdentifier: 
+  idx: 21
+  main: 0
+  tier: 0
+  romanNum: 0
+  group: 0
+  max: 1
+  cost: 0
+  increaseCost: 0
+  researchPoint: 0
+  increaseRP: 0
+  rating_require: 0
+  increaseRating_require: 0
+  needResearch: []
+  hidden: 1
+  invalid: 0
+  effect:
+    goldGet: 0.05
+    ratingGet: 0
+    explore_max_pay: 0
+    explore_cost: 0
+    explore_get_bonus: 0
+    tier: 0
+    villager_bonus: 0
+    pizzeriaExpand: 3
+    raidDefense: 0
+    customer_timelimit: 0
+    customer_max_tier: 0
+    customer_max_amount: 0
+    order_max: 0
+    maxSpeed: 0
+    damageReduce: 0
+    acceleration: 0
+  icon: {fileID: 950023893, guid: 70a332bb4041ce447b99d72b8d122cda, type: 3}

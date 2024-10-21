@@ -20,7 +20,7 @@ MonoBehaviour:
   max: 1
   cost: 2000
   increaseCost: 4000
-  researchPoint: 90
+  researchPoint: 100
   increaseRP: 0
   rating_require: 0
   increaseRating_require: 0
@@ -31,7 +31,7 @@ MonoBehaviour:
   effect:
     goldGet: 0
     ratingGet: 0
-    explore_max_pay: 30
+    explore_max_pay: 70
     explore_cost: 0
     explore_get_bonus: 0
     tier: 0

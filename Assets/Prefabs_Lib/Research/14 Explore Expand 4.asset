@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   idx: 14
   main: 0
-  tier: 4
+  tier: 3
   romanNum: 1
   group: 0
   max: 1
@@ -27,7 +27,7 @@ MonoBehaviour:
   needResearch:
   - {fileID: 11400000, guid: 12696d75da5af5b4e853ee56336d6424, type: 2}
   hidden: 0
-  invalid: 0
+  invalid: 1
   effect:
     goldGet: 0
     ratingGet: 0

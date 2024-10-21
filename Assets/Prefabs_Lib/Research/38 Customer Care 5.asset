@@ -27,7 +27,7 @@ MonoBehaviour:
   needResearch:
   - {fileID: 11400000, guid: eb1afdf72f5ab7249a84e4aed95785dc, type: 2}
   hidden: 0
-  invalid: 0
+  invalid: 1
   effect:
     goldGet: 0
     ratingGet: 0
@@ -39,7 +39,7 @@ MonoBehaviour:
     pizzeriaExpand: 0
     raidDefense: 0
     customer_timelimit: 0.05
-    customer_max_tier: 4
+    customer_max_tier: 0
     customer_max_amount: 0
     order_max: 0
     maxSpeed: 0

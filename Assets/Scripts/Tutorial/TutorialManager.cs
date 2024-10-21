@@ -104,7 +104,7 @@ public class TutorialManager : Singleton<TutorialManager>
 
         if (debug_skipToShop)
         {
-            Step2_Before();
+            SkipToShop_method();
             return;
         }
         if (debug_skipToReturn)
@@ -150,6 +150,8 @@ public class TutorialManager : Singleton<TutorialManager>
         guideTexts[10].text = tm.GetCommons("Tutorial11"); // 차량
         guideTexts[11].text = tm.GetCommons("Tutorial12"); // 주민
         guideTexts[12].text = tm.GetCommons("Tutorial13"); // 주민 - 다음날로
+
+        guideTexts[13].text = tm.GetCommons("Tutorial03_2"); // 피자 만들기
     }
 
     private void DriftTextUpdate(bool pad)
@@ -422,6 +424,16 @@ public class TutorialManager : Singleton<TutorialManager>
         UIManager.Instance.ToggleDrivingInfo(false);
     }
 
+    private void SkipToShop_method()
+    {
+        GM.Instance.timer = Constant.dayTime * 0.75f;
+        GM.Instance.TimeUpdate();
+        TutorialSkip(true);
+        training = true;
+        step = 2;
+        Step2();
+    }
+
     public void Step2()
     {
         UIManager.Instance.ToggleDrivingInfo(true);
@@ -447,9 +459,15 @@ public class TutorialManager : Singleton<TutorialManager>
         {
             guideObjects[2].SetActive(false);
             indicators[0].SetActive(false);
-            indicators[6].SetActive(true);
+            guideObjects[13].SetActive(true); // 피자 만들기
+            indicators[6].SetActive(true); // 오븐
             step = 4;
         }
+    }
+    public void PizzaOvening()
+    {
+        guideObjects[13].SetActive(false); // 피자 만들기
+        indicators[6].SetActive(false); // 오븐
     }
     private void OnPizzaComplete(object sender, OrderInfo e)
     {
@@ -457,7 +475,6 @@ public class TutorialManager : Singleton<TutorialManager>
         {
             guideObjects[3].SetActive(true);
             indicators[1].SetActive(true);
-            indicators[6].SetActive(false);
             step = 5;
 
             training = false; // 피자 만든 후 트레이닝 해제

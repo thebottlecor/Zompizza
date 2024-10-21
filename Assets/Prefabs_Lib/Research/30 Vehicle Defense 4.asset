@@ -14,13 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   idx: 30
   main: 0
-  tier: 4
+  tier: 3
   romanNum: 3
   group: 0
   max: 1
   cost: 6000
   increaseCost: 4000
-  researchPoint: 150
+  researchPoint: 160
   increaseRP: 0
   rating_require: 0
   increaseRating_require: 0

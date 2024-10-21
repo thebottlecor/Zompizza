@@ -222,7 +222,7 @@ public class GameEventManager : Singleton<GameEventManager>
             case 3:
                 {
                     ninjaPriceUp = true;
-                    GM.Instance.AddRating(-5f, GM.GetRatingSource.delivery); // 첫번째 치킨 닌자
+                    GM.Instance.AddRating(-5f, GM.GetRatingSource.notComplete); // 첫번째 치킨 닌자
                     AudioManager.Instance.PlaySFX(audioClips[3]);
                     return 10;
                 }
@@ -241,7 +241,7 @@ public class GameEventManager : Singleton<GameEventManager>
                 {
                     int money = 10000;
                     GM.Instance.AddGold(money, GM.GetGoldSource.delivery); // 두번째 치킨 닌자
-                    GM.Instance.AddRating(-10f, GM.GetRatingSource.delivery); // 두번째 치킨 닌자
+                    GM.Instance.AddRating(-10f, GM.GetRatingSource.notComplete); // 두번째 치킨 닌자
                     AudioManager.Instance.PlaySFX(audioClips[3]);
                     return money;
                 }
@@ -320,7 +320,7 @@ public class GameEventManager : Singleton<GameEventManager>
                 AudioManager.Instance.PlaySFX(audioClips[5]);
                 break;
             case 3:
-                GM.Instance.AddRating(10f, GM.GetRatingSource.delivery); // 첫번째 치킨 닌자 - 거절
+                GM.Instance.AddRating(10f, GM.GetRatingSource.notComplete); // 첫번째 치킨 닌자 - 거절
                 humanityPoint++; // 첫번째 치킨 닌자 - 거절
                 AudioManager.Instance.PlaySFX(audioClips[2]);
                 break;

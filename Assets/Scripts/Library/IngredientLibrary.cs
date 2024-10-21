@@ -21,6 +21,12 @@ public class IngredientLibrary : ScriptableObject
     public SerializableDictionary<Ingredient, Info> vegetables;
     public SerializableDictionary<Ingredient, Info> herbs;
 
+    [Header("ÄÞº¸ ¹­À½")]
+    public SerializableDictionary<Ingredient, byte> ComboSpecial1;
+    public SerializableDictionary<Ingredient, byte> ComboSpecial2;
+    public SerializableDictionary<Ingredient, byte> ComboSpecial6;
+    public SerializableDictionary<Ingredient, byte> ComboSpecial7;
+
     public Array ingredientTypes;
 
     public void SetArray()

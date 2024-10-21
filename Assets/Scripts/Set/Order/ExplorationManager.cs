@@ -92,7 +92,7 @@ public class ExplorationManager : Singleton<ExplorationManager>
 
     public void SetCost()
     {
-        float value = quantityValue * 100f;
+        float value = quantityValue * Constant.exploration_cost;
 
         value *= (qualityValue + 1);
 
@@ -164,28 +164,28 @@ public class ExplorationManager : Singleton<ExplorationManager>
             }
         }
 
-        var gmInven = GM.Instance.ingredients;
-        int minValue = int.MaxValue;
-        for (int i = 0; i < ingredients.Count; i++)
-        {
-            if (gmInven[ingredients[i]] < minValue)
-            {
-                minValue = gmInven[ingredients[i]];
-            }
-        }
-        int accpeted_Max_Value = (minValue < 15) ? 15 : ((minValue / 5) + 1) * 5; // 최소가 15개 미만인 경우, 15개 미만인 것들만 탐험에서 얻음
-        List<Ingredient> adjusted_ingredients = new List<Ingredient>();
-        for (int i = 0; i < ingredients.Count; i++)
-        {
-            if (gmInven[ingredients[i]] < accpeted_Max_Value)
-            {
-                adjusted_ingredients.Add(ingredients[i]);
-            }
-        }
-        if (adjusted_ingredients.Count > 0)
-        {
-            ingredients = adjusted_ingredients;
-        }
+        //var gmInven = GM.Instance.ingredients;
+        //int minValue = int.MaxValue;
+        //for (int i = 0; i < ingredients.Count; i++)
+        //{
+        //    if (gmInven[ingredients[i]] < minValue)
+        //    {
+        //        minValue = gmInven[ingredients[i]];
+        //    }
+        //}
+        //int accpeted_Max_Value = (minValue < 15) ? 15 : ((minValue / 5) + 1) * 5; // 최소가 15개 미만인 경우, 15개 미만인 것들만 탐험에서 얻음
+        //List<Ingredient> adjusted_ingredients = new List<Ingredient>();
+        //for (int i = 0; i < ingredients.Count; i++)
+        //{
+        //    if (gmInven[ingredients[i]] < accpeted_Max_Value)
+        //    {
+        //        adjusted_ingredients.Add(ingredients[i]);
+        //    }
+        //}
+        //if (adjusted_ingredients.Count > 0)
+        //{
+        //    ingredients = adjusted_ingredients;
+        //}
 
         resultDict = new Dictionary<Ingredient, int>();
         int count = result_quantity;

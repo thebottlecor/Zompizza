@@ -47,8 +47,12 @@ public class OrderManager : Singleton<OrderManager>
 
     private List<Ingredient> ingredients_Tier1;
     private List<Ingredient> ingredients_Tier2;
+    private List<Ingredient> ingredients_Tier3;
+    private List<Ingredient> ingredients_Tier4;
     private HashSet<Ingredient> ingredients_Tier1_Hash;
     private HashSet<Ingredient> ingredients_Tier2_Hash;
+    private HashSet<Ingredient> ingredients_Tier3_Hash;
+    private HashSet<Ingredient> ingredients_Tier4_Hash;
 
     [Header("빠른 이동")]
     public GameObject fastTravelBtnParnet;
@@ -59,6 +63,13 @@ public class OrderManager : Singleton<OrderManager>
 
     public MinimapRenderer minimap;
     public MinimapRenderer worldmap;
+
+    [Header("콤보")]
+    public bool comboMode;
+    public GameObject bonusObj;
+    public int bonusIngredients; // 오늘의 보너스 재료 - 이 재료를 넣을시 (원재료값x1.5) 만큼의 보상이 더해짐 (-1은 없는 경우)
+    public Image bonusIcon;
+    public TextMeshProUGUI[] bonusTexts;
 
     protected override void Awake()
     {
@@ -76,8 +87,12 @@ public class OrderManager : Singleton<OrderManager>
     {
         ingredients_Tier1 = new List<Ingredient>();
         ingredients_Tier2 = new List<Ingredient>();
+        ingredients_Tier3 = new List<Ingredient>();
+        ingredients_Tier4 = new List<Ingredient>();
         ingredients_Tier1_Hash = new HashSet<Ingredient>();
         ingredients_Tier2_Hash = new HashSet<Ingredient>();
+        ingredients_Tier3_Hash = new HashSet<Ingredient>();
+        ingredients_Tier4_Hash = new HashSet<Ingredient>();
         var ingLib = DataManager.Instance.ingredientLib;
         foreach (var temp in ingLib.ingredientTypes)
         {
@@ -110,6 +125,14 @@ public class OrderManager : Singleton<OrderManager>
                     ingredients_Tier2.Add(ingredient);
                     ingredients_Tier2_Hash.Add(ingredient);
                     break;
+                case 2:
+                    ingredients_Tier3.Add(ingredient);
+                    ingredients_Tier3_Hash.Add(ingredient);
+                    break;
+                case 3:
+                    ingredients_Tier4.Add(ingredient);
+                    ingredients_Tier4_Hash.Add(ingredient);
+                    break;
             }
         }
 
@@ -117,7 +140,9 @@ public class OrderManager : Singleton<OrderManager>
 
         orderMiniUIPair = new SerializableDictionary<OrderInfo, OrderMiniUI>();
         orderList = new List<OrderInfo>();
-
+    }
+    public void AfterInit()
+    {
         if (TutorialManager.Instance.training)
         {
 
@@ -137,14 +162,18 @@ public class OrderManager : Singleton<OrderManager>
     public Ingredient GetRandomIngredient_HighTier()
     {
         var list = ingredients_Tier1;
-
         switch (ResearchManager.Instance.globalEffect.tier)
         {
             case 1:
                 list = ingredients_Tier2;
                 break;
+            case 2:
+                list = ingredients_Tier3;
+                break;
+            case 3:
+                list = ingredients_Tier4;
+                break;
         }
-
         int random = UnityEngine.Random.Range(0, list.Count);
         return list[random];
     }
@@ -184,35 +213,18 @@ public class OrderManager : Singleton<OrderManager>
                     {
                         timeRating = Constant.remainTimeRating1;
                     }
-                    else if (remainPercent >= 0.4f)
+                    else if (remainPercent >= 0.25f)
                     {
                         timeRating = 2f;
                     }
-                    else if (remainPercent >= 0.3f)
+                    else
                     {
                         timeRating = 1.5f;
                     }
-                    else if (remainPercent >= 0.2f)
-                    {
-                        timeRating = 1f;
-                    }
-                    else
-                    {
-                        timeRating = 0.5f;
-                    }
-                    //else
-                    //{
-                    //    // 2점 ~ 0.5점 사이
-                    //    //timeRating = Constant.Point05((Constant.remainTimeRating2 - Constant.remainTimeRating3) / Constant.remainTime_Percent * remainPercent + Constant.remainTimeRating3);
-                    //}
                 }
                 else
                 {
-                    //float overPercent = Mathf.Min(1f, overTime / timeLimit); // 1이면 최대
-                    //timeRating = Constant.Point05(Constant.remainTimeRating4 * overPercent);
-
-                    // 원래는 0점 ~ -2.5점 사이
-                    timeRating = 0f;
+                    timeRating = 1f;
                 }
 
                 float hpRating;
@@ -221,25 +233,17 @@ public class OrderManager : Singleton<OrderManager>
                 {
                     hpRating = Constant.remainHpRating1;
                 }
-                else if (hpPercent >= 0.9f)
+                else if (hpPercent >= 0.75f)
                 {
                     hpRating = 2f;
                 }
-                else if (hpPercent >= 0.8f)
+                else if (hpPercent >= 0.5f)
                 {
                     hpRating = 1.5f;
                 }
-                else if (hpPercent >= 0.7f)
-                {
-                    hpRating = 1f;
-                }
-                else if (hpPercent >= 0.5f)
-                {
-                    hpRating = 0.5f;
-                }
                 else
                 {
-                    hpRating = 0f;
+                    hpRating = 1f;
                 }
 
                 //else if (hpPercent >= Constant.remainHP_Percent)
@@ -256,8 +260,8 @@ public class OrderManager : Singleton<OrderManager>
                 //}
 
                 float resultRating = timeRating + hpRating;
-                if (resultRating > 0f) resultRating *= (1f + ResearchManager.Instance.globalEffect.ratingGet);
-                resultRating = Mathf.Min(Constant.remainHpRating1 + Constant.remainTimeRating1, resultRating);
+                //if (resultRating > 0f) resultRating *= (1f + ResearchManager.Instance.globalEffect.ratingGet);
+                //resultRating = Mathf.Min(Constant.remainHpRating1 + Constant.remainTimeRating1, resultRating);
                 GM.Instance.AddRating(resultRating, GM.GetRatingSource.delivery);
 
                 int rewards = info.rewards;
@@ -284,6 +288,7 @@ public class OrderManager : Singleton<OrderManager>
             OrderRemovedEvent(null, orderList.Count);
 
         UIManager.Instance.shopUI.OrderLoadCountTextUpdate();
+        RemoveRemainOrders();
 
         if (currentAcceptance == 0)
         {
@@ -370,9 +375,47 @@ public class OrderManager : Singleton<OrderManager>
         UIManager.Instance.OrderUIBtnUpdate();
     }
 
+    private void SetBonusIngredients()
+    {
+        bonusIngredients = -1;
+        List<Ingredient> ingredients_Descending = new List<Ingredient>();
+        ingredients_Descending.AddRange(ingredients_Tier4.ShuffleAndDeepCopy());
+        ingredients_Descending.AddRange(ingredients_Tier3.ShuffleAndDeepCopy());
+        ingredients_Descending.AddRange(ingredients_Tier2.ShuffleAndDeepCopy());
+        ingredients_Descending.AddRange(ingredients_Tier1.ShuffleAndDeepCopy());
+
+        for (int i = 0; i < ingredients_Descending.Count; i++)
+        {
+            if (GM.Instance.ingredients[ingredients_Descending[i]] > 0)
+            {
+                bonusIngredients = (int)ingredients_Descending[i];
+                break;
+            }
+        }
+        UpdateBonusToday();
+    }
+    private void UpdateBonusToday()
+    {
+        bonusObj.SetActive(true);
+        if (bonusIngredients >= 0)
+        {
+            Ingredient bonus = (Ingredient)bonusIngredients;
+            bonusIcon.sprite = DataManager.Instance.uiLib.ingredients[bonus];
+            bonusTexts[0].text = TextManager.Instance.GetIngredient(bonus);
+            bonusTexts[1].text = $"+{(FindTier(bonus) + 1) * Constant.bonus_reward_ingredients}G";
+            bonusIcon.gameObject.SetActive(true);
+        }
+        else
+        {
+            bonusIcon.gameObject.SetActive(false);
+        }
+    }
+
     [ContextMenu("새로운 주문")]
     public void NewOrder()
     {
+        SetBonusIngredients();
+
         int day = GM.Instance.day; // 중요 날짜별 주문 추가!!!!!!!!!!!!!!!!!
         int extraOrder = ResearchManager.Instance.globalEffect.order_max;
         int minOrderCount;
@@ -390,6 +433,8 @@ public class OrderManager : Singleton<OrderManager>
                 break;
         }
         minOrderCount += extraOrder;
+
+        minOrderCount = Mathf.Min(Constant.maxOrderDaily, minOrderCount);
 
         // 데모용 2일:2개 / 3일 : 3개 / 4일 : 4개 ~~
         //List<int> rand = new List<int> { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
@@ -485,7 +530,6 @@ public class OrderManager : Singleton<OrderManager>
         yesterdayOrders.Clear();
 
         rand.Shuffle();
-
         rand = rand.Take(minOrderCount).ToList();
 
         //bool hasMinimumRes = GM.Instance.HasIngredient >= Constant.customer_max_ingredient;
@@ -567,15 +611,19 @@ public class OrderManager : Singleton<OrderManager>
 
     public void NewOrder_Tutorial()
     {
-        // 튜토리얼 - (노인 4)
-        SerializableDictionary<Ingredient, int> randInfo_sub = new SerializableDictionary<Ingredient, int>();
-        ingredients_Tier1.Shuffle();
-        randInfo_sub.Add(new SerializableDictionary<Ingredient, int>.Pair { Key = ingredients_Tier1[0], Value = 1 });
-        randInfo_sub.Add(new SerializableDictionary<Ingredient, int>.Pair { Key = ingredients_Tier1[1], Value = 1 });
-        randInfo_sub.Add(new SerializableDictionary<Ingredient, int>.Pair { Key = ingredients_Tier1[2], Value = 1 });
-        int ingredientTotal = 3;
+        bonusIngredients = 0;
+        UpdateBonusToday();
 
-        AddOrder_Sub(4, randInfo_sub, ingredientTotal, 0.35f); 
+        // 튜토리얼 - (노인 4)
+        //SerializableDictionary<Ingredient, int> randInfo_sub = new SerializableDictionary<Ingredient, int>();
+        //ingredients_Tier1.Shuffle();
+        //randInfo_sub.Add(new SerializableDictionary<Ingredient, int>.Pair { Key = ingredients_Tier1[0], Value = 1 });
+        //randInfo_sub.Add(new SerializableDictionary<Ingredient, int>.Pair { Key = ingredients_Tier1[1], Value = 1 });
+        //randInfo_sub.Add(new SerializableDictionary<Ingredient, int>.Pair { Key = ingredients_Tier1[2], Value = 1 });
+        //int ingredientTotal = 3;
+        //AddOrder_Sub(4, randInfo_sub, ingredientTotal, 0.35f); // 0.35 넣어서 골드 보너스 (135%)
+
+        AddOrder_New(4, 1); // 미트러버 고정
 
         UIManager.Instance.OrderUIUpdate();
 
@@ -589,11 +637,15 @@ public class OrderManager : Singleton<OrderManager>
         return Constant.customer_max_ingredient + ResearchManager.Instance.globalEffect.customer_max_amount;
     }
 
-    private int FindTier(Ingredient ingredient)
+    public int FindTier(Ingredient ingredient)
     {
         int value = 0;
         if (ingredients_Tier2_Hash.Contains(ingredient))
             value = 1;
+        else if (ingredients_Tier3_Hash.Contains(ingredient))
+            value = 2;
+        else if (ingredients_Tier4_Hash.Contains(ingredient))
+            value = 3;
         return value;
     }
 
@@ -702,7 +754,12 @@ public class OrderManager : Singleton<OrderManager>
                 selectedTierGroup = ingredients_Tier2;
                 break;
             case 2:
-
+                selectedTier = 2;
+                selectedTierGroup = ingredients_Tier3;
+                break;
+            case 3:
+                selectedTier = 3;
+                selectedTierGroup = ingredients_Tier4;
                 break;
         }
 
@@ -755,37 +812,78 @@ public class OrderManager : Singleton<OrderManager>
         PizzaInfo randInfo = new PizzaInfo { ingredients = randInfo_sub };
         randPizzas.Add(randInfo);
 
-        int rewards = ingredientTotal * Constant.delivery_reward_ingredients; // 현재 재료값은 100으로 고정 => 150% 받음
-        float mileBouns = Constant.delivery_reward_1km * km;
-        rewards += (int)mileBouns;
-
-        // 티어별 보상 // 2티어면 2배 보상
-        rewards = (int)((tier + 1f) * (1f + ResearchManager.Instance.globalEffect.goldGet) * rewards);
-
-        if (GameEventManager.Instance.ninjaPriceUp) // 첫번째 닌자 치킨의 제안 수락시 10% 가격 상승
-            rewards += (int)(0.1f * rewards);
-
-        // 호감도에 따른 보너스
+        int rewards = 0;
         int friendshipBonus = 0;
-        float averageRating = customersInfos[goal].AverageRating();
 
-        if (GameEventManager.Instance.friendshipFixed > 0f) averageRating = GameEventManager.Instance.friendshipFixed;
+        //int rewards = ingredientTotal * Constant.delivery_reward_ingredients; // 현재 재료값은 100으로 고정 => 130% 받음 (데모) ==> 100%로 바꿈 (1.0ver)
+        //float mileBouns = Constant.delivery_reward_1km * km;
+        //rewards += (int)mileBouns;
 
-        if (averageRating >= Constant.friendShip3) friendshipBonus = (int)(0.3f * rewards);
-        else if (averageRating >= Constant.friendShip2) friendshipBonus = (int)(0.2f * rewards);
-        else if (averageRating >= Constant.friendShip1) friendshipBonus = (int)(0.1f * rewards);
-        rewards += friendshipBonus;
+        //// 티어별 보상 // 2티어면 2배 보상
+        //rewards = (int)((tier + 1f) * (1f + ResearchManager.Instance.globalEffect.goldGet) * rewards);
+
+        //if (GameEventManager.Instance.ninjaPriceUp) // 첫번째 닌자 치킨의 제안 수락시 10% 가격 상승
+        //    rewards += (int)(0.1f * rewards);
+
+        //// 호감도에 따른 보너스
+        //int friendshipBonus = 0;
+        //float averageRating = customersInfos[goal].AverageRating();
+
+        //if (GameEventManager.Instance.friendshipFixed > 0f) averageRating = GameEventManager.Instance.friendshipFixed;
+
+        //if (averageRating >= Constant.friendShip3) friendshipBonus = (int)(0.3f * rewards);
+        //else if (averageRating >= Constant.friendShip2) friendshipBonus = (int)(0.2f * rewards);
+        //else if (averageRating >= Constant.friendShip1) friendshipBonus = (int)(0.1f * rewards);
+        //rewards += friendshipBonus;
 
         float timeLimit = (Constant.delivery_timeLimit_1km * km) * (1f + ResearchManager.Instance.globalEffect.customer_timelimit) + Constant.delivery_timeLimit_base;
+
+        int comboSpecial = UnityEngine.Random.Range(1, 9); // 1 ~ 8
 
         OrderInfo newOrder = new OrderInfo
         {
             accepted = false,
             customerIdx = goal,
             goal = goal,
-            pizzas = randPizzas,
+
+            comboSpecial = comboSpecial,     
+
             km = km,
             rewards = rewards,
+            bouns_friendship = friendshipBonus,
+            hp = 1f,
+            timeLimit = timeLimit,
+            timer = 0f,
+            stolen = false,
+        };
+        orderList.Add(newOrder);
+        PairingMiniUI(newOrder);
+    }
+
+    private void AddOrder_New(int goal, int comboSpecial = -1)
+    {
+        float dist = (orderGoals[goal].transform.position - pizzeria.position).magnitude;
+        float km = dist * Constant.distanceScale; // 게임상 거리 200 = 1km
+
+        int friendshipBonus = 0;
+
+        float timeLimit = (Constant.delivery_timeLimit_1km * km) * (1f + ResearchManager.Instance.globalEffect.customer_timelimit) + Constant.delivery_timeLimit_base;
+
+        if (comboSpecial == -1)
+            comboSpecial = UnityEngine.Random.Range(1, 9); // 1 ~ 8
+
+        OrderInfo newOrder = new OrderInfo
+        {
+            accepted = false,
+            customerIdx = goal,
+            goal = goal,
+
+            comboSpecial = comboSpecial,
+
+            km = km,
+
+            rewards = 0,
+
             bouns_friendship = friendshipBonus,
             hp = 1f,
             timeLimit = timeLimit,
@@ -878,27 +976,24 @@ public class OrderManager : Singleton<OrderManager>
 
         yesterdayOrders.Add(info.customerIdx);
 
-        // 재료 소모
-        for (int i = 0; i < info.pizzas.Count; i++)
-        {
-            foreach (var temp in info.pizzas[i].ingredients)
-            {
-                GM.Instance.ingredients[temp.Key] -= temp.Value;
-            }
-        }
-        UIManager.Instance.UpdateIngredients();
-        UIManager.Instance.OffAll_Ingredient_Highlight();
+        //// 재료 소모
+        //for (int i = 0; i < info.inputs.Count; i++)
+        //{
+        //    foreach (var temp in info.inputs)
+        //    {
+        //        GM.Instance.ingredients[temp.Key] -= temp.Value;
+        //    }
+        //}
+        //UIManager.Instance.UpdateIngredients();
 
         UIManager.Instance.shopUI.OrderLoadCountTextUpdate();
 
         UIManager.Instance.OrderUIBtnUpdate();
 
-        TutorialManager.Instance.OrderAccpeted();
-
         StatManager.Instance.acceptedOrders++;
 
-        ovenMiniGame.StartOven(info);
-        pizzaDirection.RestartSequence(info);
+        ovenMiniGame.SetPizzaPrepare(info);
+        //pizzaDirection.RestartSequence(info);
     }
     public void PizzaMakingComplete(OrderInfo info)
     {
@@ -937,32 +1032,11 @@ public class OrderManager : Singleton<OrderManager>
             var info = orderList[i];
             if (info.accepted && !info.stolen)
             {
-                count += info.pizzas.Count;
+                count += 1;
             }
         }
         return count;
     }
-
-    public bool CheckIngredient(OrderInfo info)
-    {
-        bool makable = true;
-
-        for (int i = 0; i < info.pizzas.Count; i++)
-        {
-            foreach (var temp in info.pizzas[i].ingredients)
-            {
-                if (GM.Instance.ingredients[temp.Key] < temp.Value)
-                {
-                    makable = false;
-                    break;
-                }
-            }
-            if (!makable) break;
-        }
-
-        return makable;
-    }
-
 
     public int GetAcceptedOrderCount()
     {
@@ -975,6 +1049,24 @@ public class OrderManager : Singleton<OrderManager>
             }
         }
         return count;
+    }
+
+    private void RemoveRemainOrders() // 정식 - 하루에 한번이라도 배달 완료시 남은 주문들은 사라짐
+    {
+        for (int i = orderList.Count - 1; i >= 0; i--)
+        {
+            if (!orderList[i].accepted)
+            {
+                // 미-접수 패널티
+                NotAcceptedOrderPenalty(orderList[i]);
+                UIManager.Instance.orderUIObjects[orderList[i].customerIdx].OrderReset();
+                orderMiniUIPair[orderList[i]].Hide();
+                orderMiniUIPair.Remove(orderList[i]);
+                orderList.RemoveAt(i);
+            }
+        }
+        if (OrderRemovedEvent != null)
+            OrderRemovedEvent(null, orderList.Count);
     }
 
     public void RemoveAllOrders()
@@ -1021,7 +1113,9 @@ public class OrderManager : Singleton<OrderManager>
         //}
 
         //GM.Instance.AddRating(0f, GM.GetRatingSource.notAccepted);
-        UIManager.Instance.shopUI.AddReview(GM.Instance.day, info.customerIdx, info.goal, 0f, 0f);
+        
+        /// 정식 버전 - 받지 않은 주문은 기록도 하지 않음
+        //UIManager.Instance.shopUI.AddReview(GM.Instance.day, info.customerIdx, info.goal, 0f, 0f);
     }
 
 

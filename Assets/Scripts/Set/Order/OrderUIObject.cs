@@ -45,30 +45,44 @@ public class OrderUIObject : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         customer_name.text = tm.GetSurvivorName(info.customerIdx + Constant.npcNameOffset);
 
         StringBuilder st = new StringBuilder();
-        st.AppendFormat("{0} : {1:0.#}km", tm.GetCommons("Distance"), info.km);
-        st.AppendLine();
+        st.AppendFormat("<color=#002a8e><size=110%>{0}</size></color>\n", tm.GetSurvivorName(info.customerIdx + Constant.npcNameOffset));
+        st.AppendFormat("{0} : {1:0.#}km\n", tm.GetCommons("Distance"), info.km);
 
-        float averageRating = OrderManager.Instance.customersInfos[info.goal].AverageRating();
+        //float averageRating = OrderManager.Instance.customersInfos[info.goal].AverageRating();
 
-        if (GameEventManager.Instance.friendshipFixed > 0f) averageRating = GameEventManager.Instance.friendshipFixed;
+        //if (GameEventManager.Instance.friendshipFixed > 0f) averageRating = GameEventManager.Instance.friendshipFixed;
 
-        if (averageRating >= Constant.friendShip3)
+        //if (averageRating >= Constant.friendShip3)
+        //{
+        //    friendshipIcons[0].SetActive(true);
+        //    friendshipIcons[1].SetActive(true);
+        //    friendshipIcons[2].SetActive(true);
+        //}
+        //else if (averageRating >= Constant.friendShip2)
+        //{
+        //    friendshipIcons[0].SetActive(true);
+        //    friendshipIcons[1].SetActive(true);
+        //    friendshipIcons[2].SetActive(false);
+        //}
+        //else if (averageRating >= Constant.friendShip1)
+        //{
+        //    friendshipIcons[0].SetActive(true);
+        //    friendshipIcons[1].SetActive(false);
+        //    friendshipIcons[2].SetActive(false);
+        //}
+        //else
+        //{
+        //    friendshipIcons[0].SetActive(false);
+        //    friendshipIcons[1].SetActive(false);
+        //    friendshipIcons[2].SetActive(false);
+        //}
+
+        // 이벤트성
+        if (GameEventManager.Instance.friendshipFixed > 4f)
         {
             friendshipIcons[0].SetActive(true);
             friendshipIcons[1].SetActive(true);
             friendshipIcons[2].SetActive(true);
-        }
-        else if (averageRating >= Constant.friendShip2)
-        {
-            friendshipIcons[0].SetActive(true);
-            friendshipIcons[1].SetActive(true);
-            friendshipIcons[2].SetActive(false);
-        }
-        else if (averageRating >= Constant.friendShip1)
-        {
-            friendshipIcons[0].SetActive(true);
-            friendshipIcons[1].SetActive(false);
-            friendshipIcons[2].SetActive(false);
         }
         else
         {
@@ -77,11 +91,13 @@ public class OrderUIObject : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
             friendshipIcons[2].SetActive(false);
         }
 
-        if (info.bouns_friendship > 0)
-            st.AppendFormat("{0} : {1}<size=90%><color=#550742>(+{2})</color></size>G", tm.GetCommons("Rewards"), info.rewards - info.bouns_friendship, info.bouns_friendship);
-        else
-            st.AppendFormat("{0} : {1}G", tm.GetCommons("Rewards"), info.rewards);
-        st.AppendLine();
+        //if (info.bouns_friendship > 0)
+        //    st.AppendFormat("{0} : {1}<size=90%><color=#550742>(+{2})</color></size>G", tm.GetCommons("Rewards"), info.rewards - info.bouns_friendship, info.bouns_friendship);
+        //else
+        //    st.AppendFormat("{0} : {1}G", tm.GetCommons("Rewards"), info.rewards);
+        //st.AppendLine();
+
+
 
         // 글자로 풀어서 표시
         //for (int i = 0; i < info.pizzas.Count; i++)
@@ -104,28 +120,37 @@ public class OrderUIObject : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         //        st.Append("\n");
         //}
 
-        string subStr = tm.GetCommons("OrderDetail_Sub");
-        string subStr2 = tm.GetCommons("OrderDetail_Sub2");
+        /// 피자 재료 설명하는 부분
+        //string subStr = tm.GetCommons("OrderDetail_Sub");
+        //string subStr2 = tm.GetCommons("OrderDetail_Sub2");
 
-        for (int i = 0; i < info.pizzas.Count; i++)
-        {
-            //string pizza = string.Format("{0} {1}{2}", tm.GetCommons("Pizza"), info.pizzas[i].stack, string.IsNullOrEmpty(subStr) ? string.Empty : subStr);
-            StringBuilder ele = new StringBuilder();
-            int count = info.pizzas[i].ingredients.Count;
-            foreach (var element in info.pizzas[i].ingredients)
-            {
-                //ele.AppendFormat("<color=#002a8e><sprite={0}>{1} {2}</color>{3}", (int)element.Key + ingredientSpriteOffset, tm.GetIngredient(element.Key), element.Value, string.IsNullOrEmpty(subStr) ? string.Empty : subStr);
-                ele.Append("<color=#002a8e>");
-                ele.AppendFormat(subStr, (int)element.Key + Constant.ingredientSpriteOffset, tm.GetIngredient(element.Key), element.Value);
-                count--;
-                if (count > 0)
-                    ele.AppendFormat("{0}", string.IsNullOrEmpty(subStr2) ? ", " : subStr2);
-            }
-            st.AppendFormat(tm.GetCommons("OrderDetail"), ele, tm.GetCommons("Pizza"));
+        //for (int i = 0; i < info.pizzas.Count; i++)
+        //{
+        //    ///string pizza = string.Format("{0} {1}{2}", tm.GetCommons("Pizza"), info.pizzas[i].stack, string.IsNullOrEmpty(subStr) ? string.Empty : subStr);
+        //    StringBuilder ele = new StringBuilder();
+        //    int count = info.pizzas[i].ingredients.Count;
+        //    foreach (var element in info.pizzas[i].ingredients)
+        //    {
+        //        ///ele.AppendFormat("<color=#002a8e><sprite={0}>{1} {2}</color>{3}", (int)element.Key + ingredientSpriteOffset, tm.GetIngredient(element.Key), element.Value, string.IsNullOrEmpty(subStr) ? string.Empty : subStr);
+        //        ele.Append("<color=#002a8e>");
+        //        ele.AppendFormat(subStr, (int)element.Key + Constant.ingredientSpriteOffset, tm.GetIngredient(element.Key), element.Value);
+        //        count--;
+        //        if (count > 0)
+        //            ele.AppendFormat("{0}", string.IsNullOrEmpty(subStr2) ? ", " : subStr2);
+        //    }
+        //    st.AppendFormat(tm.GetCommons("OrderDetail"), ele, tm.GetCommons("Pizza"));
 
-            if (i + 1 < info.pizzas.Count)
-                st.Append("\n");
-        }
+        //    if (i + 1 < info.pizzas.Count)
+        //        st.Append("\n");
+        //}
+        /// 사용 안함
+        /// 
+        /// 대신 콤보를 표시
+        ///
+
+        int combo = info.comboSpecial;
+        if (combo > 0)
+            st.AppendFormat("<sprite=\"emoji\" index=10> {0} x{1:F1}", tm.GetCommons($"ComboSpecial{combo}"), OrderManager.Instance.ovenMiniGame.specialComboBonus[combo]);
 
         // 아이콘으로만 표시
         //for (int i = 0; i < info.pizzas.Count; i++)
@@ -148,7 +173,7 @@ public class OrderUIObject : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         if (info == null || info.accepted) return;
 
-        bool makable = OrderManager.Instance.CheckIngredient(info);
+        bool makable = true;
         bool loadLimit = false;
 
         if (OrderManager.Instance.IsMaxDelivery)
@@ -172,7 +197,7 @@ public class OrderUIObject : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public void OrderAccept()
     {
         if (OrderManager.Instance.IsMaxDelivery) return;
-        if (!OrderManager.Instance.CheckIngredient(info)) return;
+        //if (!OrderManager.Instance.CheckIngredient(info)) return;
 
         info.accepted = true;
         OrderManager.Instance.OrderAccepted(info);
@@ -212,13 +237,15 @@ public class OrderUIObject : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         if (info == null) return;
         if (UIManager.Instance.isDirecting) return;
 
-        for (int i = 0; i < info.pizzas.Count; i++)
-        {
-            foreach (var item in info.pizzas[i].ingredients)
-            {
-                UIManager.Instance.ingredientUIPairs[item.Key].ToggleHighlight(true);
-            }
-        }
+        OrderManager.Instance.ovenMiniGame.SetHighlight(info);
+
+        //for (int i = 0; i < info.pizzas.Count; i++)
+        //{
+        //    foreach (var item in info.pizzas[i].ingredients)
+        //    {
+        //        UIManager.Instance.ingredientUIPairs[item.Key].ToggleHighlight(true);
+        //    }
+        //}
         ToggleHighlight(true);
     }
 
@@ -226,13 +253,15 @@ public class OrderUIObject : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     {
         if (info == null) return;
 
-        for (int i = 0; i < info.pizzas.Count; i++)
-        {
-            foreach (var item in info.pizzas[i].ingredients)
-            {
-                UIManager.Instance.ingredientUIPairs[item.Key].ToggleHighlight(false);
-            }
-        }
+        OrderManager.Instance.ovenMiniGame.SetHighlight(info, false);
+
+        //for (int i = 0; i < info.pizzas.Count; i++)
+        //{
+        //    foreach (var item in info.pizzas[i].ingredients)
+        //    {
+        //        UIManager.Instance.ingredientUIPairs[item.Key].ToggleHighlight(false);
+        //    }
+        //}
         ToggleHighlight(false);
     }
 

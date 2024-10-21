@@ -20,7 +20,7 @@ MonoBehaviour:
   max: 1
   cost: 2000
   increaseCost: 4000
-  researchPoint: 100
+  researchPoint: 120
   increaseRP: 0
   rating_require: 0
   increaseRating_require: 0
@@ -33,7 +33,7 @@ MonoBehaviour:
     ratingGet: 0
     explore_max_pay: 0
     explore_cost: 0
-    explore_get_bonus: 0.05
+    explore_get_bonus: 0.1
     tier: 0
     villager_bonus: 0
     pizzeriaExpand: 0

@@ -34,12 +34,12 @@ public class GiftGoal : MonoBehaviour
             ingredientSprite.sprite = uiLib.ingredients[ingredient];
             UIManager.Instance.UpdateIngredients();
             UIManager.Instance.OrderUIBtnUpdate();
-            plusSprite.sprite = uiLib.plus[1];
+            plusSprite.sprite = uiLib.plus[0];
         }
         else if (rand <= 5)
         {
             int tier = ResearchManager.Instance.globalEffect.tier; // 33% Æ¼¾î * 200 µ· 
-            GM.Instance.AddGold(100 * (tier + 1), GM.GetGoldSource.delivery);
+            GM.Instance.AddGold(Constant.delivery_reward_ingredients * (tier + 1), GM.GetGoldSource.delivery);
             ingredientSprite.sprite = uiLib.gold;
             plusSprite.sprite = uiLib.plus[2 + tier];
         }
@@ -83,9 +83,12 @@ public class GiftGoal : MonoBehaviour
         boxObj.SetActive(true);
         goalEffectObj.SetActive(true);
 
-        float dist = (GM.Instance.player.transform.position - transform.position).magnitude;
-        if (dist <= 9f)
-            ShowCheck();
+        // ±×³É ¹«Á¶°Ç ½Àµæ
+        ShowCheck(); 
+
+        //float dist = (GM.Instance.player.transform.position - transform.position).magnitude;
+        //if (dist <= 10.5f)
+        //    ShowCheck();
     }
 
     private void FindEffect()

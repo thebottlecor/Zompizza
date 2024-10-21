@@ -420,7 +420,7 @@ public class PizzaDirection : EventListener
         }
     }
 
-    public void RestartSequence(OrderInfo info)
+    public void RestartSequence(OrderInfo info, SerializableDictionary<Ingredient, int> inputs)
     {
         if (info == null) return;
 
@@ -431,13 +431,10 @@ public class PizzaDirection : EventListener
         }
 
         HashSet<Ingredient> ingredientList = new HashSet<Ingredient>();
-        for (int i = 0; i < info.pizzas.Count; i++)
+        foreach (var temp in inputs)
         {
-            foreach (var temp in info.pizzas[i].ingredients)
-            {
-                if (!ingredientList.Contains(temp.Key))
-                    ingredientList.Add(temp.Key);
-            }
+            if (temp.Value > 0 && !ingredientList.Contains(temp.Key))
+                ingredientList.Add(temp.Key);
         }
 
         int count = 0;

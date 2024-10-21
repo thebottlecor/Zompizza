@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   idx: 27
   main: 0
-  tier: 4
+  tier: 3
   romanNum: 3
   group: 0
   max: 1

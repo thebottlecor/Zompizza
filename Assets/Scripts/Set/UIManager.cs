@@ -27,7 +27,6 @@ public class UIManager : Singleton<UIManager>
 
     [Header("운행중 배달 정보")]
     public GameObject orderMiniUI_Source;
-    public int maxOrderMiniUI = 20;
     public Transform orderMiniUIContexts;
     public List<OrderMiniUI> orderMiniUIs;
     public GameObject orderMiniUIParent;
@@ -71,8 +70,8 @@ public class UIManager : Singleton<UIManager>
         villagerUI.UpdateTexts();
 
         // 운행중 배달 정보
-        orderMiniUIs = new List<OrderMiniUI>(maxOrderMiniUI);
-        for (int i = 0; i < maxOrderMiniUI; i++)
+        orderMiniUIs = new List<OrderMiniUI>(Constant.maxOrderDaily);
+        for (int i = 0; i < Constant.maxOrderDaily; i++)
         {
             var obj = Instantiate(orderMiniUI_Source, orderMiniUIContexts);
             OrderMiniUI miniUI = obj.GetComponent<OrderMiniUI>();
@@ -83,24 +82,86 @@ public class UIManager : Singleton<UIManager>
         var ingredients = Enum.GetValues(typeof(Ingredient));
         ingredientUIPairs = new Dictionary<Ingredient, IngredientUI>();
         var ingredientLib = DataManager.Instance.ingredientLib;
+
+        List<List<UINavi>> navis = new List<List<UINavi>>();
+
         foreach (var temp in ingredients)
         {
             Ingredient ingredient = (Ingredient)temp;
-            int parentIdx = 0;
-            if (ingredientLib.vegetables.ContainsKey(ingredient))
+            int parentIdx = -1;
+            int tier = 0;
+            if (ingredientLib.meats.ContainsKey(ingredient) && ingredientLib.meats[ingredient].valid)
+            {
+                parentIdx = 0;
+                tier = ingredientLib.meats[ingredient].tier;
+            }
+            else if (ingredientLib.vegetables.ContainsKey(ingredient) && ingredientLib.vegetables[ingredient].valid)
             {
                 parentIdx = 1;
+                tier = ingredientLib.vegetables[ingredient].tier;
             }
-            else if (ingredientLib.herbs.ContainsKey(ingredient))
+            else if (ingredientLib.herbs.ContainsKey(ingredient) && ingredientLib.herbs[ingredient].valid)
             {
                 parentIdx = 2;
+                tier = ingredientLib.herbs[ingredient].tier;
             }
-            var obj = Instantiate(ingredient_Source, ingredient_Parents[parentIdx]);
-            IngredientUI ingredientUI = obj.GetComponent<IngredientUI>();
-            ingredientUI.Init(ingredient);
-            ingredientUIPairs.Add(ingredient, ingredientUI);
-            ingredientUIs.Add(ingredientUI);
+            if (parentIdx > -1)
+            {
+                var obj = Instantiate(ingredient_Source, ingredient_Parents[parentIdx]);
+#if UNITY_EDITOR
+                obj.name = ingredient.ToString();
+#endif
+                IngredientUI ingredientUI = obj.GetComponent<IngredientUI>();
+                ingredientUI.Init(ingredient);
+                ingredientUIPairs.Add(ingredient, ingredientUI);
+                ingredientUIs.Add(ingredientUI);
+
+                if (navis.Count == tier)
+                    navis.Add(new List<UINavi>());
+
+                var navi = obj.GetComponent<UINavi>();
+                navis[tier].Add(navi);
+                (navi as UINaviTwin).ing = ingredientUI;
+            }
         }
+        for (int i = 0; i < navis.Count; i++)
+        {
+            for (int n = 0; n < navis[i].Count; n++)
+            {
+                var self = navis[i][n];
+
+                if (n == 0)
+                {
+                    self.left = UINaviHelper.Instance.ingame.shops_orders_making[0];
+                }
+
+                if (n > 0)
+                    self.left = navis[i][n - 1];
+                if (n < navis[i].Count - 1)
+                    self.right = navis[i][n + 1];
+
+                if (n == navis[i].Count - 1)
+                {
+                    self.right = navis[i][0];
+                }
+
+                if (i == 0)
+                {
+                    self.up = navis[navis.Count - 1][n];
+                }
+
+                if (i > 0)
+                    self.up = navis[i - 1][n];
+                if (i < navis.Count - 1)
+                    self.down = navis[i + 1][n];
+
+                if (i == navis.Count - 1)
+                {
+                    self.down = navis[0][n];
+                }
+            }
+        }
+        UINaviHelper.Instance.ingame.shops_orders_making[0].right = navis[0][0];
 
         float ratio = (float)SettingManager.Instance.settingResolution.y / SettingManager.Instance.settingResolution.x;
         float modify = (ratio > 0.5625f) ? 0f : 1f;
@@ -235,8 +296,8 @@ public class UIManager : Singleton<UIManager>
         {
             if (!GM.Instance.pizzeriaStay && installUIs.activeSelf)
             {
-                GM.Instance.InstallJumpDae(false);
-                GM.Instance.InstallFuck2();
+                GM.Instance.EnableJumpRampInstall(false);
+                GM.Instance.InstallJumpRamp();
             }
         }
     }

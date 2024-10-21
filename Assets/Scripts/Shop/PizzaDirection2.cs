@@ -270,14 +270,11 @@ public class PizzaDirection2 : EventListener
         if (info != null)
         {
             HashSet<Ingredient> ingredientList = new HashSet<Ingredient>();
-            for (int i = 0; i < info.pizzas.Count; i++)
-            {
-                foreach (var temp in info.pizzas[i].ingredients)
-                {
-                    if (!ingredientList.Contains(temp.Key))
-                        ingredientList.Add(temp.Key);
-                }
-            }
+            //foreach (var temp in info.inputs)
+            //{
+            //    if (!ingredientList.Contains(temp.Key))
+            //        ingredientList.Add(temp.Key);
+            //}
             int count = 0;
             foreach (var temp in ingredients)
             {
@@ -338,14 +335,11 @@ public class PizzaDirection2 : EventListener
         this.info = info;
 
         HashSet<Ingredient> ingredientList = new HashSet<Ingredient>();
-        for (int i = 0; i < info.pizzas.Count; i++)
-        {
-            foreach (var temp in info.pizzas[i].ingredients)
-            {
-                if (!ingredientList.Contains(temp.Key))
-                    ingredientList.Add(temp.Key);
-            }
-        }
+        //foreach (var temp in info.inputs)
+        //{
+        //    if (!ingredientList.Contains(temp.Key))
+        //        ingredientList.Add(temp.Key);
+        //}
 
         int count = 0;
         foreach (var temp in ingredients)
