@@ -247,7 +247,8 @@ public class PlayerController : PlayerControllerData
                     {
                         //Debug.Log("속도 방향과 충돌 방향 일치 -> 힘 전달 " + carRigidbody.velocity.magnitude);
 
-                        if (GM.Instance.currentVehicle != 5) // 전투트럭은 좀비 충돌에 따른 패널티 없음
+                        int currentVehicle = GM.Instance.currentVehicle;
+                        if (currentVehicle != 5 && currentVehicle != 6) // 전투트럭과 경찰차는 좀비 충돌에 따른 패널티 없음
                         {
                             float playerDot = Vector3.Dot(carVel, transform.forward); // 차앞 방향과 속도 내적
                             float crashDrag = this.crashDrag;
@@ -271,7 +272,7 @@ public class PlayerController : PlayerControllerData
 
                         AudioManager.Instance.PlaySFX(Sfx.zombieCrash);
                         zombie.Hit(cp.point, speedPercent, targetDirection);
-                        StatManager.Instance.hitZombies++;
+                        StatManager.Instance.AddHitZombies(1);
                         cam.Shake(2f);
 
                         return;
@@ -734,6 +735,7 @@ public class PlayerController : PlayerControllerData
         }
 
         StatManager.Instance.carMileage += Mathf.Abs(carSpeed) * 0.00001f;
+        if (SteamHelper.Instance != null) SteamHelper.Instance.AchieveMileage(StatManager.Instance.carMileage);
     }
 
     private void FixedUpdate()
@@ -805,7 +807,7 @@ public class PlayerController : PlayerControllerData
     public void ShakeOffAllZombies()
     {
         dirftContactBlockTimer = 0.5f;
-        StatManager.Instance.hitZombies += contactingZombies.Count;
+        StatManager.Instance.AddHitZombies(contactingZombies.Count);
         for (int i = contactingZombies.Count - 1; i >= 0; i--)
         {
             float speedPercent = Mathf.Abs(carSpeed) / MaxSpeed;

@@ -21,7 +21,7 @@ public class HiddenRecipeGoal : MonoBehaviour
             ingredientSprite.sprite = DataManager.Instance.researches[researchInfo.idx].icon;
 
             ResearchManager.Instance.ResearchUnlock_Force(researchInfo.idx);
-            StatManager.Instance.foundVisionRecipes++;
+            StatManager.Instance.AddHiddenRecipes();
             FindEffect();
         }
     }

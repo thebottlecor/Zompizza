@@ -70,14 +70,20 @@ public class UnstuckHelper : EventListener
     {
         if (cooldown > 0f) return;
         if (GM.Instance == null) return;
-        if (GM.Instance.midNight) return; // 플레이어 인간 조작중 탈출 불가
-        if (TutorialManager.Instance.training) return;
 
         var player = GM.Instance.player;
 
+        if (GM.Instance.midNight)
+        {
+            player.transform.position = GM.Instance.pizzeriaPos.position;
+            return; // 플레이어 인간 조작중 탈출 불가
+        }
+        if (TutorialManager.Instance.training) return;
+
+
         if (player == null) return;
 
-        cooldown = 5f;
+        cooldown = 1f;
         player.StopPlayer(false);
 
         //var node = AstarPath.active.GetNearest(player.transform.position, Pathfinding.NNConstraint.Walkable).position;

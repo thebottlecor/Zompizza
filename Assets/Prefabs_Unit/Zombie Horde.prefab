@@ -91,6 +91,7 @@ MonoBehaviour:
   contactingPlayer: 0
   range: 12.25
   isInstall: 0
+  isVomit: 0
   isRun: 0
   ai: {fileID: 5176931427273201179}
 --- !u!54 &4240378934813003587
@@ -101,7 +102,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3100070116413714573}
   serializedVersion: 4
-  m_Mass: 4
+  m_Mass: 1.5
   m_Drag: 0.3
   m_AngularDrag: 0.2
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -1160,5 +1161,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.83, y: 2.5, z: 0.41}
-  m_Center: {x: 0, y: 1.25, z: 0}
+  m_Size: {x: 0.8, y: 2, z: 0.4}
+  m_Center: {x: 0, y: 1, z: 0}

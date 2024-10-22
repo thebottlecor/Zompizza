@@ -213,6 +213,8 @@ public class GameEventManager : Singleton<GameEventManager>
                     cat.SetActive(true);
                     humanityPoint++; // 고양이 입양
                     AudioManager.Instance.PlaySFX(audioClips[4]);
+
+                    if (SteamHelper.Instance != null) SteamHelper.Instance.AchieveCat();
                 }
                 break;
             case 3:

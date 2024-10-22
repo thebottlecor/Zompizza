@@ -471,6 +471,8 @@ public class UIManager : Singleton<UIManager>
             if (array[i]) totalVehicle++;
         }
 
+        if (SteamHelper.Instance != null && totalVehicle >= array.Length - 1) SteamHelper.Instance.AchieveVehicle();
+
         if (vehicleMilestone < totalVehicle)
         {
             for (int i = 0; i < vehicleImages.Length; i++)
@@ -503,6 +505,8 @@ public class UIManager : Singleton<UIManager>
         ResearchManager.Instance.AutoResearch_For_Tier();
 
         int tier = ResearchManager.Instance.globalEffect.tier;
+
+        if (SteamHelper.Instance != null) SteamHelper.Instance.AchieveTier(tier);
 
         if (tierUpMilestone < tier)
         {

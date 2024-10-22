@@ -152,6 +152,19 @@ public class StatManager : Singleton<StatManager>
         statTexts[idx++].text = $"{tm.GetCommons("HitZombies")} : {hitZombies}";
     }
 
+    public void AddHitZombies(int count)
+    {
+        hitZombies += count;
+        if (SteamHelper.Instance != null) SteamHelper.Instance.AchieveHit(hitZombies);
+    }
+
+    public void AddHiddenRecipes()
+    {
+        foundVisionRecipes++;
+
+        if (SteamHelper.Instance != null && foundVisionRecipes >= ResearchManager.Instance.HiddenRecipeCount) SteamHelper.Instance.AchieveHiddenRecipes();
+    }
+
 
     public void NextDay()
     {

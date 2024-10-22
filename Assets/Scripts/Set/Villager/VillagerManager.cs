@@ -347,6 +347,9 @@ public class VillagerManager : Singleton<VillagerManager>
         //miniUI.Hide();
         miniUI.RescuedMode();
 
+        int count = GetRecruitedVillagerCount();
+        if (SteamHelper.Instance != null && count >= Constant.maxVillager) SteamHelper.Instance.AchieveVillagers();
+
         OrderManager.Instance.FastTravelShow(); // 주민 구출 후
     }
 
