@@ -50,6 +50,7 @@ public class UINaviHelper : Singleton<UINaviHelper>
         InputHelper.UIMoveEvent += OnUIMove;
         InputHelper.OkayEvent += OnOkay;
         InputHelper.BackEvent += OnBack;
+        InputHelper.TabMoveEvent += OnTabMove;
 
         InputHelper.WorldmapMoveEvent += OnScrollMove;
         InputHelper.WorldmapZoomEvent += OnSliderMove;
@@ -60,6 +61,7 @@ public class UINaviHelper : Singleton<UINaviHelper>
         InputHelper.UIMoveEvent -= OnUIMove;
         InputHelper.OkayEvent -= OnOkay;
         InputHelper.BackEvent -= OnBack;
+        InputHelper.TabMoveEvent -= OnTabMove;
 
         InputHelper.WorldmapMoveEvent -= OnScrollMove;
         InputHelper.WorldmapZoomEvent -= OnSliderMove;
@@ -214,21 +216,29 @@ public class UINaviHelper : Singleton<UINaviHelper>
                                         ingame.rocket_first[0].ResetConnection();
                                         if (ingame.rocket_first[1].gameObject.activeSelf)
                                         {
+                                            ingame.rocket_first[1].ResetConnection();
                                             ingame.rocket_first[0].left = ingame.rocket_first[1];
                                             ingame.rocket_first[0].right = ingame.rocket_first[1];
+                                            ingame.rocket_first[1].left = ingame.rocket_first[0];
+                                            ingame.rocket_first[1].right = ingame.rocket_first[0];
                                         }
-                                        else if (ingame.rocket_first[2].gameObject.activeSelf)
+                                        else if (ingame.rocket_first[2].transform.parent.gameObject.activeSelf)
                                         {
+                                            ingame.rocket_first[2].ResetConnection();
                                             ingame.rocket_first[0].left = ingame.rocket_first[2];
                                             ingame.rocket_first[0].right = ingame.rocket_first[2];
+                                            ingame.rocket_first[2].left = ingame.rocket_first[0];
+                                            ingame.rocket_first[2].right = ingame.rocket_first[0];
                                         }
                                     }
                                     else if (ingame.rocket_first[1].gameObject.activeSelf)
                                     {
+                                        ingame.rocket_first[1].ResetConnection();
                                         current = ingame.rocket_first[1];
                                     }
-                                    else if (ingame.rocket_first[2].gameObject.activeSelf)
+                                    else if (ingame.rocket_first[2].transform.parent.gameObject.activeSelf)
                                     {
+                                        ingame.rocket_first[2].ResetConnection();
                                         current = ingame.rocket_first[2];
                                     }
                                     else
@@ -437,7 +447,7 @@ public class UINaviHelper : Singleton<UINaviHelper>
         current = null;
     }
 
-    private void OnOkay(object sender, InputAction.CallbackContext e)
+    private void OnTabMove(object sender, InputAction.CallbackContext e)
     {
         if (inputHelper.disconnectedPanel.activeSelf)
         {
@@ -452,12 +462,37 @@ public class UINaviHelper : Singleton<UINaviHelper>
             {
                 if (OrderManager.Instance.fastTravleBtn.gameObject.activeInHierarchy)
                 {
-                    OrderManager.Instance.FastTravelAction();
+                    float value = e.ReadValue<float>();
+                    if (value > 0)
+                    {
+                        OrderManager.Instance.FastTravelAction();
+                    }
                 }
-                else
-                    return;
             }
         }
+    }
+
+    private void OnOkay(object sender, InputAction.CallbackContext e)
+    {
+        if (inputHelper.disconnectedPanel.activeSelf)
+        {
+            inputHelper.PadConnected();
+            return;
+        }
+
+        if (!e.performed) return;
+        //if (ingame != null)
+        //{
+        //    if (current == null)
+        //    {
+        //        if (OrderManager.Instance.fastTravleBtn.gameObject.activeInHierarchy)
+        //        {
+        //            OrderManager.Instance.FastTravelAction();
+        //        }
+        //        else
+        //            return;
+        //    }
+        //}
         if (!uiMoveCheckFunc()) return;
 
         if (ingame != null && ingame.virtualCursor.gameObject.activeSelf)
@@ -485,6 +520,8 @@ public class UINaviHelper : Singleton<UINaviHelper>
         }
 
         //current.self.Select();
+
+        if (current == null) return;
 
         switch (current.self)
         {

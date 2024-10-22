@@ -103,6 +103,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "FastTravel",
+                    "type": "Button",
+                    "id": "7edf4530-011d-48d2-bb63-4e261616cd11",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -285,7 +294,7 @@
                 {
                     "name": "",
                     "id": "3e69e342-ecc2-42c4-afbe-ac0ed647c399",
-                    "path": "<Keyboard>/enter",
+                    "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
                     "groups": "PC",
@@ -897,6 +906,17 @@
                     "action": "UIMove",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "a5714b9c-5042-43e1-b64b-1c4699f44327",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PC",
+                    "action": "FastTravel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }

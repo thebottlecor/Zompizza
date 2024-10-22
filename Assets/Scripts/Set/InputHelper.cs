@@ -24,10 +24,14 @@ public class InputHelper : MonoBehaviour
     public static EventHandler<InputAction.CallbackContext> OkayEvent;
     public static EventHandler<InputAction.CallbackContext> BackEvent;
 
+    public static EventHandler<InputAction.CallbackContext> FastTravelEvent;
+
     public GameObject disconnectedPanel;
     public TextMeshProUGUI panelTMP;
     public TextMeshProUGUI panelBtnTMP;
     public UINaviHelper uiNaviHelper;
+
+    // playerInput => Event에 아래 메소드 추가
 
     public void OnMove(InputAction.CallbackContext context)
     {
@@ -102,6 +106,13 @@ public class InputHelper : MonoBehaviour
         if (SteamWishlist.SteamOverlayActivated) return;
 
         BackEvent?.Invoke(null, context);
+    }
+
+    public void OnFastTravel(InputAction.CallbackContext context)
+    {
+        if (SteamWishlist.SteamOverlayActivated) return;
+
+        FastTravelEvent?.Invoke(null, context);
     }
 
     public void PadDisconnected()

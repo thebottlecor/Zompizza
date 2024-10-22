@@ -175,8 +175,7 @@ public class GameEventManager : Singleton<GameEventManager>
 
         int value = AcceptEffect();
 
-        string text = tm.GetCommons($"{currentEvent}Event_accept");
-
+        string text;
         switch (currentEvent)
         {
             case 0:
@@ -188,6 +187,9 @@ public class GameEventManager : Singleton<GameEventManager>
             case 7:
             case 8:
                 text = string.Format(tm.GetCommons($"{currentEvent}Event_accept"), value);
+                break;
+            default:
+                text = tm.GetCommons($"{currentEvent}Event_accept");
                 break;
         }
 
@@ -242,7 +244,7 @@ public class GameEventManager : Singleton<GameEventManager>
             case 8:
                 {
                     mysteryAid = true;
-                    return 2 + humanityPoint * 1;
+                    return 10 + humanityPoint * 5;
                 }
         }
         return int.MaxValue;
@@ -280,9 +282,21 @@ public class GameEventManager : Singleton<GameEventManager>
 
         dialogueText.text = string.Empty;
 
-        DeclineEffect();
+        int value = DeclineEffect();
 
-        StartCoroutine(TextPrint(tm.GetCommons($"{currentEvent}Event_decline"), 1f, () =>
+        string text;
+        switch (currentEvent)
+        {
+            case 3:
+            case 8:
+                text = string.Format(tm.GetCommons($"{currentEvent}Event_decline"), value);
+                break;
+            default:
+                text = tm.GetCommons($"{currentEvent}Event_decline");
+                break;
+        }
+
+        StartCoroutine(TextPrint(text, 1f, () =>
         {
             EventHide();
         }));
@@ -297,7 +311,7 @@ public class GameEventManager : Singleton<GameEventManager>
         TutorialManager.Instance.NoMoreEvented();
     }
 
-    private void DeclineEffect()
+    private int DeclineEffect()
     {
         switch (currentEvent)
         {
@@ -317,7 +331,7 @@ public class GameEventManager : Singleton<GameEventManager>
                 GM.Instance.AddRating(10f, GM.GetRatingSource.notComplete); // 첫번째 치킨 닌자 - 거절
                 humanityPoint++; // 첫번째 치킨 닌자 - 거절
                 AudioManager.Instance.PlaySFX(audioClips[2]);
-                break;
+                return 10;
             case 6:
                 AudioManager.Instance.PlaySFX(audioClips[3]);
                 break;
@@ -326,8 +340,12 @@ public class GameEventManager : Singleton<GameEventManager>
                 AudioManager.Instance.PlaySFX(audioClips[2]);
                 break;
             case 8:
-                break;
+                {
+                    mysteryAid = true;
+                    return 10 + humanityPoint * 5;
+                }
         }
+        return int.MaxValue;
     }
 
     public void NextDay()
@@ -346,8 +364,8 @@ public class GameEventManager : Singleton<GameEventManager>
     {
         if (mysteryAid)
         {
-            float baseValue = 0.02f;
-            baseValue += humanityPoint * 0.01f;
+            float baseValue = 0.1f;
+            baseValue += humanityPoint * 0.05f;
             return (1f - baseValue);
         }
         return 1f;

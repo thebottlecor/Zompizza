@@ -722,7 +722,7 @@ public class PlayerController : PlayerControllerData
         if (waterCount > 0 && currentPizza > 0) // 물속이면 초당 피자가 데미지 받음
         {
             waterTimer += Time.deltaTime;
-            if (waterTimer >= 1f)
+            if (waterTimer >= 2f)
             {
                 waterTimer = 0f;
                 if (DamageEvent != null)

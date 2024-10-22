@@ -314,8 +314,17 @@ public class RocketManager : Singleton<RocketManager>
             // 연출 후 닫기
             loading = false;
             skipTMP.text = tm.GetCommons("Close");
-            skipBtn.gameObject.SetActive(GM.Instance.day != Countdown);
-            launchBtn.SetActive(GM.Instance.day == Countdown);
+
+            if (Completed)
+            {
+                skipBtn.gameObject.SetActive(false);
+                launchBtn.SetActive(true);
+            }
+            else
+            {
+                skipBtn.gameObject.SetActive(GM.Instance.day != Countdown);
+                launchBtn.SetActive(GM.Instance.day == Countdown);
+            }
             UINaviHelper.Instance.SetFirstSelect();
         });
     }
@@ -324,8 +333,9 @@ public class RocketManager : Singleton<RocketManager>
         if (loading) return;
         TutorialManager.Instance.RocketWindowHide();
 
-        if (GM.Instance.day == Countdown)
+        if (Completed || GM.Instance.day == Countdown)
         {
+            // 발사 연출
             Sequence sequence = DOTween.Sequence().SetUpdate(true).SetAutoKill(true);
             sequence.AppendCallback(() =>
             {
@@ -345,7 +355,7 @@ public class RocketManager : Singleton<RocketManager>
                 AudioManager.Instance.PlaySFX(Sfx.rocketAlarm);
                 AudioManager.Instance.PlaySFX(Sfx.rocketCountdown);
             });
-            sequence.AppendInterval(5.2f);
+            sequence.AppendInterval(6f);
             sequence.AppendCallback(() =>
             {
                 SkipMethod();
@@ -363,13 +373,19 @@ public class RocketManager : Singleton<RocketManager>
         darkPanelImage.color = Color.black;
         HidePanel();
 
-        //GM.Instance.NextDay_Late();
-        int currentVillager = VillagerManager.Instance.GetRecruitedVillagerCount();
-        if (GM.Instance.day < Countdown && currentVillager > 0)
-            GM.Instance.NextDay_Midnight();
+        if (Completed)
+        {
+            GM.Instance.Ending();
+        }
         else
-            GM.Instance.NextDay_Late(false);
-
+        {
+            //GM.Instance.NextDay_Late();
+            int currentVillager = VillagerManager.Instance.GetRecruitedVillagerCount();
+            if (GM.Instance.day < Countdown && currentVillager > 0)
+                GM.Instance.NextDay_Midnight();
+            else
+                GM.Instance.NextDay_Late(false);
+        }
         loading = false;
     }
 

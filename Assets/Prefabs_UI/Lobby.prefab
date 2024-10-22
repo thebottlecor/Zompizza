@@ -2731,6 +2731,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9f37a93844cf4be4abef238df464046d, type: 2}
   - {fileID: 11400000, guid: ca3ae34e63395c64dae0ee5faccdab00, type: 2}
   - {fileID: 11400000, guid: 365fe9dfd98d0034b946ee4fde8546fc, type: 2}
+  - {fileID: 11400000, guid: 4154b811acb2d5544b6878a6dd51ebf9, type: 2}
   subSettingPanelTMP:
   - {fileID: 827552596113949175}
   - {fileID: 2649500489813148677}
@@ -5621,6 +5622,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 25bfd5f0-c232-4d26-ae76-7dd05702cf01
     m_ActionName: PlayerActions/New action
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5929983520039378918}
+        m_TargetAssemblyTypeName: InputHelper, Assembly-CSharp
+        m_MethodName: OnFastTravel
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 7edf4530-011d-48d2-bb63-4e261616cd11
+    m_ActionName: PlayerActions/FastTravel[/Keyboard/q]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: PC
   m_DefaultActionMap: PlayerActions

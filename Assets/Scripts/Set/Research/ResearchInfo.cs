@@ -64,7 +64,7 @@ public struct ResearchEffect
     public void Showexplore_max_pay(StringBuilder st)
     {
         var tm = TextManager.Instance;
-        var value = explore_max_pay * 100;
+        var value = explore_max_pay;
         if (value != 0)
         {
             string sub;

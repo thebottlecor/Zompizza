@@ -369,7 +369,6 @@ public class GM : Singleton<GM>
         bool tutoOn = startInfo.tutorial;
         if (saveLoad) tutoOn = false;
         TutorialManager.Instance.Init(tutoOn);
-        OrderManager.Instance.AfterInit();
 
         VillagerManager.Instance.Init(saveLoad, gameSaveData);
 
@@ -395,6 +394,7 @@ public class GM : Singleton<GM>
         {
             rainObj.SetActive(false);
         }
+        OrderManager.Instance.AfterInit();
         ResearchManager.Instance.ToggleAllHiddenRecipe(true);
         footBallPos = footBall.position;
     }
@@ -960,6 +960,27 @@ public class GM : Singleton<GM>
         darkCanvas.alpha = 0f;
     }
 
+    public void Ending()
+    {
+        if (RocketManager.Instance.Completed)
+        {
+            // 엔딩 처리
+            if (!CongratulationTriggered)
+            {
+                Congratulation(true);
+                AudioManager.Instance.PlaySFX(Sfx.complete);
+                UIManager.Instance.shopUI.upgradeDirection.Show(1);
+                return;
+            }
+        }
+        else
+        {
+            gameOverText[1].text = tm.GetCommons("Gameover4");
+            GameOver();
+            return;
+        }
+    }
+
     public void NextDay_Late(bool fromMidnight)
     {
         if (fromMidnight && lastLaunch) // 마지막 날엔 탐색 X => 바로 우주선으로
@@ -1005,25 +1026,10 @@ public class GM : Singleton<GM>
         //    //    return;
         //    //}
         //}
+
         if (day >= RocketManager.Countdown) // 30일 => 31일 게임 끝
         {
-            if (RocketManager.Instance.Completed)
-            {
-                // 엔딩 처리
-                if (!CongratulationTriggered)
-                {
-                    Congratulation(true);
-                    AudioManager.Instance.PlaySFX(Sfx.complete);
-                    UIManager.Instance.shopUI.upgradeDirection.Show(1);
-                    return;
-                }
-            }
-            else
-            {
-                gameOverText[1].text = tm.GetCommons("Gameover4");
-                GameOver();
-                return;
-            }
+            Ending();
         }
 
         warning_gameOver = false; // 평점 0점 이하 패배 조건 삭제
@@ -1550,6 +1556,7 @@ public class GM : Singleton<GM>
 
             int count = Mathf.CeilToInt(hasRes * percent);
             if (count >= hasRes) count = hasRes - 1;
+            count = Mathf.Min(hasRes, count);
             if (count <= 0)
                 return false;
 
@@ -1792,7 +1799,7 @@ public class GM : Singleton<GM>
     private IEnumerator Vomitted()
     {
         vomitEffect.SetActive(true);
-        yield return CoroutineHelper.WaitForSeconds(3f);
+        yield return CoroutineHelper.WaitForSeconds(1f);
         vomitEffect.SetActive(false);
         voimtCoroutine = null;
     }

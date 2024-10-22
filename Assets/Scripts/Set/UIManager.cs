@@ -245,6 +245,7 @@ public class UIManager : Singleton<UIManager>
         InputHelper.EscapeEvent += OnESC;
         InputHelper.WorldmapEvent += OnWorldmap;
         InputHelper.TabMoveEvent += OnTabMove;
+        InputHelper.FastTravelEvent += OnFastTravel;
         InputHelper.EnterStoreEvent += OnShopEnter;
     }
     protected override void RemoveListeners()
@@ -252,6 +253,7 @@ public class UIManager : Singleton<UIManager>
         InputHelper.EscapeEvent -= OnESC;
         InputHelper.WorldmapEvent -= OnWorldmap;
         InputHelper.TabMoveEvent -= OnTabMove;
+        InputHelper.FastTravelEvent -= OnFastTravel;
         InputHelper.EnterStoreEvent -= OnShopEnter;
     }
 
@@ -299,6 +301,15 @@ public class UIManager : Singleton<UIManager>
                 GM.Instance.EnableJumpRampInstall(false);
                 GM.Instance.InstallJumpRamp();
             }
+        }
+    }
+    private void OnFastTravel(object sender, InputAction.CallbackContext e)
+    {
+        if (!Interacting(e)) return;
+
+        if (OrderManager.Instance.fastTravleBtn.gameObject.activeInHierarchy)
+        {
+            OrderManager.Instance.FastTravelAction();
         }
     }
 

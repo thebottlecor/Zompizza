@@ -760,20 +760,40 @@ public class ShopUI : EventListener
     }
     private void Load(List<ReviewData> datas)
     {
-        int day = -1;
-        for (int i = 0; i < datas.Count; i++)
-        {
-            if (datas[i].day > day)
-            {
-                DayFirstReview(datas[i].day);
-                day = datas[i].day;
-            }
-            AddReviewByLoad(datas[i]);
-        }
         int currentDay = GM.Instance.day;
-        if (currentDay > day)
+        if (datas.Count == 0)
         {
-            DayFirstReview(currentDay);
+            for (int i = 0; i <= currentDay; i++)
+            {
+                DayFirstReview(i);
+            }
+        }
+        else
+        {
+            int day = -1;
+            for (int i = 0; i < datas.Count; i++)
+            {
+                int dataDay = datas[i].day;
+
+                while (dataDay > reviewDayObjects.Count) // 이전의 날들에서 배달을 아예 안했을 경우
+                {
+                    int differ = dataDay - reviewDayObjects.Count;
+                    DayFirstReview(dataDay - differ);
+                }
+
+                if (dataDay > day)
+                {
+                    DayFirstReview(dataDay);
+                    day = dataDay;
+                }
+
+                AddReviewByLoad(datas[i]);
+            }
+            while (currentDay > day)
+            {
+                day++;
+                DayFirstReview(day);
+            }
         }
     }
     private void AddReviewByLoad(ReviewData data)
@@ -817,6 +837,7 @@ public class ShopUI : EventListener
         UINaviHelper.Instance.SetFirstSelect();
         ExplorationManager.Instance.SetHighTierQuality();
         //ExplorationManager.Instance.SetCost();
+        OrderManager.Instance.ovenMiniGame.HideHighlight();
 
         if (!GM.Instance.midNight)
         {

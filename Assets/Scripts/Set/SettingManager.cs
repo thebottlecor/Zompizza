@@ -28,6 +28,7 @@ public enum KeyMap
     enterStore,
 
     changePOV,
+    fastTravel,
 
     LAST,
 }
@@ -51,6 +52,7 @@ public class KeySaveData
 
         new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.enterStore, Value = KeyCode.E },
         new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.changePOV, Value = KeyCode.Tab },
+        new SerializableDictionary<KeyMap, KeyCode>.Pair { Key = KeyMap.fastTravel, Value = KeyCode.Q },
     };
 }
 [Serializable]
@@ -133,7 +135,8 @@ public class SettingManager : Singleton<SettingManager>
         KeyMap.worldMapZoomOut,
 
         KeyMap.enterStore,
-        KeyMap.changePOV
+        KeyMap.changePOV,
+        KeyMap.fastTravel,
     };
     // keyOrder 순서에 맞춰서 InputSystemKeymappingBase 데이터 넣기
     [SerializeField] private List<InputSystemKeymappingBase> inputSystemKeymappings;

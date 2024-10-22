@@ -6,6 +6,7 @@ using System.Linq;
 using UnityEngine.UI;
 using TMPro;
 using MTAssets.EasyMinimapSystem;
+using UnityEngine.InputSystem;
 
 public class OrderManager : Singleton<OrderManager>
 {
@@ -59,7 +60,7 @@ public class OrderManager : Singleton<OrderManager>
     public Button fastTravleBtn;
     public RectTransform padKeyIndicators;
     public TextMeshProUGUI fastTravelText;
-    public TextMeshProUGUI fastTravelTimeText;
+    //public TextMeshProUGUI fastTravelTimeText;
 
     public MinimapRenderer minimap;
     public MinimapRenderer worldmap;
@@ -461,54 +462,53 @@ public class OrderManager : Singleton<OrderManager>
                 rand.Add(28); // 달리기 선수
             }
 
-            if (day >= 7)
+            if (day >= 6)
             {
                 rand.Add(14); // 자경단원
             }
-            if (day >= 8)
+            if (day >= 7)
             {
                 rand.Add(10); // 시장
             }
-            if (day >= 9)
+            if (day >= 8)
             {
                 rand.Add(24); // 경비원
                 rand.Add(18); // 신부님
             }
 
-            if (day >= 11)
+            if (day >= 10)
             {
                 rand.Add(19); // 목장주인
                 rand.Add(16); // 스카웃
             }
-            if (day >= 12)
+            if (day >= 11)
             {
                 rand.Add(26); // 벨보이
                 rand.Add(30); // CEO
             }
-            if (day >= 13)
+            if (day >= 12)
             {
                 rand.Add(11); // 회사원
                 rand.Add(25); // 용접공
             }
-            if (day >= 14)
+            if (day >= 13)
             {
                 rand.Add(23); // 파일럿
                 rand.Add(22); // 공원관리인
                 rand.Add(13); // 생존주의자
             }
 
-            if (day >= 16)
+            if (day >= 15)
             {
                 rand.Add(12); // 검역관
                 rand.Add(17); // 죄수
             }
-            if (day >= 17)
+            if (day >= 16)
             {
                 rand.Add(20); // 소방관
                 rand.Add(21); // 양조자
             }
-
-            if (day >= 19)
+            if (day >= 17)
             {
                 rand.Add(15); // 의사
                 rand.Add(27); // 관광객
@@ -1125,7 +1125,13 @@ public class OrderManager : Singleton<OrderManager>
     {
         if (GM.Instance.day <= 0) return;
 
-        fastTravelText.text = TextManager.Instance.GetCommons("FastTravel");
+        var tm = TextManager.Instance;
+        var pad = Gamepad.current;
+        if (pad == null)
+            fastTravelText.text = $"{tm.GetKeyMaps(KeyMap.fastTravel)} ({SettingManager.Instance.keyMappings[KeyMap.fastTravel].GetName()})";
+        else
+            fastTravelText.text = tm.GetKeyMaps(KeyMap.fastTravel);
+
         fastTravleBtn.gameObject.SetActive(true);
         padKeyIndicators.anchoredPosition = new Vector2(0f, 120f);
         FastTravelCalc();
@@ -1161,9 +1167,9 @@ public class OrderManager : Singleton<OrderManager>
 
         travelTime = km * 35f;
 
-        int hour = (int)(travelTime / Constant.oneHour);
-        int minute = (int)((travelTime - hour * Constant.oneHour) / Constant.oneMinute);
+        //int hour = (int)(travelTime / Constant.oneHour);
+        //int minute = (int)((travelTime - hour * Constant.oneHour) / Constant.oneMinute);
 
-        fastTravelTimeText.text = TextManager.Instance.GetCommons("TravelTime") + $" {hour:00}:{minute:00}";
+        //fastTravelTimeText.text = TextManager.Instance.GetCommons("TravelTime") + $" {hour:00}:{minute:00}";
     }
 }

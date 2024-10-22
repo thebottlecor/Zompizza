@@ -24,35 +24,27 @@ public class GiftGoal : MonoBehaviour
 
     private void ShowCheck()
     {
-        int rand = UnityEngine.Random.Range(0, 9);
+        int rand = UnityEngine.Random.Range(0, 10);
 
         var uiLib = DataManager.Instance.uiLib;
-        if (rand <= 2)
+        if (rand <= 3)
         {
-            // 33% 재료
+            // 40% 아이템
             Ingredient ingredient = GM.Instance.RandomIngredientGet();
             ingredientSprite.sprite = uiLib.ingredients[ingredient];
             UIManager.Instance.UpdateIngredients();
             UIManager.Instance.OrderUIBtnUpdate();
             plusSprite.sprite = uiLib.plus[0];
         }
-        else if (rand <= 5)
+        else if (rand <= 7)
         {
-            int tier = ResearchManager.Instance.globalEffect.tier; // 33% 티어 * 200 돈 
-            GM.Instance.AddGold(Constant.delivery_reward_ingredients * (tier + 1), GM.GetGoldSource.delivery);
-            ingredientSprite.sprite = uiLib.gold;
-            plusSprite.sprite = uiLib.plus[2 + tier];
-        }
-        else
-        {
-            // 33% 아이템
-
+            // 40% 아이템
             int somethingNeeds = VillagerManager.Instance.GetNeededThings();
             int itemIdx;
 
             if (somethingNeeds > -1)
             {
-                if (UnityEngine.Random.Range(0, 2) == 1) // 50% 확률로 어떤 주민이 필요한 물품이 나옴
+                if (UnityEngine.Random.Range(0, 3) <= 1) // 66% 확률로 어떤 주민이 필요한 물품이 나옴
                 {
                     itemIdx = VillagerManager.Instance.ItemGet(somethingNeeds);
                 }
@@ -68,6 +60,13 @@ public class GiftGoal : MonoBehaviour
 
             ingredientSprite.sprite = uiLib.villagerItems[itemIdx];
             plusSprite.sprite = uiLib.plus[0];
+        }
+        else
+        {
+            int tier = ResearchManager.Instance.globalEffect.tier; // 33% 티어 * 200 돈 
+            GM.Instance.AddGold(Constant.delivery_reward_ingredients * (tier + 1), GM.GetGoldSource.delivery);
+            ingredientSprite.sprite = uiLib.gold;
+            plusSprite.sprite = uiLib.plus[2 + tier];
         }
 
         FindEffect();
