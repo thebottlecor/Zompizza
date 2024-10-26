@@ -330,6 +330,17 @@ public class UINaviHelper : Singleton<UINaviHelper>
                         current = ingame.Dialogue_Reconnection();
                         uiMoveCheckFunc = Check_Dialouge;
                     }
+                    else
+                    {
+                        if (gm.darkCanvas.blocksRaycasts)
+                        {
+                            if (gm.congratulationsObj.activeSelf)
+                            {
+                                current = ingame.gameWin_first;
+                                uiMoveCheckFunc = Check_Dialouge;
+                            }
+                        }
+                    }
                 }
             }
         }

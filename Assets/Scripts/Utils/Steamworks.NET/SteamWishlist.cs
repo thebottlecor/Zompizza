@@ -12,8 +12,8 @@ public class SteamWishlist : MonoBehaviour
 
 	public static bool SteamOverlayActivated;
 
-	private void OnEnable()
-	{
+    private void Start()
+    {
 		if (SteamManager.Initialized)
 		{
 			m_GameOverlayActivated = Callback<GameOverlayActivated_t>.Create(OnGameOverlayActivated);

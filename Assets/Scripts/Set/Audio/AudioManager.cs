@@ -233,4 +233,5 @@ public enum Sfx
     rocketCountdown,
     zombieInstall,
     zombieVomit,
+    boom,
 }

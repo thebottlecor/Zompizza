@@ -36,7 +36,7 @@ MonoBehaviour:
     explore_get_bonus: 0
     tier: 0
     villager_bonus: 0
-    pizzeriaExpand: 3
+    pizzeriaExpand: 5
     raidDefense: 0
     customer_timelimit: 0
     customer_max_tier: 0

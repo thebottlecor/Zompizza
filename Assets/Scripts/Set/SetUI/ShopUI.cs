@@ -550,6 +550,21 @@ public class ShopUI : EventListener
         HideUI_Main(instant);
     }
 
+    public void HideForEnding()
+    {
+        scrollEffect.enabled = false;
+        opened = false;
+        Time.timeScale = 1f;
+        HideAllVehicle();
+        for (int i = 0; i < panelButtonPairs.Count; i++)
+        {
+            panelButtonPairs[i].button.Hide();
+        }
+        rectTransform.transform.localPosition = new Vector3(0f, -2000f, 0f);
+        canvasGroup.alpha = 0f;
+        loading = false;
+    }
+
     private void HideUI_Main(bool instant)
     {
         scrollEffect.enabled = false;

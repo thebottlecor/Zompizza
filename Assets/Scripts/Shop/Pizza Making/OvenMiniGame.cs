@@ -471,6 +471,13 @@ public class OvenMiniGame : EventListener
         UINaviHelper.Instance.SetFirstSelect();
 
         TutorialManager.Instance.OrderAccpeted();
+        StartCoroutine(DelayHighlight());
+    }
+    private IEnumerator DelayHighlight()
+    {
+        yield return null;
+        if (orderInfo != null)
+            SetHighlight(orderInfo);
     }
 
     public void ResetInput()

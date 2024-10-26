@@ -11,21 +11,6 @@ using UnityEngine.UI;
 
 public class Lobby : Singleton<Lobby>
 {
-    [Serializable]
-    public struct SaveData
-    {
-    }
-
-    public SaveData SetSaveData()
-    {
-        SaveData data = new();
-
-        return data;
-    }
-    public void GetSaveData(SaveData data)
-    {
-
-    }
 
     public GameObject lobbyUIObjects;
 
@@ -34,8 +19,6 @@ public class Lobby : Singleton<Lobby>
     public bool SaveDataLoading { get; private set; }
 
     public int newGameCount;
-
-    private SerializableDictionary<KeyMap, KeyMapping> HotKey => SettingManager.Instance.keyMappings;
 
     protected override void Awake()
     {
@@ -109,6 +92,12 @@ public class Lobby : Singleton<Lobby>
     {
         LoadingSceneManager.Instance.logueLoading = false;
         AudioManager.Instance.ToggleMute(false);
+
+        if (on)
+        {
+            var pad = Gamepad.current;
+            Cursor.visible = pad == null;
+        }
 
         lobbyUIObjects.SetActive(on);
         SettingManager.Instance.LobbySwitch(on);

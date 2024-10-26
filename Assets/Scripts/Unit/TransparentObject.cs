@@ -47,10 +47,16 @@ public class TransparentObject : MonoBehaviour
 
 		if (timer <= 0)
         {
-			ResetTransparent();
-			Destroy(this);
-        }
+			End();
+
+		}
     }
+
+	public void End()
+    {
+		ResetTransparent();
+		Destroy(this);
+	}
 
 
     public void BecomeTransparent()

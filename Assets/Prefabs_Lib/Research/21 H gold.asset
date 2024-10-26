@@ -35,7 +35,7 @@ MonoBehaviour:
     explore_get_bonus: 0
     tier: 0
     villager_bonus: 0
-    pizzeriaExpand: 3
+    pizzeriaExpand: 0
     raidDefense: 0
     customer_timelimit: 0
     customer_max_tier: 0
@@ -44,4 +44,4 @@ MonoBehaviour:
     maxSpeed: 0
     damageReduce: 0
     acceleration: 0
-  icon: {fileID: 950023893, guid: 70a332bb4041ce447b99d72b8d122cda, type: 3}
+  icon: {fileID: 2125078597, guid: 70a332bb4041ce447b99d72b8d122cda, type: 3}

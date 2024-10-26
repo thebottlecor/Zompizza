@@ -10,6 +10,7 @@ public class RankingObj : MonoBehaviour
 
     public Image medal_Img;
     public Image logo_Img;
+    public Image x_Img;
 
     public RectTransform graph_rect;
 
@@ -32,6 +33,15 @@ public class RankingObj : MonoBehaviour
             case 2:
                 nameText.text = TextManager.Instance.GetCommons("You");
                 break;
+        }
+
+        if (idx <= 1)
+        {
+            x_Img.gameObject.SetActive(rating <= 0f);
+        }
+        else
+        {
+            x_Img.gameObject.SetActive(false);
         }
 
         logo_Img.sprite = RivalManager.Instance.icons[idx];

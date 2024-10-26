@@ -162,6 +162,7 @@ public class UIManager : Singleton<UIManager>
             }
         }
         UINaviHelper.Instance.ingame.shops_orders_making[0].right = navis[0][0];
+        UINaviHelper.Instance.ingame.shops_orders_making[1].left = navis[0][navis[0].Count - 1];
 
         float ratio = (float)SettingManager.Instance.settingResolution.y / SettingManager.Instance.settingResolution.x;
         float modify = (ratio > 0.5625f) ? 0f : 1f;
@@ -177,6 +178,8 @@ public class UIManager : Singleton<UIManager>
     {
         if (on)
         {
+            Cursor.visible = false;
+
             uiCam.SetActive(false);
             minimapCam.SetActive(true);
             worldmapCam.SetActive(false);
@@ -196,6 +199,9 @@ public class UIManager : Singleton<UIManager>
         }
         else
         {
+            var pad = Gamepad.current;
+            Cursor.visible = pad == null;
+
             uiCam.SetActive(true);
             minimapCam.SetActive(false);
             worldmapCam.SetActive(true);

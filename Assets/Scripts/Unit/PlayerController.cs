@@ -102,6 +102,8 @@ public class PlayerController : PlayerControllerData
 
     public GameObject installDeco;
 
+    public Transform[] warTruckFrontWheels;
+
     private void Start()
     {
         carRigidbody = gameObject.GetComponent<Rigidbody>();
@@ -248,7 +250,7 @@ public class PlayerController : PlayerControllerData
                         //Debug.Log("속도 방향과 충돌 방향 일치 -> 힘 전달 " + carRigidbody.velocity.magnitude);
 
                         int currentVehicle = GM.Instance.currentVehicle;
-                        if (currentVehicle != 5 && currentVehicle != 6) // 전투트럭과 경찰차는 좀비 충돌에 따른 패널티 없음
+                        if (currentVehicle != 5) // 전투트럭 좀비 충돌에 따른 패널티 없음
                         {
                             float playerDot = Vector3.Dot(carVel, transform.forward); // 차앞 방향과 속도 내적
                             float crashDrag = this.crashDrag;
@@ -917,28 +919,40 @@ public class PlayerController : PlayerControllerData
         float visual_steer_modify = 0.5f;
 
         frontLeftCollider.GetWorldPose(out Vector3 FLWPosition, out Quaternion FLWRotation);
-        frontLeftMesh.transform.position = FLWPosition;
         //frontLeftMesh.transform.rotation = FLWRotation;
         Vector3 angle = new Vector3(FLWRotation.eulerAngles.x, frontLeftCollider.steerAngle * visual_steer_modify, 0);
         frontLeftMesh.transform.localEulerAngles = angle;
+        warTruckFrontWheels[0].localEulerAngles = angle;
 
         frontRightCollider.GetWorldPose(out Vector3 FRWPosition, out Quaternion FRWRotation);
-        frontRightMesh.transform.position = FRWPosition;
         //frontRightMesh.transform.rotation = FRWRotation;
         Vector3 angle2 = new Vector3(FRWRotation.eulerAngles.x, frontRightCollider.steerAngle * visual_steer_modify, 0);
         frontRightMesh.transform.localEulerAngles = angle2;
+        warTruckFrontWheels[1].localEulerAngles = angle2;
 
         rearLeftCollider.GetWorldPose(out Vector3 RLWPosition, out Quaternion RLWRotation);
-        rearLeftMesh.transform.position = RLWPosition;
         //rearLeftMesh.transform.rotation = RLWRotation;
         Vector3 angle3 = new Vector3(RLWRotation.eulerAngles.x, rearLeftCollider.steerAngle * visual_steer_modify, 0);
         rearLeftMesh.transform.localEulerAngles = angle3;
+        warTruckFrontWheels[2].localEulerAngles = angle3;
 
         rearRightCollider.GetWorldPose(out Vector3 RRWPosition, out Quaternion RRWRotation);
-        rearRightMesh.transform.position = RRWPosition;
         //rearRightMesh.transform.rotation = RRWRotation;
         Vector3 angle4 = new Vector3(RRWRotation.eulerAngles.x, rearRightCollider.steerAngle * visual_steer_modify, 0);
         rearRightMesh.transform.localEulerAngles = angle4;
+        warTruckFrontWheels[3].localEulerAngles = angle4;
+
+        if (syncTirePos)
+        {
+            frontLeftMesh.transform.position = FLWPosition;
+            frontRightMesh.transform.position = FRWPosition;
+            rearLeftMesh.transform.position = RLWPosition;
+            rearRightMesh.transform.position = RRWPosition;
+        }
+        warTruckFrontWheels[0].transform.position = FLWPosition;
+        warTruckFrontWheels[1].transform.position = FRWPosition;
+        warTruckFrontWheels[2].transform.position = RLWPosition;
+        warTruckFrontWheels[3].transform.position = RRWPosition;
     }
 
     //

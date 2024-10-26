@@ -67,7 +67,7 @@ public class ZombiePooler : Singleton<ZombiePooler>
     private float timerRange;
     private float timerHeavy;
     private float timerVomit;
-    private float timerSanta;
+    //private float timerSanta;
     public AstarPath astarPath;
 
     [Header("Á»ºñ ¸ðµ¨")]
@@ -216,19 +216,19 @@ public class ZombiePooler : Singleton<ZombiePooler>
                     SpawnVomit(1);
                 }
             }
-            if (day > 24)
-            {
-                // À§¼º Æø°Ý ? // Æ÷º´ Æø°Ý ?
-            }
-            if (day > 28)
-            {
-                timerSanta += Time.deltaTime;
-                if (timerSanta >= 30f)
-                {
-                    timerSanta = 0f;
-                    SpawnSanta(1);
-                }
-            }
+            //if (day > 24)
+            //{
+            //    // À§¼º Æø°Ý ? // Æ÷º´ Æø°Ý ?
+            //}
+            //if (day > 28)
+            //{
+            //    timerSanta += Time.deltaTime;
+            //    if (timerSanta >= 30f)
+            //    {
+            //        timerSanta = 0f;
+            //        SpawnSanta(1);
+            //    }
+            //}
         }
     }
 

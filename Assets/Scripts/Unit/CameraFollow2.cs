@@ -25,6 +25,7 @@ public class CameraFollow2 : MonoBehaviour {
 	int layerMask;
 
 	public bool checkBlocklay = true;
+	public bool follow = true;
 
 	[Space(20f)]
 	public bool secondMode = false;
@@ -85,6 +86,8 @@ public class CameraFollow2 : MonoBehaviour {
 
 	void FixedUpdate()
 	{
+		if (!follow) return;
+
 		if (!secondMode)
 		{
 			//Look at car

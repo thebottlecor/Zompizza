@@ -3355,7 +3355,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 2583230041809248098}
   m_Father: {fileID: 2329388117785257277}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6360003134436311885
@@ -4517,7 +4518,6 @@ Transform:
   - {fileID: 2320009083121255259}
   - {fileID: 1439200635939193208}
   - {fileID: 4535559183752090463}
-  - {fileID: 2583230041809248098}
   - {fileID: 727695835880156286}
   - {fileID: 8849275392710059753}
   m_Father: {fileID: 0}
@@ -5318,12 +5318,12 @@ GameObject:
   - component: {fileID: 2583230041809248098}
   - component: {fileID: 7968603216403585560}
   m_Layer: 0
-  m_Name: " AppID \uBC14\uAFB8\uAE30 ** SteamWishlist [\uB370\uBAA8\uC804\uC6A9]"
+  m_Name: SteamWishlist
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2583230041809248098
 Transform:
   m_ObjectHideFlags: 0
@@ -5337,7 +5337,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2329388117785257277}
+  m_Father: {fileID: 4535559183752090463}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7968603216403585560
 MonoBehaviour:
@@ -6325,6 +6325,11 @@ MonoBehaviour:
     - Key: 37
       Value:
         clip: {fileID: 8300000, guid: 265848fb7411b3f43aebc9adabda5ff0, type: 3}
+        volumeOffset: 0
+        maxPlay: 0
+    - Key: 38
+      Value:
+        clip: {fileID: 8300000, guid: 90b5a2e0ed36d34418bb02ed9ed12f9f, type: 3}
         volumeOffset: 0
         maxPlay: 0
   audios_villagers:

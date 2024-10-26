@@ -65,6 +65,7 @@ public class RocketManager : Singleton<RocketManager>
         public List<GameObject> objs;
     }
     public List<RocketModels> rocketModels;
+    public List<GameObject> endingHideObjes;
 
     private TextManager tm => TextManager.Instance;
     public bool Completed => currentStep >= MaxStep;
@@ -77,6 +78,8 @@ public class RocketManager : Singleton<RocketManager>
     public GameObject[] effects;
     public GameObject[] effects2;
     public GameObject[] effects3;
+
+    public SpecialTransparent rocketTrans;
 
     [Header("ShopUIs")]
     public TextMeshProUGUI projectTMP2;
@@ -92,10 +95,17 @@ public class RocketManager : Singleton<RocketManager>
         spaceTMP.text = tm.GetCommons("Spaceship");
 
         developTMP.text = tm.GetCommons("Develop");
-        lanuchTMP.text = tm.GetCommons("Launch");
 
         HidePanel();
         UpdateModels();
+    }
+
+    public void EndingHide()
+    {
+        for (int i =0; i < endingHideObjes.Count; i++)
+        {
+            endingHideObjes[i].SetActive(false);
+        }
     }
 
     public int GetCost()
@@ -121,6 +131,9 @@ public class RocketManager : Singleton<RocketManager>
         planetCam.SetActive(true);
         rocketCam.SetActive(true);
 
+        GM.Instance.player.cam.checkBlocklay = false;
+        rocketTrans.ForceReset();
+
         UpdateProgressUI();
         UpdateStepUI();
 
@@ -140,12 +153,33 @@ public class RocketManager : Singleton<RocketManager>
         developBtn.gameObject.SetActive(!Completed);
 
         skipTMP.text = tm.GetCommons("Skip");
-        skipBtn.gameObject.SetActive(GM.Instance.day != Countdown);
-        launchBtn.SetActive(GM.Instance.day == Countdown);
+        bool lastDay = GM.Instance.day == Countdown;
+        skipBtn.gameObject.SetActive(!lastDay);
+        launchBtn.SetActive(lastDay);
+        if (launchBtn.activeSelf)
+        {
+            if (Completed || LastDayCanCheck())
+                lanuchTMP.text = tm.GetCommons("Launch");
+            else
+                lanuchTMP.text = tm.GetCommons("Pray");
+        }
 
         GM.Instance.SetLight(0f, 0); // 로켓 밝게 보이게 낮으로 조정
 
         panel.SetActive(true);
+    }
+
+    private bool LastDayCanCheck() // 마지막 날에 마지막 단계를 완성할 수 있는가?
+    {
+        bool lastDay = GM.Instance.day == Countdown;
+        if (lastDay && currentStep == MaxStep - 1)
+        {
+            if (GetCost() <= GM.Instance.gold)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void UpdateProgressUI()
@@ -319,11 +353,14 @@ public class RocketManager : Singleton<RocketManager>
             {
                 skipBtn.gameObject.SetActive(false);
                 launchBtn.SetActive(true);
+                lanuchTMP.text = tm.GetCommons("Launch");
             }
             else
             {
-                skipBtn.gameObject.SetActive(GM.Instance.day != Countdown);
-                launchBtn.SetActive(GM.Instance.day == Countdown);
+                bool lastDay = GM.Instance.day == Countdown;
+                skipBtn.gameObject.SetActive(!lastDay);
+                launchBtn.SetActive(lastDay);
+                lanuchTMP.text = tm.GetCommons("Pray");
             }
             UINaviHelper.Instance.SetFirstSelect();
         });
@@ -331,6 +368,11 @@ public class RocketManager : Singleton<RocketManager>
     public void Skip()
     {
         if (loading) return;
+        if (LastDayCanCheck())
+        {
+            AudioManager.Instance.PlaySFX(Sfx.deny);
+            return;
+        }
         TutorialManager.Instance.RocketWindowHide();
 
         if (Completed || GM.Instance.day == Countdown)
@@ -395,5 +437,6 @@ public class RocketManager : Singleton<RocketManager>
         rocketCam.SetActive(false);
 
         panel.SetActive(false);
+        GM.Instance.player.cam.checkBlocklay = true;
     }
 }

@@ -272,6 +272,16 @@ public class ResearchManager : Singleton<ResearchManager>
             changed += SetVisbility(tier_Add[0], true);
             changed += SetVisbility(tier_Remove[0], false);
         }
+        if (tier >= 2)
+        {
+            changed += SetVisbility(tier_Add[1], true);
+            changed += SetVisbility(tier_Remove[1], false);
+        }
+        if (tier >= 3)
+        {
+            changed += SetVisbility(tier_Add[2], true);
+            changed += SetVisbility(tier_Remove[2], false);
+        }
 
         int expand = globalEffect.pizzeriaExpand;
         
@@ -290,6 +300,16 @@ public class ResearchManager : Singleton<ResearchManager>
             changed += SetVisbility(pizzeriaExpands_Add[2], true);
             changed += SetVisbility(pizzeriaExpands_Remove[2], false);
         }
+        if (expand >= 4)
+        {
+            changed += SetVisbility(pizzeriaExpands_Add[3], true);
+            changed += SetVisbility(pizzeriaExpands_Remove[3], false);
+        }
+        if (expand >= 5)
+        {
+            changed += SetVisbility(pizzeriaExpands_Add[4], true);
+            changed += SetVisbility(pizzeriaExpands_Remove[4], false);
+        }
 
         int raidDefense = globalEffect.raidDefense;
 
@@ -297,6 +317,16 @@ public class ResearchManager : Singleton<ResearchManager>
         {
             changed += SetVisbility(raidDefenses_Add[0], true);
             changed += SetVisbility(raidDefenses_Remove[0], false);
+        }
+        if (raidDefense >= 2)
+        {
+            changed += SetVisbility(raidDefenses_Add[1], true);
+            changed += SetVisbility(raidDefenses_Remove[1], false);
+        }
+        if (raidDefense >= 3)
+        {
+            changed += SetVisbility(raidDefenses_Add[2], true);
+            changed += SetVisbility(raidDefenses_Remove[2], false);
         }
 
         if (changed > 0)

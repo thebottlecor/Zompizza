@@ -43,6 +43,8 @@ public class PlayerControllerData : EventListener
     public GameObject rearLeftMesh;
     public GameObject rearRightMesh;
 
+    public bool syncTirePos = true;
+
     public CapsuleCollider coll;
 
     public MeshRenderer[] meshRenderers;
@@ -113,6 +115,7 @@ public class PlayerControllerData : EventListener
         player.decelerationMultiplier = decelerationMultiplier;
         player.handbrakeDriftMultiplier = handbrakeDriftMultiplier;
 
+        player.syncTirePos = syncTirePos;
         player.frontLeftMesh = frontLeftMesh;
         player.frontRightMesh = frontRightMesh;
         player.rearLeftMesh = rearLeftMesh;

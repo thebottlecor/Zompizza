@@ -132,6 +132,7 @@ public class InputHelper : MonoBehaviour
             panelBtnTMP.text = tm.GetCommons("ControllerDisconnected2");
         }
         disconnectedPanel.SetActive(true);
+        Cursor.visible = true;
 
         // 패드 없음 - 비활성화
         uiNaviHelper.PadDisconnected();

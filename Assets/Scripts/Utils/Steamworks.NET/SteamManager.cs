@@ -27,18 +27,18 @@ public class SteamManager : MonoBehaviour {
 	protected static SteamManager s_instance;
 	protected static SteamManager Instance {
 		get {
-			if (s_instance == null) {
-				return new GameObject("SteamManager").AddComponent<SteamManager>();
+			if (s_instance == null) 
+			{
+				s_instance = FindObjectOfType<SteamManager>();
 			}
-			else {
-				return s_instance;
-			}
+			return s_instance;
 		}
 	}
 
 	protected bool m_bInitialized = false;
 	public static bool Initialized {
 		get {
+			if (Instance == null) return false;
 			return Instance.m_bInitialized;
 		}
 	}
@@ -63,15 +63,11 @@ public class SteamManager : MonoBehaviour {
 	protected virtual void Awake() 
 	{
 #if UNITY_EDITOR
-		gameObject.SetActive(false);
-		return;
+        gameObject.SetActive(false);
+        return;
 #endif
-		// Only one instance of SteamManager at a time!
-		if (s_instance != null) {
-			Destroy(gameObject);
-			return;
-		}
-		s_instance = this;
+        // Only one instance of SteamManager at a time!
+        s_instance = this;
 
 		if(s_EverInitialized) {
 			// This is almost always an error.
@@ -82,7 +78,7 @@ public class SteamManager : MonoBehaviour {
 		}
 
 		// We want our SteamManager Instance to persist across scenes.
-		DontDestroyOnLoad(gameObject);
+		//DontDestroyOnLoad(gameObject);
 
 		if (!Packsize.Test()) {
 			Debug.LogError("[Steamworks.NET] Packsize Test returned false, the wrong version of Steamworks.NET is being run in this platform.", this);

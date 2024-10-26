@@ -188,6 +188,7 @@ public class GM : Singleton<GM>
     public Button gameOverBtn_ToLobby;
     public TextMeshProUGUI[] gameOverText;
     public TextMeshProUGUI gameOverBtn_ToLobby_Text;
+    public Image nukeEffect;
     public bool loading;
 
     [Header("평점 획득 축하")] // 원래는 빚 갚음
@@ -196,6 +197,10 @@ public class GM : Singleton<GM>
     public TextMeshProUGUI[] congratulationsText;
     public TextMeshProUGUI congratulationsBtn_Text;
     public bool CongratulationTriggered { get; private set; }
+
+    public GameObject rocket;
+    public Transform[] rocketWaypoints;
+    public AudioSource rocketFlyingSound;
 
     [Header("평점 게임 오버 경고")]
     public GameObject gameOverWarningObj;
@@ -300,9 +305,9 @@ public class GM : Singleton<GM>
 
         //nextDayBtn.onClick.AddListener(() => { NextDay_Late(); });
         nextDayBtn.onClick.AddListener(() => { Show_SpaceshipProject(); });
-        gameOverBtn_ToLobby.onClick.AddListener(() => { LoadingSceneManager.Instance.ToLobby(); });
+        gameOverBtn_ToLobby.onClick.AddListener(() => { GameOverBtnAction(); });
         //congratulationBtn_ToLobby.onClick.AddListener(() => { LoadingSceneManager.Instance.EpilogueStart(); });
-        congratulationBtn_ToLobby.onClick.AddListener(() => { LoadingSceneManager.Instance.ToLobby(); });
+        congratulationBtn_ToLobby.onClick.AddListener(() => { CongratulationBtnAction(); });
 
         tenDays_RaidRecords = new List<int>();
         unlockedVehicles = new bool[controllerData.Length];
@@ -960,7 +965,7 @@ public class GM : Singleton<GM>
         darkCanvas.alpha = 0f;
     }
 
-    public void Ending()
+    public bool Ending()
     {
         if (RocketManager.Instance.Completed)
         {
@@ -968,17 +973,16 @@ public class GM : Singleton<GM>
             if (!CongratulationTriggered)
             {
                 Congratulation(true);
-                AudioManager.Instance.PlaySFX(Sfx.complete);
-                UIManager.Instance.shopUI.upgradeDirection.Show(1);
-                return;
+                return true;
             }
         }
         else
         {
             gameOverText[1].text = tm.GetCommons("Gameover4");
             GameOver();
-            return;
+            return true;
         }
+        return false;
     }
 
     public void NextDay_Late(bool fromMidnight)
@@ -1029,7 +1033,8 @@ public class GM : Singleton<GM>
 
         if (day >= RocketManager.Countdown) // 30일 => 31일 게임 끝
         {
-            Ending();
+            bool end = Ending();
+            if (end) return;
         }
 
         warning_gameOver = false; // 평점 0점 이하 패배 조건 삭제
@@ -1240,7 +1245,22 @@ public class GM : Singleton<GM>
         loading = true;
 
         gameOverObj.SetActive(true);
+
+        AudioManager.Instance.PlaySFX(Sfx.boom);
+        Color color = nukeEffect.color;
+        color.a = 1f;
+        nukeEffect.color = color;
+        nukeEffect.DOFade(0f, 2f).SetUpdate(true).SetAutoKill(true);
+
         UINaviHelper.Instance.SetFirstSelect();
+    }
+    public void GameOverBtnAction()
+    {
+        if (nukeEffect.color.a <= 0.1f)
+        {
+            UIManager.Instance.ButtonSound();
+            LoadingSceneManager.Instance.ToLobby();
+        }
     }
     public void Congratulation(bool on)
     {
@@ -1251,20 +1271,79 @@ public class GM : Singleton<GM>
 
             if (SteamHelper.Instance != null) SteamHelper.Instance.AchieveWin();
 
-            darkCanvas.alpha = 1f;
-            darkCanvas.blocksRaycasts = true;
-            darkCanvas.interactable = true;
-            loading = true;
-        }
-        else
-        {
+            //darkCanvas.alpha = 1f;
             darkCanvas.alpha = 0f;
-            darkCanvas.blocksRaycasts = false;
+            darkCanvas.blocksRaycasts = true;
+            //darkCanvas.interactable = true;
             darkCanvas.interactable = false;
-            loading = false;
+            loading = true;
+
+            congratulationsObj.SetActive(on);
+            UINaviHelper.Instance.SetFirstSelect();
+
+            Vector3 startCam = new Vector3(0f, 1f, 8.5f);
+            Vector3 secondCam = new Vector3(0f, 1f, 22f);
+            Vector3 lastCam = new Vector3(0f, 1f, 182.5f);
+            Sequence seq = DOTween.Sequence().SetUpdate(true).SetAutoKill(true);
+            seq.AppendCallback(() =>
+            {
+                rocket.SetActive(true);
+                RocketManager.Instance.EndingHide();
+                midNight = true;
+
+                UIManager.Instance.shopUI.HideForEnding();
+                UIManager.Instance.shopUI.playerStay = false;
+                UIManager.Instance.shopUI.shopUIOpenButton.SetActive(false);
+
+                //player.cam.absoluteInitCameraPosition = new Vector3(0f, 1f, 182.5f);
+                player.cam.transform.position = new Vector3(-30.75f, 55.5f, 31.3f);
+                player.cam.absoluteInitCameraPosition = new Vector3(0f, 1f, 8.5f);
+                player.cam.mainCam.farClipPlane = 950f;
+                player.cam.ChangeMode();
+                player.cam.carTransform = rocket.transform;
+                player.cam.checkBlocklay = false;
+
+                DOVirtual.Vector3(startCam, secondCam, 5.5f, (v) => { player.cam.absoluteInitCameraPosition = v; }).OnComplete(() =>
+                {
+                    DOVirtual.Vector3(secondCam, lastCam, 2.5f, (v) => { player.cam.absoluteInitCameraPosition = v; }).OnComplete(() =>
+                    {
+                        player.cam.absoluteInitCameraPosition = lastCam;
+                    });
+                });
+            });
+            seq.Append(rocket.transform.DOMove(rocketWaypoints[0].position, 15f).SetEase(Ease.InQuart));
+            seq.AppendCallback(() =>
+            {
+                rocket.transform.DOMove(rocketWaypoints[1].position, 5f);
+                rocketFlyingSound.DOFade(0f, 5f);
+            });
+            seq.Append(darkCanvas.DOFade(1f, 0.5f));
+            seq.AppendCallback(() =>
+            {
+                darkCanvas.alpha = 1f;
+                darkCanvas.interactable = true;
+                AudioManager.Instance.PlaySFX(Sfx.complete);
+                UIManager.Instance.shopUI.upgradeDirection.Show(1);
+                UINaviHelper.Instance.SetFirstSelect();
+            });
         }
-        congratulationsObj.SetActive(on);
-        UINaviHelper.Instance.SetFirstSelect();
+        //else
+        //{
+        //    darkCanvas.alpha = 0f;
+        //    darkCanvas.blocksRaycasts = false;
+        //    darkCanvas.interactable = false;
+        //    loading = false;
+        //    congratulationsObj.SetActive(false);
+        //    UINaviHelper.Instance.SetFirstSelect();
+        //}
+    }
+    public void CongratulationBtnAction()
+    {
+        if (congratulationsObj.activeSelf && darkCanvas.alpha >= 0.95f)
+        {
+            UIManager.Instance.ButtonSound();
+            LoadingSceneManager.Instance.ToLobby();
+        }
     }
     public void ShowGameOverWarning(bool on)
     {
@@ -1692,11 +1771,14 @@ public class GM : Singleton<GM>
     #endregion
 
     #region 차량 변경
+
+    [SerializeField] private int firstCar = 0;
+
     public void InitPlayer()
     {
-        currentVehicle = 0;
-        controllerData[0].SetData(player);
-        unlockedVehicles[0] = true;
+        currentVehicle = firstCar;
+        controllerData[firstCar].SetData(player);
+        unlockedVehicles[firstCar] = true;
     }
 
     public void ChangeMan(bool man)

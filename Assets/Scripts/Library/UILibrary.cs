@@ -57,4 +57,5 @@ public class UILibrary : ScriptableObject
 
     public Sprite[] villagerItems;
     public Sprite[] villagerProfile;
+    public Sprite[] villagerSkills;
 }

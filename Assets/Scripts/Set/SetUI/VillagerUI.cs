@@ -33,6 +33,7 @@ public class VillagerUI : EventListener
     private string[] fixedStr;
     public TextMeshProUGUI villagerName;
     public Image villagerProfile;
+    public Image villagerTraitIcon;
 
     [Header("аж╠Б")]
     public GameObject needsParentObj;
@@ -73,6 +74,7 @@ public class VillagerUI : EventListener
     {
         villagerName.text = tm.GetVillagerName(villagerIdx);
         villagerProfile.sprite = DataManager.Instance.uiLib.villagerProfile[villagerIdx];
+        villagerTraitIcon.sprite = DataManager.Instance.uiLib.villagerSkills[villagerIdx];
 
         var villager = VillagerManager.Instance.villagers[villagerIdx];
 

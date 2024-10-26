@@ -41,6 +41,13 @@ public class SpecialTransparent : MonoBehaviour
         }
     }
 
+    public void ForceReset()
+    {
+        var trans = GetComponent<TransparentObject>();
+        if (trans != null)
+            trans.End();
+    }
+
 	public void BecomeTransparent()
 	{
         for (int i = 0; i < meshes.Length; i++)

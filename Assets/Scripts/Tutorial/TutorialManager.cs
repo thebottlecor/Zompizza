@@ -259,6 +259,7 @@ public class TutorialManager : Singleton<TutorialManager>
         controlText.gameObject.SetActive(pad == null);
 
         UIManager.Instance.ToggleDrivingInfo(false);
+        Cursor.visible = false;
     }
 
     public void TutorialSkip(bool hide)
@@ -311,6 +312,8 @@ public class TutorialManager : Singleton<TutorialManager>
                 if (step == 1)
                 {
                     DialogueManager.Instance.SetDialogue(0);
+                    var pad = Gamepad.current;
+                    Cursor.visible = pad == null;
                     //Step2();
                 }
                 else if (step == 2)
@@ -385,6 +388,7 @@ public class TutorialManager : Singleton<TutorialManager>
         GM.Instance.rainObj.SetActive(true);
 
         UIManager.Instance.ToggleDrivingInfo(false);
+        Cursor.visible = false;
 
         step = 1;
 
