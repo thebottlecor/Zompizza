@@ -192,7 +192,7 @@ public class ZombiePooler : Singleton<ZombiePooler>
             if (day > 9)
             {
                 timerRange += Time.deltaTime;
-                if (timerRange >= 10f)
+                if (timerRange >= 11f)
                 {
                     timerRange = 0f;
                     SpawnRange(1);
@@ -201,7 +201,7 @@ public class ZombiePooler : Singleton<ZombiePooler>
             if (day > 14)
             {
                 timerHeavy += Time.deltaTime;
-                if (timerHeavy >= 10f)
+                if (timerHeavy >= 12f)
                 {
                     timerHeavy = 0f;
                     SpawnHeavy(1);
@@ -210,7 +210,7 @@ public class ZombiePooler : Singleton<ZombiePooler>
             if (day > 19)
             {
                 timerVomit += Time.deltaTime;
-                if (timerVomit >= 10f)
+                if (timerVomit >= 14f)
                 {
                     timerVomit = 0f;
                     SpawnVomit(1);
@@ -369,7 +369,7 @@ public class ZombiePooler : Singleton<ZombiePooler>
             var zom = zombiesPoolFast[i];
             if (!zom.gameObject.activeSelf)
             {
-                Vector3 node = GetRandomPos(10f);
+                Vector3 node = GetRandomPos(10f); // ´Þ¸®±â
 
                 float dist = (currentTarget.position - node).magnitude;
 
@@ -400,7 +400,7 @@ public class ZombiePooler : Singleton<ZombiePooler>
             var zom = zombiesPoolVomit[i];
             if (!zom.gameObject.activeSelf)
             {
-                Vector3 node = GetRandomPos(10f);
+                Vector3 node = GetRandomPos(30f); // È­¸é¸ÔÄ¥
 
                 float dist = (currentTarget.position - node).magnitude;
 
@@ -432,7 +432,7 @@ public class ZombiePooler : Singleton<ZombiePooler>
             var zom = zombiesPoolHeavy[i];
             if (!zom.gameObject.activeSelf)
             {
-                Vector3 node = GetRandomPos(5f);
+                Vector3 node = GetRandomPos(5f); // Çìºñ
 
                 float dist = (currentTarget.position - node).magnitude;
 
@@ -464,7 +464,7 @@ public class ZombiePooler : Singleton<ZombiePooler>
             var zom = zombiesPoolRange[i];
             if (!zom.gameObject.activeSelf)
             {
-                Vector3 node = GetRandomPos(25f);
+                Vector3 node = GetRandomPos(25f); // ¹Ù´Ú¼³Ä¡
 
                 float dist = (currentTarget.position - node).magnitude;
 

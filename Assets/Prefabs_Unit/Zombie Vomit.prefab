@@ -168,7 +168,7 @@ MonoBehaviour:
   movement:
     follower:
       rotationSpeed: 600
-      speed: 3.75
+      speed: 3.6
       maxRotationSpeed: 720
       maxOnSpotRotationSpeed: 1080
       slowdownTime: 0.5
