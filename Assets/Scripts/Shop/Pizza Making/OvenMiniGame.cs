@@ -67,6 +67,8 @@ public class OvenMiniGame : EventListener
     private bool specialCombo;
     private int normalCombo; // -1 해당 x  0부터 1종,2종,3종
 
+    public TextMeshProUGUI oneWarning;
+
     private TextManager tm => TextManager.Instance;
 
     private void UpdateComboTexts()
@@ -333,6 +335,8 @@ public class OvenMiniGame : EventListener
 
         resultText.text = $"<sprite=2> {resultGold}G";
 
+        oneWarning.gameObject.SetActive(false);
+
     }
 
     private void Start()
@@ -355,6 +359,8 @@ public class OvenMiniGame : EventListener
         gradeTexts[0].text = tm.GetCommons("Bad");
         gradeTexts[1].text = tm.GetCommons("Good");
         gradeTexts[2].text = tm.GetCommons("Perfect");
+
+        oneWarning.text = tm.GetCommons("OneWarning");
 
         for (int i = 0; i < comboInfos.Length; i++)
             comboInfos[i].SetActive(false);
@@ -418,6 +424,8 @@ public class OvenMiniGame : EventListener
 
         inputPanel.SetActive(true);
         oveningPanel.SetActive(false);
+
+        oneWarning.gameObject.SetActive(false); 
 
         timer = 0f;
         angle_progress = 90f;
@@ -497,6 +505,25 @@ public class OvenMiniGame : EventListener
 
     public void MakePizza()
     {
+        var hasIngredient = GM.Instance.ingredients;
+        int totalCount = 0;
+        foreach (var temp in hasIngredient)
+        {
+            totalCount += temp.Value;
+        }
+        int inputCount = 0;
+        foreach (var temp in inputs)
+        {
+            inputCount += temp.Value;
+        }
+        if (totalCount > 0 && inputCount == 0) // 재료가 있는데, 아무것도 넣지 않았을 때
+        {
+            AudioManager.Instance.PlaySFX(Sfx.deny);
+            oneWarning.gameObject.SetActive(true);
+            return;
+        }
+        oneWarning.gameObject.SetActive(false);
+
         HideHighlight();
         // 재료 소모
         foreach (var temp in inputs)

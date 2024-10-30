@@ -28,7 +28,11 @@ public abstract class ZombieBase : MonoBehaviour
     [ContextMenu("∫Œ»∞")]
     public virtual void StateReset()
     {
-        transform.eulerAngles = Vector3.zero;
+        //transform.eulerAngles = Vector3.zero;
+        transform.LookAt(ZombiePooler.Instance.currentTarget);
+        Vector3 angle = transform.eulerAngles;
+        angle = new Vector3(0f, angle.y, 0f);
+        transform.eulerAngles = angle;
 
         rigid.velocity = Vector3.zero;
         rigid.angularVelocity = Vector3.zero;

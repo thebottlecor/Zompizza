@@ -15,6 +15,7 @@ public class OrderManager : Singleton<OrderManager>
     public List<OrderGoal> orderGoals;
 
     public List<OrderInfo> orderList;
+    public List<OrderUIObject> orderUIList_Ordered;
 
     public PizzaDirection pizzaDirection;
     public OvenMiniGame ovenMiniGame;
@@ -138,6 +139,7 @@ public class OrderManager : Singleton<OrderManager>
         }
 
         yesterdayOrders = new List<int>();
+        orderUIList_Ordered = new List<OrderUIObject>();
 
         orderMiniUIPair = new SerializableDictionary<OrderInfo, OrderMiniUI>();
         orderList = new List<OrderInfo>();
@@ -529,69 +531,60 @@ public class OrderManager : Singleton<OrderManager>
         }
         yesterdayOrders.Clear();
 
+        orderUIList_Ordered = new List<OrderUIObject>();
         rand.Shuffle();
-        rand = rand.Take(minOrderCount).ToList();
+        var tempList = rand.Take(minOrderCount);
+        tempList = tempList.OrderByDescending(a => orderGoals[a].compassDir).ThenBy(a => orderGoals[a].Km);
+        rand = tempList.ToList();
 
-        //bool hasMinimumRes = GM.Instance.HasIngredient >= Constant.customer_max_ingredient;
+        for (int i = 0; i < rand.Count; i++)
+        {
+            orderUIList_Ordered.Add(UIManager.Instance.orderUIObjects[rand[i]]);
+            AddOrder_New(rand[i]);
+        }
+        for (int i = 0; i < orderUIList_Ordered.Count; i++)
+        {
+            orderUIList_Ordered[i].transform.SetAsLastSibling();
+        }
 
-        //float totalDist = 0;
-        int lastRand = rand.Count;
+        //int lastRand = rand.Count;
+        //int halfRand = lastRand / 2;
 
-        //for (int i = 0; i < rand.Count; i++)
+        //if (GM.Instance.day <= 2) // 3일차 까진, 자신이 가진 재료에서만 주문이 나옴
+        //    halfRand = lastRand;
+
+        //int hasRes = GM.Instance.HasIngredient;
+        //if (lastRand == 1 && hasRes >= 1)
+        //    halfRand = 1;
+
+        //if (halfRand > hasRes)
         //{
-        //    float dist = (orderGoals[rand[i]].transform.position - pizzeria.transform.position).magnitude;
-        //    float km = dist * Constant.distanceScale; // 게임상 거리 200 = 1km
-        //    totalDist += km;
-
-        //    if (totalDist >= Constant.delivery_order_km) // 최대 주행거리 이상일 경우 주문 그만 받음
-        //    {
-        //        lastRand = i + 1;
-        //        break;
-        //    }
-        //    if (i == 5)
-        //    {
-        //        lastRand = i + 1;
-        //        break;
-        //    }
+        //    halfRand = hasRes;
         //}
-        
-        int halfRand = lastRand / 2;
+        //lastRand -= halfRand;
 
-        if (GM.Instance.day <= 2) // 3일차 까진, 자신이 가진 재료에서만 주문이 나옴
-            halfRand = lastRand;
+        //SerializableDictionary<Ingredient, int> tempRes = new SerializableDictionary<Ingredient, int>();
+        //foreach (var temp in GM.Instance.ingredients)
+        //{
+        //    tempRes.Add(new SerializableDictionary<Ingredient, int>.Pair { Key = temp.Key, Value = temp.Value });
+        //}
 
-        int hasRes = GM.Instance.HasIngredient;
-        if (lastRand == 1 && hasRes >= 1) 
-            halfRand = 1;
-        
-        if (halfRand > hasRes)
-        {
-            halfRand = hasRes;
-        }
-        lastRand -= halfRand;
+        //int error = 0; // 플레이어가 가지고 있는 자원 내에서 생성되지 못한 주문
+        //for (int i = 0; i < halfRand; i++) // 플레이어가 가지고 있는 자원 내에서 생성될 주문들
+        //{
+        //    bool result = AddOrder_Adjust(rand[i], ref tempRes);
 
-        SerializableDictionary<Ingredient, int> tempRes = new SerializableDictionary<Ingredient, int>();
-        foreach (var temp in GM.Instance.ingredients)
-        {
-            tempRes.Add(new SerializableDictionary<Ingredient, int>.Pair { Key = temp.Key, Value = temp.Value });
-        }
-
-        int error = 0; // 플레이어가 가지고 있는 자원 내에서 생성되지 못한 주문
-        for (int i = 0; i < halfRand; i++) // 플레이어가 가지고 있는 자원 내에서 생성될 주문들
-        {
-            bool result = AddOrder_Adjust(rand[i], ref tempRes);
-
-            //Debug.Log($"----{i}--------------{tempRes.Count}");
-            //foreach (var temp in tempRes)
-            //{
-            //    Debug.Log($">{temp.Key} : {temp.Value}");
-            //}
-            if (!result) error++;
-        }
-        for (int i = 0; i < lastRand + error; i++) // 아무렇게나 생성될 주문들
-        {
-            AddOrder(rand[i + halfRand - error]);
-        }
+        //    //Debug.Log($"----{i}--------------{tempRes.Count}");
+        //    //foreach (var temp in tempRes)
+        //    //{
+        //    //    Debug.Log($">{temp.Key} : {temp.Value}");
+        //    //}
+        //    if (!result) error++;
+        //}
+        //for (int i = 0; i < lastRand + error; i++) // 아무렇게나 생성될 주문들
+        //{
+        //    AddOrder(rand[i + halfRand - error]);
+        //}
         //Debug.Log(error);
 
         UIManager.Instance.OrderUIUpdate();
@@ -614,6 +607,8 @@ public class OrderManager : Singleton<OrderManager>
         bonusIngredients = 0;
         UpdateBonusToday();
 
+        int oldMan = 4;
+
         // 튜토리얼 - (노인 4)
         //SerializableDictionary<Ingredient, int> randInfo_sub = new SerializableDictionary<Ingredient, int>();
         //ingredients_Tier1.Shuffle();
@@ -623,7 +618,9 @@ public class OrderManager : Singleton<OrderManager>
         //int ingredientTotal = 3;
         //AddOrder_Sub(4, randInfo_sub, ingredientTotal, 0.35f); // 0.35 넣어서 골드 보너스 (135%)
 
-        AddOrder_New(4, 1); // 미트러버 고정
+        orderUIList_Ordered = new List<OrderUIObject>();
+        AddOrder_New(oldMan, 1); // 미트러버 고정
+        orderUIList_Ordered.Add(UIManager.Instance.orderUIObjects[oldMan]);
 
         UIManager.Instance.OrderUIUpdate();
 
@@ -804,8 +801,7 @@ public class OrderManager : Singleton<OrderManager>
 
     private void AddOrder_Sub(int goal, SerializableDictionary<Ingredient, int> randInfo_sub, int ingredientTotal, float tier = 0)
     {
-        float dist = (orderGoals[goal].transform.position - pizzeria.position).magnitude;
-        float km = dist * Constant.distanceScale; // 게임상 거리 200 = 1km
+        float km = orderGoals[goal].Km;
 
         List<PizzaInfo> randPizzas = new List<PizzaInfo>();
 
@@ -862,8 +858,7 @@ public class OrderManager : Singleton<OrderManager>
 
     private void AddOrder_New(int goal, int comboSpecial = -1)
     {
-        float dist = (orderGoals[goal].transform.position - pizzeria.position).magnitude;
-        float km = dist * Constant.distanceScale; // 게임상 거리 200 = 1km
+        float km = orderGoals[goal].Km;
 
         int friendshipBonus = 0;
 
@@ -1083,6 +1078,7 @@ public class OrderManager : Singleton<OrderManager>
                 // 미완료 리뷰 남기기 -5점
                 GM.Instance.AddRating(Constant.delivery_Not_completed_rating, GM.GetRatingSource.notComplete);
                 UIManager.Instance.shopUI.AddReview(GM.Instance.day, orderList[i].customerIdx, orderList[i].goal, -10000f, Constant.delivery_Not_completed_rating); // 구분 기능 -1000 => -5는 점수
+                orderGoals[orderList[i].goal].Hide();
             }
 
             orderMiniUIPair[orderList[i]].Hide();
@@ -1123,7 +1119,7 @@ public class OrderManager : Singleton<OrderManager>
 
     public void FastTravelShow()
     {
-        if (GM.Instance.day <= 0) return;
+        if (GM.Instance.day <= 0 && TutorialManager.Instance.step <= 9) return;
 
         var tm = TextManager.Instance;
         var pad = Gamepad.current;

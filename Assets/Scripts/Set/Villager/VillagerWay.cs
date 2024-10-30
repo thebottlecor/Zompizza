@@ -45,6 +45,7 @@ public class VillagerWay : MonoBehaviour
         else if (recruited)
         {
             gameObject.SetActive(true);
+            loading = true;
             StartCoroutine(ResetPos());
         }
 
@@ -84,6 +85,8 @@ public class VillagerWay : MonoBehaviour
     public int idx;
     public int gender;
 
+    private bool loading = false;
+
     public void Init()
     {
         ai = GetComponent<IAstarAI>();
@@ -91,17 +94,18 @@ public class VillagerWay : MonoBehaviour
 
         target = GM.Instance.player.transform;
         minimapObj.SetActive(false);
-        RandomTarget();
+        RandomTarget(1f);
 
         gameObject.SetActive(false);
     }
 
-    public void RandomTarget()
+    public void RandomTarget(float maxWait)
     {
         targetWayPoint = UnityEngine.Random.Range(0, wayPoints.Length);
-        dealyToTargetTimer = UnityEngine.Random.Range(0.75f, 3.5f);
+        dealyToTargetTimer = UnityEngine.Random.Range(0.75f, maxWait);
         destinationSetter.target = wayPoints[targetWayPoint];
         ai.canMove = false;
+        animator.SetBool(TextManager.WalkId, false);
     }
 
     public int Income()
@@ -135,6 +139,7 @@ public class VillagerWay : MonoBehaviour
         if (ai == null) return;
         if (expelled) return;
         if (!recruited) return;
+        if (loading) return;
 
         if (GM.Instance.midNight)
         {
@@ -165,14 +170,13 @@ public class VillagerWay : MonoBehaviour
             return;
         }
         ai.canMove = true;
-
         walk = true;
 
         if (!ai.pathPending)
         {
             if (ai.remainingDistance <= (ai as FollowerEntity).stopDistance)
             {
-                RandomTarget();
+                RandomTarget(3.5f);
             }
         }
 
@@ -206,6 +210,8 @@ public class VillagerWay : MonoBehaviour
         transform.position = midnightFixedPos.position;
         transform.rotation = midnightFixedPos.rotation;
         firstQuat = midnightFixedPos.rotation;
+
+        loading = false;
     }
 
 
@@ -230,7 +236,7 @@ public class VillagerWay : MonoBehaviour
         if (relationExp >= 1f)
         {
             relations += 1;
-            AddCondition(-2);
+            if (condition > 2) condition = 2;
             relationExp = 0f;
         }
         else if (relationExp < 0f) relationExp = 0f;

@@ -167,7 +167,8 @@ public class UINaviHelper_Ingame : MonoBehaviour
             bool canCloseStore = shops.shopCloseBtn.gameObject.activeSelf && shops.shopCloseBtn.enabled;
             bool maxLoad = OrderManager.Instance.IsMaxDelivery;
 
-            var list = uiManager.orderUIObjects;
+            //var list = uiManager.orderUIObjects;
+            var list = OrderManager.Instance.orderUIList_Ordered;
             for (int i = 0; i < list.Count; i++)
             {
                 list[i].navi.ResetConnection();

@@ -260,6 +260,7 @@ public class GM : Singleton<GM>
 
     [Space(10f)]
     public AutosavingTMP savingTMP;
+    public GameObject hideUI_WhenEnding;
     public bool lastLaunch;
 
     public static EventHandler<bool> EndTimeEvent; // true일시 마감
@@ -1294,6 +1295,8 @@ public class GM : Singleton<GM>
                 UIManager.Instance.shopUI.HideForEnding();
                 UIManager.Instance.shopUI.playerStay = false;
                 UIManager.Instance.shopUI.shopUIOpenButton.SetActive(false);
+                Cursor.visible = false;
+                hideUI_WhenEnding.SetActive(false);
 
                 //player.cam.absoluteInitCameraPosition = new Vector3(0f, 1f, 182.5f);
                 player.cam.transform.position = new Vector3(-30.75f, 55.5f, 31.3f);
@@ -1322,6 +1325,8 @@ public class GM : Singleton<GM>
             {
                 darkCanvas.alpha = 1f;
                 darkCanvas.interactable = true;
+                var pad = Gamepad.current;
+                Cursor.visible = pad == null;
                 AudioManager.Instance.PlaySFX(Sfx.complete);
                 UIManager.Instance.shopUI.upgradeDirection.Show(1);
                 UINaviHelper.Instance.SetFirstSelect();
@@ -1341,6 +1346,8 @@ public class GM : Singleton<GM>
     {
         if (congratulationsObj.activeSelf && darkCanvas.alpha >= 0.95f)
         {
+            rocket.transform.DOKill();
+            rocketFlyingSound.DOKill();
             UIManager.Instance.ButtonSound();
             LoadingSceneManager.Instance.ToLobby();
         }

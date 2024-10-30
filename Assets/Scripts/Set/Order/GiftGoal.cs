@@ -27,9 +27,9 @@ public class GiftGoal : MonoBehaviour
         int rand = UnityEngine.Random.Range(0, 10);
 
         var uiLib = DataManager.Instance.uiLib;
-        if (rand <= 3)
+        if (rand <= 2)
         {
-            // 40% 아이템
+            // 30% 재료
             Ingredient ingredient = GM.Instance.RandomIngredientGet();
             ingredientSprite.sprite = uiLib.ingredients[ingredient];
             UIManager.Instance.UpdateIngredients();
@@ -38,13 +38,13 @@ public class GiftGoal : MonoBehaviour
         }
         else if (rand <= 7)
         {
-            // 40% 아이템
+            // 50% 아이템
             int somethingNeeds = VillagerManager.Instance.GetNeededThings();
             int itemIdx;
 
             if (somethingNeeds > -1)
             {
-                if (UnityEngine.Random.Range(0, 3) <= 1) // 66% 확률로 어떤 주민이 필요한 물품이 나옴
+                if (UnityEngine.Random.Range(0, 4) <= 2) // 75% 확률로 어떤 주민이 필요한 물품이 나옴
                 {
                     itemIdx = VillagerManager.Instance.ItemGet(somethingNeeds);
                 }

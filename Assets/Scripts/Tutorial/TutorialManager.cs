@@ -32,6 +32,7 @@ public class TutorialManager : Singleton<TutorialManager>
     public GameObject prologueObj;
     public Transform trainingCenterPos;
     public Transform prologuePos;
+    public Transform tutoReturnPos;
 
     public TextMeshProUGUI controlText;
     public GameObject controlPadObj;
@@ -152,6 +153,7 @@ public class TutorialManager : Singleton<TutorialManager>
         guideTexts[12].text = tm.GetCommons("Tutorial13"); // 주민 - 다음날로
 
         guideTexts[13].text = tm.GetCommons("Tutorial03_2"); // 피자 만들기
+        guideTexts[14].text = tm.GetCommons("Tutorial08_2"); // 점프대
     }
 
     private void DriftTextUpdate(bool pad)
@@ -421,20 +423,26 @@ public class TutorialManager : Singleton<TutorialManager>
             GM.Instance.TimeUpdate();
         }));
 
+        ReturnToShop();
+
+        UIManager.Instance.ToggleDrivingInfo(false);
+    }
+    private void ReturnToShop()
+    {
         TutorialSkip(true);
         training = true;
         step = 2;
-
-        UIManager.Instance.ToggleDrivingInfo(false);
+        var player = GM.Instance.player;
+        player.transform.position = tutoReturnPos.position;
+        player.transform.localEulerAngles = new Vector3(0f, 180f, 0f);
+        player.cam.ForceUpdate();
     }
 
     private void SkipToShop_method()
     {
         GM.Instance.timer = Constant.dayTime * 0.75f;
         GM.Instance.TimeUpdate();
-        TutorialSkip(true);
-        training = true;
-        step = 2;
+        ReturnToShop();
         Step2();
     }
 
@@ -497,6 +505,8 @@ public class TutorialManager : Singleton<TutorialManager>
                 break;
             case 11:
                 NextDay_After();
+                if (GM.Instance.installJumpEnable)
+                    guideObjects[14].SetActive(true);
                 break;
             case 13:
                 ThreeDay_After();
@@ -515,6 +525,7 @@ public class TutorialManager : Singleton<TutorialManager>
         {
             case 2:
                 NextDay_After();
+                guideObjects[14].SetActive(false);
                 break;
             case 3:
                 ThreeDay_After();
@@ -571,6 +582,13 @@ public class TutorialManager : Singleton<TutorialManager>
             returnGoal.SetActive(true);
             step = 8;
         }
+        else if (step == 12)
+            guideObjects[14].SetActive(false);
+    }
+    public void JumpRampInstalled()
+    {
+        if (step == 12)
+            guideObjects[14].SetActive(false);
     }
     private void Step9()
     {
@@ -602,14 +620,14 @@ public class TutorialManager : Singleton<TutorialManager>
     {
         if (step == 10)
         {
-            guideObjects[7].SetActive(true);
+            guideObjects[7].SetActive(true); // 평점
             indicators[5].SetActive(false);
             step = 11;
         }
     }
     private void NextDay_After()
     {
-        guideObjects[7].SetActive(false);
+        guideObjects[7].SetActive(false); // 평점
         step = 12;
     }
     public void ThreeDay() // 탐험, 이벤트 완료후

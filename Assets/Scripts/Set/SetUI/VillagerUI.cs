@@ -34,6 +34,7 @@ public class VillagerUI : EventListener
     public TextMeshProUGUI villagerName;
     public Image villagerProfile;
     public Image villagerTraitIcon;
+    public TextMeshProUGUI villagerTips;
 
     [Header("аж╠Б")]
     public GameObject needsParentObj;
@@ -69,6 +70,8 @@ public class VillagerUI : EventListener
         expelWarningDetail_Text.text = tm.GetCommons("ExpelWarning");
         exeplWarningBtn_Text[0].text = tm.GetCommons("Expel");
         exeplWarningBtn_Text[1].text = tm.GetCommons("Cancel");
+
+        villagerTips.text = tm.GetCommons("VillagerTips");
     }
     public void UpdateUI(int villagerIdx)
     {

@@ -306,6 +306,7 @@ public class UIManager : Singleton<UIManager>
             {
                 GM.Instance.EnableJumpRampInstall(false);
                 GM.Instance.InstallJumpRamp();
+                TutorialManager.Instance.JumpRampInstalled();
             }
         }
     }

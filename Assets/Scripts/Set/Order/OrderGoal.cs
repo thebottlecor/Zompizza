@@ -7,8 +7,23 @@ using MTAssets.EasyMinimapSystem;
 using UnityEngine.UI;
 using TMPro;
 
+public enum CompassDir
+{
+    Northwest,
+    Northeast,
+    North,
+    Southwest,
+    Southeast,
+    South,
+    West,
+    East,
+}
+
 public class OrderGoal : MonoBehaviour
 {
+
+    public CompassDir compassDir;
+    public float Km { get; private set; }
 
     public int index;
     public GameObject goalEffectObj;
@@ -40,6 +55,9 @@ public class OrderGoal : MonoBehaviour
 
     public void Init(int idx)
     {
+        float dist = (transform.position - OrderManager.Instance.pizzeria.position).magnitude;
+        Km = dist * Constant.distanceScale; // 게임상 거리 200 = 1km
+
         index = idx;
 
         if (DataManager.Instance != null)
@@ -80,6 +98,7 @@ public class OrderGoal : MonoBehaviour
         pos.y += 4f;
         var obj = Instantiate(source, pos, Quaternion.identity);
         Destroy(obj, 5f);
+
         Hide();
     }
 
