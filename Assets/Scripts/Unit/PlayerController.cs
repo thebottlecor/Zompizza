@@ -6,6 +6,8 @@ I wish you the best for your project. Good luck!
 
 P.S: If you need more cars, you can check my other vehicle assets on the Unity Asset Store, perhaps you could find
 something useful for your game. Best regards, Mena.
+
+>> Thanks Mena!
 */
 
 using System;
@@ -245,7 +247,7 @@ public class PlayerController : PlayerControllerData
                 if (dotProduct > 0)
                 {
                     // 시야각 안에있는지 여부
-                    if (theta <= 120f / 2f)
+                    if (theta <= 60f)
                     {
                         //Debug.Log("속도 방향과 충돌 방향 일치 -> 힘 전달 " + carRigidbody.velocity.magnitude);
 
@@ -257,7 +259,7 @@ public class PlayerController : PlayerControllerData
                             if (zombie.isHeavy && !zombie.dead)
                             {
                                 if (playerDot >= 0) // 전진일 경우만 헤비 좀비에게 튕겨남
-                                    crashDrag *= 200f * 2f * speedPercent;
+                                    crashDrag *= 400f * speedPercent;
                                 beforeCollisionSpeed = MaxSpeed; // 헤비와 부딪히면 무조건 충돌 판정
                                 isCollision = true;
                             }
@@ -786,7 +788,7 @@ public class PlayerController : PlayerControllerData
                 run = false;
             }
 
-            if (input.y > 0)
+            if (input.y > 0 || pressBreak)
             {
                 //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.back), 0.1f);
                 float speed = (pressBreak ? 1.5f * manSpeed : manSpeed) * Time.fixedDeltaTime;
