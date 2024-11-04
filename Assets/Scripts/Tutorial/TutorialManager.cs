@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using DG.Tweening;
+using UnityEngine.UI;
 
 public class TutorialManager : Singleton<TutorialManager>
 {
@@ -141,7 +142,7 @@ public class TutorialManager : Singleton<TutorialManager>
         guideTexts[1].text = tm.GetCommons("Tutorial02"); // 가게 진입
         guideTexts[2].text = tm.GetCommons("Tutorial03"); // 주문 받기
         guideTexts[3].text = tm.GetCommons("Tutorial04"); // 배달 시작
-        guideTexts[4].text = string.Format(tm.GetCommons("Tutorial05"), tm.GetKeyMaps(KeyMap.worldMap), sm.keyMappings[KeyMap.worldMap].GetName()); // 배달중
+        //guideTexts[4].text = string.Format(tm.GetCommons("Tutorial05"), tm.GetKeyMaps(KeyMap.worldMap), sm.keyMappings[KeyMap.worldMap].GetName()); // 배달중
         guideTexts[5].text = tm.GetCommons("Tutorial06"); // 복귀
         guideTexts[6].text = tm.GetCommons("Tutorial07"); // 탐험
         guideTexts[7].text = tm.GetCommons("Tutorial08"); // 평점
@@ -565,7 +566,27 @@ public class TutorialManager : Singleton<TutorialManager>
     {
         if (step == 6)
         {
+            var pad = Gamepad.current;
+            if (pad != null)
+            {
+                int padType = UINaviHelper.Instance.PadType;
+                switch (padType)
+                {
+                    case 0:
+                        guideTexts[4].text = string.Format(tm.GetCommons("Tutorial05"), tm.GetKeyMaps(KeyMap.worldMap), "<sprite=10>"); // 배달중 플스
+                        break;
+                    default:
+                        guideTexts[4].text = string.Format(tm.GetCommons("Tutorial05"), tm.GetKeyMaps(KeyMap.worldMap), "<sprite=11>"); // 배달중 엑박
+                        break;
+                }
+            }
+            else
+            {
+                guideTexts[4].text = string.Format(tm.GetCommons("Tutorial05"), tm.GetKeyMaps(KeyMap.worldMap), sm.keyMappings[KeyMap.worldMap].GetName()); // 배달중
+            }
             guideObjects[4].SetActive(true);
+            LayoutRebuilder.ForceRebuildLayoutImmediate(guideTexts[4].transform as RectTransform);
+            LayoutRebuilder.ForceRebuildLayoutImmediate(guideObjects[4].transform as RectTransform);
             indicators[2].SetActive(true);
             step = 7;
             shopGate.alwaysClosed = false;

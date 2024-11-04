@@ -656,6 +656,28 @@
                 },
                 {
                     "name": "",
+                    "id": "e072b6b7-23a1-4938-be20-ae274c014b38",
+                    "path": "<Gamepad>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PsPad",
+                    "action": "Escape",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c0e12d11-5f33-4a8a-9d44-5206a6975444",
+                    "path": "<Gamepad>/start",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "XboxPad",
+                    "action": "Escape",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "af621ffb-4114-4427-9a3a-a04086169327",
                     "path": "<Gamepad>/buttonWest",
                     "interactions": "",

@@ -1142,6 +1142,7 @@ public class OrderManager : Singleton<OrderManager>
         Vector3 pos = GM.Instance.pizzeriaPos.position;
         pos.y += 2.5f;
         player.transform.position = pos;
+        player.transform.localEulerAngles = new Vector3(0f, 180f, 0f);
         player.cam.ForceUpdate();
         player.ShakeOffAllZombies();
 

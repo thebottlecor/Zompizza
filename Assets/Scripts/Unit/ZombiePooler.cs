@@ -672,6 +672,7 @@ public class ZombiePooler : Singleton<ZombiePooler>
             if (!zom.gameObject.activeSelf)
             {
                 Vector3 node = GetRandomPos(rect.bounds);
+                node.y = 3f;
 
                 zom.transform.position = node;
 

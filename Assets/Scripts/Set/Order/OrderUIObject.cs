@@ -46,7 +46,7 @@ public class OrderUIObject : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
         StringBuilder st = new StringBuilder();
         st.AppendFormat("<color=#002a8e><size=110%>{0}</size></color>\n", tm.GetSurvivorName(info.customerIdx + Constant.npcNameOffset));
-        st.AppendFormat("{0} : {1:0.#}km ({2})\n", tm.GetCommons("Distance"), info.km, tm.GetCommons(OrderManager.Instance.orderGoals[info.goal].compassDir.ToString()));
+        st.AppendFormat("{0} : {1:0.#}km <size=90%>{2}</size>\n", tm.GetCommons("Distance"), info.km, tm.GetCommons(OrderManager.Instance.orderGoals[info.goal].compassDir.ToString()));
 
         //float averageRating = OrderManager.Instance.customersInfos[info.goal].AverageRating();
 
