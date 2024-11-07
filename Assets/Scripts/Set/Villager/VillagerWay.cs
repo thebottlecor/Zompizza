@@ -254,7 +254,7 @@ public class VillagerWay : MonoBehaviour
         {
             int rand = UnityEngine.Random.Range(0, 100);
 
-            if (rand < 33)
+            if (rand < 25)
             {
                 AddCondition(-1);
             }
@@ -316,7 +316,22 @@ public class VillagerWay : MonoBehaviour
         relations = 0;
         //condition = UnityEngine.Random.Range(1, 4);
         condition = 2;
-        currentNeeds = UnityEngine.Random.Range(0, VillagerManager.Instance.inventory.Length);
+
+        var inven = VillagerManager.Instance.inventory;
+        List<int> hasList = new List<int>();
+        for (int i = 0; i < inven.Length; i++)
+        {
+            if (inven[i] > 0)
+            {
+                hasList.Add(i);
+                break;
+            }
+        }
+        hasList.Shuffle();
+        if (hasList != null && hasList.Count > 0)
+            currentNeeds = hasList[0];
+        else
+            currentNeeds = UnityEngine.Random.Range(0, VillagerManager.Instance.inventory.Length);
 
         gameObject.SetActive(true);
         StartCoroutine(ResetPos());

@@ -126,6 +126,9 @@ public class ShopUI : EventListener
     public TextMeshProUGUI vehicleInfo_NameText;
     public TextMeshProUGUI vehicleInfo_DetailText;
 
+    public int[] vehicleShowcaseOrders;
+    public int ShowingVehicles => vehicleShowcaseOrders[currentViewVehicle];
+
     private TextManager tm => TextManager.Instance;
     private UIManager um => UIManager.Instance;
     private UILibrary uiLib => DataManager.Instance.uiLib;
@@ -1185,7 +1188,7 @@ public class ShopUI : EventListener
         UpdateOwnedVehicles();
 
         currentViewVehicle = GM.Instance.currentVehicle;
-        UpdateVehicleUI(currentViewVehicle);
+        UpdateVehicleUI(ShowingVehicles);
 
         UINaviHelper.Instance.SetFirstSelect();
     }
@@ -1217,7 +1220,7 @@ public class ShopUI : EventListener
     }
     private void ShowVehicleStat()
     {
-        int current = currentViewVehicle;
+        int current = ShowingVehicles;
 
         if (upgradePanel_Vehicle.activeSelf)
         {
@@ -1310,14 +1313,14 @@ public class ShopUI : EventListener
             case 0:
                 break;
             case 1:
-                GM.Instance.ChangeVehicle(currentViewVehicle);
+                GM.Instance.ChangeVehicle(ShowingVehicles);
                 break;
             case 2:
-                GM.Instance.BuyVehicle(currentViewVehicle);
+                GM.Instance.BuyVehicle(ShowingVehicles);
                 UpdateOwnedVehicles();
                 break;
         }
-        UpdateVehicleUI(currentViewVehicle);
+        UpdateVehicleUI(ShowingVehicles);
     }
     public void ChangeViewVehicle(bool right)
     {
@@ -1333,7 +1336,7 @@ public class ShopUI : EventListener
             if (currentViewVehicle < 0)
                 currentViewVehicle = vehicleShowcase.vehicleModels.Length - 1;
         }
-        UpdateVehicleUI(currentViewVehicle);
+        UpdateVehicleUI(ShowingVehicles);
     }
     #endregion
 }

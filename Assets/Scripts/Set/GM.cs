@@ -13,6 +13,7 @@ public class GM : Singleton<GM>
     [Serializable]
     public struct SaveData
     {
+        public bool hardMode;
         public int day;
         public float timer;
         public int gold;
@@ -31,11 +32,13 @@ public class GM : Singleton<GM>
         public float[] rivalRating;
 
         public List<SavePosition> installJumpPostions;
+        public bool manModeEntered;
     }
     public SaveData Save()
     {
         SaveData data = new()
         {
+            hardMode = this.hardMode,
             day = this.day,
             timer = this.timer,
 
@@ -55,12 +58,14 @@ public class GM : Singleton<GM>
             rivalRating = RivalManager.Instance.rating,
 
             installJumpPostions = this.installJumpPostions,
+            manModeEntered = TutorialManager.Instance.manModeEntered,
         };
 
         return data;
     }
     public void Load(SaveData data)
     {
+        hardMode = data.hardMode;
         day = data.day;
         SetTimer(data.timer);
 
@@ -98,10 +103,13 @@ public class GM : Singleton<GM>
         {
             Instantiate(installJumpObj, installJumpPostions[i], Quaternion.identity); // 세이브에서 불러옴
         }
+        TutorialManager.Instance.manModeEntered = data.manModeEntered;
     }
 
     public bool stop_control;
     public int slotNum;
+
+    public bool hardMode;
 
     public int day;
     public float timer;
@@ -234,6 +242,7 @@ public class GM : Singleton<GM>
     public ShopGate[] shopGates;
     public ZombieEnvSound zombieEnvSound;
     public GameObject runIndicator;
+    public GameObject runIndicatorPad;
     public TextMeshProUGUI runIndicatorTMP;
 
     [Header("블러드문")]
@@ -959,6 +968,20 @@ public class GM : Singleton<GM>
         VillagerManager.Instance.SetMidNight(true);
         timeText.text = dayStr[2];
 
+        var villagers = VillagerManager.Instance.villagers.ShuffleAndDeepCopy();
+        int index = -1;
+        for (int i = 0; i < villagers.Count; i++)
+        {
+            if (villagers[i].recruited && !villagers[i].expelled)
+            {
+                index = i;
+                break;
+            }
+        }
+        if (index >= 0)
+        {
+            player.transform.LookAt(villagers[index].transform);
+        }
         TutorialManager.Instance.ManMove_Enter();
 
         darkCanvas.blocksRaycasts = false;
@@ -1191,8 +1214,8 @@ public class GM : Singleton<GM>
 
         if (day > 25)
         {
-            ZombiePooler.Instance.spawnCount = 4;
-            ZombiePooler.Instance.spawnCountRandomAdd = 2;
+            ZombiePooler.Instance.spawnCount = 5;
+            ZombiePooler.Instance.spawnCountRandomAdd = 1;
         }
         else if (day > 19)
         {
@@ -1271,6 +1294,9 @@ public class GM : Singleton<GM>
             CongratulationTriggered = true;
 
             if (SteamHelper.Instance != null) SteamHelper.Instance.AchieveWin();
+            Lobby.Instance.clearedCount++;
+            if (hardMode) Lobby.Instance.clearedCount_Hard++;
+            SaveManager.Instance.SavePlayer();
 
             //darkCanvas.alpha = 1f;
             darkCanvas.alpha = 0f;
@@ -1569,14 +1595,26 @@ public class GM : Singleton<GM>
             var pad = Gamepad.current;
             if (pad == null)
             {
-                runIndicatorTMP.text = $"{tm.GetCommons("Run")} ({HotKey[KeyMap.carBreak].GetName()})";
+                StringBuilder st = new StringBuilder();
+                st.AppendFormat("{0} ({1})\n", tm.GetKeyMaps(KeyMap.carForward), HotKey[KeyMap.carForward].GetName());
+                st.AppendFormat("{0} ({1})\n", tm.GetKeyMaps(KeyMap.carLeft), HotKey[KeyMap.carLeft].GetName());
+                st.AppendFormat("{0} ({1})\n", tm.GetKeyMaps(KeyMap.carRight), HotKey[KeyMap.carRight].GetName());
+                st.AppendFormat("{0} ({1})", tm.GetCommons("Run"), HotKey[KeyMap.carBreak].GetName());
+                runIndicatorTMP.text = st.ToString();
+                runIndicatorPad.SetActive(false);
                 runIndicator.SetActive(true);
             }
             else
+            {
+                runIndicatorPad.SetActive(true);
                 runIndicator.SetActive(false);
+            }
         }
         else
+        {
+            runIndicatorPad.SetActive(false);
             runIndicator.SetActive(false);
+        }
     }
     #endregion
 
@@ -1617,8 +1655,8 @@ public class GM : Singleton<GM>
 
         // 가진 자원수가 60 넘을 때 (1티어), 60 넘을 때 (2티어), 50% 확률로 습격 발생, 습격 관련 업그레이드에 따라서 30%~0% 만큼 자원을 빼앗김
         bool raid = false;
-        if (ResearchManager.Instance.globalEffect.tier == 0 && hasRes > 60) raid = true;
-        else if (ResearchManager.Instance.globalEffect.tier >= 1 && hasRes > 60) raid = true;
+        //int tier = ResearchManager.Instance.globalEffect.tier;
+        if (hasRes >= 60) raid = true;
 
         if (day <= 2) raid = false; // 3일차까진 습격 없음
 
@@ -1628,16 +1666,18 @@ public class GM : Singleton<GM>
             switch (ResearchManager.Instance.globalEffect.raidDefense)
             {
                 case 1:
-                    percent = 0.2f;
+                    percent -= 0.1f;
                     break;
                 case 2:
-                    percent = 0.1f;
+                    percent -= 0.2f;
                     break;
                 case 3:
-                    percent = 0f;
+                    percent -= 0.4f;
                     break;
             }
             if (GameEventManager.Instance.hasCat) percent -= 0.05f;
+            if (hasRes >= 90) percent += 0.05f;
+            if (hasRes >= 120) percent += 0.05f;
             if (percent < 0) percent = 0f;
 
             int count = Mathf.CeilToInt(hasRes * percent);

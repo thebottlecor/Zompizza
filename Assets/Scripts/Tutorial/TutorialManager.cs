@@ -683,7 +683,7 @@ public class TutorialManager : Singleton<TutorialManager>
 
     public void ManMove_Enter()
     {
-        if (step == 100) return;
+        //if (step == 100) return;
 
         if (!manModeEntered)
         {
@@ -692,7 +692,7 @@ public class TutorialManager : Singleton<TutorialManager>
     }
     public void ManMove_TalkEnd()
     {
-        if (step == 100) return;
+        //if (step == 100) return;
 
         if (!manModeEntered)
         {

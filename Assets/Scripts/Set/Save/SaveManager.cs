@@ -86,7 +86,7 @@ public struct Save2DArray<T>
 public class SaveManager : Singleton<SaveManager>
 {
 
-    public readonly int version = 102;
+    public readonly int version = 103;
 
 
     public override void CallAfterAwake()
@@ -164,9 +164,12 @@ public class SaveManager : Singleton<SaveManager>
     {
         if (Lobby.Instance.SaveDataLoading) return;
 
-        PlayerData player = new PlayerData();
-
-        player.newGameCount = Lobby.Instance.newGameCount;
+        PlayerData player = new PlayerData
+        {
+            newGameCount = Lobby.Instance.newGameCount,
+            clearedCount = Lobby.Instance.clearedCount,
+            clearedCount_Hard = Lobby.Instance.clearedCount_Hard
+        };
 
         string jsonData = JsonHelper.ObjectToJson(player);
         JsonHelper.CreateJsonFile(Application.persistentDataPath, "player", "Config", jsonData, false);
@@ -535,6 +538,8 @@ public struct ReviewData
 public class PlayerData
 {
     public int newGameCount;
+    public int clearedCount;
+    public int clearedCount_Hard;
 }
 
 [Serializable]

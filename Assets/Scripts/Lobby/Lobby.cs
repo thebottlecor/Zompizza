@@ -18,6 +18,8 @@ public class Lobby : Singleton<Lobby>
 
     public bool SaveDataLoading { get; private set; }
 
+    public int clearedCount;
+    public int clearedCount_Hard;
     public int newGameCount;
 
     protected override void Awake()
@@ -46,6 +48,8 @@ public class Lobby : Singleton<Lobby>
         if (player != null)
         {
             newGameCount = player.newGameCount;
+            clearedCount = player.clearedCount;
+            clearedCount_Hard = player.clearedCount_Hard;
         }
     }
 

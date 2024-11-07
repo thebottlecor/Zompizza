@@ -150,9 +150,22 @@ public class OrderGoal : MonoBehaviour
 
         yield return CoroutineHelper.WaitForSeconds(0.76f);
 
-        for (int i = 0; i < rand; i++)
+        if (rand > 1) // 상자가 2개 이상일 경우, 1개는 무조건 주민 아이템으로 드랍
         {
-            giftGoals[i].Show();
+            giftGoals[0].villagerItem = true;
+            giftGoals[0].notVillagerItem = false;
+            giftGoals[0].Show();
+
+            for (int i = 1; i < rand; i++)
+            {
+                giftGoals[i].villagerItem = false;
+                giftGoals[i].notVillagerItem = true;
+                giftGoals[i].Show();
+            }
+        }
+        else
+        {
+            giftGoals[0].Show();
         }
     }
 

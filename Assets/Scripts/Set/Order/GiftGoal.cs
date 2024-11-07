@@ -14,62 +14,113 @@ public class GiftGoal : MonoBehaviour
     public SpriteRenderer ingredientSprite;
     public SpriteRenderer plusSprite;
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.CompareTag("Player") && boxObj.activeSelf)
-        {
-            ShowCheck();
-        }
-    }
+    public bool villagerItem;
+    public bool notVillagerItem;
+
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if (other.gameObject.CompareTag("Player") && boxObj.activeSelf)
+    //    {
+    //        ShowCheck();
+    //    }
+    //}
 
     private void ShowCheck()
     {
         int rand = UnityEngine.Random.Range(0, 10);
 
-        var uiLib = DataManager.Instance.uiLib;
-        if (rand <= 2)
+        if (notVillagerItem)
         {
-            // 30% 재료
-            Ingredient ingredient = GM.Instance.RandomIngredientGet();
-            ingredientSprite.sprite = uiLib.ingredients[ingredient];
-            UIManager.Instance.UpdateIngredients();
-            UIManager.Instance.OrderUIBtnUpdate();
-            plusSprite.sprite = uiLib.plus[0];
-        }
-        else if (rand <= 7)
-        {
-            // 50% 아이템
-            int somethingNeeds = VillagerManager.Instance.GetNeededThings();
-            int itemIdx;
-
-            if (somethingNeeds > -1)
+            if (rand <= 3)
             {
-                if (UnityEngine.Random.Range(0, 4) <= 2) // 75% 확률로 어떤 주민이 필요한 물품이 나옴
-                {
-                    itemIdx = VillagerManager.Instance.ItemGet(somethingNeeds);
-                }
-                else
-                {
-                    itemIdx = VillagerManager.Instance.RandomItemGet();
-                }
+                // 40% 재료
+                GetIngredients();
+            }
+            else if (rand <= 6)
+            {
+                // 30% 아이템
+                GetVillagerItems();
+            }
+            else
+            {
+                // 30% 골드
+                GetGold();
+            }
+        }
+        else if (villagerItem)
+        {
+            GetVillagerItems();
+        }
+        else
+        {
+            if (rand <= 2)
+            {
+                // 30% 재료
+                GetIngredients();
+            }
+            else if (rand <= 7)
+            {
+                // 50% 아이템
+                GetVillagerItems();
+            }
+            else
+            {
+                // 20% 골드
+                GetGold();
+            }
+        }
+
+        notVillagerItem = false;
+        villagerItem = false;
+
+        GetEffect();
+    }
+
+    private void GetGold()
+    {
+        int tier = ResearchManager.Instance.globalEffect.tier;
+        GM.Instance.AddGold(Constant.delivery_reward_ingredients * (tier + 1), GM.GetGoldSource.delivery);
+
+        var uiLib = DataManager.Instance.uiLib;
+        ingredientSprite.sprite = uiLib.gold;
+        plusSprite.sprite = uiLib.plus[2 + tier];
+    }
+
+    private void GetIngredients()
+    {
+        Ingredient ingredient = GM.Instance.RandomIngredientGet();
+
+        var uiLib = DataManager.Instance.uiLib;
+        ingredientSprite.sprite = uiLib.ingredients[ingredient];
+        UIManager.Instance.UpdateIngredients();
+        UIManager.Instance.OrderUIBtnUpdate();
+        plusSprite.sprite = uiLib.plus[0];
+    }
+
+    private void GetVillagerItems()
+    {
+        int somethingNeeds = VillagerManager.Instance.GetNeededThings();
+        int itemIdx;
+
+        if (somethingNeeds > -1)
+        {
+            if (UnityEngine.Random.Range(0, 5) <= 3) // 80% 확률로 어떤 주민이 필요한 물품이 나옴
+            {
+                itemIdx = VillagerManager.Instance.ItemGet(somethingNeeds);
             }
             else
             {
                 itemIdx = VillagerManager.Instance.RandomItemGet();
             }
-
-            ingredientSprite.sprite = uiLib.villagerItems[itemIdx];
-            plusSprite.sprite = uiLib.plus[0];
         }
         else
         {
-            int tier = ResearchManager.Instance.globalEffect.tier; // 33% 티어 * 200 돈 
-            GM.Instance.AddGold(Constant.delivery_reward_ingredients * (tier + 1), GM.GetGoldSource.delivery);
-            ingredientSprite.sprite = uiLib.gold;
-            plusSprite.sprite = uiLib.plus[2 + tier];
+            itemIdx = VillagerManager.Instance.RandomItemGet();
         }
 
-        FindEffect();
+        var uiLib = DataManager.Instance.uiLib;
+        ingredientSprite.sprite = uiLib.villagerItems[itemIdx];
+        plusSprite.sprite = uiLib.plus[0];
     }
 
     public void Hide()
@@ -90,7 +141,7 @@ public class GiftGoal : MonoBehaviour
         //    ShowCheck();
     }
 
-    private void FindEffect()
+    private void GetEffect()
     {
         AudioManager.Instance.PlaySFX(Sfx.itemGet);
         var source = DataManager.Instance.effectLib.appleBlastEffect;
