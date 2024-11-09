@@ -261,6 +261,7 @@ MonoBehaviour:
   focusRect: {fileID: 0}
   padKey2: 1
   padUI2: {fileID: 6556885517053606957}
+  ing: {fileID: 0}
 --- !u!95 &8515499102125140921
 Animator:
   serializedVersion: 5
@@ -511,6 +512,7 @@ GameObject:
   - component: {fileID: 7514165383182434364}
   - component: {fileID: 3146439316959994862}
   - component: {fileID: 3983285840164220458}
+  - component: {fileID: 1818674701684116703}
   m_Layer: 5
   m_Name: Button_Plus
   m_TagString: Untagged
@@ -654,6 +656,51 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1818674701684116703
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4946714679165203588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 4431051452855375813}
+          m_TargetAssemblyTypeName: IngredientUI, Assembly-CSharp
+          m_MethodName: MousePressed
+          m_Mode: 4
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 1
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 3
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 4431051452855375813}
+          m_TargetAssemblyTypeName: IngredientUI, Assembly-CSharp
+          m_MethodName: MouseReleased
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &5145062385560114101
 GameObject:
   m_ObjectHideFlags: 0
@@ -801,6 +848,7 @@ GameObject:
   - component: {fileID: 4362564265052893096}
   - component: {fileID: 3220922048048024289}
   - component: {fileID: 8127030068963513431}
+  - component: {fileID: 4675016017812580977}
   m_Layer: 5
   m_Name: Button_Minus
   m_TagString: Untagged
@@ -944,6 +992,51 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &4675016017812580977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5332432043494845594}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 2
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 4431051452855375813}
+          m_TargetAssemblyTypeName: IngredientUI, Assembly-CSharp
+          m_MethodName: MousePressed
+          m_Mode: 4
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: -1
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - eventID: 3
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 4431051452855375813}
+          m_TargetAssemblyTypeName: IngredientUI, Assembly-CSharp
+          m_MethodName: MouseReleased
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &5701404428411878982
 GameObject:
   m_ObjectHideFlags: 0

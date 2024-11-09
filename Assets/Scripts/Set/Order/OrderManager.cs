@@ -295,7 +295,11 @@ public class OrderManager : Singleton<OrderManager>
 
         if (currentAcceptance == 0)
         {
-            FastTravelShow(); // 주문 없을 때
+            bool someSos = VillagerManager.Instance.CreateSOS(false);
+            if (!someSos)
+            {
+                FastTravelShow(); // 주문 없고, 구조 신호도 없을 떄
+            }
         }
 
         UIManager.Instance.OrderUIBtnUpdate();
@@ -981,9 +985,8 @@ public class OrderManager : Singleton<OrderManager>
         //}
         //UIManager.Instance.UpdateIngredients();
 
-        UIManager.Instance.shopUI.OrderLoadCountTextUpdate();
-
-        UIManager.Instance.OrderUIBtnUpdate();
+        //UIManager.Instance.shopUI.OrderLoadCountTextUpdate();
+        //UIManager.Instance.OrderUIBtnUpdate();
 
         StatManager.Instance.acceptedOrders++;
 

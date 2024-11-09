@@ -56,9 +56,9 @@ public class ShopUI : EventListener
     [Header("SOS")]
     public GameObject sosWarningObj;
     public RectTransform sosWarningRect;
-    public TextMeshProUGUI sosWarningBtn_Text;
-    public TextMeshProUGUI sosWarning_Text;
-    public TextMeshProUGUI sosWarningDetail_Text;
+    public TextMeshProUGUI[] sosWarningBtn_Text;
+    public TextMeshProUGUI[] sosWarning_Text;
+    public TextMeshProUGUI[] sosWarningDetail_Text;
 
     [Header("야간 모드 - 탐험")]
     public GameObject orderPanel;
@@ -67,6 +67,7 @@ public class ShopUI : EventListener
     private bool endTime;
 
     public TextMeshProUGUI orderText;
+    public TextMeshProUGUI moreOrderGuideText;
     public TextMeshProUGUI ingredientText;
     public TextMeshProUGUI[] ingredientsSub;
 
@@ -106,6 +107,7 @@ public class ShopUI : EventListener
     public UpgradeDirection upgradeDirection;
     public SerializableDictionary<ResearchInfo, RectTransform> upgradePositions;
     public List<MaskedUIHelper> maskedUIHelders;
+    public GameObject researchableNotification;
 
     [Header("차량탭")]
     public GameObject upgradePanel_Vehicle;
@@ -177,9 +179,12 @@ public class ShopUI : EventListener
         shopCloseWarningBtn_Text[0].text = tm.GetCommons("ShopClose");
         shopCloseWarningBtn_Text[1].text = tm.GetCommons("Cancel");
 
-        sosWarning_Text.text = tm.GetCommons("Sos");
-        sosWarningDetail_Text.text = tm.GetCommons("Sos2");
-        sosWarningBtn_Text.text = tm.GetCommons("Sos3");
+        sosWarning_Text[0].text = tm.GetCommons("Sos");
+        sosWarning_Text[1].text = tm.GetCommons("Sos");
+        sosWarningDetail_Text[0].text = tm.GetCommons("Sos2");
+        sosWarningDetail_Text[1].text = tm.GetCommons("Sos2");
+        sosWarningBtn_Text[0].text = tm.GetCommons("Sos3");
+        sosWarningBtn_Text[1].text = tm.GetCommons("Sos3");
 
         loanText.text = tm.GetCommons("Loan");
 
@@ -212,6 +217,8 @@ public class ShopUI : EventListener
         /// <see cref="UIManager.OnESC"/>
         /// <ser cref="UINaviHelper.SetFirstSelect"/>
         /// </summary>
+         
+        ovenDir = 0f;
 
         if (um.changingResolution) return;
         if (GM.Instance.loading) return;
@@ -236,12 +243,17 @@ public class ShopUI : EventListener
         if (um.isDirecting)
         {
             if (makingPanel.activeSelf && OrderManager.Instance.ovenMiniGame.inputPanel.activeSelf)
-            {
+            {      
                 var navi = UINaviHelper.Instance.current;
                 if (navi != null && navi is UINaviTwin)
                 {
                     if (e.performed)
                     {
+                        if (value > 0)
+                            ovenDir = 1f;
+                        else if (value < 0)
+                            ovenDir = -1f;
+
                         var ing = (navi as UINaviTwin).ing;
                         if (value > 0)
                             ing.Input();
@@ -279,6 +291,7 @@ public class ShopUI : EventListener
         ShowOrder();
         um.VehicleUnlock();
         um.TierUp();
+        ToggleResearchNotification(true);
         playerStay = true;
     }
 
@@ -417,7 +430,50 @@ public class ShopUI : EventListener
             }
             shopUIOpenButton.SetActive(buttonOn);
         }
+
+        if (um.isDirecting)
+        {
+            if (makingPanel.activeSelf && OrderManager.Instance.ovenMiniGame.inputPanel.activeSelf)
+            {
+                var navi = UINaviHelper.Instance.current;
+                if (navi != null && navi is UINaviTwin)
+                {
+                    if (ovenDir == 0f)
+                    {
+                        sliderGauge = 0f;
+                        //sliderGauge2 = 0f;
+                    }
+                    else
+                    {
+                        sliderGauge += Time.unscaledDeltaTime;
+                        //sliderGauge2 += Time.unscaledDeltaTime * 4f;
+                    }
+
+                    //float value = ovenDir;
+                    //if (sliderGauge2 > 1f)
+                    //{
+                    //    value *= (int)sliderGauge2 + 1f;
+                    //}
+                    //int value2 = Mathf.Min(2, (int)Mathf.Abs(value));
+
+                    if (sliderGauge > 0.15f)
+                    {
+                        sliderGauge = 0f;
+
+                        var ing = (navi as UINaviTwin).ing;
+                        if (ovenDir > 0)
+                            ing.Input();
+                        else if (ovenDir < 0)
+                            ing.Cancel();
+                    }
+                }
+            }
+        }
     }
+
+    private float ovenDir;
+    private float sliderGauge;
+    //private float sliderGauge2;
 
     public void ShowOrder()
     {
@@ -427,8 +483,8 @@ public class ShopUI : EventListener
     public void ShowOrder(int customerIdx)
     {
         activeSubPanel = 0;
-        SnapTo(um.orderUIObjects[customerIdx].transform as RectTransform);
         OpenUI();
+        SnapTo(um.orderUIObjects[customerIdx].transform as RectTransform);
     }
 
     public void OpenUI()
@@ -656,6 +712,7 @@ public class ShopUI : EventListener
                 case 2:
                     //SelectUpgrade(-1);
                     SelectUpgrade(GetMainResearch().idx);
+                    ToggleResearchNotification(false);
                     break;
                 case 3:
                     ResetVehicleUI();
@@ -835,10 +892,16 @@ public class ShopUI : EventListener
         int max = OrderManager.Instance.MaxAccpetance;
 
         if (current >= max)
+        {
             orderText.text = tm.GetCommons("Order") + $" <color=#A91111><size=75%>({current}/{max})</color>";
+            moreOrderGuideText.gameObject.SetActive(false);
+        }
         else
+        {
             orderText.text = tm.GetCommons("Order") + $" <size=75%>({current}/{max})";
-
+            moreOrderGuideText.text = string.Format(tm.GetCommons("MoreGuide"), max - current);
+            moreOrderGuideText.gameObject.SetActive(true);
+        }
     }
 
     #region 상점 닫기
@@ -901,7 +964,6 @@ public class ShopUI : EventListener
 
         UINaviHelper.Instance.SetFirstSelect();
     }
-
     #endregion
 
     #region 업그레이드
@@ -947,21 +1009,6 @@ public class ShopUI : EventListener
             }
             temp.Value.UpdateUI();
         }
-    }
-    public ResearchUI GetMainResearch()
-    {
-        ResearchUI first = null;
-        var infos = DataManager.Instance.researches;
-        foreach (var ui in researchUIs)
-        {
-            if (infos[ui.Key].main && infos[ui.Key].group == ResearchInfo.ResearchGroup.upgrade && ui.Value.gameObject.activeSelf)
-            {
-                first = ui.Value;
-                break;
-            }    
-        }
-        //SelectUpgrade(first.idx);
-        return first;
     }
     public ResearchUI GetMainResearch_Vehicle()
     {
@@ -1179,6 +1226,49 @@ public class ShopUI : EventListener
     public void UpdateResearchUI(int idx)
     {
         researchUIs[idx].UpdateUI();
+    }
+
+    public void ToggleResearchNotification(bool on)
+    {
+        if (on)
+        {
+            if (SomethingResearchable())
+            {
+                researchableNotification.SetActive(true);
+            }
+            else
+                researchableNotification.SetActive(false);
+        }
+        else
+            researchableNotification.SetActive(false);
+    }
+
+    public bool SomethingResearchable()
+    {
+        var infos = DataManager.Instance.researches;
+        foreach (var ui in researchUIs)
+        {
+            if (ui.Value.gameObject.activeSelf && ResearchManager.Instance.CheckCanUnlocked(infos[ui.Key].idx))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    public ResearchUI GetMainResearch()
+    {
+        ResearchUI first = null;
+        var infos = DataManager.Instance.researches;
+        foreach (var ui in researchUIs)
+        {
+            if (infos[ui.Key].main && infos[ui.Key].group == ResearchInfo.ResearchGroup.upgrade && ui.Value.gameObject.activeSelf)
+            {
+                first = ui.Value;
+                break;
+            }
+        }
+        //SelectUpgrade(first.idx);
+        return first;
     }
     #endregion
 

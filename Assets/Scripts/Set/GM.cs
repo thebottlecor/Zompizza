@@ -1880,6 +1880,7 @@ public class GM : Singleton<GM>
             AudioManager.Instance.PlaySFX(Sfx.complete);
             UIManager.Instance.vehicleMilestone++;
             unlockedVehicles[idx] = true;
+            ChangeVehicle(idx);
             return true;
         }
         else

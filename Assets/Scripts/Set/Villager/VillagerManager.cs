@@ -298,7 +298,7 @@ public class VillagerManager : Singleton<VillagerManager>
             return -1;
     }
 
-    public void CreateSOS()
+    public bool CreateSOS(bool fromShop = true)
     {
         // 복귀 후, 아무 주문이 없을 떄
         // 강제로 가게를 닫았을 떄
@@ -318,10 +318,18 @@ public class VillagerManager : Singleton<VillagerManager>
                 if (who >= 0)
                 {
                     sosShowed = true;
-                    UIManager.Instance.shopUI.ShowSosWarning(true);
+
                     AudioManager.Instance.PlaySFX_Villager(1, villagers[who].gender);
 
-                    float dist = (helpGoals[who].transform.position - OrderManager.Instance.pizzeria.position).magnitude;
+                    if (fromShop)
+                        UIManager.Instance.shopUI.ShowSosWarning(true);
+                    else
+                    {
+                        UIManager.Instance.utilUI.ShowSosWarning(true);
+                    }
+                    //float dist = (helpGoals[who].transform.position - OrderManager.Instance.pizzeria.position).magnitude;
+                    float dist = (helpGoals[who].transform.position - GM.Instance.player.transform.position).magnitude;
+
                     float km = dist * Constant.distanceScale; // 게임상 거리 200 = 1km
                     sosTimer = 0f;
                     sosTimeLimit = Constant.sos_timeLimit_1km * km + Constant.delivery_timeLimit_base * 1.5f;
@@ -329,9 +337,12 @@ public class VillagerManager : Singleton<VillagerManager>
                     currentSosIdx = who;
                     miniUI.Init(who);
                     helpGoals[who].Show();
+
+                    return true;
                 }
             }
         }
+        return false;
     }
 
     public void Rescue(int idx)

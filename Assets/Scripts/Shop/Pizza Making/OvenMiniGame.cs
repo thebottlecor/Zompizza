@@ -92,6 +92,15 @@ public class OvenMiniGame : EventListener
             comboTexts[7].text = string.Empty;
         }
     }
+
+    public void CalcOnlyCount()
+    {
+        IngredientCount = 0;
+        foreach (var temp in inputs)
+        {
+            IngredientCount += temp.Value;
+        }
+    }
     public void CalcValues()
     {
         IngredientCount = 0;
@@ -401,8 +410,13 @@ public class OvenMiniGame : EventListener
     {
         UIManager.Instance.shopUI.orderPanel.SetActive(true);
         UIManager.Instance.shopUI.makingPanel.SetActive(false);
+
+        UIManager.Instance.shopUI.OrderLoadCountTextUpdate();
+        UIManager.Instance.OrderUIBtnUpdate();
+
         if (TutorialManager.Instance.step >= 9)
             UIManager.Instance.shopUI.shopCloseBtn.enabled = true;
+
         UINaviHelper.Instance.SetFirstSelect();
     }
 

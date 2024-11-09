@@ -403,6 +403,11 @@ public class UIManager : Singleton<UIManager>
             shopUI.ShowShopCloseWarning(false);
             return;
         }
+        if (utilUI.sosWarningObj_maps.activeSelf)
+        {
+            utilUI.ShowSosWarning(false);
+            return;
+        }
         if (shopUI.sosWarningObj.activeSelf)
         {
             shopUI.ShowSosWarning(false);
@@ -479,6 +484,14 @@ public class UIManager : Singleton<UIManager>
         }
 
         if (SteamHelper.Instance != null && totalVehicle >= array.Length - 1) SteamHelper.Instance.AchieveVehicle();
+        if (newVehicle < 0) return;
+
+        int currentVehicle = GM.Instance.currentVehicle;
+        var vehicleInfos = GM.Instance.controllerData;
+        if (vehicleInfos[newVehicle].maxLoad >= vehicleInfos[currentVehicle].maxLoad)
+        {
+            GM.Instance.ChangeVehicle(newVehicle);
+        }
 
         if (vehicleMilestone < totalVehicle)
         {

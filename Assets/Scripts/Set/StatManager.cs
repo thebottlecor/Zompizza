@@ -133,13 +133,15 @@ public class StatManager : Singleton<StatManager>
     {
         int idx = 0;
         statTexts[idx++].text = $"{tm.GetCommons("TotalAcceptedOrders")} : {acceptedOrders}";
-        float completePercent = (acceptedOrders > 0 ? ((float)completedOrders / acceptedOrders) * 100f : 0f);
-        statTexts[idx++].text = $"{tm.GetCommons("TotalCompletedOrders")} : {completedOrders} ({completePercent:F0}%)";
+        //float completePercent = (acceptedOrders > 0 ? ((float)completedOrders / acceptedOrders) * 100f : 0f);
+        // statTexts[idx++].text = $"{tm.GetCommons("TotalCompletedOrders")} : {completedOrders} ({completePercent:F0}%)";
+        statTexts[idx++].text = string.Empty;
 
         statTexts[idx++].text = $"<sprite=2> {tm.GetCommons("TotalSales")} : {totalEarn}G";
         statTexts[idx++].text = $"<sprite=2> {tm.GetCommons("HighestSalesDay")} : {string.Format(tm.GetCommons("Day"), highestEarningDay + 1)}, {highestEarningValue}G";
 
-        statTexts[idx++].text = $"<sprite=1> {tm.GetCommons("TotalRating")} : {totalRating:0.#}";
+        //statTexts[idx++].text = $"<sprite=1> {tm.GetCommons("TotalRating")} : {totalRating:0.#}";
+        statTexts[idx++].text = string.Empty;
         statTexts[idx++].text = $"<sprite=1> {tm.GetCommons("HighestRatingDay")} : {string.Format(tm.GetCommons("Day"), highestRatingDay + 1)}, {highestRatingValue:0.#}";
 
         statTexts[idx++].text = $"<sprite=3> {tm.GetCommons("AverageDeliveryOnTime")} : {averageDeliveryTime * 100f:F0}%";

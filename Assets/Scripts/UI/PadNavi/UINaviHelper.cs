@@ -181,7 +181,14 @@ public class UINaviHelper : Singleton<UINaviHelper>
                     switch (util.activeSubPanel)
                     {
                         case 0:
-                            current = ingame.Utils_Map_Reconnection();
+                            if (util.sosWarningObj_maps.activeSelf)
+                            {
+                                current = ingame.sosWarningMaps_first;
+                            }
+                            else
+                            {
+                                current = ingame.Utils_Map_Reconnection();
+                            }
                             break;
                         case 1:
                             current = title_option_first;
@@ -713,8 +720,10 @@ public class UINaviHelper : Singleton<UINaviHelper>
 
     Vector3 scrollMoveDir;
     Vector2 virtualCursorDir;
+    float scrollGauge;
     float sliderDir;
     float sliderGauge;
+    float sliderGauge2;
 
     public void UpdateTexts()
     {
@@ -731,20 +740,45 @@ public class UINaviHelper : Singleton<UINaviHelper>
             if (current.self is Scrollbar)
             {
                 Scrollbar scrollbar = current.self as Scrollbar;
+                float speed = (current as UINavi_Scorllbar).AdjustSpeed;
 
-                scrollbar.value += 2f * Time.unscaledDeltaTime * scrollMoveDir.z;
+                if (scrollMoveDir.z == 0f) scrollGauge = 0f;
+                else scrollGauge += Time.unscaledDeltaTime;
+
+                if (scrollGauge > 1f)
+                {
+                    speed *= Mathf.Pow(2, (int)scrollGauge);
+                }
+                speed = Mathf.Min(20f, speed);
+
+                scrollbar.value += speed * Time.unscaledDeltaTime * scrollMoveDir.z;
             }
             else if (current.self is Slider)
             {
                 Slider slider = current.self as Slider;
 
-                if (sliderDir == 0f) sliderGauge = 0f;
-                else sliderGauge += Time.unscaledDeltaTime;
+                if (sliderDir == 0f)
+                {
+                    sliderGauge = 0f;
+                    sliderGauge2 = 0f;
+                }
+                else
+                {
+                    sliderGauge += Time.unscaledDeltaTime;
+                    sliderGauge2 += Time.unscaledDeltaTime;
+                }
+
+                float value = sliderDir;
+                if (sliderGauge2 > 1f)
+                {
+                    value *= Mathf.Pow(2, (int)sliderGauge2);
+                }
+                value = Mathf.Min(5f, value);
 
                 if (sliderGauge > 0.075f)
                 {
                     sliderGauge = 0f;
-                    slider.value += sliderDir;
+                    slider.value += value;
                 }
             }
         }

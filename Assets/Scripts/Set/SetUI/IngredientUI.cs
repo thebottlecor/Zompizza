@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class IngredientUI : MonoBehaviour
 {
@@ -17,6 +18,10 @@ public class IngredientUI : MonoBehaviour
     public Ingredient info;
 
     private bool valid;
+
+    private bool pressed;
+    private bool added;
+    private float pressTime;
 
     public void Init(Ingredient info)
     {
@@ -96,6 +101,8 @@ public class IngredientUI : MonoBehaviour
             {
                 buttons[i].SetActive(false);
             }
+
+            MouseReleased();
         }
     }
 
@@ -125,6 +132,78 @@ public class IngredientUI : MonoBehaviour
         oven.UpdateValueTexts();
         UpdateStack_ComboMode();
     }
+    public void Input(int count)
+    {
+        if (!OrderManager.Instance.comboMode) return;
+        if (!valid)
+        {
+            AudioManager.Instance.PlaySFX(Sfx.deny);
+            return;
+        }
+
+        var oven = OrderManager.Instance.ovenMiniGame;
+        var inputs = oven.inputs;
+        if (!inputs.ContainsKey(info))
+            inputs.Add(new SerializableDictionary<Ingredient, int>.Pair(info, 0));
+
+        int trueCount = 0;
+        int failCount = 0;
+
+        while (count > 0)
+        {
+            if (GM.Instance.ingredients[info] > inputs[info] && !oven.IsMaxInput)
+            {
+                if (inputs.ContainsKey(info))
+                    inputs[info] += 1;
+                trueCount++;
+            }
+            else
+                failCount++;
+            oven.CalcOnlyCount();
+            count--;
+        }
+
+        if (trueCount > 0)
+        {
+            AudioManager.Instance.PlaySFX(Sfx.buttons);
+        }
+        if (failCount > 0)
+        {
+            AudioManager.Instance.PlaySFX(Sfx.deny);
+        }
+
+        oven.UpdateValueTexts();
+        UpdateStack_ComboMode();
+    }
+    public void Cancel(int count)
+    {
+        if (!OrderManager.Instance.comboMode) return;
+        if (!valid)
+        {
+            AudioManager.Instance.PlaySFX(Sfx.deny);
+            return;
+        }
+
+        var inputs = OrderManager.Instance.ovenMiniGame.inputs;
+        if (!inputs.ContainsKey(info))
+        {
+            inputs.Add(new SerializableDictionary<Ingredient, int>.Pair(info, 0));
+        }
+
+        while (count > 0)
+        {
+            if (inputs.ContainsKey(info))
+            {
+                if (inputs[info] > 0)
+                    inputs[info] -= 1;
+            }
+            count--;
+        }
+        AudioManager.Instance.PlaySFX(Sfx.inputFieldEnd);
+
+        OrderManager.Instance.ovenMiniGame.UpdateValueTexts();
+        UpdateStack_ComboMode();
+    }
     public void Cancel()
     {
         if (!OrderManager.Instance.comboMode) return;
@@ -148,4 +227,37 @@ public class IngredientUI : MonoBehaviour
         UpdateStack_ComboMode();
     }
 
+    public void MousePressed(float value)
+    {
+        pressed = true;
+        added = value > 0;
+        pressTime = 0f;
+    }
+    public void MouseReleased()
+    {
+        pressTime = 0f;
+        pressed = false;
+    }
+
+    public void Update()
+    {
+        if (!OrderManager.Instance.comboMode) return;
+
+        if (pressed)
+        {
+            pressTime += Time.unscaledDeltaTime;
+            if (pressTime > 0.125f)
+            {
+                pressTime = 0f;
+                if (added)
+                {
+                    Input();
+                }
+                else
+                {
+                    Cancel();
+                }
+            }
+        }
+    }
 }

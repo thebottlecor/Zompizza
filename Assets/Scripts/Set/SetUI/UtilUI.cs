@@ -16,6 +16,9 @@ public class UtilUI : EventListener
     public CanvasGroup canvasGroup;
     public RectTransform rectTransform;
 
+    public GameObject sosWarningObj_maps;
+    public RectTransform sosWarningRect_maps;
+
     [HideInInspector] public bool loading;
     [HideInInspector] public bool opened;
 
@@ -50,6 +53,7 @@ public class UtilUI : EventListener
     private void OnTabMove(object sender, InputAction.CallbackContext e)
     {
         if (!opened || loading) return;
+        if (sosWarningObj_maps.activeSelf) return;
 
         float value = e.ReadValue<float>();
 
@@ -74,6 +78,30 @@ public class UtilUI : EventListener
         }
     }
 
+    public void ShowSosWarning(bool on)
+    {
+        sosWarningObj_maps.SetActive(on);
+
+        if (!on)
+        {
+            //HideUI();
+            int currentIdx = VillagerManager.Instance.currentSosIdx;
+            if (currentIdx >= 0)
+            {
+                var currentSos = VillagerManager.Instance.helpGoals[currentIdx];
+                WorldMapManager.Instance.worldMapCamera.transform.position = currentSos.transform.position;
+            }
+        }
+        else
+        {
+            OpenWorldMap();
+            sosWarningRect_maps.localScale = 0.01f * Vector3.one;
+            sosWarningRect_maps.DOScale(new Vector3(1f, 1f, 1f), 0.5f).SetEase(Ease.OutElastic).SetUpdate(true);
+        }
+
+        UINaviHelper.Instance.SetFirstSelect();
+    }
+
     public void OpenWorldMap()
     {
         // 버그 해결법 - 세팅창과 월드맵을 번갈아 연다
@@ -86,7 +114,6 @@ public class UtilUI : EventListener
         yield return CoroutineHelper.WaitForSecondsRealtime(fadeTime);
         SelectSubPanel(1);
         SelectSubPanel(0);
-
     }
 
     public void OpenSettings()
