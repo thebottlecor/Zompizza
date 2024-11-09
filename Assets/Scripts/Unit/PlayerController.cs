@@ -771,7 +771,8 @@ public class PlayerController : PlayerControllerData
             {
                 //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.left), 0.1f);
 
-                transform.Rotate(manRotSpeed * Time.fixedDeltaTime * new Vector3(0, 1, 0));
+                float manRotSpeed2 = 180f;
+                transform.Rotate(manRotSpeed2 * Time.deltaTime * new Vector3(0, 1, 0));
 
                 //transform.Translate(manSpeed * Time.fixedDeltaTime * Vector3.forward);
                 walk = true;
@@ -781,7 +782,8 @@ public class PlayerController : PlayerControllerData
             {
                 //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.right), 0.1f);
 
-                transform.Rotate(manRotSpeed * Time.fixedDeltaTime * new Vector3(0, -1, 0));
+                float manRotSpeed2 = 180f;
+                transform.Rotate(manRotSpeed2 * Time.deltaTime * new Vector3(0, -1, 0));
 
                 //transform.Translate(manSpeed * Time.fixedDeltaTime * Vector3.forward);
                 walk = true;
@@ -791,7 +793,8 @@ public class PlayerController : PlayerControllerData
             if (input.y > 0 || pressBreak)
             {
                 //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.back), 0.1f);
-                float speed = (pressBreak ? 1.5f * manSpeed : manSpeed) * Time.fixedDeltaTime;
+                float manSpeed2 = 6f;
+                float speed = (pressBreak ? 1.5f * manSpeed2 : manSpeed2) * Time.deltaTime;
                 transform.Translate(speed * Vector3.forward);
                 walk = true;
                 run = pressBreak;
