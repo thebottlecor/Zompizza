@@ -13,8 +13,11 @@ public class UILibrary : ScriptableObject
     public Color button_HighlightColor;
     public Color button_subColor;
     public Color button_inactiveColor;
+    public Color button_greenColor;
 
     public Color button_Upgrade;
+    public Color button_Upgrade_needRes;
+    public Color button_Upgrade_needTier;
 
     public Sprite shopButton;
     public Sprite shopButtonHighlighted;

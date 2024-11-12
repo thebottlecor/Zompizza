@@ -378,6 +378,12 @@ public class ResearchManager : Singleton<ResearchManager>
         return CanResearced(idx) && CheckRating(idx) && PayResearchPoint(idx, false);
         // CanResearced(idx) && CheckRating(idx) && PayCost(idx, false) && PayResearchPoint(idx, false);
     }
+    public bool CheckCanUnlocked_ByTier(int idx)
+    {
+        var info = ResearchInfo[idx];
+        if (info.tier > 0 && !Researched(DataManager.Instance.researchLib.pizzaRecipeUpgrades[info.tier - 1].idx)) return false;
+        return true;
+    }
 
     public bool ResearchUnlock(int idx)
     {
@@ -405,13 +411,16 @@ public class ResearchManager : Singleton<ResearchManager>
     }
     public void AutoResearch_For_Tier() // 티어 자동 업그레이드
     {
+        bool upgraded = false;
         for (int i = 0; i < tierResearches.Length; i++)
         {
             if (ResearchUnlock(tierResearches[i]))
             {
-                UIManager.Instance.shopUI.UpdateResearchUI(tierResearches[i]);
+                upgraded = true;
             }
         }
+        if (upgraded)
+            UIManager.Instance.shopUI.UpdateResearchUI();
     }
 
     public void ResearchUnlock_Force(int idx)

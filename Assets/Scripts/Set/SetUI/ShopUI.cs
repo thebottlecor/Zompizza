@@ -710,8 +710,11 @@ public class ShopUI : EventListener
                     reviewScroll.verticalNormalizedPosition = 1f;
                     break;
                 case 2:
-                    //SelectUpgrade(-1);
-                    SelectUpgrade(GetMainResearch().idx);
+                    var pad = Gamepad.current;
+                    if (pad == null)
+                        SelectUpgrade(-1);
+                    else
+                        SelectUpgrade(GetMainResearch().idx);
                     ToggleResearchNotification(false);
                     break;
                 case 3:
@@ -1036,22 +1039,22 @@ public class ShopUI : EventListener
         if (prev != -1)
             researchUIs[prev].UpdateUI();
 
-        var info = DataManager.Instance.researches[idx];
+        //var info = DataManager.Instance.researches[idx];
 
         TextMeshProUGUI nameText = upgradeDetailNameText;
         TextMeshProUGUI detailText = upgradeDetailText;
         Button unlockBtn = upgrade_UnlockBtn;
 
-        bool vehicle = info.group == ResearchInfo.ResearchGroup.vehicle;
-        if (vehicle)
-        {
-            nameText = upgradeDetailNameText_Vehicle;
-            detailText = upgradeDetailText_Vehicle;
-            unlockBtn = upgrade_UnlockBtn_Vehicle;
+        //bool vehicle = info.group == ResearchInfo.ResearchGroup.vehicle;
+        //if (vehicle)
+        //{
+        //    nameText = upgradeDetailNameText_Vehicle;
+        //    detailText = upgradeDetailText_Vehicle;
+        //    unlockBtn = upgrade_UnlockBtn_Vehicle;
 
-            upgradePanel_Vehicle.SetActive(true);
-            infoPanel_Vehicle.SetActive(false);
-        }
+        //    upgradePanel_Vehicle.SetActive(true);
+        //    infoPanel_Vehicle.SetActive(false);
+        //}
 
         if (idx == -1)
         {
@@ -1060,6 +1063,8 @@ public class ShopUI : EventListener
             unlockBtn.gameObject.SetActive(false);
             return;
         }
+
+        var info = DataManager.Instance.researches[idx];
 
         researchUIs[currentSelectUpgrade].UpdateUI();
 
@@ -1078,7 +1083,8 @@ public class ShopUI : EventListener
         nameText.text = st2.ToString();
 
         StringBuilder st = new StringBuilder();
-        if (!info.hidden && !vehicle)
+        //if (!info.hidden && !vehicle)
+        if (!info.hidden)
         {
             switch (info.tier)
             {
@@ -1196,9 +1202,9 @@ public class ShopUI : EventListener
         }
         //upgrade_UnlockBtn.enabled = canResearch;
 
-        if (vehicle)
-            UINaviHelper.Instance.ingame.Shop_Vehicle_Reconnection();
-        else
+        //if (vehicle)
+        //    UINaviHelper.Instance.ingame.Shop_Vehicle_Reconnection();
+        //else
             UINaviHelper.Instance.SetFirstSelect();
     }
 
@@ -1214,7 +1220,7 @@ public class ShopUI : EventListener
             AudioManager.Instance.PlaySFX(Sfx.complete);
             upgradeDirection.Show();
 
-            researchUIs[currentSelectUpgrade].UpdateUI();
+            UIManager.Instance.shopUI.UpdateResearchUI();
 
             SelectUpgrade(currentSelectUpgrade);
         }
@@ -1223,9 +1229,12 @@ public class ShopUI : EventListener
             AudioManager.Instance.PlaySFX(Sfx.deny);
         }
     }
-    public void UpdateResearchUI(int idx)
+    public void UpdateResearchUI()
     {
-        researchUIs[idx].UpdateUI();
+        foreach (var temp in researchUIs)
+        {
+            temp.Value.UpdateUI();
+        }
     }
 
     public void ToggleResearchNotification(bool on)
@@ -1238,6 +1247,8 @@ public class ShopUI : EventListener
             }
             else
                 researchableNotification.SetActive(false);
+
+            UIManager.Instance.shopUI.UpdateResearchUI();
         }
         else
             researchableNotification.SetActive(false);
@@ -1277,7 +1288,13 @@ public class ShopUI : EventListener
     {
         UpdateOwnedVehicles();
 
-        currentViewVehicle = GM.Instance.currentVehicle;
+        int temp = 0;
+        for (int i = 0; i < vehicleShowcaseOrders.Length; i++)
+        {
+            if (vehicleShowcaseOrders[i] == GM.Instance.currentVehicle)
+                temp = i;
+        }
+        currentViewVehicle = temp;
         UpdateVehicleUI(ShowingVehicles);
 
         UINaviHelper.Instance.SetFirstSelect();
@@ -1325,9 +1342,9 @@ public class ShopUI : EventListener
         canBuyVehicleHighlight.SetActive(false);
         if (GM.Instance.currentVehicle == current)
         {
-            selectVehicleBtnText.text = tm.GetCommons("SelectVehicles");
+            selectVehicleBtnText.text = tm.GetCommons("SelectVehicles2");
             //selectVehicleBtn.image.color = new Color(0.1753262f, 0.6415094f, 0.09985761f);
-            selectVehicleBtn.image.color = uiLib.button_HighlightColor;
+            selectVehicleBtn.image.color = uiLib.button_greenColor;
             selectVehicleBtnMode = 0;
         }
         else

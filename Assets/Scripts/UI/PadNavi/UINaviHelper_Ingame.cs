@@ -60,6 +60,7 @@ public class UINaviHelper_Ingame : MonoBehaviour
         }
         virtualCursorTMP[0].text = TextManager.Instance.GetCommons("VirtualCursor0");
         virtualCursorTMP[1].text = TextManager.Instance.GetCommons("VirtualCursor2");
+        virtualCursorTMP[6].text = TextManager.Instance.GetCommons("VirtualCursor7");
 
         virtualCursorTMP[2].text = TextManager.Instance.GetCommons("VirtualCursor5");
         virtualCursorTMP[3].text = TextManager.Instance.GetCommons("VirtualCursor1");

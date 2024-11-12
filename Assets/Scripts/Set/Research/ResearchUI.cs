@@ -68,17 +68,40 @@ public class ResearchUI : MonoBehaviour
         if (value > 0f)
             gameObject.SetActive(true);
 
+        bool tierOkay = ResearchManager.Instance.CheckCanUnlocked_ByTier(idx);
+        bool researchable = false;
+        if (tierOkay)
+            researchable = ResearchManager.Instance.CheckCanUnlocked(idx);
+
         if (UIManager.Instance.shopUI.currentSelectUpgrade == idx)
         {
             (transform as RectTransform).sizeDelta = 1.25f * initSizeDelta;
             romanNumText.rectTransform.localScale = initRomanScale * 1.25f;
-            bg.color = DataManager.Instance.uiLib.button_HighlightColor;
+
+            if (researchable)
+                bg.color = DataManager.Instance.uiLib.button_HighlightColor;
+            else
+            {
+                if (!tierOkay)
+                    bg.color = DataManager.Instance.uiLib.button_Upgrade_needTier;
+                else
+                    bg.color = DataManager.Instance.uiLib.button_Upgrade_needRes;
+            }
         }
         else
         {
             (transform as RectTransform).sizeDelta = initSizeDelta;
             romanNumText.rectTransform.localScale = initRomanScale;
-            bg.color = DataManager.Instance.uiLib.button_Upgrade;
+
+            if (researchable)
+                bg.color = DataManager.Instance.uiLib.button_Upgrade;
+            else
+            {
+                if (!tierOkay)
+                    bg.color = DataManager.Instance.uiLib.button_Upgrade_needTier;
+                else
+                    bg.color = DataManager.Instance.uiLib.button_Upgrade_needRes;
+            }
         }
     }
 
