@@ -6484,6 +6484,16 @@ MonoBehaviour:
         clip: {fileID: 8300000, guid: 90b5a2e0ed36d34418bb02ed9ed12f9f, type: 3}
         volumeOffset: 0
         maxPlay: 0
+    - Key: 39
+      Value:
+        clip: {fileID: 8300000, guid: 14c5dbfbf401b684cacb5f22e705e87b, type: 3}
+        volumeOffset: 0
+        maxPlay: 0
+    - Key: 40
+      Value:
+        clip: {fileID: 8300000, guid: d46b2bde22815734aba7c6fd510d8a89, type: 3}
+        volumeOffset: 0
+        maxPlay: 0
   audios_villagers:
   - clip: {fileID: 8300000, guid: a2d7d06a520a3284ab684e63d5a1810f, type: 3}
     volumeOffset: 0

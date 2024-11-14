@@ -342,7 +342,10 @@ public class OvenMiniGame : EventListener
 
         mileValueText.text = $"+{mileGold}G";
 
-        resultText.text = $"<sprite=2> {resultGold}G";
+        if (resultGold > 0)
+            resultText.text = $"<sprite=2> +{resultGold}G";
+        else
+            resultText.text = $"<sprite=2> {resultGold}G";
 
         oneWarning.gameObject.SetActive(false);
 
@@ -552,6 +555,7 @@ public class OvenMiniGame : EventListener
         UIManager.Instance.OffAll_Ingredient_Highlight();
         UINaviHelper.Instance.SetFirstSelect();
 
+        AudioManager.Instance.PlaySFX(Sfx.ovenstart);
         OrderManager.Instance.pizzaDirection.RestartSequence(orderInfo, inputs);
 
         TutorialManager.Instance.PizzaOvening();

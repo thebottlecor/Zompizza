@@ -474,6 +474,7 @@ public class TutorialManager : Singleton<TutorialManager>
             indicators[0].SetActive(false);
             guideObjects[13].SetActive(true); // ÇÇÀÚ ¸¸µé±â
             indicators[6].SetActive(true); // ¿Àºì
+            indicators[7].SetActive(true); // ¿Àºì2
             step = 4;
         }
     }
@@ -481,6 +482,7 @@ public class TutorialManager : Singleton<TutorialManager>
     {
         guideObjects[13].SetActive(false); // ÇÇÀÚ ¸¸µé±â
         indicators[6].SetActive(false); // ¿Àºì
+        indicators[7].SetActive(false); // ¿Àºì2
     }
     private void OnPizzaComplete(object sender, OrderInfo e)
     {

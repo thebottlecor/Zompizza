@@ -234,4 +234,6 @@ public enum Sfx
     zombieInstall,
     zombieVomit,
     boom,
+    cookstart,
+    ovenstart,
 }

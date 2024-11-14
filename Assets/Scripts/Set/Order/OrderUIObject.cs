@@ -205,9 +205,15 @@ public class OrderUIObject : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         OrderManager.Instance.OrderGoalUpdate();
 
         AudioManager.Instance.PlaySFX(Sfx.okay);
+        CoroutineHelper.StartCoroutine(DelayAcceptSound());
 
         UIManager.Instance.shopUI.SnapTo(null);
         UINaviHelper.Instance.SetFirstSelect();
+    }
+    private IEnumerator DelayAcceptSound()
+    {
+        yield return CoroutineHelper.WaitForSecondsRealtime(0.05f);
+        AudioManager.Instance.PlaySFX(Sfx.cookstart);
     }
     public bool OrderAcceptable()
     {
