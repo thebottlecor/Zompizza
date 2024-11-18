@@ -86,7 +86,7 @@ public struct Save2DArray<T>
 public class SaveManager : Singleton<SaveManager>
 {
 
-    public readonly int version = 108;
+    public readonly int version = 110;
 
 
     public override void CallAfterAwake()
@@ -219,6 +219,7 @@ public class SaveManager : Singleton<SaveManager>
     public TextMeshProUGUI saveCloseTMP;
     public TextMeshProUGUI saveDeleteTMP;
     public TextMeshProUGUI tutorialTMP;
+    public TextMeshProUGUI hardModeTMP;
 
     public float fadeTime = 1f;
     public CanvasGroup saveCanvasGroup;
@@ -227,6 +228,10 @@ public class SaveManager : Singleton<SaveManager>
     public GameObject[] saveUIs; // 0 슬롯 - 1 세이브 파일들
     public GameObject saveDeleteBtn;
     public Toggle tutorialToggle;
+    public Toggle hardModeToggle;
+
+    public GameObject hardModeTooltipObj;
+    public TextMeshProUGUI hardModeTooltipTMP;
 
     public ScrollingUIEffect scrollEffect;
 
@@ -251,10 +256,12 @@ public class SaveManager : Singleton<SaveManager>
         saveCloseTMP.text = tm.GetCommons("Close");
         saveDeleteTMP.text = tm.GetCommons("Delete");
         tutorialTMP.text = tm.GetCommons("Tutorial");
+        hardModeTMP.text = tm.GetCommons("HardMode");
         saveDeleteWarningBtn_Text[0].text = tm.GetCommons("Delete");
         saveDeleteWarningBtn_Text[1].text = tm.GetCommons("Cancel");
         saveDeleteWarning_Text.text = tm.GetCommons("Warning");
         saveDeleteWarningDetail_Text.text = tm.GetCommons("DeleteConfirm");
+        hardModeTooltipTMP.text = tm.GetCommons("HardModeTooltip");
     }
 
     private void UpdateCurrentSaveSlotUIs()
@@ -295,6 +302,8 @@ public class SaveManager : Singleton<SaveManager>
             UpdateCurrentSaveSlotUIs();
             saveUIs[0].SetActive(false);
             tutorialToggle.gameObject.SetActive(false);
+            hardModeToggle.gameObject.SetActive(false);
+            hardModeTooltipObj.SetActive(false);
             saveUIs[1].SetActive(true);
             saveDeleteBtn.SetActive(true);
             UINaviHelper.Instance.SetFirstSelect();
@@ -312,6 +321,7 @@ public class SaveManager : Singleton<SaveManager>
                 slotNum = slot.slotNum,
                 saveName = string.Empty,
                 tutorial = tutorialToggle.isOn,
+                hardMode = hardModeToggle.isOn,
             };
             LoadingSceneManager.Instance.LobbyStart(gameStartInfo, settingLib.sceneName);
         }
@@ -323,6 +333,8 @@ public class SaveManager : Singleton<SaveManager>
 
         saveUIs[0].SetActive(true);
         tutorialToggle.gameObject.SetActive(true);
+        hardModeToggle.gameObject.SetActive(true);
+        hardModeTooltipObj.SetActive(false);
         saveUIs[1].SetActive(false);
         saveDeleteBtn.SetActive(false);
 

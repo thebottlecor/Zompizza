@@ -7,8 +7,8 @@ public class SteamHelper : Singleton<SteamHelper>
 
 	//protected Callback<GameOverlayActivated_t> m_GameOverlayActivated;
 
-	private readonly string[] APIName = new string[12] { "a00", "a01", "a02", "a03", "a04", "a05", "a06", "a07", "a08", "a09", "a10", "a11" };
-	private bool[] isClear = new bool[12];
+	private readonly string[] APIName = new string[14] { "a00", "a01", "a02", "a03", "a04", "a05", "a06", "a07", "a08", "a09", "a10", "a11", "a12", "a13" };
+	private bool[] isClear = new bool[14];
 
 	private bool requestSuccess;
 	public bool SteamOverlayIsOn { get; private set; }
@@ -33,14 +33,29 @@ public class SteamHelper : Singleton<SteamHelper>
 		}
 	}
 
-	public void AchieveWin()
+    public void AchieveRating(float rating)
+    {
+        if (SteamManager.Initialized)
+        {
+            CheckSteamRequest();
+            if (requestSuccess)
+            {
+                if (rating >= 5f)
+                    CheckAchieve(13);
+            }
+        }
+    }
+    public void AchieveWin(bool hard)
     {
 		if (SteamManager.Initialized)
         {
             CheckSteamRequest();
             if (requestSuccess)
             {
-                CheckAchieve(0);
+                if (!hard)
+                    CheckAchieve(0);
+                else
+                    CheckAchieve(12);
             }
         }
 	}

@@ -64,6 +64,8 @@ public class VillagerWay : MonoBehaviour
     public int condition;
     public int currentNeeds;
 
+    public int chatIdx;
+
 
     public GameObject interactionObj;
     public GameObject minimapObj;
@@ -111,6 +113,8 @@ public class VillagerWay : MonoBehaviour
     public int Income()
     {
         int value = Constant.villagerIncome;
+        if (GM.Instance.hardMode)
+            value += 50;
         value *= (relations + 1);
 
         float modify = 1f;

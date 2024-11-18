@@ -83,7 +83,7 @@ public class OrderGoal : MonoBehaviour
         goalEffectObj.SetActive(on);
     }
 
-    public void SuccessEffect(int gold, float rating)
+    public void SuccessEffect(int gold)
     {
         textCanvas.gameObject.SetActive(true);
         goldText.text = $"+{gold}G";

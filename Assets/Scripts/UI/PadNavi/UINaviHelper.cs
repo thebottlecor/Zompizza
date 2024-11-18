@@ -35,6 +35,7 @@ public class UINaviHelper : Singleton<UINaviHelper>
     public UINavi title_save_delete_sure_first;
     public UINavi title_save_delete;
     public UINavi title_save_tutorial;
+    public UINavi title_save_hardMode;
     public UINavi title_save_close;
 
     [Header("인게임 - 옵션 저장값")]
@@ -115,13 +116,17 @@ public class UINaviHelper : Singleton<UINaviHelper>
                     current = title_saveSlots[0];
                     title_save_close.ResetConnection();
                     title_save_tutorial.ResetConnection();
+                    title_save_hardMode.ResetConnection();
                     title_save_delete.ResetConnection();
                     title_save_close.left = title_save_tutorial;
-                    title_save_close.right = title_save_tutorial;
+                    title_save_close.right = title_save_hardMode;
+                    title_save_tutorial.left = title_save_hardMode;
                     title_save_tutorial.right = title_save_close;
-                    title_save_tutorial.left = title_save_close;
+                    title_save_hardMode.left = title_save_close;
+                    title_save_hardMode.right = title_save_tutorial;
                     title_save_close.up = title_saveSlots[0];
                     title_save_tutorial.up = title_saveSlots[0];
+                    title_save_hardMode.up = title_saveSlots[0];
                 }
                 else if (save.saveUIs[1].activeSelf)
                 {
@@ -136,6 +141,7 @@ public class UINaviHelper : Singleton<UINaviHelper>
                     title_save_close.ResetConnection();
                     title_save_delete.ResetConnection();
                     title_save_tutorial.ResetConnection();
+                    title_save_hardMode.ResetConnection();
                     title_save_close.left = title_save_delete;
                     title_save_close.right = title_save_delete;
                     title_save_delete.right = title_save_close;
@@ -341,7 +347,12 @@ public class UINaviHelper : Singleton<UINaviHelper>
                     {
                         if (gm.darkCanvas.blocksRaycasts)
                         {
-                            if (gm.congratulationsObj.activeSelf)
+                            if (gm.gameOverObj.activeSelf)
+                            {
+                                current = ingame.gameOver_first;
+                                uiMoveCheckFunc = Check_Dialouge;
+                            }
+                            else if (gm.congratulationsObj.activeSelf)
                             {
                                 current = ingame.gameWin_first;
                                 uiMoveCheckFunc = Check_Dialouge;

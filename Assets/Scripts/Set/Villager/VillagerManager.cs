@@ -229,6 +229,29 @@ public class VillagerManager : Singleton<VillagerManager>
         {
             villagers[i].MidNight(on);
         }
+        if (on)
+        {
+            int chatMax = 24;
+            HashSet<int> chatHashset = new HashSet<int>();
+            for (int i = 0; i < villagers.Length; i++)
+            {
+                if (villagers[i].recruited && !villagers[i].expelled)
+                {
+                    int chatIdx;
+                    while (true)
+                    {
+                        int randChat = UnityEngine.Random.Range(0, chatMax);
+                        if (!chatHashset.Contains(randChat))
+                        {
+                            chatHashset.Add(randChat);
+                            chatIdx = randChat;
+                            break;
+                        }
+                    }
+                    villagers[i].chatIdx = chatIdx;
+                }
+            }
+        }
     }
 
     public void GetIncome()

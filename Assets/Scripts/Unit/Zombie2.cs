@@ -243,12 +243,16 @@ public class Zombie2 : ZombieBase
         //if (!GM.Instance.EndTime && OrderManager.Instance.IsDelivering())
         //    GM.Instance.AddGold(1, GM.GetGoldSource.zombie);
 
-        CoroutineHelper.StartCoroutine(Reanimate());
+        if (!GM.Instance.loading_hardMode)
+            CoroutineHelper.StartCoroutine(Reanimate());
     }
 
     private IEnumerator Reanimate()
     {
         yield return CoroutineHelper.WaitForSeconds(2.5f);
+        if (GM.Instance == null || GM.Instance.loading_hardMode)
+            yield break;
+
         if (gameObject.activeSelf && dead)
         {
             while (transform.position.y >= Constant.spawnPosY)

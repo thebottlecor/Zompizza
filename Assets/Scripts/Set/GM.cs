@@ -198,6 +198,7 @@ public class GM : Singleton<GM>
     public TextMeshProUGUI gameOverBtn_ToLobby_Text;
     public Image nukeEffect;
     public bool loading;
+    public bool loading_hardMode;
 
     [Header("평점 획득 축하")] // 원래는 빚 갚음
     public GameObject congratulationsObj;
@@ -272,6 +273,13 @@ public class GM : Singleton<GM>
     public GameObject hideUI_WhenEnding;
     public bool lastLaunch;
 
+    [Header("하드모드")]
+    public GameObject hpBarObj;
+    public float hp;
+    public Slider hpSilder;
+    public Image hpSliderbarImg;
+    public TextMeshProUGUI hpPercentTMP;
+
     public static EventHandler<bool> EndTimeEvent; // true일시 마감
     private SerializableDictionary<KeyMap, KeyMapping> HotKey => SettingManager.Instance.keyMappings;
     private TextManager tm => TextManager.Instance;
@@ -279,11 +287,15 @@ public class GM : Singleton<GM>
     protected override void AddListeners()
     {
         OrderManager.OrderRemovedEvent += OnOrderRemoved;
+        PlayerController.DamageEvent += OnPlayerDamaged;
+        Zombie2.DamageEvent += OnPlayerDamaged;
     }
 
     protected override void RemoveListeners()
     {
         OrderManager.OrderRemovedEvent -= OnOrderRemoved;
+        PlayerController.DamageEvent -= OnPlayerDamaged;
+        Zombie2.DamageEvent -= OnPlayerDamaged;
     }
 
     private void OnOrderRemoved(object sender, int e)
@@ -332,7 +344,7 @@ public class GM : Singleton<GM>
             startInfo = LoadingSceneManager.Instance.StartInfo;
             slotNum = startInfo.slotNum;
         }
-
+        hardMode = startInfo.hardMode;
 
         bool saveLoad = false;
         if (SaveManager.Instance != null && !startInfo.saveName.Equals(string.Empty) && (startInfo.slotNum >= 1 && startInfo.slotNum <= 3))
@@ -412,6 +424,9 @@ public class GM : Singleton<GM>
         OrderManager.Instance.AfterInit();
         ResearchManager.Instance.ToggleAllHiddenRecipe(true);
         footBallPos = footBall.position;
+
+        HardMode_HpReset();
+        hpBarObj.SetActive(hardMode);
     }
 
     public void TextUpdate()
@@ -637,6 +652,7 @@ public class GM : Singleton<GM>
 
     public void NextDay()
     {
+        HardMode_HpReset();
         EnableJumpRampInstall(false);
         rainObj.SetActive(false);
         zombieEnvSound.Mute(true);
@@ -1212,30 +1228,61 @@ public class GM : Singleton<GM>
             EnableJumpRampInstall(false);
         }
 
-        if (day > 25)
+        if (hardMode)
         {
-            ZombiePooler.Instance.spawnCount = 5;
-            ZombiePooler.Instance.spawnCountRandomAdd = 1;
+            if (day > 25)
+            {
+                ZombiePooler.Instance.spawnCount = 7;
+                ZombiePooler.Instance.spawnCountRandomAdd = 1;
+            }
+            else if (day > 19)
+            {
+                ZombiePooler.Instance.spawnCount = 6;
+                ZombiePooler.Instance.spawnCountRandomAdd = 1;
+            }
+            else if (day > 13)
+            {
+                ZombiePooler.Instance.spawnCount = 5;
+                ZombiePooler.Instance.spawnCountRandomAdd = 1;
+            }
+            else if (day > 5)
+            {
+                ZombiePooler.Instance.spawnCount = 4;
+                ZombiePooler.Instance.spawnCountRandomAdd = 1;
+            }
+            else // 초보자 배려 구간
+            {
+                ZombiePooler.Instance.spawnCount = 3;
+                ZombiePooler.Instance.spawnCountRandomAdd = 1;
+            }
         }
-        else if (day > 19)
+        else
         {
-            ZombiePooler.Instance.spawnCount = 4;
-            ZombiePooler.Instance.spawnCountRandomAdd = 1;
-        }
-        else if (day > 13)
-        {
-            ZombiePooler.Instance.spawnCount = 3;
-            ZombiePooler.Instance.spawnCountRandomAdd = 2;
-        }
-        else if (day > 5)
-        {
-            ZombiePooler.Instance.spawnCount = 3;
-            ZombiePooler.Instance.spawnCountRandomAdd = 1;
-        }
-        else // 초보자 배려 구간
-        {
-            ZombiePooler.Instance.spawnCount = 2;
-            ZombiePooler.Instance.spawnCountRandomAdd = 0;
+            if (day > 25)
+            {
+                ZombiePooler.Instance.spawnCount = 5;
+                ZombiePooler.Instance.spawnCountRandomAdd = 1;
+            }
+            else if (day > 19)
+            {
+                ZombiePooler.Instance.spawnCount = 4;
+                ZombiePooler.Instance.spawnCountRandomAdd = 1;
+            }
+            else if (day > 13)
+            {
+                ZombiePooler.Instance.spawnCount = 3;
+                ZombiePooler.Instance.spawnCountRandomAdd = 2;
+            }
+            else if (day > 5)
+            {
+                ZombiePooler.Instance.spawnCount = 3;
+                ZombiePooler.Instance.spawnCountRandomAdd = 1;
+            }
+            else // 초보자 배려 구간
+            {
+                ZombiePooler.Instance.spawnCount = 2;
+                ZombiePooler.Instance.spawnCountRandomAdd = 0;
+            }
         }
     }
     public void EnableJumpRampInstall(bool on)
@@ -1282,6 +1329,7 @@ public class GM : Singleton<GM>
     {
         if (nukeEffect.color.a <= 0.1f)
         {
+            nukeEffect.DOKill();
             UIManager.Instance.ButtonSound();
             LoadingSceneManager.Instance.ToLobby();
         }
@@ -1293,9 +1341,13 @@ public class GM : Singleton<GM>
             if (CongratulationTriggered) return;
             CongratulationTriggered = true;
 
-            if (SteamHelper.Instance != null) SteamHelper.Instance.AchieveWin();
+            if (SteamHelper.Instance != null) SteamHelper.Instance.AchieveWin(false);
             Lobby.Instance.clearedCount++;
-            if (hardMode) Lobby.Instance.clearedCount_Hard++;
+            if (hardMode)
+            {
+                if (SteamHelper.Instance != null) SteamHelper.Instance.AchieveWin(true);
+                Lobby.Instance.clearedCount_Hard++;
+            }
             SaveManager.Instance.SavePlayer();
 
             //darkCanvas.alpha = 1f;
@@ -1934,4 +1986,86 @@ public class GM : Singleton<GM>
         voimtCoroutine = null;
     }
     #endregion
+
+
+    private void OnPlayerDamaged(object sender, float e)
+    {
+        //float damage = Mathf.Max(Constant.min_damage, GM.Instance.player.DamageReduction * e);
+        float damage = Mathf.Max(Constant.min_damage_hardMode_player, e * 0.25f);
+        HardMode_Damage(damage);
+    }
+
+    private void HardMode_HpReset()
+    {
+        if (!hardMode) return;
+
+        hp = 1f;
+        HardMode_UpdateUI();
+    }
+
+    public void HardMode_Damage(float dam)
+    {
+        if (!hardMode) return;
+        if (loading) return;
+
+        hp -= dam;
+
+        HardMode_UpdateUI();
+
+        if (hp <= 0)
+        {
+            // 패배
+            loading = true;
+            loading_hardMode = true;
+            StartCoroutine(Jump());
+        }
+    }
+    private IEnumerator Jump()
+    {
+        player.StopPlayer(false, true);
+
+        yield return null;
+
+        player.ShakeOffAllZombies();
+
+        player.carRigidbody.AddForce(player.transform.forward * 50f * 250f + Vector3.up * 20000f, ForceMode.Impulse);
+
+        AudioManager.Instance.PlaySFX(Sfx.santaTake);
+
+        yield return CoroutineHelper.WaitForSecondsRealtime(3f);
+
+        Time.timeScale = 0f;
+
+        yield return null;
+
+        Time.timeScale = 0f;
+        gameOverText[1].text = tm.GetCommons("Gameover4");
+        GameOver();
+    }
+
+    private void HardMode_UpdateUI()
+    {
+        if (hp > 1f) hp = 1f;
+        if (hp < 0) hp = 0f;
+
+        hpPercentTMP.text = $"{hp * 100f:F0}%";
+        hpSilder.value = hp;
+
+        var uilib = DataManager.Instance.uiLib;
+        if (hp > 0.6f)
+        {
+            hpSliderbarImg.color = uilib.hpColor0;
+            hpPercentTMP.color = Color.white;
+        }
+        else if (hp > 0.3f)
+        {
+            hpSliderbarImg.color = uilib.hpColor1;
+            hpPercentTMP.color = Color.black;
+        }
+        else
+        {
+            hpSliderbarImg.color = uilib.hpColor2;
+            hpPercentTMP.color = Color.black;
+        }
+    }
 }

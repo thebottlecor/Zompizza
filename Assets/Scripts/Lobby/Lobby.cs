@@ -364,6 +364,7 @@ public struct GameStartInfo
     public int startResource;
 
     public bool tutorial;
+    public bool hardMode;
 
     // LoadGame (세이브 파일 불러오기)
     public int slotNum;

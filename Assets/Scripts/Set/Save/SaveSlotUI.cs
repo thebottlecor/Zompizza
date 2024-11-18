@@ -13,10 +13,12 @@ public class SaveSlotUI : MonoBehaviour
 
     public int slotNum;
     public TextMeshProUGUI slotTMP;
+    public TextMeshProUGUI hardModeTMP;
     public TextMeshProUGUI slotInfoTMP;
 
     private List<string> saveNames;
     public int recentDays;
+    public bool hardMode;
     public List<SaveIndexInfo> saveIndexs;
 
     public struct SaveIndexInfo
@@ -40,11 +42,20 @@ public class SaveSlotUI : MonoBehaviour
         slotTMP.text = $"{tm.GetCommons("Slot")} {slotNum}";
         if (recentDays >= 0)
         {
+            if (hardMode)
+            {
+                hardModeTMP.text = tm.GetCommons("HardMode");
+                hardModeTMP.gameObject.SetActive(true);
+            }
+            else
+                hardModeTMP.gameObject.SetActive(false);
+
             slotInfoTMP.text = string.Format(tm.GetCommons("Day"), recentDays + 1);
         }
         else
         {
             slotInfoTMP.text = tm.GetCommons("Empty");
+            hardModeTMP.gameObject.SetActive(false);
         }
     }
 
@@ -52,6 +63,7 @@ public class SaveSlotUI : MonoBehaviour
     {
         saveNames = new List<string>();
         recentDays = -1;
+        hardMode = false;
         saveIndexs = new List<SaveIndexInfo>();
 
         JsonHelper.GetJsonFileNames(Application.persistentDataPath, $"Saves/Slot {slotNum}", ref saveNames);
@@ -82,7 +94,7 @@ public class SaveSlotUI : MonoBehaviour
         if (saveIndexs == null || saveIndexs.Count == 0) return;
 
         saveIndexs = saveIndexs.OrderBy(x => x.date).ToList();
-
+        hardMode = saveIndexs[0].gm.data.hardMode;
         recentDays = saveIndexs[0].index;
     }
 }

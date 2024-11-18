@@ -205,48 +205,105 @@ public class OrderManager : Singleton<OrderManager>
             if (!info.stolen && gIndex == e)
             {
                 // 배달 성공
+                bool hardMode = GM.Instance.hardMode;
 
                 float timeRating;
                 float timeLimit = info.timeLimit;
                 float overTime = info.timer - timeLimit;
-                if (overTime <= 0f)
+                if (hardMode)
                 {
-                    float remainPercent = Mathf.Abs(overTime) / timeLimit;
-                    if (remainPercent >= Constant.remainTime_Percent) // 남은 시간이 50% 이상
+                    if (overTime <= 0f)
                     {
-                        timeRating = Constant.remainTimeRating1;
-                    }
-                    else if (remainPercent >= 0.25f)
-                    {
-                        timeRating = 2f;
+                        float remainPercent = Mathf.Abs(overTime) / timeLimit;
+                        if (remainPercent >= 0.6f)
+                        {
+                            timeRating = Constant.remainTimeRating1;
+                        }
+                        else if (remainPercent >= 0.4f)
+                        {
+                            timeRating = 2f;
+                        }
+                        else if (remainPercent >= 0.2f)
+                        {
+                            timeRating = 1.5f;
+                        }
+                        else
+                        {
+                            timeRating = 1f;
+                        }
                     }
                     else
                     {
-                        timeRating = 1.5f;
+                        timeRating = 0.5f;
                     }
                 }
                 else
                 {
-                    timeRating = 1f;
+                    if (overTime <= 0f)
+                    {
+                        float remainPercent = Mathf.Abs(overTime) / timeLimit;
+                        if (remainPercent >= Constant.remainTime_Percent) // 남은 시간이 50% 이상
+                        {
+                            timeRating = Constant.remainTimeRating1;
+                        }
+                        else if (remainPercent >= 0.25f)
+                        {
+                            timeRating = 2f;
+                        }
+                        else
+                        {
+                            timeRating = 1.5f;
+                        }
+                    }
+                    else
+                    {
+                        timeRating = 1f;
+                    }
                 }
 
                 float hpRating;
                 float hpPercent = info.hp;
-                if (hpPercent == 1f)
+                if (hardMode)
                 {
-                    hpRating = Constant.remainHpRating1;
-                }
-                else if (hpPercent >= 0.75f)
-                {
-                    hpRating = 2f;
-                }
-                else if (hpPercent >= 0.5f)
-                {
-                    hpRating = 1.5f;
+                    if (hpPercent == 1f)
+                    {
+                        hpRating = Constant.remainHpRating1;
+                    }
+                    else if (hpPercent >= 0.9f)
+                    {
+                        hpRating = 2f;
+                    }
+                    else if (hpPercent >= 0.7f)
+                    {
+                        hpRating = 1.5f;
+                    }
+                    else if (hpPercent >= 0.5f)
+                    {
+                        hpRating = 1f;
+                    }
+                    else
+                    {
+                        hpRating = 0.5f;
+                    }
                 }
                 else
                 {
-                    hpRating = 1f;
+                    if (hpPercent == 1f)
+                    {
+                        hpRating = Constant.remainHpRating1;
+                    }
+                    else if (hpPercent >= 0.75f)
+                    {
+                        hpRating = 2f;
+                    }
+                    else if (hpPercent >= 0.5f)
+                    {
+                        hpRating = 1.5f;
+                    }
+                    else
+                    {
+                        hpRating = 1f;
+                    }
                 }
 
                 //else if (hpPercent >= Constant.remainHP_Percent)
@@ -267,12 +324,14 @@ public class OrderManager : Singleton<OrderManager>
                 //resultRating = Mathf.Min(Constant.remainHpRating1 + Constant.remainTimeRating1, resultRating);
                 GM.Instance.AddRating(resultRating, GM.GetRatingSource.delivery);
 
+                if (SteamHelper.Instance != null) SteamHelper.Instance.AchieveRating(resultRating);
+
                 int rewards = info.rewards;
 
                 GM.Instance.AddGold(rewards, GM.GetGoldSource.delivery);
                 UIManager.Instance.shopUI.AddReview(GM.Instance.day, info.customerIdx, info.goal, timeRating, hpRating);
 
-                orderGoals[gIndex].SuccessEffect(rewards, resultRating);
+                orderGoals[gIndex].SuccessEffect(rewards);
 
                 //moneyDirection.RestartSequence_Debug();
                 

@@ -19,6 +19,10 @@ public class UILibrary : ScriptableObject
     public Color button_Upgrade_needRes;
     public Color button_Upgrade_needTier;
 
+    public Color hpColor0;
+    public Color hpColor1;
+    public Color hpColor2;
+
     public Sprite shopButton;
     public Sprite shopButtonHighlighted;
     public Sprite gold;

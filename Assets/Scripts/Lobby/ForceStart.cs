@@ -40,6 +40,7 @@ public class ForceStart : MonoBehaviour
             slotNum = 1,
             saveName = string.Empty,
             tutorial = true,
+            hardMode = false,
         };
         Debug.Log("·ÎµùµÇ´Â ¾À : " + editorSettingLib.sceneName);
         LoadingSceneManager.Instance.LobbyStart(gameStartInfo, editorSettingLib.sceneName);

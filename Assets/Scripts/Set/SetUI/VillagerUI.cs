@@ -35,6 +35,7 @@ public class VillagerUI : EventListener
     public Image villagerProfile;
     public Image villagerTraitIcon;
     public TextMeshProUGUI villagerTips;
+    public TextMeshProUGUI villagerChats;
 
     [Header("주기")]
     public GameObject needsParentObj;
@@ -43,7 +44,7 @@ public class VillagerUI : EventListener
     public TextMeshProUGUI needsText;
     public Image needsIcon;
 
-    [Header("주문탭")]
+    [Header("추방")]
     public GameObject expelWarningObj;
     public TextMeshProUGUI[] exeplWarningBtn_Text;
     public TextMeshProUGUI expelWarning_Text;
@@ -80,6 +81,8 @@ public class VillagerUI : EventListener
         villagerTraitIcon.sprite = DataManager.Instance.uiLib.villagerSkills[villagerIdx];
 
         var villager = VillagerManager.Instance.villagers[villagerIdx];
+
+        villagerChats.text = tm.GetCommons($"Chat{villager.chatIdx}");
 
         float sliderValue = villager.relationExp > 0.01f ? villager.relationExp : 0.01f;
         expSlider.value = sliderValue;
