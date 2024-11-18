@@ -43,7 +43,7 @@ public class Constant
     public const float water_damage = 0.01f;
     public const float zombie_damage = 0.01f;
     public const float min_damage = 0f;
-    public const float min_damage_hardMode_player = 0.005f;
+    public const float min_damage_hardMode_player = 0.01f;
 
     // 기본 탐험 투자 가능값
     public const int explorationQuantityMax = 30;

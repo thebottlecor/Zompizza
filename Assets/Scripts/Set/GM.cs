@@ -1991,7 +1991,7 @@ public class GM : Singleton<GM>
     private void OnPlayerDamaged(object sender, float e)
     {
         //float damage = Mathf.Max(Constant.min_damage, GM.Instance.player.DamageReduction * e);
-        float damage = Mathf.Max(Constant.min_damage_hardMode_player, e * 0.25f);
+        float damage = Mathf.Max(Constant.min_damage_hardMode_player, e * 2f);
         HardMode_Damage(damage);
     }
 

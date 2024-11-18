@@ -215,26 +215,30 @@ public class OrderManager : Singleton<OrderManager>
                     if (overTime <= 0f)
                     {
                         float remainPercent = Mathf.Abs(overTime) / timeLimit;
-                        if (remainPercent >= 0.6f)
+                        if (remainPercent >= 0.65f)
                         {
                             timeRating = Constant.remainTimeRating1;
                         }
-                        else if (remainPercent >= 0.4f)
+                        else if (remainPercent >= 0.55f)
                         {
                             timeRating = 2f;
                         }
-                        else if (remainPercent >= 0.2f)
+                        else if (remainPercent >= 0.4f)
                         {
                             timeRating = 1.5f;
                         }
-                        else
+                        else if (remainPercent >= 0.2f)
                         {
                             timeRating = 1f;
+                        }
+                        else
+                        {
+                            timeRating = 0.5f;
                         }
                     }
                     else
                     {
-                        timeRating = 0.5f;
+                        timeRating = 0f;
                     }
                 }
                 else
@@ -273,17 +277,21 @@ public class OrderManager : Singleton<OrderManager>
                     {
                         hpRating = 2f;
                     }
-                    else if (hpPercent >= 0.7f)
+                    else if (hpPercent >= 0.8f)
                     {
                         hpRating = 1.5f;
                     }
-                    else if (hpPercent >= 0.5f)
+                    else if (hpPercent >= 0.6f)
                     {
                         hpRating = 1f;
                     }
-                    else
+                    else if (hpPercent >= 0.5f)
                     {
                         hpRating = 0.5f;
+                    }
+                    else
+                    {
+                        hpRating = 0f;
                     }
                 }
                 else
