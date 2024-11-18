@@ -114,7 +114,7 @@ public class VillagerWay : MonoBehaviour
     {
         int value = Constant.villagerIncome;
         if (GM.Instance.hardMode)
-            value += 50;
+            value += 100;
         value *= (relations + 1);
 
         float modify = 1f;

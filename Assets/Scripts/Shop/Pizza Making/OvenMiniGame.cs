@@ -126,7 +126,7 @@ public class OvenMiniGame : EventListener
         if (GameEventManager.Instance.ninjaPriceUp) // 첫번째 닌자 치킨의 제안 수락시 10% 가격 상승
             globalMul += 0.1f;
         if (GM.Instance.hardMode)
-            globalMul += 0.1f;
+            globalMul += 0.2f;
 
         mileGold = (int)(mileGold * globalMul);
         goldValue = (int)(goldValue * globalMul);

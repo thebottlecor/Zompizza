@@ -231,7 +231,7 @@ public class VillagerManager : Singleton<VillagerManager>
         }
         if (on)
         {
-            int chatMax = 24;
+            int chatMax = 24 + 1;
             HashSet<int> chatHashset = new HashSet<int>();
             for (int i = 0; i < villagers.Length; i++)
             {
