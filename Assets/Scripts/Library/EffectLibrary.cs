@@ -15,6 +15,8 @@ public class EffectLibrary : ScriptableObject
 
     public GameObject appleBlastEffect;
 
+    public GameObject explodeEffect;
+
     public GameObject[] hitEffects;
 
 }

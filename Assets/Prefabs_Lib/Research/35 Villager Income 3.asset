@@ -35,7 +35,7 @@ MonoBehaviour:
     explore_cost: 0
     explore_get_bonus: 0
     tier: 0
-    villager_bonus: 0.25
+    villager_bonus: 0.2
     pizzeriaExpand: 0
     raidDefense: 0
     customer_timelimit: 0

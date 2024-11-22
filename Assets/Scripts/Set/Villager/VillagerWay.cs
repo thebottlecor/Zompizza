@@ -317,7 +317,13 @@ public class VillagerWay : MonoBehaviour
         recruited = true;
         expelled = false;
 
+        int day = GM.Instance.day;
+
         relations = 0;
+        if (day >= 14) relations++;
+        if (day >= 18) relations++;
+        if (day >= 21) relations++;
+
         //condition = UnityEngine.Random.Range(1, 4);
         condition = 2;
 

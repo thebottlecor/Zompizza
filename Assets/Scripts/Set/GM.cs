@@ -2032,6 +2032,12 @@ public class GM : Singleton<GM>
 
         AudioManager.Instance.PlaySFX(Sfx.santaTake);
 
+        var source = DataManager.Instance.effectLib.explodeEffect;
+        Vector3 pos = player.transform.position;
+        pos.y += 8f;
+        Instantiate(source, pos, Quaternion.identity);
+        //Destroy(obj, 5f);
+
         yield return CoroutineHelper.WaitForSecondsRealtime(3f);
 
         Time.timeScale = 0f;
@@ -2040,6 +2046,8 @@ public class GM : Singleton<GM>
 
         Time.timeScale = 0f;
         gameOverText[1].text = tm.GetCommons("Gameover4");
+        var pad = Gamepad.current;
+        Cursor.visible = pad == null;
         GameOver();
     }
 

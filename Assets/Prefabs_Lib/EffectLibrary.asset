@@ -15,5 +15,6 @@ MonoBehaviour:
   dollarBoomEffect: {fileID: 190236, guid: 39f586f40e7d928499bfe946ffb04ad5, type: 3}
   goldCoinBlastEffect: {fileID: 143964, guid: 09d9de58ef3bf5444ac94afa0e6013cb, type: 3}
   appleBlastEffect: {fileID: 6113892806898033283, guid: 4683c7649bdadc34299fa8b5bdcbea53, type: 3}
+  explodeEffect: {fileID: 1198724786340194, guid: 0898b572f28fb32439fbe4be9a9beb52, type: 3}
   hitEffects:
   - {fileID: 7248555855582809004, guid: da337e0d224b3c64495b62306b81c0f8, type: 3}
