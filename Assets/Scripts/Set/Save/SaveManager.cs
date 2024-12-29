@@ -86,7 +86,7 @@ public struct Save2DArray<T>
 public class SaveManager : Singleton<SaveManager>
 {
 
-    public readonly int version = 111;
+    public readonly int version = 112;
 
 
     public override void CallAfterAwake()
@@ -276,14 +276,21 @@ public class SaveManager : Singleton<SaveManager>
             for (int i = 0; i < max; i++)
             {
                 saveFiles[i].gameObject.SetActive(true);
+
+                var gm = currentSaveSlot.saveIndexs[i].gm;
+                var date = currentSaveSlot.saveIndexs[i].date;
+
                 saveFiles[i].saveFileTMP.text = string.Format(tm.GetCommons("Day"), currentSaveSlot.saveIndexs[i].index + 1);
+                if (gm.data.hardMode)
+                    saveFiles[i].saveFileTMP.color = new Color(0.84f, 0.6f, 0.6f, 1f);
+                else
+                    saveFiles[i].saveFileTMP.color = Color.white;
 
                 StringBuilder st = new StringBuilder();
                 StringBuilder st2 = new StringBuilder();
-                var date = currentSaveSlot.saveIndexs[i].date;
-                var gm = currentSaveSlot.saveIndexs[i].gm;
                 float rocketPrecent = (float)gm.rocket.currentStep / RocketManager.MaxStep;
                 if (rocketPrecent <= 0f) rocketPrecent = 0.01f;
+
                 st.AppendFormat("<sprite=8> {2:F0}% <sprite=2> {0} <sprite=1> {1}    ", gm.data.gold, gm.data.rating, rocketPrecent * 100f);
                 st2.AppendFormat("{0}/{1:00}/{2:00} {3:00}:{4:00}", date.year, date.month, date.day, date.hour, date.minute);
 

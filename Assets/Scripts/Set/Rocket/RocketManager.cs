@@ -57,7 +57,7 @@ public class RocketManager : Singleton<RocketManager>
     public const int Countdown = 30;
 
     //private List<int> cost = new List<int>() { 3000, 6000, 12000, 24000, int.MaxValue - 99, int.MaxValue - 98, int.MaxValue - 97, int.MaxValue - 96, int.MaxValue - 95, int.MaxValue - 94 };
-    public List<int> cost = new List<int>() { 5000, 10000, 20000, 40000, 80000, 120000, 160000, 200000, 240000, 280000 };
+    public List<int> cost = new List<int>() { 5000, 10000, 20000, 40000, 80000, 120000, 160000, 200000, 280000, 360000 };
 
     [System.Serializable]
     public struct RocketModels
